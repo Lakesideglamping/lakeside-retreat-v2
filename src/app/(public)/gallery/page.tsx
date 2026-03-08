@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GalleryContent } from "@/components/gallery-content";
+import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Photo Gallery",
@@ -10,6 +11,12 @@ export const metadata: Metadata = {
 export default function GalleryPage() {
   return (
     <>
+      <JsonLd data={[
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Gallery", path: "/gallery" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[50vh] flex items-center justify-center text-center text-white bg-cover bg-center"

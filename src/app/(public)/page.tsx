@@ -1,10 +1,30 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createLodgingBusinessSchema, createOrganizationSchema, createWebSiteSchema, createFaqSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={[
+        createLodgingBusinessSchema(),
+        createOrganizationSchema(),
+        createWebSiteSchema(),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Accommodation", path: "/stay" },
+          { name: "Things to Do", path: "/explore" },
+        ]),
+        createFaqSchema([
+          { question: "Where is Lakeside Retreat located in Central Otago?", answer: "Lakeside Retreat is located at 96 Smiths Way, Mount Pisa, just 12km from Cromwell town centre. We're positioned directly on Lake Dunstan in the heart of Central Otago wine country, with the cycle trail just 300m from our accommodation." },
+          { question: "What type of accommodation do you offer?", answer: "We offer luxury glamping domes and a family cottage, all with Lake Dunstan and mountain views. Dome Pinot (50sqm) and Dome Ros\u00e9 (40sqm) are perfect for couples with private spas, while our Lakeside Cottage accommodates families with direct lake access." },
+          { question: "How close are you to Central Otago wineries?", answer: "We're in the heart of Central Otago wine country with 15+ wineries within 15km, including Felton Road, Carrick, and Mt Difficulty." },
+          { question: "How far is Lakeside Retreat from Queenstown?", answer: "Approximately 45 minutes' drive from Queenstown via the Kawarau Gorge. Also 35 minutes from Wanaka." },
+          { question: "Can I bring my pet?", answer: "The Lakeside Cottage is pet-friendly with prior approval ($50 flat fee). The domes are not suitable for pets." },
+          { question: "What's the cancellation policy?", answer: "Full refund if cancelled 7+ days before check-in. 50% refund for 3-6 days. No refund within 3 days." },
+          { question: "Why book direct instead of Airbnb?", answer: "Booking direct saves you 12-18% in service fees that platforms add. Same stay, better price, direct host communication." },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[85vh] flex items-center justify-center text-center text-white bg-cover bg-center"

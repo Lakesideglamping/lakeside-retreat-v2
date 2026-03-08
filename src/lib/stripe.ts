@@ -1,0 +1,167 @@
+import Stripe from "stripe";
+import { getById, type Accommodation } from "./accommodations";
+
+export const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY)
+  : null;
+
+export const isDevMode = !process.env.STRIPE_SECRET_KEY;
+
+const baseUrl = () =>
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+function daysBetween(checkIn: string, checkOut: string): number {
+  const start = new Date(checkIn);
+  const end = new Date(checkOut);
+  return Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+export interface LineItem {
+  name: string;
+  amount: number; // in cents
+  quantity: number;
+}
+
+export function calculateLineItems(
+  accommodation: Accommodation,
+  checkIn: string,
+  checkOut: string,
+  guests: number,
+  pets: number = 0
+): { lineItems: LineItem[]; totalAmount: number } {
+  const nights = daysBetween(checkIn, checkOut);
+  const items: LineItem[] = [];
+
+  // Nightly rate
+  items.push({
+    name: `${accommodation.name} (${nights} night${nights > 1 ? "s" : ""})`,
+    amount: accommodation.basePrice * 100,
+    quantity: nights,
+  });
+
+  // Cleaning fee
+  items.push({
+    name: "Cleaning fee",
+    amount: accommodation.cleaningFee * 100,
+    quantity: 1,
+  });
+
+  // Extra guest fee
+  if (
+    accommodation.extraGuestFee &&
+    guests > accommodation.baseGuests
+  ) {
+    const extraGuests = guests - accommodation.baseGuests;
+    items.push({
+      name: `Extra guest fee (${extraGuests} guest${extraGuests > 1 ? "s" : ""})`,
+      amount: accommodation.extraGuestFee * 100,
+      quantity: nights * extraGuests,
+    });
+  }
+
+  // Pet fee
+  if (accommodation.petFee && pets > 0) {
+    items.push({
+      name: `Pet fee (${pets} pet${pets > 1 ? "s" : ""})`,
+      amount: accommodation.petFee * 100,
+      quantity: pets,
+    });
+  }
+
+  // Security deposit (authorization hold)
+  items.push({
+    name: "Security bond (pre-authorisation only \u2014 released after checkout)",
+    amount: accommodation.securityDeposit * 100,
+    quantity: 1,
+  });
+
+  const totalAmount = items.reduce((sum, i) => sum + i.amount * i.quantity, 0);
+
+  return { lineItems: items, totalAmount };
+}
+
+interface CreateSessionParams {
+  accommodation: string;
+  checkIn: string;
+  checkOut: string;
+  guests: number;
+  guestName: string;
+  guestEmail: string;
+  guestPhone?: string;
+  specialRequests?: string;
+  pets?: number;
+}
+
+export async function createCheckoutSession(
+  params: CreateSessionParams
+): Promise<{ sessionId: string; url: string }> {
+  const acc = getById(params.accommodation);
+  if (!acc) throw new Error("Invalid accommodation");
+
+  if (!stripe) {
+    // Dev mode mock
+    return {
+      sessionId: "dev_mock_session_" + Date.now(),
+      url: `${baseUrl()}/booking-success?session_id=dev_mock`,
+    };
+  }
+
+  const { lineItems } = calculateLineItems(
+    acc,
+    params.checkIn,
+    params.checkOut,
+    params.guests,
+    params.pets || 0
+  );
+
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    customer_email: params.guestEmail,
+    expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
+    payment_intent_data: {
+      capture_method: "manual",
+    },
+    line_items: lineItems.map((item) => ({
+      price_data: {
+        currency: "nzd",
+        product_data: { name: item.name },
+        unit_amount: item.amount,
+      },
+      quantity: item.quantity,
+    })),
+    metadata: {
+      accommodation: params.accommodation,
+      accommodationName: acc.name,
+      checkIn: params.checkIn,
+      checkOut: params.checkOut,
+      guests: String(params.guests),
+      guestName: params.guestName,
+      guestEmail: params.guestEmail,
+      guestPhone: params.guestPhone || "",
+      specialRequests: params.specialRequests || "",
+      pets: String(params.pets || 0),
+      securityDeposit: String(acc.securityDeposit),
+    },
+    success_url: `${baseUrl()}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${baseUrl()}/booking-cancelled`,
+  });
+
+  return {
+    sessionId: session.id,
+    url: session.url!,
+  };
+}
+
+export function constructWebhookEvent(
+  body: string,
+  signature: string
+): Stripe.Event {
+  if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) {
+    throw new Error("Stripe not configured");
+  }
+  return stripe.webhooks.constructEvent(
+    body,
+    signature,
+    process.env.STRIPE_WEBHOOK_SECRET
+  );
+}

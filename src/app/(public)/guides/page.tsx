@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Local Guides & Tips",
@@ -56,6 +57,12 @@ const guides = [
 export default function GuidesPage() {
   return (
     <>
+      <JsonLd data={[
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Guides", path: "/guides" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[50vh] flex items-center justify-center text-center text-white bg-cover bg-center"

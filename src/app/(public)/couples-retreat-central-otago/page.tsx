@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "The Perfect Romantic Getaway in Central Otago",
@@ -39,6 +40,19 @@ const experiences = [
 export default function CouplesRetreatPage() {
   return (
     <>
+      <JsonLd data={[
+        createArticleSchema({
+          title: "The Perfect Romantic Getaway in Central Otago",
+          description: "Adults-only luxury glamping domes with private spas, vineyard views, and wine country at your doorstep.",
+          path: "/couples-retreat-central-otago",
+          image: "dome-rose-spa1.jpeg",
+        }),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Guides", path: "/guides" },
+          { name: "Couples Retreat", path: "/couples-retreat-central-otago" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"

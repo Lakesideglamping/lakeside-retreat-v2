@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { ContactForm } from "@/components/contact-form";
+import { JsonLd, createContactPageSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -18,6 +19,13 @@ const contactInfo = [
 export default function ContactPage() {
   return (
     <>
+      <JsonLd data={[
+        createContactPageSchema(),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[50vh] flex items-center justify-center text-center text-white bg-cover bg-center"
@@ -66,62 +74,7 @@ export default function ContactPage() {
           {/* Contact Form */}
           <div>
             <h2 className="font-display text-3xl mb-8">Send Us a Message</h2>
-            <form className="space-y-5">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-1">
-                  Your Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-1">
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal"
-                />
-              </div>
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium mb-1">
-                  Subject
-                </label>
-                <select
-                  id="subject"
-                  name="subject"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal"
-                >
-                  <option value="booking">Booking Enquiry</option>
-                  <option value="availability">Availability Check</option>
-                  <option value="special">Special Request</option>
-                  <option value="feedback">Feedback</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-1">
-                  Your Message *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  rows={5}
-                  placeholder="Tell us about your travel dates, questions, or any special requirements..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal resize-y"
-                />
-              </div>
-              <Button href="/#booking">Send Message</Button>
-            </form>
+            <ContactForm />
           </div>
         </div>
 

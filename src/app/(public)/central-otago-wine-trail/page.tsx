@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Central Otago Wine Trail Guide",
@@ -55,6 +56,19 @@ const tips = [
 export default function WineTrailPage() {
   return (
     <>
+      <JsonLd data={[
+        createArticleSchema({
+          title: "Central Otago Wine Trail Guide",
+          description: "Your gateway to New Zealand's premier Pinot Noir region. Explore 30+ cellar doors in Bannockburn, Cromwell Basin, and Pisa.",
+          path: "/central-otago-wine-trail",
+          image: "vineyard.jpeg",
+        }),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Guides", path: "/guides" },
+          { name: "Central Otago Wine Trail", path: "/central-otago-wine-trail" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"

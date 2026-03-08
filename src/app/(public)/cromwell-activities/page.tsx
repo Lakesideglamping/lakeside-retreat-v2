@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Things to Do in Cromwell, Central Otago",
@@ -33,6 +34,19 @@ const dayTrips = [
 export default function CromwellActivitiesPage() {
   return (
     <>
+      <JsonLd data={[
+        createArticleSchema({
+          title: "Things to Do in Cromwell, Central Otago",
+          description: "Complete guide to activities in Cromwell: Lake Dunstan water sports, cycling trails, wine tasting, heritage precinct, and day trips.",
+          path: "/cromwell-activities",
+          image: "lakeview.jpeg",
+        }),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Guides", path: "/guides" },
+          { name: "Cromwell Activities", path: "/cromwell-activities" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"

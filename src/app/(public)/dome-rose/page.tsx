@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Dome Ros\u00e9 | Romantic Getaway Central Otago | $510/night",
@@ -51,6 +52,30 @@ const guides = [
 export default function DomeRosePage() {
   return (
     <>
+      <JsonLd data={[
+        createPropertySchema({
+          id: "dome-rose",
+          name: "Dome Ros\u00e9",
+          description: "Romantic 40sqm luxury geodesic dome with vineyard views, private outdoor spa, and intimate wine country setting.",
+          price: 510,
+          floorSize: 40,
+          maxOccupancy: 2,
+          bedType: "King",
+          images: ["dome-rose-spa1.jpeg", "dome-rose-interior.jpeg"],
+          amenities: ["Private Outdoor Spa", "Mountain Views", "King Bed", "Vineyard Setting", "Sustainably Powered", "Underfloor Heating", "Air Conditioning", "Kitchenette", "Free WiFi", "Free Parking"],
+          reviewCount: "98",
+        }),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Stay", path: "/stay" },
+          { name: "Dome Ros\u00e9", path: "/dome-rose" },
+        ]),
+        createFaqSchema([
+          { question: "What makes Dome Ros\u00e9 special?", answer: "Dome Ros\u00e9 is a romantic 40sqm retreat with private outdoor spa, vineyard and mountain views, and a cosy intimate atmosphere perfect for couples." },
+          { question: "Is Dome Ros\u00e9 suitable for families?", answer: "No, Dome Ros\u00e9 is strictly adults-only. For families, we recommend our Lakeside Cottage." },
+          { question: "What's the difference between Dome Pinot and Dome Ros\u00e9?", answer: "Dome Pinot is larger (50sqm vs 40sqm) with lake views and a stargazing skylight. Dome Ros\u00e9 offers a more intimate setting with vineyard and mountain views." },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[70vh] flex items-center justify-center text-center text-white bg-cover bg-center"

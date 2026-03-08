@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createLodgingBusinessSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Accommodation",
@@ -63,6 +64,13 @@ const accommodations = [
 export default function StayPage() {
   return (
     <>
+      <JsonLd data={[
+        createLodgingBusinessSchema(),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Accommodation", path: "/stay" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"

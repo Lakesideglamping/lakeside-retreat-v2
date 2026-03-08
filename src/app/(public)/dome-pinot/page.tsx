@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Dome Pinot | Geodesic Dome Accommodation NZ | $530/night",
@@ -51,6 +52,31 @@ const guides = [
 export default function DomePinotPage() {
   return (
     <>
+      <JsonLd data={[
+        createPropertySchema({
+          id: "dome-pinot",
+          name: "Dome Pinot",
+          description: "Flagship 50sqm luxury geodesic dome with panoramic Lake Dunstan views, private outdoor spa, stargazing skylight, and eco-luxury comfort.",
+          price: 530,
+          floorSize: 50,
+          maxOccupancy: 2,
+          bedType: "King",
+          images: ["dome-pinot-hero.jpeg", "PinotLakeView.jpeg", "pinotinternal.jpeg"],
+          amenities: ["Private Outdoor Spa", "Stargazing Skylight", "King Bed", "Panoramic Lake Views", "Sustainably Powered", "Underfloor Heating", "Air Conditioning", "Kitchenette", "Free WiFi", "Free Parking"],
+          reviewCount: "127",
+        }),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Stay", path: "/stay" },
+          { name: "Dome Pinot", path: "/dome-pinot" },
+        ]),
+        createFaqSchema([
+          { question: "What makes Dome Pinot different from other glamping in Central Otago?", answer: "Dome Pinot is our flagship 50sqm luxury geodesic dome featuring panoramic Lake Dunstan views, a private outdoor spa, stargazing skylight, king bed, and complimentary welcome hamper." },
+          { question: "How far is Dome Pinot from Queenstown?", answer: "Approximately 45 minutes' drive from Queenstown and 30 minutes from Wanaka." },
+          { question: "Is Dome Pinot suitable for children?", answer: "No, Dome Pinot is strictly adults-only accommodation designed for couples. For families, we recommend our Lakeside Cottage." },
+          { question: "What is included in a stay at Dome Pinot?", answer: "Every stay includes a private outdoor spa, complimentary welcome hamper with local Central Otago produce, premium bed linen, underfloor heating, full kitchen facilities, and direct access to the Lake Dunstan Cycle Trail." },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[70vh] flex items-center justify-center text-center text-white bg-cover bg-center"

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Lakeside Cottage | Pet Friendly Accommodation Cromwell | $295/night",
@@ -53,6 +54,30 @@ const guides = [
 export default function LakesideCottagePage() {
   return (
     <>
+      <JsonLd data={[
+        createPropertySchema({
+          id: "lakeside-cottage",
+          name: "Lakeside Cottage",
+          description: "Family-friendly lakefront cottage with direct Lake Dunstan access, 2 bedrooms, full kitchen, and pet-friendly accommodation.",
+          price: 295,
+          floorSize: 65,
+          maxOccupancy: 3,
+          bedType: "Queen",
+          images: ["lakeside-cottage-exterior.jpeg", "lakeside-cottage-interior.jpeg"],
+          amenities: ["Direct Lake Access", "Pet Friendly", "Full Kitchen", "2 Bedrooms", "Kayaks Included", "Free WiFi", "Free Parking", "BBQ"],
+          reviewCount: "191",
+        }),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Stay", path: "/stay" },
+          { name: "Lakeside Cottage", path: "/lakeside-cottage" },
+        ]),
+        createFaqSchema([
+          { question: "Can I bring my dog to Lakeside Cottage?", answer: "Yes! The Lakeside Cottage is pet-friendly. Well-behaved dogs are welcome with a $50 flat pet fee per stay. Maximum 2 dogs." },
+          { question: "How many people can stay at Lakeside Cottage?", answer: "The cottage accommodates up to 3 guests (2 base, extra guest $100/night)." },
+          { question: "Is there lake access from the cottage?", answer: "Yes, the Lakeside Cottage has direct access to Lake Dunstan for swimming, kayaking, and fishing. Kayaks are included." },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[70vh] flex items-center justify-center text-center text-white bg-cover bg-center"

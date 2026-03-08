@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "The Perfect Weekend Escape from Queenstown",
@@ -34,6 +35,19 @@ const highlights = [
 export default function WeekendGetawayPage() {
   return (
     <>
+      <JsonLd data={[
+        createArticleSchema({
+          title: "The Perfect Weekend Escape from Queenstown",
+          description: "Swap the crowds for calm lakeside luxury, just 45 minutes from Queenstown.",
+          path: "/weekend-getaway-queenstown",
+          image: "lake-mountains-perfect.jpg",
+        }),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Guides", path: "/guides" },
+          { name: "Weekend from Queenstown", path: "/weekend-getaway-queenstown" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"

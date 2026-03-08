@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Explore Central Otago",
@@ -49,6 +50,12 @@ const dayTrips = [
 export default function ExplorePage() {
   return (
     <>
+      <JsonLd data={[
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Explore", path: "/explore" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"

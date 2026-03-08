@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
+import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Guest Reviews",
@@ -62,6 +63,13 @@ const reviews = [
 export default function ReviewsPage() {
   return (
     <>
+      <JsonLd data={[
+        createOrganizationSchema(),
+        createBreadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Reviews", path: "/reviews" },
+        ]),
+      ]} />
       {/* Hero */}
       <section
         className="relative min-h-[50vh] flex items-center justify-center text-center text-white bg-cover bg-center"
