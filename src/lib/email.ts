@@ -1,4 +1,19 @@
 import nodemailer from "nodemailer";
+import { logger } from "./logger";
+import {
+  type BookingEmailData as TemplateBookingData,
+  formatAccommodationName,
+  preArrivalHtml,
+  duringStayHtml,
+  checkoutThankYouHtml,
+  paymentFailureHtml,
+  cancellationHtml,
+  paymentNotificationHtml,
+  systemAlertHtml,
+} from "./email-templates";
+
+export type { BookingEmailData } from "./email-templates";
+export { formatAccommodationName } from "./email-templates";
 
 const isConfigured =
   !!process.env.EMAIL_USER && !!process.env.EMAIL_PASS;
@@ -67,7 +82,7 @@ export async function sendContactEmail(data: ContactEmailData): Promise<void> {
   });
 }
 
-interface BookingEmailData {
+interface LegacyBookingEmailData {
   guestName: string;
   guestEmail: string;
   accommodation: string;
@@ -78,7 +93,7 @@ interface BookingEmailData {
 }
 
 export async function sendBookingConfirmation(
-  data: BookingEmailData
+  data: LegacyBookingEmailData
 ): Promise<void> {
   const transporter = createTransporter();
   if (!transporter) {
@@ -129,4 +144,161 @@ export async function sendBookingConfirmation(
       </div>
     `,
   });
+}
+
+/* ---------------------------------------------------------------------------
+ * Template-based email senders
+ * ------------------------------------------------------------------------- */
+
+const fromAddress = () => `"Lakeside Retreat" <${process.env.EMAIL_USER}>`;
+
+export async function sendPreArrivalInstructions(
+  booking: TemplateBookingData
+): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("Email not configured - pre-arrival instructions skipped");
+    return;
+  }
+
+  const name = formatAccommodationName(booking.accommodation);
+  await transporter.sendMail({
+    from: fromAddress(),
+    to: booking.guest_email,
+    subject: `Your Arrival Instructions - Lakeside Retreat (${name})`,
+    html: preArrivalHtml(booking),
+  });
+  logger.info(`Pre-arrival instructions sent to ${booking.guest_email}`);
+}
+
+export async function sendDuringStayCheckin(
+  booking: TemplateBookingData
+): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("Email not configured - during-stay check-in skipped");
+    return;
+  }
+
+  await transporter.sendMail({
+    from: fromAddress(),
+    to: booking.guest_email,
+    subject: "Welcome to Lakeside Retreat - We hope you're settling in!",
+    html: duringStayHtml(booking),
+  });
+  logger.info(`During-stay check-in email sent to ${booking.guest_email}`);
+}
+
+export async function sendCheckoutThankYou(
+  booking: TemplateBookingData
+): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("Email not configured - checkout thank-you skipped");
+    return;
+  }
+
+  await transporter.sendMail({
+    from: fromAddress(),
+    to: booking.guest_email,
+    subject: "Thank you for staying at Lakeside Retreat!",
+    html: checkoutThankYouHtml(booking),
+  });
+  logger.info(`Checkout thank-you email sent to ${booking.guest_email}`);
+}
+
+export async function sendPaymentFailureNotification(
+  booking: TemplateBookingData
+): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("Email not configured - payment failure notification skipped");
+    return;
+  }
+
+  const idSlice = booking.booking_id ? booking.booking_id.slice(0, 8) : "";
+  await transporter.sendMail({
+    from: fromAddress(),
+    to: booking.guest_email,
+    subject: `Payment Issue — Lakeside Retreat${idSlice ? ` Booking #${idSlice}` : ""}`,
+    html: paymentFailureHtml(booking),
+  });
+  logger.info(`Payment failure notification sent to ${booking.guest_email}`);
+}
+
+export async function sendCancellationConfirmation(
+  booking: TemplateBookingData & { refundEligible: boolean }
+): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("Email not configured - cancellation confirmation skipped");
+    return;
+  }
+
+  await transporter.sendMail({
+    from: fromAddress(),
+    to: booking.guest_email,
+    subject: "Booking Cancelled — Lakeside Retreat",
+    html: cancellationHtml(booking),
+  });
+  logger.info(`Cancellation confirmation sent to ${booking.guest_email}`);
+}
+
+export async function sendPaymentNotification(
+  booking: TemplateBookingData & { paymentAmount: string; paymentMethod: string }
+): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("Email not configured - payment notification skipped");
+    return;
+  }
+
+  const name = formatAccommodationName(booking.accommodation);
+  await transporter.sendMail({
+    from: fromAddress(),
+    to: contactTo(),
+    subject: `Payment Received - ${booking.guest_name} (${name})`,
+    html: paymentNotificationHtml(booking),
+  });
+  logger.info("Payment notification sent to admin");
+}
+
+export async function sendSystemAlert(
+  alertType: string,
+  message: string,
+  details?: string
+): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("Email not configured - system alert skipped");
+    return;
+  }
+
+  await transporter.sendMail({
+    from: fromAddress(),
+    to: contactTo(),
+    subject: `Lakeside Retreat System Alert - ${alertType.toUpperCase()}`,
+    html: systemAlertHtml({ alertType, message, details }),
+  });
+  logger.info(`System alert sent: ${alertType}`);
+}
+
+export async function testEmailConfiguration(): Promise<{
+  success: boolean;
+  message: string;
+}> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    return { success: false, message: "Email not configured (missing EMAIL_USER or EMAIL_PASS)" };
+  }
+
+  try {
+    await transporter.verify();
+    logger.info("SMTP connection verified successfully");
+    return { success: true, message: "SMTP connection verified successfully" };
+  } catch (error) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    logger.error("SMTP connection verification failed", { error: errMsg });
+    return { success: false, message: `SMTP verification failed: ${errMsg}` };
+  }
 }

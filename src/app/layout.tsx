@@ -28,6 +28,23 @@ export const metadata: Metadata = {
     icon: "/images/favicon-16x16.png",
     apple: "/images/apple-touch-icon.png",
   },
+  openGraph: {
+    title: "Lakeside Retreat | Luxury Glamping Central Otago",
+    description:
+      "Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell. Private spas, stargazing skylights, vineyard views.",
+    url: "https://lakesideretreat.co.nz",
+    siteName: "Lakeside Retreat",
+    images: [
+      {
+        url: "/images/lake-mountains-perfect.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Lakeside Retreat glamping domes overlooking Lake Dunstan",
+      },
+    ],
+    locale: "en_NZ",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -39,6 +56,11 @@ export default function RootLayout({
     <html lang="en-NZ">
       <body className={`${playfair.variable} ${roboto.variable} antialiased`}>
         {children}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js')})}`,
+          }}
+        />
       </body>
     </html>
   );
