@@ -1,17 +1,182 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Romantic Getaways",
-  description: "Couples retreat itinerary for Central Otago.",
+  title: "The Perfect Romantic Getaway in Central Otago",
+  description:
+    "Adults-only luxury glamping domes with private spas, vineyard views, and wine country at your doorstep. Plan the perfect couples retreat in Central Otago.",
 };
 
-export default function RomanticGetawaysPage() {
+const itinerary = [
+  {
+    day: "Day 1",
+    title: "Arrive, Unwind, and Settle In",
+    desc: "Enjoy the scenic drive from Queenstown Airport through the Kawarau Gorge. Explore your dome and unpack your welcome hamper featuring local cheeses, cured meats, crackers, and a bottle of regional wine. End the evening soaking in your private outdoor spa under the stars — the Milky Way is spectacular with zero light pollution.",
+  },
+  {
+    day: "Day 2",
+    title: "Wine Trail and Vineyard Dining",
+    desc: "Start with a slow morning, then drive 10 minutes to Bannockburn. Visit Mt Difficulty for Pinot Noir tasting, Carrick Winery for organic vineyard platters, and Wooing Tree's underground cellar. Enjoy a picnic by Lake Dunstan in the afternoon, then dinner at Carrick or Stoaker Room.",
+  },
+  {
+    day: "Day 3",
+    title: "Cycle the Rail Trail and Farewell Brunch",
+    desc: "Hire bikes and ride the Otago Rail Trail (300m from the retreat). The Cromwell to Clyde section follows the Kawarau River — flat and relaxed. Finish with brunch at the historic precinct. Optionally take the Crown Range Road to Queenstown for stunning views.",
+  },
+];
+
+const experiences = [
+  { title: "Wine Tasting for Two", desc: "30+ wineries within 15 min, with intimate private tastings available" },
+  { title: "Couples Cycling", desc: "Otago Rail Trail and Lake Dunstan Trail with tunnels and suspension bridges" },
+  { title: "Lakeside Picnics", desc: "Hamper with local produce at secluded spots along Lake Dunstan" },
+  { title: "Hot Tub Under the Stars", desc: "Private outdoor spas with dark skies and minimal light pollution" },
+  { title: "Local Dining", desc: "Vineyard restaurants, degustation menus, and heritage precinct cafes" },
+  { title: "Stargazing", desc: "Darkest skies in NZ — Dome Pinot's skylight lets you view southern constellations from bed" },
+];
+
+export default function CouplesRetreatPage() {
   return (
-    <section className="min-h-[60vh] flex items-center justify-center px-5 pt-24">
-      <div className="text-center">
-        <h1 className="font-display text-5xl mb-4">Romantic Getaways</h1>
-        <p className="text-muted text-lg">Coming soon — this page is being rebuilt.</p>
-      </div>
-    </section>
+    <>
+      {/* Hero */}
+      <section
+        className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/dome-rose-spa1.jpeg')",
+        }}
+      >
+        <div className="pt-20 px-5">
+          <h1 className="font-display text-5xl text-white mb-4">
+            The Perfect Romantic Getaway
+          </h1>
+          <p className="text-xl opacity-95 max-w-[700px] mx-auto">
+            Adults-only luxury glamping domes with private spas, vineyard views, and wine country
+            at your doorstep
+          </p>
+        </div>
+      </section>
+
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
+        <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
+          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li className="text-gray-400">&rsaquo;</li>
+          <li><Link href="/guides" className="text-teal no-underline hover:underline">Guides</Link></li>
+          <li className="text-gray-400">&rsaquo;</li>
+          <li className="text-muted">Couples Retreat</li>
+        </ol>
+      </nav>
+
+      {/* Intro */}
+      <section className="py-20 px-5">
+        <div className="max-w-[800px] mx-auto text-center">
+          <h2 className="font-display text-4xl mb-6">
+            Why Central Otago Is New Zealand&apos;s Best-Kept Secret for Couples
+          </h2>
+          <p className="text-lg leading-8 text-muted">
+            While Queenstown and Wanaka draw the crowds, Central Otago offers something rarer:
+            space, silence, and genuine escape. Lakeside Retreat sits at 96 Smiths Way, Mount Pisa,
+            with views across Lake Dunstan toward Bannockburn, surrounded by vineyards and framed
+            by the Pisa Range. The famous Otago Rail Trail is just 300m away.
+          </p>
+        </div>
+      </section>
+
+      {/* Domes */}
+      <section className="py-20 px-5 bg-white">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-4">
+            <span className="bg-red-50 text-red-700 px-4 py-2 rounded-full text-sm font-semibold">
+              Strictly Adults Only
+            </span>
+          </div>
+          <h2 className="font-display text-4xl text-center mb-10">
+            Our Adults-Only Luxury Domes
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Link href="/dome-pinot" className="block bg-cream rounded-2xl overflow-hidden shadow-lg no-underline hover:-translate-y-1 transition-transform">
+              <div className="relative h-[250px]">
+                <Image src="/images/dome-pinot-hero.jpeg" alt="Dome Pinot" fill className="object-cover" sizes="50vw" />
+              </div>
+              <div className="p-6">
+                <h3 className="font-display text-xl text-teal mb-1">Dome Pinot</h3>
+                <p className="text-burgundy font-semibold text-sm mb-3">From $530/night &middot; 50sqm</p>
+                <ul className="text-sm text-muted space-y-1">
+                  <li>&bull; Private outdoor spa with lake views</li>
+                  <li>&bull; Stargazing skylight</li>
+                  <li>&bull; Complimentary welcome hamper</li>
+                  <li>&bull; Full kitchenette</li>
+                </ul>
+              </div>
+            </Link>
+            <Link href="/dome-rose" className="block bg-cream rounded-2xl overflow-hidden shadow-lg no-underline hover:-translate-y-1 transition-transform">
+              <div className="relative h-[250px]">
+                <Image src="/images/dome-rose-spa1.jpeg" alt="Dome Ros&eacute;" fill className="object-cover" sizes="50vw" />
+              </div>
+              <div className="p-6">
+                <h3 className="font-display text-xl text-teal mb-1">Dome Ros&eacute;</h3>
+                <p className="text-burgundy font-semibold text-sm mb-3">From $510/night &middot; 40sqm</p>
+                <ul className="text-sm text-muted space-y-1">
+                  <li>&bull; Private outdoor spa</li>
+                  <li>&bull; Mountain and vineyard views</li>
+                  <li>&bull; Luxury king bed</li>
+                  <li>&bull; Full kitchenette</li>
+                </ul>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Itinerary */}
+      <section className="py-20 px-5">
+        <div className="max-w-[800px] mx-auto">
+          <h2 className="font-display text-4xl text-center mb-10">
+            A Romantic 3-Day Central Otago Itinerary
+          </h2>
+          <div className="space-y-8">
+            {itinerary.map((day) => (
+              <div key={day.day} className="flex gap-6">
+                <div className="text-2xl font-bold text-burgundy min-w-[70px]">{day.day}</div>
+                <div className="bg-white rounded-xl p-6 shadow-sm flex-1">
+                  <h3 className="font-display text-xl mb-3">{day.title}</h3>
+                  <p className="text-muted leading-7">{day.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Experiences */}
+      <section className="py-20 px-5 bg-white">
+        <div className="max-w-[1200px] mx-auto">
+          <h2 className="font-display text-4xl text-center mb-10">
+            Romantic Things to Do
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {experiences.map((e) => (
+              <div key={e.title} className="bg-cream rounded-2xl p-6">
+                <h3 className="font-display text-lg text-teal mb-2">{e.title}</h3>
+                <p className="text-muted text-sm">{e.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 px-5 text-center">
+        <div className="max-w-[600px] mx-auto">
+          <h2 className="font-display text-4xl mb-4">Book Your Romantic Escape</h2>
+          <p className="text-lg text-muted mb-8">
+            Book direct for the best rates and a complimentary welcome hamper.
+          </p>
+          <Button href="/stay">Check Availability</Button>
+        </div>
+      </section>
+    </>
   );
 }
