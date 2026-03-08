@@ -1,0 +1,232 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model abandoned_checkout_reminders {
+  id                    Int     @id @default(autoincrement())
+  booking_id            String  @unique
+  guest_email           String
+  guest_name            String?
+  accommodation         String?
+  check_in              String?
+  check_out             String?
+  reminder_count        Int?    @default(0)
+  last_reminder_sent_at String?
+  last_error            String?
+  created_at            String? @default(dbgenerated("CURRENT_TIMESTAMP"))
+}
+
+model audit_logs {
+  id         Int       @id @default(autoincrement())
+  admin_user String
+  action     String
+  details    String?
+  ip_address String?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([action], map: "idx_audit_logs_action")
+  @@index([created_at], map: "idx_audit_logs_created_at")
+}
+
+model bookings {
+  id                              String    @id
+  guest_name                      String
+  guest_email                     String
+  guest_phone                     String?
+  accommodation                   String
+  check_in                        DateTime  @db.Date
+  check_out                       DateTime  @db.Date
+  guests                          Int
+  total_price                     Decimal?  @db.Decimal(10, 2)
+  status                          String?   @default("confirmed")
+  payment_status                  String?   @default("pending")
+  notes                           String?
+  stripe_session_id               String?
+  stripe_payment_id               String?
+  uplisting_id                    String?
+  created_at                      DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at                      DateTime? @default(now()) @db.Timestamptz(6)
+  deposit_release_due             String?
+  booking_source                  String?   @default("unknown")
+  uplisting_sync_status           String?   @default("pending")
+  security_deposit_intent_id      String?
+  security_deposit_status         String?   @default("pending")
+  security_deposit_amount         Decimal?  @default(300.00) @db.Decimal(10, 2)
+  security_deposit_released_at    DateTime? @db.Timestamp(6)
+  security_deposit_claimed_amount Decimal?  @default(0) @db.Decimal(10, 2)
+  deleted_at                      DateTime? @db.Timestamp(6)
+
+  @@index([accommodation], map: "idx_bookings_accommodation")
+  @@index([booking_source], map: "idx_bookings_booking_source")
+  @@index([check_in], map: "idx_bookings_check_in")
+  @@index([check_out], map: "idx_bookings_check_out")
+  @@index([created_at], map: "idx_bookings_created")
+  @@index([created_at], map: "idx_bookings_created_at")
+  @@index([check_in, check_out], map: "idx_bookings_dates")
+  @@index([payment_status], map: "idx_bookings_payment_status")
+  @@index([status], map: "idx_bookings_status")
+  @@index([stripe_session_id], map: "idx_bookings_stripe_session")
+}
+
+model contact_messages {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String
+  message    String
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@index([created_at], map: "idx_contact_created")
+}
+
+model failed_webhook_events {
+  id                Int       @id @default(autoincrement())
+  event_id          String
+  event_type        String
+  stripe_session_id String?
+  stripe_payment_id String?
+  booking_id        String?
+  event_data        String?
+  error_message     String?
+  resolved          Boolean?  @default(false)
+  resolved_at       DateTime? @db.Timestamp(6)
+  created_at        DateTime? @default(now()) @db.Timestamp(6)
+  retry_count       Int?      @default(0)
+  last_retry_at     DateTime? @db.Timestamp(6)
+
+  @@index([resolved], map: "idx_failed_webhook_unresolved", where: raw("(resolved = false)"))
+}
+
+model gallery_images {
+  id            Int       @id @default(autoincrement())
+  filename      String
+  title         String?
+  description   String?
+  property      String?
+  is_hero       Boolean?  @default(false)
+  is_featured   Boolean?  @default(false)
+  display_order Int?      @default(0)
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  updated_at    DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model processed_webhook_events {
+  event_id     String    @id
+  processed_at DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model review_requests {
+  id                   Int     @id @default(autoincrement())
+  booking_id           String  @unique
+  guest_email          String
+  guest_name           String?
+  accommodation        String?
+  check_out            String?
+  request_count        Int?    @default(0)
+  last_request_sent_at String?
+  last_error           String?
+  status               String? @default("pending")
+  created_at           String? @default(dbgenerated("CURRENT_TIMESTAMP"))
+}
+
+model reviews {
+  id             Int       @id @default(autoincrement())
+  guest_name     String
+  platform       String?   @default("direct")
+  rating         Int?      @default(5)
+  review_text    String?
+  stay_date      DateTime? @db.Date
+  property       String?
+  status         String?   @default("pending")
+  is_featured    Boolean?  @default(false)
+  admin_notes    String?
+  admin_response String?
+  response_date  DateTime? @db.Timestamp(6)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model schema_migrations {
+  id         Int       @id @default(autoincrement())
+  filename   String    @unique
+  applied_at DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model seasonal_rates {
+  id         Int       @id @default(autoincrement())
+  name       String
+  start_date DateTime  @db.Date
+  end_date   DateTime  @db.Date
+  multiplier Decimal?  @default(1.00) @db.Decimal(3, 2)
+  is_active  Boolean?  @default(true)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model social_content_drafts {
+  id                Int     @id @default(autoincrement())
+  platform          String
+  source_type       String?
+  source_text       String?
+  accommodation     String?
+  generated_caption String?
+  hashtags          String?
+  story_text        String?
+  status            String? @default("draft")
+  created_at        String? @default(dbgenerated("CURRENT_TIMESTAMP"))
+}
+
+model system_settings {
+  id            Int       @id @default(autoincrement())
+  setting_key   String    @unique
+  setting_value String?
+  setting_type  String?   @default("string")
+  updated_at    DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([setting_key], map: "idx_settings_key")
+}
+
+model token_blacklist {
+  token_hash String   @id
+  expires_at DateTime @db.Timestamp(6)
+}
+
+model blocked_dates {
+  id         Int       @id @default(autoincrement())
+  property   String
+  start_date DateTime  @db.Date
+  end_date   DateTime  @db.Date
+  reason     String?   @default("maintenance")
+  notes      String?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([property], map: "idx_blocked_dates_property")
+  @@index([start_date, end_date], map: "idx_blocked_dates_range")
+}
+
+model promo_codes {
+  id             Int       @id @default(autoincrement())
+  name           String
+  code           String    @unique
+  type           String?   @default("general")
+  description    String?
+  discount_type  String
+  discount_value Decimal   @db.Decimal(10, 2)
+  valid_from     DateTime? @db.Date
+  valid_until    DateTime? @db.Date
+  min_stay       Int?
+  usage_limit    Int?
+  usage_count    Int?      @default(0)
+  status         String?   @default("active")
+  partner_info   String?
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([code], map: "idx_promo_codes_code")
+  @@index([status], map: "idx_promo_codes_status")
+}

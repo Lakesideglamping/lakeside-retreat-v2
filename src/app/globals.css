@@ -10,6 +10,11 @@
   --color-cream: #FAF4F5;
   --color-navy: #0f172a;
 
+  /* Admin Panel */
+  --color-admin-bg: #f8fafc;
+  --color-admin-sidebar: #0f172a;
+  --color-admin-sidebar-active: #1e293b;
+
   /* Text */
   --color-body: #302E41;
   --color-muted: #64748b;
