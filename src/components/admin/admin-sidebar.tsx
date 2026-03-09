@@ -140,12 +140,7 @@ export function AdminSidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`
-          w-64 shrink-0 bg-admin-sidebar
-          max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-40
-          max-lg:transition-transform max-lg:duration-200 max-lg:ease-in-out
-          ${!mobileOpen ? "max-lg:-translate-x-full" : ""}
-        `}
+        className={`admin-sidebar-aside w-64 shrink-0 bg-admin-sidebar ${mobileOpen ? "sidebar-open" : ""}`}
       >
         <div className="flex h-full flex-col">
           {/* Logo */}

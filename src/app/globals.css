@@ -31,6 +31,22 @@ body {
   line-height: 1.6;
 }
 
+/* Admin sidebar — plain CSS to avoid Tailwind v4 cascade issues */
+@media (max-width: 1023px) {
+  .admin-sidebar-aside {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+    transition: transform 200ms ease-in-out;
+    transform: translateX(-100%);
+  }
+  .admin-sidebar-aside.sidebar-open {
+    transform: translateX(0);
+  }
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   color: var(--color-teal);
