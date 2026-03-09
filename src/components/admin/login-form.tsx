@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
 
 export function LoginForm() {
-  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -31,7 +29,9 @@ export function LoginForm() {
         return;
       }
 
-      router.push("/admin");
+      // Full navigation (not router.push) so the admin layout
+      // re-renders with AdminShell instead of reusing the login layout
+      window.location.href = "/admin";
     } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
