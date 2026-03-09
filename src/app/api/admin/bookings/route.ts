@@ -52,15 +52,30 @@ export async function GET(request: Request) {
 
     const skip = (page - 1) * limit;
 
-    const [bookings, total] = await Promise.all([
+    // Sort: upcoming/current bookings first (nearest check-in), then past
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [upcoming, upcomingCount, past, pastCount] = await Promise.all([
       prisma.bookings.findMany({
-        where,
-        orderBy: [{ check_in: "desc" }, { created_at: "desc" }],
-        skip,
-        take: limit,
+        where: { ...where, check_out: { gte: today } },
+        orderBy: [{ check_in: "asc" }],
+        skip: 0,
+        take: limit + skip, // fetch enough to paginate
       }),
-      prisma.bookings.count({ where }),
+      prisma.bookings.count({ where: { ...where, check_out: { gte: today } } }),
+      prisma.bookings.findMany({
+        where: { ...where, check_out: { lt: today } },
+        orderBy: [{ check_in: "desc" }],
+        skip: 0,
+        take: limit + skip,
+      }),
+      prisma.bookings.count({ where: { ...where, check_out: { lt: today } } }),
     ]);
+
+    const combined = [...upcoming, ...past];
+    const bookings = combined.slice(skip, skip + limit);
+    const total = upcomingCount + pastCount;
 
     return NextResponse.json({
       bookings,
