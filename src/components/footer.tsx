@@ -5,7 +5,7 @@ const stayLinks = [
   { href: "/dome-pinot", label: "Dome Pinot" },
   { href: "/dome-rose", label: "Dome Ros\u00e9" },
   { href: "/lakeside-cottage", label: "Lakeside Cottage" },
-  { href: "/contact", label: "Check Availability" },
+  { href: "/book", label: "Check Availability" },
 ];
 
 const exploreLinks = [

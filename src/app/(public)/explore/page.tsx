@@ -195,7 +195,7 @@ export default function ExplorePage() {
           <p className="text-lg text-muted mb-8">
             Book your stay at Lakeside Retreat and discover everything Central Otago has to offer.
           </p>
-          <Button href="/contact">Book Your Stay</Button>
+          <Button href="/book">Book Your Stay</Button>
         </div>
       </section>
     </>

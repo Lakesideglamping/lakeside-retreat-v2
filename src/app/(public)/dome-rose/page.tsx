@@ -92,7 +92,7 @@ export default function DomeRosePage() {
             A romantic 40sqm geodesic dome nestled among the vineyards
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/contact" ariaLabel="Book Dome Ros&eacute; now from $510 per night">
+            <Button href="/book?a=dome-rose" ariaLabel="Book Dome Ros&eacute; now from $510 per night">
               Book Now - From $510/night
             </Button>
             <Button href="#gallery" variant="outline">
@@ -203,7 +203,7 @@ export default function DomeRosePage() {
               </p>
             </div>
             <Button
-              href="/contact"
+              href="/book?a=dome-rose"
               className="w-full text-center"
               ariaLabel="Check availability for Dome Ros&eacute;"
             >
@@ -298,7 +298,7 @@ export default function DomeRosePage() {
             Just 45 minutes from Queenstown, 30 minutes from Wanaka.
           </p>
           <Button
-            href="/contact"
+            href="/book?a=dome-rose"
             ariaLabel="Book Dome Ros&eacute; now from $510 per night"
           >
             Book Dome Ros&eacute; Now

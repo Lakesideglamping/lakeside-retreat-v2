@@ -144,7 +144,7 @@ export default function ReviewsPage() {
             Join our community of happy guests and experience Central Otago&apos;s finest
             accommodation.
           </p>
-          <Button href="/contact">Book Your Stay</Button>
+          <Button href="/book">Book Your Stay</Button>
         </div>
       </section>
     </>

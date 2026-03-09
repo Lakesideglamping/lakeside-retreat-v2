@@ -41,7 +41,7 @@ export default function HomePage() {
             Luxury glamping domes and lakefront cottage in the heart of Central
             Otago&apos;s wine country
           </p>
-          <Button href="/contact">Book Your Escape</Button>
+          <Button href="/book">Book Your Escape</Button>
         </div>
       </section>
 
