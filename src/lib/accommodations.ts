@@ -27,7 +27,7 @@ const accommodations: Accommodation[] = [
     securityDeposit: 300,
     cleaningFee: 50,
     adultsOnly: true,
-    amenities: ["King bed", "Private spa", "Panoramic views", "Solar powered"],
+    amenities: ["Super King bed", "Private spa", "Panoramic views", "Solar powered"],
     images: ["dome-pinot-hero.jpeg", "dome-pinot-interior.jpeg"],
   },
   {
@@ -41,7 +41,7 @@ const accommodations: Accommodation[] = [
     securityDeposit: 300,
     cleaningFee: 50,
     adultsOnly: true,
-    amenities: ["King bed", "Outdoor spa", "Mountain views", "Solar powered"],
+    amenities: ["Super King bed", "Outdoor spa", "Mountain views", "Solar powered"],
     images: ["dome-rose-spa1.jpeg", "dome-rose-interior.jpeg"],
   },
   {
@@ -57,7 +57,7 @@ const accommodations: Accommodation[] = [
     adultsOnly: false,
     extraGuestFee: 100,
     petFee: 50,
-    amenities: ["2 bedrooms", "Full kitchen", "Lake views", "Pet friendly"],
+    amenities: ["Queen bed + sofa bed", "Full kitchen", "Lake views", "Pet friendly"],
     images: ["lakeside-cottage-exterior.jpeg", "lakeside-cottage-interior.jpeg"],
   },
 ];

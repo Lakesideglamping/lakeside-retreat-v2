@@ -14,7 +14,7 @@ const features = [
   { title: "50sqm Living Space", desc: "Our largest dome with spacious open-plan design" },
   { title: "Private Outdoor Spa", desc: "Relax under the stars in your own spa pool" },
   { title: "Stargazing Skylight", desc: "Fall asleep watching the Milky Way" },
-  { title: "Luxury King Bed", desc: "Premium bedding with lake views from your pillow" },
+  { title: "Luxury Super King Bed", desc: "Premium bedding with lake views from your pillow" },
   { title: "Eco-Powered", desc: "100% renewable energy with backup power" },
   { title: "Panoramic Views", desc: "Floor-to-ceiling windows overlooking Lake Dunstan" },
 ];
@@ -60,9 +60,9 @@ export default function DomePinotPage() {
           price: 530,
           floorSize: 50,
           maxOccupancy: 2,
-          bedType: "King",
+          bedType: "Super King",
           images: ["dome-pinot-hero.jpeg", "PinotLakeView.jpeg", "pinotinternal.jpeg"],
-          amenities: ["Private Outdoor Spa", "Stargazing Skylight", "King Bed", "Panoramic Lake Views", "Sustainably Powered", "Underfloor Heating", "Air Conditioning", "Kitchenette", "Free WiFi", "Free Parking"],
+          amenities: ["Private Outdoor Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Underfloor Heating", "Air Conditioning", "Kitchenette", "Free WiFi", "Free Parking"],
           reviewCount: "127",
         }),
         createBreadcrumbSchema([
@@ -71,7 +71,7 @@ export default function DomePinotPage() {
           { name: "Dome Pinot", path: "/dome-pinot" },
         ]),
         createFaqSchema([
-          { question: "What makes Dome Pinot different from other glamping in Central Otago?", answer: "Dome Pinot is our flagship 50sqm luxury geodesic dome featuring panoramic Lake Dunstan views, a private outdoor spa, stargazing skylight, king bed, and complimentary welcome hamper." },
+          { question: "What makes Dome Pinot different from other glamping in Central Otago?", answer: "Dome Pinot is our flagship 50sqm luxury geodesic dome featuring panoramic Lake Dunstan views, a private outdoor spa, stargazing skylight, super king bed, and complimentary welcome hamper." },
           { question: "How far is Dome Pinot from Queenstown?", answer: "Approximately 45 minutes' drive from Queenstown and 30 minutes from Wanaka." },
           { question: "Is Dome Pinot suitable for children?", answer: "No, Dome Pinot is strictly adults-only accommodation designed for couples. For families, we recommend our Lakeside Cottage." },
           { question: "What is included in a stay at Dome Pinot?", answer: "Every stay includes a private outdoor spa, complimentary welcome hamper with local Central Otago produce, premium bed linen, underfloor heating, full kitchen facilities, and direct access to the Lake Dunstan Cycle Trail." },

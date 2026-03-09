@@ -21,7 +21,7 @@ const galleryItems = [
   { src: "/images/vineyard.jpeg", alt: "Central Otago vineyard views from Lakeside Retreat", title: "Vineyard Views", category: "views" as Category },
   { src: "/images/magical-sunset.jpg", alt: "Stunning sunset over Lake Dunstan", title: "Lake Dunstan Sunset", category: "views" as Category },
   { src: "/images/pinotspa.jpeg", alt: "Private hot tub under the stars", title: "Hot Tub Experience", category: "amenities" as Category },
-  { src: "/images/dome-rose-interior.jpeg", alt: "Luxurious dome interior with king bed and panoramic windows", title: "Dome Interior", category: "domes" as Category },
+  { src: "/images/dome-rose-interior.jpeg", alt: "Luxurious dome interior with super king bed and panoramic windows", title: "Dome Interior", category: "domes" as Category },
   { src: "/images/domesmountainview.jpeg", alt: "Mountain views from the property", title: "Mountain Panorama", category: "views" as Category },
   { src: "/images/gallerydeck.jpeg", alt: "Relaxing on the deck with vineyard views", title: "Your Private Retreat", category: "amenities" as Category },
 ];

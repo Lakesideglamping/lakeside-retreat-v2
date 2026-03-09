@@ -14,7 +14,7 @@ const features = [
   { title: "Vineyard Views", desc: "Wake up to rows of vines and mountain backdrops" },
   { title: "Private Outdoor Spa", desc: "Soak under the stars with a glass of local wine" },
   { title: "Romantic Setting", desc: "Intimate 40sqm space designed for couples" },
-  { title: "Luxury King Bed", desc: "Premium bedding for restful nights" },
+  { title: "Luxury Super King Bed", desc: "Premium bedding for restful nights" },
   { title: "Eco-Powered", desc: "100% renewable energy with backup power" },
   { title: "Wine Trail Access", desc: "30+ wineries within 20 minutes drive" },
 ];
@@ -60,9 +60,9 @@ export default function DomeRosePage() {
           price: 510,
           floorSize: 40,
           maxOccupancy: 2,
-          bedType: "King",
+          bedType: "Super King",
           images: ["dome-rose-spa1.jpeg", "dome-rose-interior.jpeg"],
-          amenities: ["Private Outdoor Spa", "Mountain Views", "King Bed", "Vineyard Setting", "Sustainably Powered", "Underfloor Heating", "Air Conditioning", "Kitchenette", "Free WiFi", "Free Parking"],
+          amenities: ["Private Outdoor Spa", "Mountain Views", "Super King Bed", "Vineyard Setting", "Sustainably Powered", "Underfloor Heating", "Air Conditioning", "Kitchenette", "Free WiFi", "Free Parking"],
           reviewCount: "98",
         }),
         createBreadcrumbSchema([

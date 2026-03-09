@@ -20,7 +20,7 @@ const features = [
 ];
 
 const amenities = [
-  { title: "2 Bedrooms", desc: "King bed + Queen bed + 2 singles (sofa bed)" },
+  { title: "Sleeping", desc: "Queen bed + sofa bed" },
   { title: "BBQ Facilities", desc: "Gas BBQ on the deck for family cookouts" },
   { title: "Climate Control", desc: "Underfloor heating and air conditioning" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },

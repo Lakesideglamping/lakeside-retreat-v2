@@ -19,7 +19,7 @@ const accommodations = [
     price: "$530",
     tagline: "50sqm luxury dome with panoramic Lake Dunstan views, private spa, and stargazing skylight.",
     features: [
-      "King-size bed with premium linens",
+      "Super King bed with premium linens",
       "Private outdoor salt-water spa",
       "Stargazing skylight",
       "Full kitchenette",
@@ -35,7 +35,7 @@ const accommodations = [
     price: "$510",
     tagline: "40sqm romantic retreat with vineyard views, private spa, and complete cooking facilities.",
     features: [
-      "Queen-size bed with luxury bedding",
+      "Super King bed with luxury bedding",
       "Private outdoor salt-water spa",
       "Vineyard & mountain views",
       "Full kitchen",

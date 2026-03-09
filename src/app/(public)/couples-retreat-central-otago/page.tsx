@@ -135,7 +135,7 @@ export default function CouplesRetreatPage() {
                 <ul className="text-sm text-muted space-y-1">
                   <li>&bull; Private outdoor spa</li>
                   <li>&bull; Mountain and vineyard views</li>
-                  <li>&bull; Luxury king bed</li>
+                  <li>&bull; Luxury super king bed</li>
                   <li>&bull; Full kitchenette</li>
                 </ul>
               </div>
