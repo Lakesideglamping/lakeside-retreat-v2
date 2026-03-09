@@ -63,31 +63,33 @@ export async function fetchBlockedDates(
   if (!propertyId) return [];
 
   try {
+    // Use calendar endpoint for availability — more efficient than bookings
+    const today = new Date().toISOString().split("T")[0];
+    const futureDate = new Date();
+    futureDate.setFullYear(futureDate.getFullYear() + 1);
+    const toDate = futureDate.toISOString().split("T")[0];
+
     const res = await fetchWithRetry(
-      `${API_BASE}/api/v2/properties/${propertyId}/bookings`,
+      `${API_BASE}/calendar/${propertyId}?from=${today}&to=${toDate}`,
       {
         headers: {
           Authorization: authHeader(),
-          Accept: "application/json",
+          "Content-Type": "application/json",
         },
       }
     );
 
     if (!res.ok) {
-      console.error(`[uplisting] Failed to fetch blocked dates: ${res.status}`);
+      console.error(`[uplisting] Failed to fetch calendar: ${res.status}`);
       return [];
     }
 
     const data = await res.json();
     const blocked: string[] = [];
 
-    for (const booking of data.data || []) {
-      const start = new Date(booking.attributes?.check_in || booking.check_in);
-      const end = new Date(booking.attributes?.check_out || booking.check_out);
-      const current = new Date(start);
-      while (current < end) {
-        blocked.push(current.toISOString().split("T")[0]);
-        current.setDate(current.getDate() + 1);
+    for (const day of data.calendar?.days || []) {
+      if (!day.available) {
+        blocked.push(day.date);
       }
     }
 
@@ -130,6 +132,11 @@ interface SyncBookingData {
   guests: number;
 }
 
+/**
+ * Block dates on Uplisting calendar when a direct booking is made.
+ * The public API doesn't have a create-booking endpoint, so we use
+ * the calendar update endpoint to mark dates as unavailable.
+ */
 export async function syncBooking(data: SyncBookingData): Promise<void> {
   if (!isConfigured()) {
     console.log("[uplisting] Not configured — skipping booking sync.", data);
@@ -142,42 +149,43 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
     return;
   }
 
-  const [firstName, ...lastParts] = data.guestName.split(" ");
-  const lastName = lastParts.join(" ") || firstName;
-
   try {
-    const res = await fetchWithRetry(`${API_BASE}/api/v2/bookings`, {
-      method: "POST",
-      headers: {
-        Authorization: authHeader(),
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        data: {
-          type: "bookings",
-          attributes: {
-            property_id: propertyId,
-            check_in: data.checkIn,
-            check_out: data.checkOut,
-            guest_first_name: firstName,
-            guest_last_name: lastName,
-            guest_email: data.guestEmail,
-            guest_phone: data.guestPhone || "",
-            number_of_guests: data.guests,
-            source: "direct",
-          },
+    const res = await fetchWithRetry(
+      `${API_BASE}/calendar/${propertyId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: authHeader(),
+          "Content-Type": "application/json",
         },
-      }),
-    });
+        body: JSON.stringify({
+          calendar: {
+            days: [
+              {
+                available: false,
+                from: data.checkIn,
+                to: data.checkOut,
+              },
+            ],
+          },
+        }),
+      }
+    );
 
     if (!res.ok) {
       const body = await res.text();
-      console.error(`[uplisting] Booking sync failed: ${res.status}`, body);
+      console.error(`[uplisting] Calendar sync failed: ${res.status}`, body);
+    } else {
+      console.log(
+        `[uplisting] Blocked dates ${data.checkIn} to ${data.checkOut} for ${data.accommodation}`
+      );
     }
   } catch (err) {
-    console.error("[uplisting] Booking sync error:", err);
+    console.error("[uplisting] Calendar sync error:", err);
   }
+
+  // Invalidate blocked dates cache for this accommodation
+  setCache(`blocked-dates-${data.accommodation}`, null);
 }
 
 export function verifyWebhookSignature(

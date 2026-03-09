@@ -35,20 +35,21 @@ export async function POST(request: Request) {
 
     const event = JSON.parse(body);
     const eventType = event.type || "unknown";
-    const data = event.data?.attributes || event.data || {};
-    const uplistingId = String(
-      event.data?.id || data.id || data.booking_id || ""
-    );
+
+    // Uplisting webhook payload uses flat booking fields (not nested attributes)
+    // e.g. { type: "booking_updated", data: { id: 123, property_id: 82753, check_in: "2026-03-10", ... } }
+    const data = event.data || {};
+    const uplistingId = String(data.id || data.booking_id || "");
 
     console.log("[uplisting webhook] Event:", eventType, "ID:", uplistingId);
 
     switch (eventType) {
-      case "booking.created": {
+      case "booking_created": {
         const propertyId = String(data.property_id || "");
         const accommodation = getAccommodationSlug(propertyId);
-        const source = data.source || data.channel || "channel";
+        const source = data.channel || "channel";
 
-        // Skip if this booking already exists (e.g., we created it via syncBooking)
+        // Skip if this booking already exists
         if (uplistingId) {
           const existing = await prisma.bookings.findFirst({
             where: { uplisting_id: uplistingId },
@@ -61,8 +62,8 @@ export async function POST(request: Request) {
           }
         }
 
-        // Also skip if it was a "direct" booking we pushed to Uplisting
-        if (source === "direct") {
+        // Skip if it was a direct booking we synced via calendar block
+        if (source === "uplisting") {
           const matchingBooking = await prisma.bookings.findFirst({
             where: {
               accommodation,
@@ -73,7 +74,6 @@ export async function POST(request: Request) {
             },
           });
           if (matchingBooking) {
-            // Link our existing booking to the Uplisting ID
             await prisma.bookings.update({
               where: { id: matchingBooking.id },
               data: {
@@ -90,10 +90,7 @@ export async function POST(request: Request) {
         }
 
         // Create a new booking from external channel (Airbnb, Booking.com, etc.)
-        const guestName =
-          [data.guest_first_name, data.guest_last_name]
-            .filter(Boolean)
-            .join(" ") || "Channel Guest";
+        const guestName = data.guest_name || "Channel Guest";
 
         try {
           await prisma.bookings.create({
@@ -106,10 +103,12 @@ export async function POST(request: Request) {
               check_in: new Date(data.check_in),
               check_out: new Date(data.check_out),
               guests: Number(data.number_of_guests) || 1,
-              total_price: data.total_price
-                ? Number(data.total_price)
-                : null,
-              status: "confirmed",
+              total_price: data.total_payout
+                ? Number(data.total_payout)
+                : data.accomodation_total
+                  ? Number(data.accomodation_total)
+                  : null,
+              status: data.status === "cancelled" ? "cancelled" : "confirmed",
               payment_status: "paid_external",
               booking_source:
                 source === "airbnb"
@@ -131,7 +130,7 @@ export async function POST(request: Request) {
         break;
       }
 
-      case "booking.updated": {
+      case "booking_updated": {
         if (!uplistingId) break;
 
         try {
@@ -145,18 +144,14 @@ export async function POST(request: Request) {
             updateData.check_out = new Date(data.check_out);
           if (data.number_of_guests)
             updateData.guests = Number(data.number_of_guests);
-          if (data.guest_first_name || data.guest_last_name) {
-            updateData.guest_name = [
-              data.guest_first_name,
-              data.guest_last_name,
-            ]
-              .filter(Boolean)
-              .join(" ");
-          }
+          if (data.guest_name)
+            updateData.guest_name = data.guest_name;
           if (data.guest_email)
             updateData.guest_email = data.guest_email;
-          if (data.total_price)
-            updateData.total_price = Number(data.total_price);
+          if (data.total_payout)
+            updateData.total_price = Number(data.total_payout);
+          if (data.status === "cancelled")
+            updateData.status = "cancelled";
 
           const result = await prisma.bookings.updateMany({
             where: { uplisting_id: uplistingId },
@@ -172,7 +167,7 @@ export async function POST(request: Request) {
         break;
       }
 
-      case "booking.cancelled": {
+      case "booking_cancelled": {
         if (!uplistingId) break;
 
         try {
