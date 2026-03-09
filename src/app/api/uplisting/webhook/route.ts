@@ -33,13 +33,12 @@ export async function POST(request: Request) {
       }
     }
 
-    const event = JSON.parse(body);
-    const eventType = event.type || "unknown";
-
-    // Uplisting webhook payload uses flat booking fields (not nested attributes)
-    // e.g. { type: "booking_updated", data: { id: 123, property_id: 82753, check_in: "2026-03-10", ... } }
-    const data = event.data || {};
-    const uplistingId = String(data.id || data.booking_id || "");
+    // Uplisting webhook payload is a flat booking object POSTed directly.
+    // Event type comes from the ?event= query param since all hooks share one URL.
+    const url = new URL(request.url);
+    const eventType = url.searchParams.get("event") || "unknown";
+    const data = JSON.parse(body);
+    const uplistingId = String(data.id || "");
 
     console.log("[uplisting webhook] Event:", eventType, "ID:", uplistingId);
 
@@ -111,9 +110,9 @@ export async function POST(request: Request) {
               status: data.status === "cancelled" ? "cancelled" : "confirmed",
               payment_status: "paid_external",
               booking_source:
-                source === "airbnb"
+                source.startsWith("airbnb")
                   ? "airbnb"
-                  : source === "booking_com"
+                  : source.startsWith("booking")
                     ? "booking.com"
                     : `channel:${source}`,
               uplisting_id: uplistingId,
@@ -167,7 +166,7 @@ export async function POST(request: Request) {
         break;
       }
 
-      case "booking_cancelled": {
+      case "booking_removed": {
         if (!uplistingId) break;
 
         try {
