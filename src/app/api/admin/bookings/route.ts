@@ -56,26 +56,49 @@ export async function GET(request: Request) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const [upcoming, upcomingCount, past, pastCount] = await Promise.all([
-      prisma.bookings.findMany({
-        where: { ...where, check_out: { gte: today } },
-        orderBy: [{ check_in: "asc" }],
-        skip: 0,
-        take: limit + skip, // fetch enough to paginate
-      }),
-      prisma.bookings.count({ where: { ...where, check_out: { gte: today } } }),
-      prisma.bookings.findMany({
-        where: { ...where, check_out: { lt: today } },
-        orderBy: [{ check_in: "desc" }],
-        skip: 0,
-        take: limit + skip,
-      }),
-      prisma.bookings.count({ where: { ...where, check_out: { lt: today } } }),
+    const upcomingWhere = { ...where, check_out: { gte: today } };
+    const pastWhere = { ...where, check_out: { lt: today } };
+
+    const [upcomingCount, pastCount] = await Promise.all([
+      prisma.bookings.count({ where: upcomingWhere }),
+      prisma.bookings.count({ where: pastWhere }),
     ]);
 
-    const combined = [...upcoming, ...past];
-    const bookings = combined.slice(skip, skip + limit);
     const total = upcomingCount + pastCount;
+    let bookings: Awaited<ReturnType<typeof prisma.bookings.findMany>> = [];
+
+    if (skip < upcomingCount) {
+      // Page starts within upcoming bookings
+      const upcomingTake = Math.min(limit, upcomingCount - skip);
+      const upcomingResults = await prisma.bookings.findMany({
+        where: upcomingWhere,
+        orderBy: [{ check_in: "asc" }],
+        skip,
+        take: upcomingTake,
+      });
+      bookings.push(...upcomingResults);
+
+      // Fill remaining slots from past bookings if needed
+      const remaining = limit - upcomingResults.length;
+      if (remaining > 0) {
+        const pastResults = await prisma.bookings.findMany({
+          where: pastWhere,
+          orderBy: [{ check_in: "desc" }],
+          skip: 0,
+          take: remaining,
+        });
+        bookings.push(...pastResults);
+      }
+    } else {
+      // Page starts within past bookings
+      const pastSkip = skip - upcomingCount;
+      bookings = await prisma.bookings.findMany({
+        where: pastWhere,
+        orderBy: [{ check_in: "desc" }],
+        skip: pastSkip,
+        take: limit,
+      });
+    }
 
     return NextResponse.json({
       bookings,
