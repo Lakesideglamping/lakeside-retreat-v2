@@ -65,6 +65,13 @@ function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
+function formatAccommodation(slug: string): string {
+  return slug
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-US", {
     month: "short",
@@ -201,7 +208,7 @@ export function DashboardContent({
                       {booking.guest_name}
                     </td>
                     <td className="whitespace-nowrap px-6 py-3.5 text-sm text-gray-600">
-                      {booking.accommodation}
+                      {formatAccommodation(booking.accommodation)}
                     </td>
                     <td className="whitespace-nowrap px-6 py-3.5 text-sm text-gray-600">
                       {formatDate(booking.check_in)}

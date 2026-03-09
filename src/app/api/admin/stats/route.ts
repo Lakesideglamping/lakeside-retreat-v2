@@ -69,7 +69,7 @@ export async function GET(request: Request) {
           status: true,
           total_price: true,
         },
-        orderBy: { created_at: "desc" },
+        orderBy: [{ check_in: "desc" }, { created_at: "desc" }],
         take: 5,
       }),
     ]);
