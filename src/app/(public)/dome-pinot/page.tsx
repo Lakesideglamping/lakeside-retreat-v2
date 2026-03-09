@@ -93,7 +93,7 @@ export default function DomePinotPage() {
             Our flagship 50sqm luxury geodesic dome with panoramic Lake Dunstan views
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/#booking" ariaLabel="Book Dome Pinot now from $530 per night">
+            <Button href="/contact" ariaLabel="Book Dome Pinot now from $530 per night">
               Book Now - From $530/night
             </Button>
             <Button href="#gallery" variant="outline">
@@ -204,7 +204,7 @@ export default function DomePinotPage() {
               </p>
             </div>
             <Button
-              href="/#booking"
+              href="/contact"
               className="w-full text-center"
               ariaLabel="Check availability for Dome Pinot"
             >
@@ -299,7 +299,7 @@ export default function DomePinotPage() {
             Queenstown, 30 minutes from Wanaka.
           </p>
           <Button
-            href="/#booking"
+            href="/contact"
             ariaLabel="Book Dome Pinot now from $530 per night"
           >
             Book Dome Pinot Now

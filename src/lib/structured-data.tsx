@@ -75,7 +75,7 @@ export function createOrganizationSchema() {
     name: "Lakeside Retreat Central Otago",
     alternateName: "Lakeside Retreat",
     url: BASE_URL,
-    logo: `${BASE_URL}/images/logo.png`,
+    logo: `${BASE_URL}/images/logormbg.png`,
     foundingDate: "2019",
     founder: { "@type": "Person", name: "Stephen & Sandy" },
     description:
@@ -167,7 +167,7 @@ export function createPropertySchema(params: PropertySchemaParams) {
     containsPlace: {
       "@type": "Accommodation",
       name: params.name,
-      description: `${params.floorSize}sqm luxury geodesic dome`,
+      description: params.description,
       occupancy: { "@type": "QuantitativeValue", maxValue: params.maxOccupancy },
       floorSize: { "@type": "QuantitativeValue", value: params.floorSize, unitCode: "MTK" },
       bed: { "@type": "BedDetails", typeOfBed: params.bedType, numberOfBeds: 1 },
@@ -241,7 +241,7 @@ export function createArticleSchema(params: ArticleSchemaParams) {
     publisher: {
       "@type": "Organization",
       name: "Lakeside Retreat Central Otago",
-      logo: { "@type": "ImageObject", url: `${BASE_URL}/images/logo.png` },
+      logo: { "@type": "ImageObject", url: `${BASE_URL}/images/logormbg.png` },
     },
     inLanguage: "en-NZ",
   };

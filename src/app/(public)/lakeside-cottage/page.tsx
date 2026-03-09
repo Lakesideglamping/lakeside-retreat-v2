@@ -63,7 +63,7 @@ export default function LakesideCottagePage() {
           floorSize: 65,
           maxOccupancy: 3,
           bedType: "Queen",
-          images: ["lakeside-cottage-exterior.jpeg", "lakeside-cottage-interior.jpeg"],
+          images: ["lakeside-cottage-exterior.jpeg", "cottagebedroom.jpeg"],
           amenities: ["Direct Lake Access", "Pet Friendly", "Full Kitchen", "2 Bedrooms", "Kayaks Included", "Free WiFi", "Free Parking", "BBQ"],
           reviewCount: "191",
         }),
@@ -94,7 +94,7 @@ export default function LakesideCottagePage() {
             Spacious family accommodation with direct Lake Dunstan access
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/#booking" ariaLabel="Book Lakeside Cottage now from $295 per night">
+            <Button href="/contact" ariaLabel="Book Lakeside Cottage now from $295 per night">
               Book Now - From $295/night
             </Button>
             <Button href="#gallery" variant="outline">
@@ -203,7 +203,7 @@ export default function LakesideCottagePage() {
               ))}
             </ul>
             <Button
-              href="/#booking"
+              href="/contact"
               className="w-full text-center"
               ariaLabel="Check availability for Lakeside Cottage"
             >
@@ -298,7 +298,7 @@ export default function LakesideCottagePage() {
             from Queenstown, 30 minutes from Wanaka.
           </p>
           <Button
-            href="/#booking"
+            href="/contact"
             ariaLabel="Book Lakeside Cottage now from $295 per night"
           >
             Book Lakeside Cottage Now

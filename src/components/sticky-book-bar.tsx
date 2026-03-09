@@ -22,7 +22,7 @@ export function StickyBookBar() {
           <span className="text-white/70">/night</span>
         </p>
         <Link
-          href="/#booking"
+          href="/contact"
           className="bg-burgundy text-white no-underline px-6 py-2.5 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity"
         >
           Book Now

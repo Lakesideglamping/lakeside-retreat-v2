@@ -141,7 +141,7 @@ export default function OurStoryPage() {
             We&apos;d love to welcome you to Lakeside Retreat and share our corner of Central Otago
             with you.
           </p>
-          <Button href="/#booking">Book Your Stay</Button>
+          <Button href="/contact">Book Your Stay</Button>
         </div>
       </section>
     </>

@@ -28,7 +28,7 @@ const accommodations: Accommodation[] = [
     cleaningFee: 50,
     adultsOnly: true,
     amenities: ["Super King bed", "Private spa", "Panoramic views", "Solar powered"],
-    images: ["dome-pinot-hero.jpeg", "dome-pinot-interior.jpeg"],
+    images: ["dome-pinot-hero.jpeg", "pinotinternal.jpeg"],
   },
   {
     id: "dome-rose",
@@ -58,7 +58,7 @@ const accommodations: Accommodation[] = [
     extraGuestFee: 100,
     petFee: 50,
     amenities: ["Queen bed + sofa bed", "Full kitchen", "Lake views", "Pet friendly"],
-    images: ["lakeside-cottage-exterior.jpeg", "lakeside-cottage-interior.jpeg"],
+    images: ["lakeside-cottage-exterior.jpeg", "cottagebedroom.jpeg"],
   },
 ];
 
