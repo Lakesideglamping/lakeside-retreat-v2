@@ -141,10 +141,10 @@ export function AdminSidebar() {
       {/* Sidebar */}
       <aside
         className={`
-          fixed inset-y-0 left-0 z-40 w-64 bg-admin-sidebar
-          transform transition-transform duration-200 ease-in-out
-          lg:static lg:translate-x-0
-          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+          w-64 shrink-0 bg-admin-sidebar
+          max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-40
+          max-lg:transition-transform max-lg:duration-200 max-lg:ease-in-out
+          ${!mobileOpen ? "max-lg:-translate-x-full" : ""}
         `}
       >
         <div className="flex h-full flex-col">

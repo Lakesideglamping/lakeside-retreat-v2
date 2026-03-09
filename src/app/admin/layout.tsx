@@ -34,9 +34,13 @@ export default async function AdminLayout({
 
   let username = "Admin";
   if (token) {
-    const payload = await verifyToken(token);
-    if (payload?.username) {
-      username = payload.username;
+    try {
+      const payload = await verifyToken(token);
+      if (payload?.username) {
+        username = payload.username;
+      }
+    } catch {
+      // Token verification failed — still render shell with default username
     }
   }
 
