@@ -38,7 +38,7 @@ const pricingFeatures = [
   "Nightly rate: $530/night",
   "Minimum 2 nights (3 nights peak season)",
   "All amenities included",
-  "Complimentary welcome hamper",
+  "Continental breakfast included",
   "Security Bond: $300 (refundable, released 48 hours after checkout)",
 ];
 
@@ -71,10 +71,10 @@ export default function DomePinotPage() {
           { name: "Dome Pinot", path: "/dome-pinot" },
         ]),
         createFaqSchema([
-          { question: "What makes Dome Pinot different from other glamping in Central Otago?", answer: "Dome Pinot is our flagship 50sqm luxury geodesic dome featuring panoramic Lake Dunstan views, a private outdoor spa, stargazing skylight, super king bed, and complimentary welcome hamper." },
+          { question: "What makes Dome Pinot different from other glamping in Central Otago?", answer: "Dome Pinot is our flagship 50sqm luxury geodesic dome featuring panoramic Lake Dunstan views, a private outdoor spa, stargazing skylight, super king bed, and complimentary continental breakfast." },
           { question: "How far is Dome Pinot from Queenstown?", answer: "Approximately 45 minutes' drive from Queenstown and 30 minutes from Wanaka." },
           { question: "Is Dome Pinot suitable for children?", answer: "No, Dome Pinot is strictly adults-only accommodation designed for couples. For families, we recommend our Lakeside Cottage." },
-          { question: "What is included in a stay at Dome Pinot?", answer: "Every stay includes a private outdoor spa, complimentary welcome hamper with local Central Otago produce, premium bed linen, underfloor heating, full kitchen facilities, and direct access to the Lake Dunstan Cycle Trail." },
+          { question: "What is included in a stay at Dome Pinot?", answer: "Every stay includes a private outdoor spa, complimentary continental breakfast, premium bed linen, underfloor heating, full kitchen facilities, and direct access to the Lake Dunstan Cycle Trail." },
         ]),
       ]} />
       {/* Hero */}
@@ -295,7 +295,7 @@ export default function DomePinotPage() {
             Ready to Experience Dome Pinot?
           </h2>
           <p className="text-lg text-muted mb-8">
-            Book direct for the best rates and a complimentary welcome hamper. Just 45 minutes from
+            Book direct for the best rates and complimentary continental breakfast. Just 45 minutes from
             Queenstown, 30 minutes from Wanaka.
           </p>
           <Button

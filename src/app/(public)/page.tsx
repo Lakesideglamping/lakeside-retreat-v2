@@ -155,7 +155,7 @@ export default function HomePage() {
               title="Dome Pinot"
               badge="Adults Only"
               description="50sqm luxury dome with panoramic Lake Dunstan views, private spa, and stargazing skylight."
-              features={["Lake Views", "Private Spa", "Welcome Hamper", "Super King Bed"]}
+              features={["Lake Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
               price="From $530/night"
             />
             <AccommodationCard
@@ -164,7 +164,7 @@ export default function HomePage() {
               title="Dome Ros&eacute;"
               badge="Adults Only"
               description="40sqm romantic retreat with vineyard views, private spa, and complete cooking facilities."
-              features={["Vineyard Views", "Private Spa", "Welcome Hamper", "Super King Bed"]}
+              features={["Vineyard Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
               price="From $510/night"
             />
             <AccommodationCard
@@ -206,7 +206,7 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[
-              { author: "Sarah", accommodation: "Dome Pinot", date: "January 2026", text: "Outstanding experience. The breakfast hamper, vineyard walks, and lake swimming made this the perfect Central Otago getaway. The stargazing skylight was magical." },
+              { author: "Sarah", accommodation: "Dome Pinot", date: "January 2026", text: "Outstanding experience. The continental breakfast, vineyard walks, and lake swimming made this the perfect Central Otago getaway. The stargazing skylight was magical." },
               { author: "Ryan", accommodation: "Lakeside Cottage", date: "February 2026", text: "Such a lovely place. The lake views from the deck, morning kayaks with the kids, and the attentive hosts made our family holiday unforgettable." },
               { author: "Emma", accommodation: "Dome Ros\u00e9", date: "December 2025", text: "A hidden gem in wine country. The private spa overlooking the vineyards was heavenly. Stephen and Sandy are wonderful hosts who think of everything." },
             ].map((review) => (

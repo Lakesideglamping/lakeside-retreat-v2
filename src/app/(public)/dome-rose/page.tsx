@@ -38,7 +38,7 @@ const pricingFeatures = [
   "Nightly rate: $510/night",
   "Minimum 2 nights (3 nights peak season)",
   "All amenities included",
-  "Complimentary welcome hamper",
+  "Continental breakfast included",
   "Security Bond: $300 (refundable, released 48 hours after checkout)",
 ];
 
@@ -294,7 +294,7 @@ export default function DomeRosePage() {
             Ready for Romance in Wine Country?
           </h2>
           <p className="text-lg text-muted mb-8">
-            Book direct for the best rates and a complimentary welcome hamper including local wine.
+            Book direct for the best rates and complimentary continental breakfast.
             Just 45 minutes from Queenstown, 30 minutes from Wanaka.
           </p>
           <Button

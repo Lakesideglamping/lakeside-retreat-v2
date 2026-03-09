@@ -24,7 +24,7 @@ const accommodations = [
       "Stargazing skylight",
       "Full kitchenette",
       "Panoramic lake views",
-      "Complimentary welcome hamper",
+      "Continental breakfast included",
     ],
   },
   {
@@ -40,7 +40,7 @@ const accommodations = [
       "Vineyard & mountain views",
       "Full kitchen",
       "Outdoor dining deck",
-      "Complimentary welcome hamper",
+      "Continental breakfast included",
     ],
   },
   {

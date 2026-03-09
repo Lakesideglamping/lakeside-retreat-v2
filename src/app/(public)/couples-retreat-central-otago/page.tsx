@@ -14,7 +14,7 @@ const itinerary = [
   {
     day: "Day 1",
     title: "Arrive, Unwind, and Settle In",
-    desc: "Enjoy the scenic drive from Queenstown Airport through the Kawarau Gorge. Explore your dome and unpack your welcome hamper featuring local cheeses, cured meats, crackers, and a bottle of regional wine. End the evening soaking in your private outdoor spa under the stars — the Milky Way is spectacular with zero light pollution.",
+    desc: "Enjoy the scenic drive from Queenstown Airport through the Kawarau Gorge. Explore your dome and enjoy a continental breakfast at your leisure. End the evening soaking in your private outdoor spa under the stars — the Milky Way is spectacular with zero light pollution.",
   },
   {
     day: "Day 2",
@@ -120,7 +120,7 @@ export default function CouplesRetreatPage() {
                 <ul className="text-sm text-muted space-y-1">
                   <li>&bull; Private outdoor spa with lake views</li>
                   <li>&bull; Stargazing skylight</li>
-                  <li>&bull; Complimentary welcome hamper</li>
+                  <li>&bull; Continental breakfast included</li>
                   <li>&bull; Full kitchenette</li>
                 </ul>
               </div>
@@ -186,7 +186,7 @@ export default function CouplesRetreatPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Romantic Escape</h2>
           <p className="text-lg text-muted mb-8">
-            Book direct for the best rates and a complimentary welcome hamper.
+            Book direct for the best rates and complimentary continental breakfast.
           </p>
           <Button href="/stay">Check Availability</Button>
         </div>
