@@ -62,7 +62,10 @@ export default async function AdminDashboardPage() {
       },
     }),
     prisma.bookings.findMany({
-      where: { deleted_at: null },
+      where: {
+        deleted_at: null,
+        check_out: { gte: new Date() },
+      },
       select: {
         id: true,
         guest_name: true,
@@ -72,7 +75,7 @@ export default async function AdminDashboardPage() {
         status: true,
         total_price: true,
       },
-      orderBy: { created_at: "desc" },
+      orderBy: { check_in: "asc" },
       take: 5,
     }),
     prisma.bookings.count({

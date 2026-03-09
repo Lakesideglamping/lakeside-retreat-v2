@@ -128,7 +128,7 @@ export function CalendarView({
       const [blockedRes, bookingsRes] = await Promise.all([
         adminGet<{ blockedDates: BlockedDate[] }>("/api/admin/blocked-dates"),
         adminGet<{ bookings: CalendarBooking[]; total: number }>(
-          "/api/admin/bookings?limit=100&status=confirmed"
+          "/api/admin/bookings?limit=500&status=confirmed"
         ),
       ]);
       setBlockedDates(blockedRes.blockedDates);

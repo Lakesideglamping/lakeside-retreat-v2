@@ -46,9 +46,9 @@ const TEAL = "#2d5a5a";
 const BURGUNDY = "#753742";
 
 function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-NZ", {
     style: "currency",
-    currency: "USD",
+    currency: "NZD",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);

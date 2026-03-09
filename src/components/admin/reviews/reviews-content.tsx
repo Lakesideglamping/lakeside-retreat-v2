@@ -554,7 +554,7 @@ export function ReviewsContent() {
               name="property"
               value={createForm.property}
               onChange={(v) => setCreateForm((f) => ({ ...f, property: v }))}
-              placeholder="e.g. Lakehouse, Cabin"
+              placeholder="e.g. Dome Pinot, Dome Rose, Lakeside Cottage"
             />
           </div>
           <FormField

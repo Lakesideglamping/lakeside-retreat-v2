@@ -48,6 +48,8 @@ const SOURCE_OPTIONS = [
   { value: "website", label: "Website" },
   { value: "manual", label: "Manual" },
   { value: "uplisting", label: "Uplisting" },
+  { value: "airbnb", label: "Airbnb" },
+  { value: "booking.com", label: "Booking.com" },
   { value: "unknown", label: "Unknown" },
 ];
 
@@ -76,9 +78,9 @@ function formatDate(dateStr: string): string {
 }
 
 function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-NZ", {
     style: "currency",
-    currency: "USD",
+    currency: "NZD",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);
