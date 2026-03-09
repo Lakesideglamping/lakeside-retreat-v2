@@ -2,13 +2,22 @@ import { prisma } from "@/lib/db";
 import { DashboardContent } from "@/components/admin/dashboard-content";
 
 export default async function AdminDashboardPage() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  // Use NZ timezone for "today" since the server runs in UTC
+  const nzParts = new Intl.DateTimeFormat("en-NZ", {
+    timeZone: "Pacific/Auckland",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const nzYear = Number(nzParts.find((p) => p.type === "year")!.value);
+  const nzMonth = Number(nzParts.find((p) => p.type === "month")!.value) - 1;
+  const nzDay = Number(nzParts.find((p) => p.type === "day")!.value);
 
-  const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-  const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+  const today = new Date(Date.UTC(nzYear, nzMonth, nzDay));
+  const tomorrow = new Date(Date.UTC(nzYear, nzMonth, nzDay + 1));
+
+  const monthStart = new Date(Date.UTC(nzYear, nzMonth, 1));
+  const monthEnd = new Date(Date.UTC(nzYear, nzMonth + 1, 1));
 
   const twentyFourHoursAgo = new Date(today.getTime() - 24 * 60 * 60 * 1000);
 
@@ -64,7 +73,7 @@ export default async function AdminDashboardPage() {
     prisma.bookings.findMany({
       where: {
         deleted_at: null,
-        check_out: { gte: new Date() },
+        check_out: { gte: today },
       },
       select: {
         id: true,
