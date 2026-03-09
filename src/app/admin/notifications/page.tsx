@@ -7,7 +7,7 @@ export default async function NotificationsPage() {
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const twentyFourHoursAgo = new Date(today.getTime() - 24 * 60 * 60 * 1000);
 
   const [
     failedPayments,

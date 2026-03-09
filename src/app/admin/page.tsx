@@ -10,7 +10,7 @@ export default async function AdminDashboardPage() {
   const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
   const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 1);
 
-  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const twentyFourHoursAgo = new Date(today.getTime() - 24 * 60 * 60 * 1000);
 
   const [
     totalBookings,

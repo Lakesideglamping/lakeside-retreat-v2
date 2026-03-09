@@ -1,4 +1,5 @@
 import { getCached, setCache } from "./cache";
+import crypto from "crypto";
 
 const API_BASE = "https://connect.uplisting.io";
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
@@ -186,7 +187,6 @@ export function verifyWebhookSignature(
   const secret = process.env.UPLISTING_WEBHOOK_SECRET;
   if (!secret) return false;
 
-  const crypto = require("crypto") as typeof import("crypto");
   const expected = crypto
     .createHmac("sha256", secret)
     .update(rawBody)

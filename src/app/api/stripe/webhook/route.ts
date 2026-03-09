@@ -45,12 +45,6 @@ export async function POST(request: Request) {
           metadata.checkOut
         );
 
-        const nights = Math.round(
-          (new Date(metadata.checkOut).getTime() -
-            new Date(metadata.checkIn).getTime()) /
-            (1000 * 60 * 60 * 24)
-        );
-
         // Save booking to database
         const bookingId = randomUUID();
         try {
