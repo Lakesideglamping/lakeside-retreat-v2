@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 import { ReviewsList } from "@/components/reviews-list";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Guest Reviews",
   description:
