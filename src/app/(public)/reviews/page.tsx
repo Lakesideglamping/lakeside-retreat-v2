@@ -1,66 +1,59 @@
 import type { Metadata } from "next";
+import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Guest Reviews",
   description:
-    "Read verified guest reviews of Lakeside Retreat Central Otago. Rated 4.9 stars from 127 reviews across Airbnb, Booking.com and direct bookings.",
+    "Read verified guest reviews of Lakeside Retreat Central Otago. Rated 4.9 stars across Airbnb, Booking.com and direct bookings.",
 };
 
-const stats = [
-  { label: "Overall Rating", value: "4.9", sub: "out of 5 stars" },
-  { label: "Verified Reviews", value: "127", sub: "across all platforms" },
-  { label: "Return Guests", value: "45%", sub: "come back again" },
-  { label: "Would Recommend", value: "98%", sub: "to friends & family" },
-];
+const PLATFORM_LABELS: Record<string, string> = {
+  airbnb: "Airbnb",
+  booking: "Booking.com",
+  direct: "Direct Booking",
+  google: "Google",
+};
 
-const reviews = [
-  {
-    author: "Sarah & James",
-    date: "December 2024",
-    accommodation: "Dome Pinot",
-    source: "Airbnb",
-    text: "Absolutely magical! The dome was stunning with incredible lake views. Stephen and Sandy were wonderful hosts who recommended some amazing wineries. We didn't want to leave!",
-  },
-  {
-    author: "Mike & Family",
-    date: "November 2024",
-    accommodation: "Lakeside Cottage",
-    source: "Direct Booking",
-    text: "Perfect for our family getaway. The kids loved swimming in the lake and we brought our dog too! The kitchen was fully equipped and the BBQ was a bonus. Will definitely return.",
-  },
-  {
-    author: "Emma",
-    date: "October 2024",
-    accommodation: "Dome Ros\u00e9",
-    source: "Airbnb",
-    text: "The private spa was heavenly! Watching the sunset over the vineyards while soaking in the hot tub was the highlight of our trip. The quality of the linens and the welcome basket were lovely touches.",
-  },
-  {
-    author: "David & Lisa",
-    date: "September 2024",
-    accommodation: "Dome Pinot",
-    source: "Booking.com",
-    text: "We loved that the property is solar-powered. Close enough to Queenstown for day trips but peaceful at night. The Rail Trail access was perfect for morning bike rides.",
-  },
-  {
-    author: "Rachel",
-    date: "August 2024",
-    accommodation: "Dome Ros\u00e9",
-    source: "Return Guest",
-    text: "Our third stay and it just keeps getting better. The hosts remember us and always go the extra mile. Winter mountain views from the hot tub are unbeatable!",
-  },
-  {
-    author: "Tom & Anna",
-    date: "July 2024",
-    accommodation: "Dome Pinot",
-    source: "Airbnb",
-    text: "Celebrated our anniversary here and it was perfection. The dome felt like a luxury hotel but with so much more character. Stephen's wine recommendations were spot on!",
-  },
-];
+function formatStayDate(date: Date | null): string {
+  if (!date) return "";
+  return date.toLocaleDateString("en-NZ", {
+    month: "long",
+    year: "numeric",
+    timeZone: "Pacific/Auckland",
+  });
+}
 
-export default function ReviewsPage() {
+function renderStars(rating: number) {
+  return "★".repeat(rating) + "☆".repeat(5 - rating);
+}
+
+export default async function ReviewsPage() {
+  const [reviews, summary] = await Promise.all([
+    prisma.reviews.findMany({
+      where: { status: "approved" },
+      orderBy: { stay_date: "desc" },
+    }),
+    prisma.reviews.aggregate({
+      where: { status: "approved" },
+      _count: true,
+      _avg: { rating: true },
+    }),
+  ]);
+
+  const totalReviews = summary._count;
+  const avgRating = summary._avg.rating
+    ? Number(summary._avg.rating).toFixed(1)
+    : "0.0";
+
+  const stats = [
+    { label: "Overall Rating", value: avgRating, sub: "out of 5 stars" },
+    { label: "Verified Reviews", value: String(totalReviews), sub: "across all platforms" },
+    { label: "Return Guests", value: "45%", sub: "come back again" },
+    { label: "Would Recommend", value: "98%", sub: "to friends & family" },
+  ];
+
   return (
     <>
       <JsonLd data={[
@@ -108,25 +101,29 @@ export default function ReviewsPage() {
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {reviews.map((r) => (
-              <div key={r.author} className="bg-white rounded-2xl p-8 shadow-md">
+              <div key={r.id} className="bg-white rounded-2xl p-8 shadow-md">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-burgundy to-teal-dark flex items-center justify-center text-white font-bold text-lg">
-                    {r.author[0]}
+                    {r.guest_name[0]}
                   </div>
                   <div>
-                    <div className="font-semibold">{r.author}</div>
-                    <div className="text-muted text-xs">{r.date}</div>
+                    <div className="font-semibold">{r.guest_name}</div>
+                    <div className="text-muted text-xs">{formatStayDate(r.stay_date)}</div>
                   </div>
                 </div>
-                <div className="text-yellow-500 text-sm mb-3">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <div className="text-yellow-500 text-sm mb-3">
+                  {renderStars(r.rating ?? 5)}
+                </div>
                 <p className="text-muted text-sm leading-7 mb-4 italic">
-                  &ldquo;{r.text}&rdquo;
+                  &ldquo;{r.review_text}&rdquo;
                 </p>
                 <div className="flex items-center justify-between text-xs">
                   <span className="bg-cream px-3 py-1 rounded-full text-teal font-medium">
-                    {r.accommodation}
+                    {r.property ?? "Lakeside Retreat"}
                   </span>
-                  <span className="text-muted">{r.source}</span>
+                  <span className="text-muted">
+                    {PLATFORM_LABELS[r.platform ?? "direct"] ?? r.platform}
+                  </span>
                 </div>
               </div>
             ))}
