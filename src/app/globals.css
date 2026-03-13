@@ -47,9 +47,10 @@ body {
   }
 }
 
-@layer base {
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
-    color: var(--color-teal);
-  }
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+}
+
+h1:not(.text-white), h2:not(.text-white), h3:not(.text-white), h4:not(.text-white) {
+  color: var(--color-teal);
 }
