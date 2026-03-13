@@ -22,7 +22,7 @@ export default function GalleryPage() {
         className="relative min-h-[50vh] flex items-center justify-center text-center text-white bg-cover bg-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/dome-pinot-hero.jpeg')",
+            "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/domes-vineyard-sunset.jpg')",
         }}
       >
         <div className="pt-20">

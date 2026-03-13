@@ -29,9 +29,10 @@ const amenities = [
 ];
 
 const galleryImages = [
-  { src: "/images/dome-pinot-hero.jpeg", alt: "Dome Pinot exterior with Lake Dunstan views" },
-  { src: "/images/PinotLakeView.jpeg", alt: "View from Dome Pinot bed overlooking the lake" },
+  { src: "/images/Pinotfront.jpeg", alt: "Dome Pinot exterior with snow-capped mountain views" },
+  { src: "/images/gallerydecksitting.jpeg", alt: "Dome Pinot private deck overlooking the autumn vineyard and lake" },
   { src: "/images/pinotinternal.jpeg", alt: "Dome Pinot interior luxury living space" },
+  { src: "/images/windowview.jpeg", alt: "View from inside Dome Pinot over the vineyard and Lake Dunstan" },
 ];
 
 const pricingFeatures = [
@@ -61,7 +62,7 @@ export default function DomePinotPage() {
           floorSize: 50,
           maxOccupancy: 2,
           bedType: "Super King",
-          images: ["dome-pinot-hero.jpeg", "PinotLakeView.jpeg", "pinotinternal.jpeg"],
+          images: ["Pinotfront.jpeg", "gallerydecksitting.jpeg", "pinotinternal.jpeg"],
           amenities: ["Private Outdoor Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Underfloor Heating", "Air Conditioning", "Kitchenette", "Free WiFi", "Free Parking"],
           reviewCount: "127",
         }),
@@ -82,7 +83,7 @@ export default function DomePinotPage() {
         className="relative min-h-[70vh] flex items-center justify-center text-center text-white bg-cover bg-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/images/dome-pinot-hero.jpeg')",
+            "linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/images/Pinotfront.jpeg')",
         }}
       >
         <div className="pt-20 px-5">

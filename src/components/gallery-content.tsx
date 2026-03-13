@@ -15,14 +15,20 @@ const categoryLabels: Record<Category, string> = {
 };
 
 const galleryItems = [
-  { src: "/images/dome-pinot-hero.jpeg", alt: "Dome Pinot exterior with panoramic Lake Dunstan views at sunset", title: "Dome Pinot Exterior", category: "domes" as Category },
-  { src: "/images/dome-rose-spa1.jpeg", alt: "Dome Rosé with private spa pool and vineyard views", title: "Dome Rosé & Spa", category: "domes" as Category },
+  { src: "/images/domes-vineyard-sunset.jpg", alt: "Both glamping domes at Lakeside Retreat with Lake Dunstan and sunset sky", title: "Domes at Sunset", category: "domes" as Category },
+  { src: "/images/Pinotfront.jpeg", alt: "Dome Pinot exterior with snow-capped mountain views", title: "Dome Pinot Exterior", category: "domes" as Category },
+  { src: "/images/dome-rose-spa1.jpeg", alt: "Dome Rosé nestled in golden autumn vineyard by the lake", title: "Dome Rosé in Autumn", category: "domes" as Category },
+  { src: "/images/IMG_1266-1920x1080.jpeg", alt: "Both domes in winter vineyard with snow-capped mountains", title: "Winter at Lakeside", category: "domes" as Category },
   { src: "/images/lakeside-cottage-exterior.jpeg", alt: "Lakeside Cottage with direct Lake Dunstan access", title: "Lakeside Cottage", category: "cottage" as Category },
-  { src: "/images/vineyard.jpeg", alt: "Central Otago vineyard views from Lakeside Retreat", title: "Vineyard Views", category: "views" as Category },
+  { src: "/images/cottagebedroom.jpeg", alt: "Lakeside Cottage bedroom with mountain views", title: "Cottage Bedroom", category: "cottage" as Category },
+  { src: "/images/galleryrainbow.jpeg", alt: "Full rainbow over Lake Dunstan and the vineyards at Lakeside Retreat", title: "Rainbow over the Lake", category: "views" as Category },
+  { src: "/images/domesmountainview.jpeg", alt: "Both domes among autumn vineyard with mountain backdrop", title: "Mountain Panorama", category: "views" as Category },
   { src: "/images/magical-sunset.jpg", alt: "Stunning sunset over Lake Dunstan", title: "Lake Dunstan Sunset", category: "views" as Category },
-  { src: "/images/pinotspa.jpeg", alt: "Private hot tub under the stars", title: "Hot Tub Experience", category: "amenities" as Category },
-  { src: "/images/dome-rose-interior.jpeg", alt: "Luxurious dome interior with super king bed and panoramic windows", title: "Dome Interior", category: "domes" as Category },
-  { src: "/images/domesmountainview.jpeg", alt: "Mountain views from the property", title: "Mountain Panorama", category: "views" as Category },
+  { src: "/images/vineyard.jpeg", alt: "Central Otago vineyard views from Lakeside Retreat", title: "Vineyard Views", category: "views" as Category },
+  { src: "/images/pinotinternal.jpeg", alt: "Dome Pinot interior luxury living space with vineyard views", title: "Dome Interior", category: "domes" as Category },
+  { src: "/images/dome-rose-interior.jpeg", alt: "Dome Rosé interior with panoramic windows overlooking the lake", title: "Dome Rosé Interior", category: "domes" as Category },
+  { src: "/images/gallerydecksitting.jpeg", alt: "Dome deck overlooking the golden autumn vineyard and Lake Dunstan", title: "Deck Views", category: "amenities" as Category },
+  { src: "/images/pinotspa.jpeg", alt: "Private hot tub with lake and mountain views", title: "Private Hot Tub", category: "amenities" as Category },
   { src: "/images/gallerydeck.jpeg", alt: "Relaxing on the deck with vineyard views", title: "Your Private Retreat", category: "amenities" as Category },
 ];
 

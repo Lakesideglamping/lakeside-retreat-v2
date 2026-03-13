@@ -31,6 +31,8 @@ const amenities = [
 const galleryImages = [
   { src: "/images/lakeside-cottage-exterior.jpeg", alt: "Lakeside Cottage exterior with lake views" },
   { src: "/images/lakeview.jpeg", alt: "Lake Dunstan views from Lakeside Cottage" },
+  { src: "/images/cottagebedroom.jpeg", alt: "Lakeside Cottage bedroom with mountain views" },
+  { src: "/images/cottagebathroom.jpeg", alt: "Lakeside Cottage bathroom with timber vanity" },
   { src: "/images/vineyard.jpeg", alt: "Surrounding vineyard landscape" },
 ];
 
@@ -226,7 +228,7 @@ export default function LakesideCottagePage() {
             >
               <div className="relative h-[200px]">
                 <Image
-                  src="/images/dome-pinot-hero.jpeg"
+                  src="/images/Pinotfront.jpeg"
                   alt="Dome Pinot luxury glamping"
                   fill
                   className="object-cover"

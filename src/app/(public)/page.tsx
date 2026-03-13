@@ -30,7 +30,7 @@ export default function HomePage() {
         className="relative min-h-[85vh] flex items-center justify-center text-center text-white bg-cover bg-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/domesmountainview.jpeg')",
+            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/domes-vineyard-sunset.jpg')",
         }}
       >
         <div className="max-w-[700px] px-5 pt-20">
@@ -151,7 +151,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-8">
             <AccommodationCard
               href="/dome-pinot"
-              image="/images/dome-pinot-hero.jpeg"
+              image="/images/Pinotfront.jpeg"
               title="Dome Pinot"
               badge="Adults Only"
               description="50sqm luxury dome with panoramic Lake Dunstan views, private spa, and stargazing skylight."
