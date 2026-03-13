@@ -110,7 +110,7 @@ export default function TermsConditionsPage() {
             5. Accommodation Types and Guest Restrictions
           </h2>
           <h3 className="font-display text-xl mt-6 mb-3">
-            Dome Pinot &amp; Dome Ros&eacute; (Adults Only)
+            Dome Pinot &amp; Dome Rosé (Adults Only)
           </h3>
           <ul>
             <li>Maximum 2 adult guests (18+ years)</li>

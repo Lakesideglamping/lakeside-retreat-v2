@@ -16,7 +16,7 @@ const categoryLabels: Record<Category, string> = {
 
 const galleryItems = [
   { src: "/images/dome-pinot-hero.jpeg", alt: "Dome Pinot exterior with panoramic Lake Dunstan views at sunset", title: "Dome Pinot Exterior", category: "domes" as Category },
-  { src: "/images/dome-rose-spa1.jpeg", alt: "Dome Rose with private spa pool and vineyard views", title: "Dome Ros\u00e9 & Spa", category: "domes" as Category },
+  { src: "/images/dome-rose-spa1.jpeg", alt: "Dome Rosé with private spa pool and vineyard views", title: "Dome Rosé & Spa", category: "domes" as Category },
   { src: "/images/lakeside-cottage-exterior.jpeg", alt: "Lakeside Cottage with direct Lake Dunstan access", title: "Lakeside Cottage", category: "cottage" as Category },
   { src: "/images/vineyard.jpeg", alt: "Central Otago vineyard views from Lakeside Retreat", title: "Vineyard Views", category: "views" as Category },
   { src: "/images/magical-sunset.jpg", alt: "Stunning sunset over Lake Dunstan", title: "Lake Dunstan Sunset", category: "views" as Category },

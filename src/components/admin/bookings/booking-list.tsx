@@ -39,7 +39,7 @@ const STATUS_OPTIONS = [
 const ACCOMMODATION_OPTIONS = [
   { value: "", label: "All Properties" },
   { value: "dome-pinot", label: "Dome Pinot" },
-  { value: "dome-rose", label: "Dome Rose" },
+  { value: "dome-rose", label: "Dome Rosé" },
   { value: "lakeside-cottage", label: "Lakeside Cottage" },
 ];
 

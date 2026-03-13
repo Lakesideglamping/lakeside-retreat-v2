@@ -248,14 +248,14 @@ export default function LakesideCottagePage() {
               <div className="relative h-[200px]">
                 <Image
                   src="/images/dome-rose-spa1.jpeg"
-                  alt="Dome Ros&eacute; romantic glamping"
+                  alt="Dome Rosé romantic glamping"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
               <div className="p-6">
-                <h3 className="font-display text-xl text-teal mb-2">Dome Ros&eacute;</h3>
+                <h3 className="font-display text-xl text-teal mb-2">Dome Rosé</h3>
                 <p className="text-muted text-sm mb-3">
                   40sqm romantic dome with outdoor spa and vineyard views. Perfect for couples.
                 </p>

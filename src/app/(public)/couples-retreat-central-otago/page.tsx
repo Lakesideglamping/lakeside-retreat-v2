@@ -127,10 +127,10 @@ export default function CouplesRetreatPage() {
             </Link>
             <Link href="/dome-rose" className="block bg-cream rounded-2xl overflow-hidden shadow-lg no-underline hover:-translate-y-1 transition-transform">
               <div className="relative h-[250px]">
-                <Image src="/images/dome-rose-spa1.jpeg" alt="Dome Ros&eacute;" fill className="object-cover" sizes="50vw" />
+                <Image src="/images/dome-rose-spa1.jpeg" alt="Dome Rosé" fill className="object-cover" sizes="50vw" />
               </div>
               <div className="p-6">
-                <h3 className="font-display text-xl text-teal mb-1">Dome Ros&eacute;</h3>
+                <h3 className="font-display text-xl text-teal mb-1">Dome Rosé</h3>
                 <p className="text-burgundy font-semibold text-sm mb-3">From $510/night &middot; 40sqm</p>
                 <ul className="text-sm text-muted space-y-1">
                   <li>&bull; Private outdoor spa</li>

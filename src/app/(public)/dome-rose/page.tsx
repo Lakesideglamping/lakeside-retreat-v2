@@ -86,13 +86,13 @@ export default function DomeRosePage() {
       >
         <div className="pt-20 px-5">
           <h1 className="font-display text-5xl text-white mb-4 drop-shadow-lg">
-            Dome Ros&eacute;
+            Dome Rosé
           </h1>
           <p className="text-xl mb-8 opacity-95">
             A romantic 40sqm geodesic dome nestled among the vineyards
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=dome-rose" ariaLabel="Book Dome Ros&eacute; now from $510 per night">
+            <Button href="/book?a=dome-rose" ariaLabel="Book Dome Rosé now from $510 per night">
               Book Now - From $510/night
             </Button>
             <Button href="#gallery" variant="outline">
@@ -109,7 +109,7 @@ export default function DomeRosePage() {
           <li className="text-gray-400">&rsaquo;</li>
           <li><Link href="/stay" className="text-teal no-underline hover:underline">Stay</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li className="text-muted">Dome Ros&eacute;</li>
+          <li className="text-muted">Dome Rosé</li>
         </ol>
       </nav>
 
@@ -120,7 +120,7 @@ export default function DomeRosePage() {
             Romance in Wine Country
           </h2>
           <p className="max-w-[800px] mx-auto text-center text-lg leading-8 text-muted mb-12">
-            Dome Ros&eacute; offers an intimate 40sqm retreat perfectly positioned among the
+            Dome Rosé offers an intimate 40sqm retreat perfectly positioned among the
             vineyards of Central Otago. Named after the region&apos;s famous ros&eacute; wines,
             this romantic dome features stunning views of the surrounding mountains and vineyard
             rows. With your own private outdoor spa, you can soak under the stars while enjoying a
@@ -205,7 +205,7 @@ export default function DomeRosePage() {
             <Button
               href="/book?a=dome-rose"
               className="w-full text-center"
-              ariaLabel="Check availability for Dome Ros&eacute;"
+              ariaLabel="Check availability for Dome Rosé"
             >
               Check Availability
             </Button>
@@ -299,9 +299,9 @@ export default function DomeRosePage() {
           </p>
           <Button
             href="/book?a=dome-rose"
-            ariaLabel="Book Dome Ros&eacute; now from $510 per night"
+            ariaLabel="Book Dome Rosé now from $510 per night"
           >
-            Book Dome Ros&eacute; Now
+            Book Dome Rosé Now
           </Button>
         </div>
       </section>

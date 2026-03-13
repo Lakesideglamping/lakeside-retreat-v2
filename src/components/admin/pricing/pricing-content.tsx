@@ -32,7 +32,7 @@ const TABS = [
 
 const ACCOMMODATIONS = [
   { id: "dome-pinot", name: "Dome Pinot" },
-  { id: "dome-rose", name: "Dome Rose" },
+  { id: "dome-rose", name: "Dome Rosé" },
   { id: "lakeside-cottage", name: "Lakeside Cottage" },
 ];
 

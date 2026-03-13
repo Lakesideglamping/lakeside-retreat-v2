@@ -36,7 +36,7 @@ const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const PROPERTY_FILTERS = [
   { value: "all", label: "All" },
   { value: "dome-pinot", label: "Dome Pinot" },
-  { value: "dome-rose", label: "Dome Rose" },
+  { value: "dome-rose", label: "Dome Rosé" },
   { value: "lakeside-cottage", label: "Cottage" },
 ];
 

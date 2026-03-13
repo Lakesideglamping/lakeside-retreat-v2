@@ -161,7 +161,7 @@ export default function HomePage() {
             <AccommodationCard
               href="/dome-rose"
               image="/images/dome-rose-spa1.jpeg"
-              title="Dome Ros&eacute;"
+              title="Dome Rosé"
               badge="Adults Only"
               description="40sqm romantic retreat with vineyard views, private spa, and complete cooking facilities."
               features={["Vineyard Views", "Private Spa", "Breakfast Included", "Super King Bed"]}

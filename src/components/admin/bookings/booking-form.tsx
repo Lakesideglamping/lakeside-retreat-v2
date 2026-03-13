@@ -9,7 +9,7 @@ import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
 
 const ACCOMMODATION_OPTIONS = [
   { value: "dome-pinot", label: "Dome Pinot" },
-  { value: "dome-rose", label: "Dome Rose" },
+  { value: "dome-rose", label: "Dome Rosé" },
   { value: "lakeside-cottage", label: "Lakeside Cottage" },
 ];
 
