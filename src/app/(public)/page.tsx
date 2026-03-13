@@ -59,7 +59,7 @@ export default function HomePage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <Button href="/our-story">About Us</Button>
-            <Button href="/gallery" variant="outline" className="border-burgundy text-burgundy hover:bg-burgundy hover:text-white">
+            <Button href="/gallery" variant="outline-dark">
               View Gallery
             </Button>
           </div>
@@ -84,7 +84,7 @@ export default function HomePage() {
             </p>
             <div className="flex gap-4">
               <Button href="/stay">View Accommodations</Button>
-              <Button href="/our-story" variant="outline" className="border-burgundy text-burgundy hover:bg-burgundy hover:text-white">
+              <Button href="/our-story" variant="outline-dark">
                 Meet Your Hosts
               </Button>
             </div>

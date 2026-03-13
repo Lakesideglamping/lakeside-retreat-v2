@@ -26,6 +26,10 @@ const PROPERTY_FILTERS = [
   { label: "Lakeside Cottage", value: "Lakeside Cottage" },
 ];
 
+const PROPERTY_DISPLAY: Record<string, string> = {
+  "Dome Rose": "Dome Rosé",
+};
+
 const PAGE_SIZE = 12;
 
 function formatStayDate(dateStr: string | null): string {
@@ -105,7 +109,7 @@ export function ReviewsList({ reviews }: { reviews: Review[] }) {
             </p>
             <div className="flex items-center justify-between text-xs">
               <span className="bg-cream px-3 py-1 rounded-full text-teal font-medium">
-                {r.property ?? "Lakeside Retreat"}
+                {PROPERTY_DISPLAY[r.property ?? ""] ?? r.property ?? "Lakeside Retreat"}
               </span>
               <span className="text-muted">
                 {PLATFORM_LABELS[r.platform ?? "direct"] ?? r.platform}

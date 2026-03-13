@@ -47,7 +47,9 @@ body {
   }
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-display);
-  color: var(--color-teal);
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--color-teal);
+  }
 }
