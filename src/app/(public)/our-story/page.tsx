@@ -11,9 +11,11 @@ export const metadata: Metadata = {
 
 const timeline = [
   { year: "2021", event: "Purchased the lakeside property in Mount Pisa and began planning the sustainable retreat" },
-  { year: "2022", event: "Opened Dome Pinot and welcomed first guests" },
-  { year: "2023", event: "Added Dome Ros\u00e9 and the Lakeside Cottage" },
-  { year: "2024", event: "Celebrated 127th five-star review and 45% return guest rate" },
+  { year: "2022", event: "Opened the Lakeside Cottage and welcomed our first guests" },
+  { year: "2023", event: "Added Dome Rosé and Dome Pinot — bringing our unique geodesic domes to life" },
+  { year: "2024", event: "Celebrated 127 five-star reviews and a 45% return guest rate" },
+  { year: "2025", event: "Installed a new commercial-grade solar system with advanced battery storage" },
+  { year: "2026", event: "Something new is coming — watch this space \uD83D\uDC40" },
 ];
 
 const values = [
@@ -62,10 +64,10 @@ export default function OurStoryPage() {
               access to the famous Otago Rail Trail.
             </p>
             <p className="text-lg leading-8 text-muted">
-              We set out to build a commercial-grade renewable energy system with advanced battery
-              storage that feeds surplus back into the national grid. Our geodesic domes were chosen
-              for their efficiency &mdash; offering exceptional insulation, structural integrity, and
-              panoramic windows.
+              Our geodesic domes were chosen for their efficiency &mdash; offering exceptional
+              insulation, structural integrity, and panoramic windows. In 2025 we took another step
+              forward with a new commercial-grade solar system and advanced battery storage, feeding
+              surplus energy back into the national grid.
             </p>
           </div>
           <Image
