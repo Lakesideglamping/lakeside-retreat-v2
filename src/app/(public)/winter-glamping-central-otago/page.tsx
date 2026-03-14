@@ -296,6 +296,25 @@ export default function WinterGlampingPage() {
         </div>
       </section>
 
+      {/* Related Guides */}
+      <section className="py-16 px-5 bg-cream">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-2xl text-center mb-8">Also Explore</h2>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { href: "/glamping-central-otago", title: "Glamping Central Otago", desc: "Our full glamping guide — all seasons" },
+              { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail Stays", desc: "Ride the trail in winter, return to your private spa" },
+              { href: "/luxury-accommodation-cromwell", title: "Luxury Accommodation Cromwell", desc: "All three of our properties — domes & cottage" },
+            ].map((link) => (
+              <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
+                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="text-muted text-sm">{link.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 px-5 text-center">
         <div className="max-w-[600px] mx-auto">

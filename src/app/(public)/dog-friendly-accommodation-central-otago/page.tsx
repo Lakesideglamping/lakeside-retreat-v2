@@ -97,8 +97,9 @@ export default function DogFriendlyAccommodationPage() {
             </p>
             <p className="text-lg leading-8 text-muted mb-6">
               Direct lake access means your dog can swim to their heart&apos;s content. A secure
-              outdoor area gives them space to explore safely. And the Otago Rail Trail is just
-              300 metres away for epic walks.
+              outdoor area gives them space to explore safely. And the{" "}
+              <Link href="/otago-rail-trail-accommodation" className="text-teal no-underline hover:underline">Otago Rail Trail</Link>
+              {" "}is just 300 metres away for epic walks.
             </p>
             <div className="bg-cream rounded-xl p-5">
               <p className="font-semibold text-body mb-1">Lakeside Cottage — Quick Facts</p>
@@ -188,6 +189,25 @@ export default function DogFriendlyAccommodationPage() {
                 <span>Maximum 2 dogs per booking</span>
               </li>
             </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Related Guides */}
+      <section className="py-16 px-5 bg-cream">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-2xl text-center mb-8">Also Explore</h2>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail Guide", desc: "300m away — walk to the Cromwell trailhead" },
+              { href: "/glamping-central-otago", title: "Glamping Domes", desc: "For couples (adults only — no dogs, no kids)" },
+              { href: "/luxury-accommodation-cromwell", title: "All Our Accommodation", desc: "Compare all three properties at Lakeside Retreat" },
+            ].map((link) => (
+              <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
+                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="text-muted text-sm">{link.desc}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

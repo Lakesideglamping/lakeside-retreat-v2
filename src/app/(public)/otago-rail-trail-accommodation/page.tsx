@@ -226,6 +226,25 @@ export default function OtagoRailTrailAccommodationPage() {
         </div>
       </section>
 
+      {/* Related Guides */}
+      <section className="py-16 px-5 bg-cream">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-2xl text-center mb-8">Also Explore</h2>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { href: "/glamping-central-otago", title: "Glamping Central Otago", desc: "Reward yourself with a luxury dome after the ride" },
+              { href: "/winter-glamping-central-otago", title: "Winter Rail Trail", desc: "Ride in winter — return to your private spa each evening" },
+              { href: "/dog-friendly-accommodation-central-otago", title: "Dog-Friendly Accommodation", desc: "Bring your dog on the trail — cottage welcomes pets" },
+            ].map((link) => (
+              <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
+                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="text-muted text-sm">{link.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 px-5 text-center">
         <div className="max-w-[600px] mx-auto">

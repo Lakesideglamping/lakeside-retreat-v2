@@ -128,7 +128,9 @@ export default function GlampingCentralOtagoPage() {
           </p>
           <p className="text-lg leading-8 text-muted">
             Located at 96 Smiths Way, Mount Pisa — in the heart of Central Otago wine country,
-            300 metres from the Otago Rail Trail, and 45 minutes from Queenstown. Rated
+            300 metres from the{" "}
+            <Link href="/otago-rail-trail-accommodation" className="text-teal no-underline hover:underline">Otago Rail Trail</Link>
+            , and 45 minutes from Queenstown. Rated
             4.9/5 by 416 guests across Airbnb and Booking.com.
           </p>
         </div>
@@ -293,6 +295,25 @@ export default function GlampingCentralOtagoPage() {
             &ldquo;The most magical place we&apos;ve ever stayed. Woke up to the Milky Way through the skylight, soaked in the spa with vineyard views. Nothing compares.&rdquo;
           </blockquote>
           <p className="text-muted text-sm">Sarah &amp; James — Auckland &bull; Dome Pinot</p>
+        </div>
+      </section>
+
+      {/* Related Guides */}
+      <section className="py-16 px-5 bg-cream">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-2xl text-center mb-8">Also Explore</h2>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { href: "/winter-glamping-central-otago", title: "Winter Glamping Guide", desc: "Heated domes, outdoor spas in the snow & ski fields nearby" },
+              { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail Stays", desc: "300m from the Cromwell trailhead — the perfect trail base" },
+              { href: "/luxury-accommodation-cromwell", title: "Luxury Accommodation Cromwell", desc: "Compare all three of our Central Otago properties" },
+            ].map((link) => (
+              <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
+                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="text-muted text-sm">{link.desc}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

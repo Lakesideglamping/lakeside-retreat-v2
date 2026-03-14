@@ -25,6 +25,13 @@ const guides = [
     href: "/winter-glamping-central-otago",
   },
   {
+    category: "Seasonal",
+    title: "Autumn in Central Otago: Harvest Season Guide",
+    image: "/images/lakeviewautumn.jpeg",
+    excerpt: "Golden vineyards, pinot noir harvest, and crisp spa evenings. March–May is Central Otago at its most beautiful.",
+    href: "/autumn-central-otago",
+  },
+  {
     category: "Accommodation",
     title: "Dog-Friendly Accommodation in Central Otago",
     image: "/images/lakeside-cottage-exterior.jpeg",
