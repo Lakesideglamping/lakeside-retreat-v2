@@ -8,6 +8,21 @@ export const metadata: Metadata = {
   title: "Dome Pinot | Geodesic Dome Accommodation NZ | $530/night",
   description:
     "Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct from $530/night.",
+  openGraph: {
+    title: "Dome Pinot | Luxury Geodesic Dome — Lake Dunstan, Central Otago",
+    description:
+      "50sqm luxury glamping dome with private outdoor spa, stargazing skylight, and panoramic Lake Dunstan views. Adults-only escape from $530/night.",
+    url: "https://lakesideretreat.co.nz/dome-pinot",
+    images: [
+      {
+        url: "/images/Pinotfront.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Dome Pinot luxury geodesic dome with panoramic Lake Dunstan views",
+      },
+    ],
+    type: "website",
+  },
 };
 
 const features = [
@@ -79,14 +94,17 @@ export default function DomePinotPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[70vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/images/Pinotfront.jpeg')",
-        }}
-      >
-        <div className="pt-20 px-5">
+      <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
+        <Image
+          src="/images/Pinotfront.jpeg"
+          alt="Dome Pinot luxury geodesic dome with panoramic Lake Dunstan views"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="relative pt-20 px-5">
           <h1 className="font-display text-5xl text-white mb-4 drop-shadow-lg">
             Dome Pinot
           </h1>

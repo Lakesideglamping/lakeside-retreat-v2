@@ -8,6 +8,21 @@ export const metadata: Metadata = {
   title: "Lakeside Cottage | Pet Friendly Accommodation Cromwell | $295/night",
   description:
     "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. 2 bedrooms, full kitchen, direct lake access. Family accommodation in Central Otago from $295/night.",
+  openGraph: {
+    title: "Lakeside Cottage | Pet-Friendly Family Accommodation on Lake Dunstan",
+    description:
+      "Family-friendly cottage with direct Lake Dunstan access, 2 bedrooms, full kitchen, kayaks included, and pet-friendly. From $295/night in Cromwell, Central Otago.",
+    url: "https://lakesideretreat.co.nz/lakeside-cottage",
+    images: [
+      {
+        url: "/images/lakeside-cottage-exterior.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Lakeside Cottage with direct Lake Dunstan access, Cromwell Central Otago",
+      },
+    ],
+    type: "website",
+  },
 };
 
 const features = [
@@ -81,14 +96,17 @@ export default function LakesideCottagePage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[70vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/images/lakeside-cottage-exterior.jpeg')",
-        }}
-      >
-        <div className="pt-20 px-5">
+      <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
+        <Image
+          src="/images/lakeside-cottage-exterior.jpeg"
+          alt="Lakeside Cottage with direct Lake Dunstan access, Cromwell Central Otago"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="relative pt-20 px-5">
           <h1 className="font-display text-5xl text-white mb-4 drop-shadow-lg">
             Lakeside Cottage
           </h1>

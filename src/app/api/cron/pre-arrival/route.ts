@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { verifyCronSecret } from "@/lib/cron-auth";
 import { logger } from "@/lib/logger";
 import { findPreArrivalBookings } from "@/lib/marketing-automation";
-import { sendPreArrivalInstructions } from "@/lib/email";
+import { sendPreArrivalInstructions, sendSystemAlert } from "@/lib/email";
 
 export async function POST(request: Request) {
   if (!verifyCronSecret(request)) {
@@ -38,6 +38,7 @@ export async function POST(request: Request) {
       job: "pre-arrival",
       error: String(error),
     });
+    sendSystemAlert("CRON_FAILURE", "Cron job failed: pre-arrival", String(error)).catch(() => {});
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

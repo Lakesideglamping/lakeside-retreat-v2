@@ -26,17 +26,25 @@ export default function HomePage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[85vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/domes-vineyard-sunset.jpg')",
-        }}
-      >
-        <div className="max-w-[700px] px-5 pt-20">
+      <section className="relative min-h-[85vh] flex items-center justify-center text-center text-white overflow-hidden">
+        <Image
+          src="/images/domes-vineyard-sunset.jpg"
+          alt="Luxury glamping domes at Lakeside Retreat overlooking Lake Dunstan"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative max-w-[700px] px-5 pt-20">
           <h1 className="font-display text-5xl md:text-6xl text-white mb-4 drop-shadow-lg">
             Luxury Glamping on Lake Dunstan, Central Otago
           </h1>
+          <div className="flex items-center justify-center gap-2 mb-5">
+            <span className="text-yellow-400 text-lg" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span className="text-white font-semibold text-sm">4.9/5</span>
+            <span className="text-white/70 text-sm">&bull; 416 verified reviews</span>
+          </div>
           <p className="text-xl mb-8 opacity-95">
             Luxury glamping domes and lakefront cottage in the heart of Central
             Otago&apos;s wine country
@@ -44,6 +52,7 @@ export default function HomePage() {
           <Button href="/book">Book Your Escape</Button>
         </div>
       </section>
+
 
       {/* Welcome */}
       <section className="py-20 px-5">

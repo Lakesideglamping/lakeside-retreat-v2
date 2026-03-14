@@ -114,6 +114,19 @@ export async function createCheckoutSession(
     params.pets || 0
   );
 
+  const checkInFormatted = new Date(params.checkIn).toLocaleDateString("en-NZ", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const checkOutFormatted = new Date(params.checkOut).toLocaleDateString("en-NZ", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     customer_email: params.guestEmail,
@@ -121,10 +134,21 @@ export async function createCheckoutSession(
     payment_intent_data: {
       capture_method: "manual",
     },
-    line_items: lineItems.map((item) => ({
+    custom_text: {
+      submit: {
+        message: `Security bond ($${acc.securityDeposit} NZD) will be pre-authorised only — it is NOT charged and will be released within 48 hours of checkout.`,
+      },
+    },
+    line_items: lineItems.map((item, i) => ({
       price_data: {
         currency: "nzd",
-        product_data: { name: item.name },
+        product_data: {
+          name: item.name,
+          // Add check-in/out dates as description on the first (accommodation) line item
+          ...(i === 0
+            ? { description: `Check-in: ${checkInFormatted} · Check-out: ${checkOutFormatted} · ${params.guests} guest${params.guests > 1 ? "s" : ""}` }
+            : {}),
+        },
         unit_amount: item.amount,
       },
       quantity: item.quantity,

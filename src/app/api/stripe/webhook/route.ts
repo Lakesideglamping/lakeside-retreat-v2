@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { constructWebhookEvent, stripe, isDevMode } from "@/lib/stripe";
-import { sendBookingConfirmation } from "@/lib/email";
+import { sendBookingConfirmation, sendSystemAlert } from "@/lib/email";
 import { syncBooking } from "@/lib/uplisting";
 import { prisma } from "@/lib/db";
 import { randomUUID } from "crypto";
@@ -100,6 +100,15 @@ export async function POST(request: Request) {
                     ? dbErr.message
                     : "Unknown DB error",
               },
+            })
+            .then(() => {
+              const errMsg =
+                dbErr instanceof Error ? dbErr.message : "Unknown DB error";
+              sendSystemAlert(
+                "WEBHOOK_DB_FAILURE",
+                `Booking DB save failed for Stripe event ${event.id}`,
+                `Guest: ${metadata.guestName} (${metadata.guestEmail})\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nSession: ${session.id}\nError: ${errMsg}`
+              ).catch(() => {});
             })
             .catch((e) =>
               console.error(

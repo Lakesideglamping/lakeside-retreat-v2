@@ -8,6 +8,21 @@ export const metadata: Metadata = {
   title: "Dome Ros\u00e9 | Romantic Getaway Central Otago | $510/night",
   description:
     "Dome Ros\u00e9 — intimate 40sqm glamping dome perfect for couples in Cromwell, Central Otago. Outdoor spa, mountain views, vineyard setting on Lake Dunstan. Book direct from $510/night.",
+  openGraph: {
+    title: "Dome Rosé | Romantic Glamping Dome — Vineyard Views, Central Otago",
+    description:
+      "40sqm romantic dome with private outdoor spa, vineyard and mountain views. The perfect couples escape from $510/night in Central Otago wine country.",
+    url: "https://lakesideretreat.co.nz/dome-rose",
+    images: [
+      {
+        url: "/images/dome-rose-spa1.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Dome Rosé private outdoor spa overlooking Central Otago vineyard at dusk",
+      },
+    ],
+    type: "website",
+  },
 };
 
 const features = [
@@ -77,14 +92,17 @@ export default function DomeRosePage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[70vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/images/dome-rose-spa1.jpeg')",
-        }}
-      >
-        <div className="pt-20 px-5">
+      <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
+        <Image
+          src="/images/dome-rose-spa1.jpeg"
+          alt="Dome Rosé romantic geodesic dome with private outdoor spa and vineyard views"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="relative pt-20 px-5">
           <h1 className="font-display text-5xl text-white mb-4 drop-shadow-lg">
             Dome Rosé
           </h1>

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { verifyCronSecret } from "@/lib/cron-auth";
 import { logger } from "@/lib/logger";
 import { findDuringStayBookings } from "@/lib/marketing-automation";
-import { sendDuringStayCheckin } from "@/lib/email";
+import { sendDuringStayCheckin, sendSystemAlert } from "@/lib/email";
 
 export async function POST(request: Request) {
   if (!verifyCronSecret(request)) {
@@ -38,6 +38,7 @@ export async function POST(request: Request) {
       job: "during-stay",
       error: String(error),
     });
+    sendSystemAlert("CRON_FAILURE", "Cron job failed: during-stay", String(error)).catch(() => {});
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

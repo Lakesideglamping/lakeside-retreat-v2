@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { verifyCronSecret } from "@/lib/cron-auth";
 import { logger } from "@/lib/logger";
+import { sendSystemAlert } from "@/lib/email";
 import { isConfigured, fetchBlockedDates } from "@/lib/uplisting";
 
 const ACCOMMODATIONS = ["dome-pinot", "dome-rose", "lakeside-cottage"] as const;
@@ -42,6 +43,7 @@ export async function POST(request: Request) {
       job: "reconcile-calendar",
       error: String(error),
     });
+    sendSystemAlert("CRON_FAILURE", "Cron job failed: reconcile-calendar", String(error)).catch(() => {});
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
