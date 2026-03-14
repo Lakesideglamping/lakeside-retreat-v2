@@ -56,7 +56,7 @@ const guides = [
     category: "Day Trips",
     title: "Queenstown Day Trip: Adventure Awaits",
     image: "/images/lake-mountains-perfect.jpg",
-    excerpt: "How to make the most of a day trip to Queenstown from Lakeside Retreat, just 45 minutes away.",
+    excerpt: "Bungy, gondola, jet boat, Arrowtown — then back to your private spa. Queenstown is just 45 minutes away.",
     href: "/weekend-getaway-queenstown",
   },
   {

@@ -2,34 +2,83 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
+import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Weekend Getaway from Queenstown | Luxury Glamping 45 Minutes Away",
+  title: "Queenstown Day Trip from Cromwell | Adventure Guide from Lakeside Retreat",
   description:
-    "Escape the crowds. Luxury glamping domes and lakeside cottage on Lake Dunstan, Cromwell — just 45 minutes from Queenstown. Private spas, wine country. From $295/night.",
+    "Queenstown is just 45 minutes from Lakeside Retreat. Day trip guide: bungee jumping, Skyline Gondola, Shotover Jet, Arrowtown, and more — then return to your private spa.",
 };
 
-const comparison = [
+const activities = [
   {
-    title: "Central Queenstown",
-    items: ["Busy streets & tour groups", "Premium prices", "Difficult parking", "Late-night bar noise", "Hotel-style stays"],
-    negative: true,
+    title: "Kawarau Bungy",
+    time: "On the way",
+    desc: "The world's first commercial bungy site. The iconic Kawarau Bridge is right on the route between Cromwell and Queenstown — stop en route for a jump or just to watch.",
   },
   {
-    title: "Lakeside Retreat, Cromwell",
-    items: ["Peaceful lakeside, no crowds", "Luxury from $295/night", "Free parking", "Silent nights & stargazing", "Unique geodesic domes & cottage"],
-    negative: false,
+    title: "Skyline Gondola & Luge",
+    time: "Morning",
+    desc: "Ride the gondola up Bob's Peak for panoramic views over Lake Wakatipu and the Remarkables. Luge runs, zip lines, and a great café at the top.",
+  },
+  {
+    title: "Shotover Jet",
+    time: "Morning / Afternoon",
+    desc: "New Zealand's most famous jet boat ride. Hurtle through the narrow Shotover River canyon at 85km/h with 360° spins. Book ahead in peak season.",
+  },
+  {
+    title: "Queenstown Gardens",
+    time: "Afternoon",
+    desc: "A peaceful escape on the Queenstown peninsula. Rose gardens, giant chess, frisbee golf, and beautiful lake and mountain views — free and dog-friendly.",
+  },
+  {
+    title: "Arrowtown",
+    time: "Afternoon",
+    desc: "A 20-minute detour from Queenstown. The best-preserved gold rush town in NZ — gold panning, the Chinese settlement, great cafés and boutique shops.",
+  },
+  {
+    title: "The Mall & Waterfront",
+    time: "Afternoon / Evening",
+    desc: "Browse Queenstown's vibrant town centre, lakefront restaurants, and bars. Fergburger (iconic NZ burger) often has a queue — arrive early or late.",
   },
 ];
 
-const highlights = [
-  { title: "Lake Dunstan", desc: "Swimming, kayaking, paddleboarding, fishing — direct lake access from the cottage" },
-  { title: "Wine Country", desc: "30+ wineries within 15 min, some of the finest Pinot Noir in the world" },
-  { title: "Cycle Trails", desc: "Otago Rail Trail 300m from your door, Lake Dunstan Cycle Trail nearby" },
-  { title: "Mountain Views", desc: "Pisa Range panoramic views from your dome or cottage" },
-  { title: "Stargazing", desc: "Minimal light pollution, Milky Way visible, dome skylights for viewing" },
-  { title: "Private Spas", desc: "Both domes have private outdoor spas with mountain views" },
+const itinerary = [
+  {
+    time: "8:30am",
+    label: "Depart Lakeside Retreat",
+    detail: "45-min drive through Kawarau Gorge. Scenic and easy.",
+  },
+  {
+    time: "9:00am",
+    label: "Stop at Kawarau Bungy",
+    detail: "Watch the jumpers (or take the leap). Allow 30–60 minutes.",
+  },
+  {
+    time: "10:00am",
+    label: "Arrive Queenstown — Skyline Gondola",
+    detail: "Head straight up the gondola before the queues build. Views are best in the morning.",
+  },
+  {
+    time: "12:00pm",
+    label: "Lunch on the waterfront",
+    detail: "Fergburger, Bespoke Kitchen, or a lakefront café. Plenty of options for all budgets.",
+  },
+  {
+    time: "1:30pm",
+    label: "Shotover Jet or Arrowtown",
+    detail: "Choose your adventure: adrenaline on the river, or a leisurely afternoon in Arrowtown (20 min detour).",
+  },
+  {
+    time: "3:30pm",
+    label: "Stroll the Queenstown Gardens",
+    detail: "Wind down with lake views, rose gardens, and a coffee before the drive back.",
+  },
+  {
+    time: "5:00pm",
+    label: "Return to Lakeside Retreat",
+    detail: "Back in 45 minutes. Your private outdoor spa is waiting.",
+  },
 ];
 
 export default function WeekendGetawayPage() {
@@ -37,31 +86,39 @@ export default function WeekendGetawayPage() {
     <>
       <JsonLd data={[
         createArticleSchema({
-          title: "The Perfect Weekend Escape from Queenstown",
-          description: "Swap the crowds for calm lakeside luxury, just 45 minutes from Queenstown.",
+          title: "Queenstown Day Trip from Lakeside Retreat — Adventure Guide",
+          description: "Make the most of a day trip to Queenstown from your Central Otago base — bungee, gondola, jet boat, Arrowtown, and more, just 45 minutes away.",
           path: "/weekend-getaway-queenstown",
           image: "lake-mountains-perfect.jpg",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },
           { name: "Guides", path: "/guides" },
-          { name: "Weekend from Queenstown", path: "/weekend-getaway-queenstown" },
+          { name: "Queenstown Day Trip", path: "/weekend-getaway-queenstown" },
+        ]),
+        createFaqSchema([
+          { question: "How far is Queenstown from Cromwell?", answer: "Queenstown is approximately 45 minutes from Cromwell (and Lakeside Retreat) via State Highway 6 through the Kawarau Gorge. The drive is one of the most scenic in New Zealand, passing the Kawarau River and AJ Hackett bungy bridge." },
+          { question: "What is there to do in Queenstown on a day trip?", answer: "On a day trip to Queenstown from Cromwell you can visit the Skyline Gondola, take the Shotover Jet, bungee jump at Kawarau Bridge, explore Arrowtown, walk the Queenstown Gardens, and enjoy the lakefront restaurants and bars. Most activities can be booked in advance online." },
+          { question: "Is Kawarau Bungy on the way to Queenstown from Cromwell?", answer: "Yes — the AJ Hackett Kawarau Bridge Bungy is right on the route between Cromwell and Queenstown on State Highway 6. It's a convenient stop on the drive in, whether you're jumping or just watching." },
+          { question: "Can I visit Arrowtown from Queenstown on a day trip?", answer: "Arrowtown is 20 minutes from central Queenstown and well worth including. It's New Zealand's best-preserved gold rush town with gold panning, historic Chinese settlement, boutique shops, and great cafés." },
         ]),
       ]} />
+
       {/* Hero */}
       <section
         className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/lake-mountains-perfect.jpg')",
+            "linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/images/lake-mountains-perfect.jpg')",
         }}
       >
         <div className="pt-20 px-5">
           <h1 className="font-display text-5xl text-white mb-4">
-            The Perfect Weekend Escape
+            Queenstown Day Trip
           </h1>
           <p className="text-xl opacity-95 max-w-[700px] mx-auto">
-            Swap the crowds for calm lakeside luxury, just 45 minutes from Queenstown
+            Adventure awaits — just 45 minutes from Lakeside Retreat through
+            the stunning Kawarau Gorge
           </p>
         </div>
       </section>
@@ -73,114 +130,169 @@ export default function WeekendGetawayPage() {
           <li className="text-gray-400">&rsaquo;</li>
           <li><Link href="/guides" className="text-teal no-underline hover:underline">Guides</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li className="text-muted">Weekend from Queenstown</li>
+          <li className="text-muted">Queenstown Day Trip</li>
         </ol>
       </nav>
 
-      {/* Comparison */}
+      {/* Intro */}
       <section className="py-20 px-5">
-        <div className="max-w-[1000px] mx-auto">
-          <h2 className="font-display text-4xl text-center mb-10">
-            Why Choose Cromwell Over Queenstown
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {comparison.map((col) => (
-              <div
-                key={col.title}
-                className={`rounded-2xl p-8 ${col.negative ? "bg-gray-100" : "bg-cream border-2 border-teal"}`}
-              >
-                <h3 className="font-display text-xl mb-4">{col.title}</h3>
-                <ul className="space-y-3">
-                  {col.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm">
-                      <span className={`font-bold mt-0.5 ${col.negative ? "text-red-500" : "text-teal"}`}>
-                        {col.negative ? "\u2717" : "\u2713"}
-                      </span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Getting Here */}
-      <section className="py-20 px-5 bg-white">
         <div className="max-w-[800px] mx-auto text-center">
           <h2 className="font-display text-4xl mb-6">
-            Getting Here: A Scenic Drive You&apos;ll Enjoy
+            The Perfect Adventure Base
           </h2>
-          <p className="text-lg leading-8 text-muted mb-8">
-            The 45-minute drive from Queenstown passes through the stunning Kawarau Gorge, past
-            the AJ Hackett Bungy bridge and the turquoise Kawarau River. It&apos;s one of the most
-            scenic drives in New Zealand. Continue 30 minutes further and you&apos;re in Wanaka.
+          <p className="text-lg leading-8 text-muted mb-6">
+            Queenstown is New Zealand&apos;s adventure capital — bungee jumping, jet
+            boats, gondolas, and world-class restaurants. From Lakeside Retreat
+            you&apos;re just 45 minutes away, making it the ideal day trip. Go hard,
+            then come home to your private outdoor spa and a glass of Central Otago
+            Pinot Noir.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4 text-sm">
             <div className="bg-cream rounded-xl px-6 py-3">
-              <span className="font-bold text-teal">Queenstown</span>
-              <span className="text-muted text-sm block">Start</span>
+              <span className="font-bold text-teal block">45 min</span>
+              <span className="text-muted">Drive to Queenstown</span>
             </div>
-            <span className="self-center text-muted">&rarr;</span>
             <div className="bg-cream rounded-xl px-6 py-3">
-              <span className="font-bold text-teal">Kawarau Gorge</span>
-              <span className="text-muted text-sm block">20 min scenic drive</span>
+              <span className="font-bold text-teal block">Kawarau Gorge</span>
+              <span className="text-muted">Scenic route via SH6</span>
             </div>
-            <span className="self-center text-muted">&rarr;</span>
-            <div className="bg-teal text-white rounded-xl px-6 py-3">
-              <span className="font-bold">Lakeside Retreat</span>
-              <span className="text-white/80 text-sm block">45 min from Queenstown</span>
-            </div>
-            <span className="self-center text-muted">&rarr;</span>
             <div className="bg-cream rounded-xl px-6 py-3">
-              <span className="font-bold text-teal">Wanaka</span>
-              <span className="text-muted text-sm block">30 min further</span>
+              <span className="font-bold text-teal block">Bungy on the way</span>
+              <span className="text-muted">Kawarau Bridge stop</span>
+            </div>
+            <div className="bg-cream rounded-xl px-6 py-3">
+              <span className="font-bold text-teal block">Free parking</span>
+              <span className="text-muted">Start & end at the retreat</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* What You'll Love */}
+      {/* The Drive */}
+      <section className="py-16 px-5 bg-teal text-white">
+        <div className="max-w-[800px] mx-auto text-center">
+          <h2 className="font-display text-3xl mb-4">
+            A Scenic Drive You&apos;ll Love
+          </h2>
+          <p className="text-white/90 text-lg leading-8">
+            The 45-minute drive from Cromwell passes through the spectacular
+            Kawarau Gorge alongside the turquoise Kawarau River. The{" "}
+            <strong>AJ Hackett Kawarau Bridge</strong> — where commercial bungy
+            jumping began in 1988 — is right on the route. Stop and watch, or
+            strap in for a jump. Continue to Queenstown through one of New
+            Zealand&apos;s most dramatic landscapes.
+          </p>
+        </div>
+      </section>
+
+      {/* Top Activities */}
       <section className="py-20 px-5">
         <div className="max-w-[1200px] mx-auto">
-          <h2 className="font-display text-4xl text-center mb-10">
-            What You&apos;ll Love About Staying Here
+          <h2 className="font-display text-4xl text-center mb-4">
+            Top Things to Do in Queenstown
           </h2>
+          <p className="text-center text-muted text-lg mb-12">
+            From world-class adventure to relaxed sightseeing — one day is plenty to sample the highlights
+          </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {highlights.map((h) => (
-              <div key={h.title} className="bg-white rounded-2xl p-6 shadow-md">
-                <h3 className="font-display text-xl text-teal mb-2">{h.title}</h3>
-                <p className="text-muted text-sm">{h.desc}</p>
+            {activities.map((a) => (
+              <div key={a.title} className="bg-white rounded-2xl p-6 shadow-md">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <h3 className="font-display text-xl text-teal">{a.title}</h3>
+                  <span className="text-xs bg-cream text-burgundy px-2 py-1 rounded-full font-semibold shrink-0 whitespace-nowrap">
+                    {a.time}
+                  </span>
+                </div>
+                <p className="text-muted text-sm leading-6">{a.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Better Value */}
+      {/* Suggested Itinerary */}
       <section className="py-20 px-5 bg-white">
-        <div className="max-w-[800px] mx-auto text-center">
-          <h2 className="font-display text-4xl mb-6">Better Value, Better Experience</h2>
-          <p className="text-lg leading-8 text-muted">
-            Queenstown hotels charge $400+ per night in peak season. The Lakeside Cottage starts
-            from $295/night, sleeps up to 3 guests, is pet-friendly, has a full kitchen, and
-            direct lake access. Our domes offer a truly unique experience with private spas,
-            panoramic skylights, and complete seclusion. Dining in Cromwell is more affordable
-            with no parking fees or tourist markup.
+        <div className="max-w-[700px] mx-auto">
+          <h2 className="font-display text-4xl text-center mb-4">
+            Suggested Day Itinerary
+          </h2>
+          <p className="text-center text-muted mb-12">
+            A full day from Lakeside Retreat — make the most of every hour
+          </p>
+          <div className="space-y-4">
+            {itinerary.map((step, i) => (
+              <div
+                key={step.time}
+                className={`rounded-xl p-5 flex gap-5 items-start ${
+                  i === 0 || i === itinerary.length - 1
+                    ? "bg-teal text-white"
+                    : "bg-cream"
+                }`}
+              >
+                <div className={`text-sm font-bold shrink-0 w-[60px] ${i === 0 || i === itinerary.length - 1 ? "text-white/90" : "text-burgundy"}`}>
+                  {step.time}
+                </div>
+                <div>
+                  <p className={`font-semibold ${i === 0 || i === itinerary.length - 1 ? "text-white" : "text-body"}`}>
+                    {step.label}
+                  </p>
+                  <p className={`text-sm mt-0.5 ${i === 0 || i === itinerary.length - 1 ? "text-white/80" : "text-muted"}`}>
+                    {step.detail}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-muted text-sm mt-8">
+            Prefer a slower pace? Skip the jet boat and spend longer in Arrowtown, or add a winery stop in Gibbston Valley on the way back.
+          </p>
+        </div>
+      </section>
+
+      {/* Practical Tips */}
+      <section className="py-20 px-5">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-4xl text-center mb-10">Practical Tips</h2>
+          <div className="grid sm:grid-cols-2 gap-6">
+            {[
+              { title: "Book Activities in Advance", desc: "Shotover Jet and Skyline Gondola can sell out in peak season (Dec–Feb, July ski). Book online the evening before or at breakfast." },
+              { title: "Arrive Early", desc: "Queenstown gets busy by mid-morning, especially in summer. Leaving Lakeside Retreat by 8:30am means you beat the tour buses and queues." },
+              { title: "Queenstown Parking", desc: "Use the Lakeview car park (paid, 10-min walk to town) or Queenstown Events Centre (free, 15-min walk). Avoid central parking — it's limited and expensive." },
+              { title: "Gibbston Valley Detour", desc: "On the return drive, detour into the Gibbston Valley for a winery stop. Peregrine and Gibbston Valley Winery are just off SH6 on the way back to Cromwell." },
+            ].map((tip) => (
+              <div key={tip.title} className="bg-white rounded-2xl p-6 shadow-sm">
+                <h3 className="font-display text-xl text-teal mb-2">{tip.title}</h3>
+                <p className="text-muted text-sm leading-6">{tip.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Return to retreat CTA */}
+      <section className="py-16 px-5 bg-cream">
+        <div className="max-w-[700px] mx-auto text-center">
+          <p className="font-display text-3xl mb-3">
+            Then Return to Your Private Spa 🛁
+          </p>
+          <p className="text-muted text-lg leading-8">
+            After a full day of adventure, the 45-minute drive back to Lakeside
+            Retreat feels like the best part. Change into your robe, sink into
+            the private outdoor spa, and watch the stars appear over the Pisa
+            Range. That&apos;s the Central Otago way.
           </p>
         </div>
       </section>
 
       {/* Where to Stay */}
-      <section className="py-20 px-5">
+      <section className="py-20 px-5 bg-white">
         <div className="max-w-[1200px] mx-auto">
-          <h2 className="font-display text-4xl text-center mb-10">Where to Stay</h2>
+          <h2 className="font-display text-4xl text-center mb-10">Your Queenstown Base</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "From $295/night" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night", note: "Private spa, skylight, breakfast" },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night", note: "Private spa, vineyard views" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "2 bedrooms, lake access, dogs welcome" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -193,11 +305,12 @@ export default function WeekendGetawayPage() {
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-display text-lg text-teal">{acc.title}</h3>
-                    <span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-semibold">
+                    <span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-semibold shrink-0">
                       {acc.badge}
                     </span>
                   </div>
-                  <p className="text-burgundy font-semibold text-sm">{acc.price} &rarr;</p>
+                  <p className="text-burgundy font-semibold text-sm mb-1">{acc.price}</p>
+                  <p className="text-muted text-xs">{acc.note}</p>
                 </div>
               </Link>
             ))}
@@ -205,11 +318,34 @@ export default function WeekendGetawayPage() {
         </div>
       </section>
 
+      {/* Also Explore */}
+      <section className="py-16 px-5 bg-cream">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-2xl text-center mb-8">Also Explore</h2>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { href: "/cromwell-activities", title: "Lake Dunstan Activities", desc: "Swimming, kayaking & cycling right from your door" },
+              { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail", desc: "NZ's iconic cycle trail starts 300m away" },
+              { href: "/central-otago-wine-trail", title: "Central Otago Wine Trail", desc: "30+ cellar doors within 15 minutes of the retreat" },
+            ].map((link) => (
+              <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
+                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="text-muted text-sm">{link.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="py-20 px-5 bg-white text-center">
+      <section className="py-20 px-5 text-center">
         <div className="max-w-[600px] mx-auto">
-          <h2 className="font-display text-4xl mb-4">Book Your Weekend Getaway</h2>
-          <Button href="/book">Book Your Stay</Button>
+          <h2 className="font-display text-4xl mb-4">Book Your Central Otago Base</h2>
+          <p className="text-lg text-muted mb-8">
+            45 minutes to Queenstown. Private spa to return to. Wine country on your doorstep.
+            Luxury domes from $510 &bull; Cottage from $295/night.
+          </p>
+          <Button href="/book">Check Availability & Book</Button>
         </div>
       </section>
     </>
