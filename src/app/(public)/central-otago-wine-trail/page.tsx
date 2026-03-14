@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
+import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Central Otago Wine Trail | Best Wineries Near Cromwell & Bannockburn",
@@ -42,6 +42,36 @@ const regions = [
       { name: "Wild Irishman", note: "Smaller producer, tastings by appointment" },
     ],
   },
+  {
+    name: "Gibbston Valley: The Valley of Vines",
+    distance: "25-35 minutes from Lakeside Retreat",
+    desc: "New Zealand's coolest and highest wine-producing area, nestled in the Kawarau Gorge between Cromwell and Queenstown. Famous for elegant, cool-climate Pinot Noir.",
+    wineries: [
+      { name: "Gibbston Valley Winery", note: "NZ's largest wine cave — underground barrel cellar, restaurant, and guided tours" },
+      { name: "Peregrine Wines", note: "Architecturally stunning winery, award-winning Pinot Noir and Pinot Gris" },
+      { name: "Chard Farm", note: "One of Central Otago's original estates, dramatic gorge setting" },
+    ],
+  },
+  {
+    name: "Bendigo: High Country Intensity",
+    distance: "20-30 minutes from Lakeside Retreat",
+    desc: "Hot, dry summers and cool nights on the eastern shores of Lake Dunstan produce wines of exceptional concentration and depth.",
+    wineries: [
+      { name: "Quartz Reef", note: "Specialists in méthode traditionnelle sparkling wine and Pinot Noir" },
+      { name: "Bendigo Estate", note: "Boutique producer with stunning lake and Pisa Range views" },
+      { name: "Prophecy Rock", note: "Small-batch Pinot Noir, open by appointment" },
+    ],
+  },
+  {
+    name: "Alexandra Basin: Pioneer Country",
+    distance: "40-50 minutes from Lakeside Retreat",
+    desc: "The oldest commercial wine-growing area in Central Otago, with a harsh continental climate producing distinctive, food-friendly styles.",
+    wineries: [
+      { name: "Two Paddocks", note: "Owned by actor Sam Neill — Pinot Noir and Riesling, tastings in Clyde" },
+      { name: "Grasshopper Rock", note: "High-altitude vineyard, limited production, appointments recommended" },
+      { name: "Doctors Flat Vineyard", note: "Small family producer, intense Pinot Noir from old vines" },
+    ],
+  },
 ];
 
 const tips = [
@@ -67,6 +97,12 @@ export default function WineTrailPage() {
           { name: "Home", path: "/" },
           { name: "Guides", path: "/guides" },
           { name: "Central Otago Wine Trail", path: "/central-otago-wine-trail" },
+        ]),
+        createFaqSchema([
+          { question: "How many wineries are in Central Otago?", answer: "Central Otago has over 100 vineyards and 30+ cellar doors across six sub-regions: Bannockburn, Cromwell Basin, Pisa and Lowburn, Gibbston Valley, Bendigo, and Alexandra Basin. Lakeside Retreat is centrally located near Cromwell, giving easy access to all sub-regions." },
+          { question: "What wine is Central Otago famous for?", answer: "Central Otago is world-renowned for Pinot Noir — considered among the finest expressions of the variety outside Burgundy. The region also produces excellent Pinot Gris, Riesling, and sparkling wines." },
+          { question: "Which is the best winery to visit in Central Otago?", answer: "Felton Road in Bannockburn is consistently rated New Zealand's top winery (tastings by appointment). For a restaurant experience, Carrick Winery and Mt Difficulty are excellent choices. Gibbston Valley Winery has the most visitor-friendly experience including underground cave tours." },
+          { question: "How far are the Central Otago wineries from Cromwell?", answer: "Bannockburn and Cromwell Basin wineries are 5–15 minutes from Cromwell. Gibbston Valley is 25–35 minutes (on the way to Queenstown). Alexandra Basin wineries are 40–50 minutes. All six sub-regions are easily visited as day trips from Lakeside Retreat." },
         ]),
       ]} />
       {/* Hero */}
@@ -186,11 +222,34 @@ export default function WineTrailPage() {
         </div>
       </section>
 
+      {/* Also Explore */}
+      <section className="py-16 px-5 bg-cream">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-2xl text-center mb-8">Also Explore</h2>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { href: "/glamping-central-otago", title: "Glamping in Central Otago", desc: "Luxury domes with private spa — your wine country base" },
+              { href: "/autumn-central-otago", title: "Autumn Harvest Season", desc: "March–May: golden vineyards and pinot noir harvest" },
+              { href: "/cromwell-activities", title: "Cromwell Activities", desc: "Lake Dunstan, cycling trails, and more right from your door" },
+            ].map((link) => (
+              <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
+                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="text-muted text-sm">{link.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 px-5 text-center">
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Wine Country Escape</h2>
-          <Button href="/stay">View Our Accommodation</Button>
+          <p className="text-lg text-muted mb-8">
+            30+ cellar doors within 15 minutes. Private spa to return to each evening.
+            Domes from $510 &bull; Cottage from $295/night.
+          </p>
+          <Button href="/book">Check Availability & Book</Button>
         </div>
       </section>
     </>

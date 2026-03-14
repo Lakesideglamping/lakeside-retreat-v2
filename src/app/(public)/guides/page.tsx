@@ -75,10 +75,10 @@ const guides = [
   },
   {
     category: "Food & Dining",
-    title: "Central Otago Wine Trail & Cellar Doors",
+    title: "Food & Dining in Central Otago",
     image: "/images/ViewfromVineyard.jpeg",
-    excerpt: "30+ wineries within 15 minutes. Our guide to the best cellar doors, winery restaurants, and tastings in the region.",
-    href: "/central-otago-wine-trail",
+    excerpt: "Winery restaurants, Cromwell Heritage Precinct cafés, Wanaka dining, stone fruit stalls, and local produce guides.",
+    href: "/food-dining-central-otago",
   },
 ];
 
