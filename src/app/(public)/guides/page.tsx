@@ -63,8 +63,8 @@ const guides = [
     category: "Day Trips",
     title: "Wanaka: Lakes, Mountains & That Tree",
     image: "/images/lakeviewautumn.jpeg",
-    excerpt: "Discover Wanaka's best attractions, cafes, and walks, just 30 minutes from your door.",
-    href: "/cromwell-activities",
+    excerpt: "That Tree, Roy's Peak, Rippon Vineyard, and great cafés — just 45 minutes from Lakeside Retreat.",
+    href: "/wanaka-day-trip",
   },
   {
     category: "Seasonal",
