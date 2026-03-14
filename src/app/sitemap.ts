@@ -35,6 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
     },
     { path: "/glamping-central-otago", priority: 0.9, changeFrequency: "monthly" },
+    { path: "/winter-glamping-central-otago", priority: 0.8, changeFrequency: "monthly" },
     { path: "/luxury-accommodation-cromwell", priority: 0.8, changeFrequency: "monthly" },
     { path: "/dog-friendly-accommodation-central-otago", priority: 0.8, changeFrequency: "monthly" },
     { path: "/otago-rail-trail-accommodation", priority: 0.8, changeFrequency: "monthly" },

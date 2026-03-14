@@ -18,6 +18,13 @@ const guides = [
     href: "/glamping-central-otago",
   },
   {
+    category: "Seasonal",
+    title: "Winter Glamping in Central Otago",
+    image: "/images/domesmountainview.jpeg",
+    excerpt: "Soak in a private outdoor spa with snow on the mountains. Ski Cardrona by day, stargaze by night.",
+    href: "/winter-glamping-central-otago",
+  },
+  {
     category: "Accommodation",
     title: "Dog-Friendly Accommodation in Central Otago",
     image: "/images/lakeside-cottage-exterior.jpeg",
