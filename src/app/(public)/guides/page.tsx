@@ -70,15 +70,15 @@ const guides = [
     category: "Seasonal",
     title: "Best Time to Visit Central Otago",
     image: "/images/golden-vineyard-autumn.jpg",
-    excerpt: "A season-by-season guide to Central Otago, from summer swimming to winter wine tasting.",
-    href: "/cromwell-activities",
+    excerpt: "A season-by-season guide to Central Otago — autumn harvest, winter snow, spring blossom, and long summer days.",
+    href: "/autumn-central-otago",
   },
   {
     category: "Food & Dining",
-    title: "Where to Eat in Cromwell & Beyond",
+    title: "Central Otago Wine Trail & Cellar Doors",
     image: "/images/ViewfromVineyard.jpeg",
-    excerpt: "Our favourite restaurants, cafes, and winery eateries in the Cromwell Basin and beyond.",
-    href: "/cromwell-activities",
+    excerpt: "30+ wineries within 15 minutes. Our guide to the best cellar doors, winery restaurants, and tastings in the region.",
+    href: "/central-otago-wine-trail",
   },
 ];
 
