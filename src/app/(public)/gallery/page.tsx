@@ -3,9 +3,9 @@ import { GalleryContent } from "@/components/gallery-content";
 import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Photo Gallery",
+  title: "Photo Gallery | Luxury Glamping Domes & Cottage, Central Otago",
   description:
-    "Photos of luxury glamping domes, Lake Dunstan views and Central Otago scenery at Lakeside Retreat. Rated 4.9 stars by 127 guests.",
+    "Photos of Lakeside Retreat: luxury geodesic domes, private outdoor spas, Lake Dunstan views, and Central Otago landscapes. 4.9★ rated accommodation, Cromwell.",
 };
 
 export default function GalleryPage() {

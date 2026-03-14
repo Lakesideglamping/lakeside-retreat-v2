@@ -4,18 +4,32 @@ import Link from "next/link";
 import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Local Guides & Tips",
+  title: "Central Otago Travel Guides | Insider Tips from Lakeside Retreat",
   description:
-    "Insider knowledge from your hosts to help you make the most of your Central Otago adventure. Guides to wine trails, cycling, water sports, and day trips.",
+    "Expert guides for your Central Otago stay: Otago Rail Trail cycling, Lake Dunstan activities, Central Otago wine trails, and day trips to Queenstown and Wanaka.",
 };
 
 const guides = [
   {
+    category: "Glamping",
+    title: "Glamping in Central Otago: The Complete Guide",
+    image: "/images/Pinotfront.jpeg",
+    excerpt: "Everything you need to know about luxury glamping on Lake Dunstan — domes, spas, stargazing, and wine country.",
+    href: "/glamping-central-otago",
+  },
+  {
+    category: "Accommodation",
+    title: "Dog-Friendly Accommodation in Central Otago",
+    image: "/images/lakeside-cottage-exterior.jpeg",
+    excerpt: "Bring the whole family — including your dog. Lakeside Cottage on Lake Dunstan welcomes pets.",
+    href: "/dog-friendly-accommodation-central-otago",
+  },
+  {
     category: "Cycling",
-    title: "Otago Rail Trail: A Complete Guide",
+    title: "Otago Rail Trail: Accommodation & Guide",
     image: "/images/vineyard-path.jpg",
-    excerpt: "Everything you need to know about New Zealand's original Great Ride, just 300m from Lakeside Retreat.",
-    href: "/cromwell-activities",
+    excerpt: "Stay 300m from the trailhead. Everything you need to know about NZ's original Great Ride.",
+    href: "/otago-rail-trail-accommodation",
   },
   {
     category: "Water Activities",

@@ -28,7 +28,7 @@ const accommodations: Accommodation[] = [
     cleaningFee: 50,
     adultsOnly: true,
     amenities: ["Super King bed", "Private spa", "Panoramic views", "Solar powered"],
-    images: ["dome-pinot-hero.jpeg", "pinotinternal.jpeg"],
+    images: ["Pinotfront.jpeg", "pinotinternal.jpeg"],
   },
   {
     id: "dome-rose",

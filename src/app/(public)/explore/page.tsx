@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Explore Central Otago",
+  title: "Things to Do Near Cromwell | Wineries, Cycling & Lake Dunstan Activities",
   description:
-    "Things to do near Lakeside Retreat: world-class wineries, cycling trails, Lake Dunstan water sports, and day trips to Queenstown, Wanaka, and Arrowtown.",
+    "Everything to do near Lakeside Retreat: Otago Rail Trail cycling, Central Otago wineries, Lake Dunstan water sports, and day trips to Queenstown, Wanaka, and Arrowtown.",
 };
 
 const distances = [

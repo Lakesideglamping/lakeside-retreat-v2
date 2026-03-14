@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "The Perfect Romantic Getaway in Central Otago",
+  title: "Couples Retreat Central Otago | Romantic Glamping Domes with Private Spas",
   description:
-    "Adults-only luxury glamping domes with private spas, vineyard views, and wine country at your doorstep. Plan the perfect couples retreat in Central Otago.",
+    "Adults-only luxury geodesic domes with private outdoor spas, stargazing skylights, and Central Otago wine country at your doorstep. The perfect romantic escape.",
 };
 
 const itinerary = [
@@ -112,7 +112,7 @@ export default function CouplesRetreatPage() {
           <div className="grid md:grid-cols-2 gap-8">
             <Link href="/dome-pinot" className="block bg-cream rounded-2xl overflow-hidden shadow-lg no-underline hover:-translate-y-1 transition-transform">
               <div className="relative h-[250px]">
-                <Image src="/images/dome-pinot-hero.jpeg" alt="Dome Pinot" fill className="object-cover" sizes="50vw" />
+                <Image src="/images/Pinotfront.jpeg" alt="Dome Pinot luxury geodesic dome with Lake Dunstan views" fill className="object-cover" sizes="50vw" />
               </div>
               <div className="p-6">
                 <h3 className="font-display text-xl text-teal mb-1">Dome Pinot</h3>
@@ -188,7 +188,7 @@ export default function CouplesRetreatPage() {
           <p className="text-lg text-muted mb-8">
             Book direct for the best rates and complimentary continental breakfast.
           </p>
-          <Button href="/stay">Check Availability</Button>
+          <Button href="/book">Book Your Stay</Button>
         </div>
       </section>
     </>

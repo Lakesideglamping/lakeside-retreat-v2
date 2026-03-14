@@ -5,15 +5,15 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createLodgingBusinessSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Accommodation",
+  title: "Luxury Accommodation Central Otago | Glamping Domes & Lakeside Cottage",
   description:
-    "Choose from two luxury glamping domes or a pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Adults-only domes from $510/night, family cottage from $295/night.",
+    "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Stargazing skylights, vineyard views. From $295/night.",
 };
 
 const accommodations = [
   {
     slug: "dome-pinot",
-    image: "/images/dome-pinot-hero.jpeg",
+    image: "/images/Pinotfront.jpeg",
     title: "Dome Pinot",
     adultsOnly: true,
     price: "$530",

@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Our Story",
+  title: "About Lakeside Retreat | Sustainable Luxury Accommodation, Central Otago",
   description:
-    "Meet Stephen and Sandy, the hosts behind Lakeside Retreat. Learn about our journey building Central Otago's premier sustainably powered luxury accommodation.",
+    "Meet Stephen and Sandy, hosts of Central Otago's premier sustainably powered retreat on Lake Dunstan. Our story of building luxury glamping domes and a lakeside cottage.",
 };
 
 const timeline = [

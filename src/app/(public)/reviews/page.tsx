@@ -7,9 +7,9 @@ import { ReviewsList } from "@/components/reviews-list";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Guest Reviews",
+  title: "Guest Reviews | 4.9★ Rated Accommodation, Central Otago",
   description:
-    "Read verified guest reviews of Lakeside Retreat Central Otago. Rated 4.9 stars across Airbnb, Booking.com and direct bookings.",
+    "Read 416 verified guest reviews of Lakeside Retreat, Cromwell. 4.9/5 stars across Airbnb, Booking.com, and direct bookings. Central Otago's top-rated glamping.",
 };
 
 export default async function ReviewsPage() {

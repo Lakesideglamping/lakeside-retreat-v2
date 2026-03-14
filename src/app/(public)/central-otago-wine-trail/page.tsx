@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Central Otago Wine Trail Guide",
+  title: "Central Otago Wine Trail | Best Wineries Near Cromwell & Bannockburn",
   description:
-    "Your gateway to New Zealand's premier Pinot Noir region. Explore 30+ cellar doors in Bannockburn, Cromwell Basin, and Pisa — all within minutes of Lakeside Retreat.",
+    "Explore New Zealand's finest Pinot Noir country. 30+ wineries within 15 minutes of Lakeside Retreat — Bannockburn, Cromwell Basin, Mt Difficulty, Carrick, Felton Road.",
 };
 
 const regions = [
@@ -164,7 +164,7 @@ export default function WineTrailPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/dome-pinot-hero.jpeg", title: "Dome Pinot", price: "From $530/night" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", price: "From $530/night" },
               { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", price: "From $510/night" },
               { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", price: "From $295/night" },
             ].map((acc) => (

@@ -4,9 +4,9 @@ import { ContactForm } from "@/components/contact-form";
 import { JsonLd, createContactPageSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: "Contact Lakeside Retreat | Cromwell, Central Otago",
   description:
-    "Contact Lakeside Retreat in Cromwell, Central Otago. Enquiries, bookings, and availability for luxury glamping domes and lakefront cottage.",
+    "Get in touch with Lakeside Retreat in Cromwell, Central Otago. Enquiries, availability, and bookings for luxury glamping domes and lakeside cottage. Call or email Stephen & Sandy.",
 };
 
 const contactInfo = [

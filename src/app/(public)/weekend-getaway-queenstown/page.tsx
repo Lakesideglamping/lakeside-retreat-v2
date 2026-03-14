@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "The Perfect Weekend Escape from Queenstown",
+  title: "Weekend Getaway from Queenstown | Luxury Glamping 45 Minutes Away",
   description:
-    "Swap the crowds for calm lakeside luxury, just 45 minutes from Queenstown. Luxury glamping domes and family cottage on Lake Dunstan from $295/night.",
+    "Escape the crowds. Luxury glamping domes and lakeside cottage on Lake Dunstan, Cromwell — just 45 minutes from Queenstown. Private spas, wine country. From $295/night.",
 };
 
 const comparison = [
@@ -178,7 +178,7 @@ export default function WeekendGetawayPage() {
           <h2 className="font-display text-4xl text-center mb-10">Where to Stay</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/dome-pinot-hero.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night" },
               { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night" },
               { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "From $295/night" },
             ].map((acc) => (
@@ -209,7 +209,7 @@ export default function WeekendGetawayPage() {
       <section className="py-20 px-5 bg-white text-center">
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Weekend Getaway</h2>
-          <Button href="/stay">View Accommodation &amp; Book</Button>
+          <Button href="/book">Book Your Stay</Button>
         </div>
       </section>
     </>

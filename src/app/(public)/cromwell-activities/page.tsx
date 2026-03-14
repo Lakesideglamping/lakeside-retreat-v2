@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Things to Do in Cromwell, Central Otago",
+  title: "Things to Do in Cromwell | Activities Guide — Cycling, Wine & Lake Dunstan",
   description:
-    "Your complete guide to activities in Cromwell: Lake Dunstan water sports, cycling trails, wine tasting, heritage precinct, and day trips to Queenstown and Wanaka.",
+    "Complete guide to Cromwell activities: Otago Rail Trail cycling, Lake Dunstan water sports, Central Otago wine tasting, heritage precinct, and day trips to Queenstown.",
 };
 
 const waterActivities = [
@@ -171,7 +171,7 @@ export default function CromwellActivitiesPage() {
           <h2 className="font-display text-4xl text-center mb-10">Where to Stay in Cromwell</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/dome-pinot-hero.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night" },
               { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night" },
               { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "From $295/night" },
             ].map((acc) => (

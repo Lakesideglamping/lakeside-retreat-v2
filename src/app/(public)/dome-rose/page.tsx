@@ -244,8 +244,8 @@ export default function DomeRosePage() {
             >
               <div className="relative h-[200px]">
                 <Image
-                  src="/images/dome-pinot-hero.jpeg"
-                  alt="Dome Pinot luxury glamping"
+                  src="/images/Pinotfront.jpeg"
+                  alt="Dome Pinot luxury geodesic dome with Lake Dunstan views"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
