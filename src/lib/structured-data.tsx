@@ -182,7 +182,7 @@ export function createPropertySchema(params: PropertySchemaParams) {
       "@type": "ReserveAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${BASE_URL}/stay`,
+        urlTemplate: `${BASE_URL}/book?a=${params.id}`,
         actionPlatform: [
           "http://schema.org/DesktopWebPlatform",
           "http://schema.org/MobileWebPlatform",
