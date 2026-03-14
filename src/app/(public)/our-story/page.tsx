@@ -10,9 +10,7 @@ export const metadata: Metadata = {
 };
 
 const timeline = [
-  { year: "2019", event: "Discovered the perfect lakeside property in Mount Pisa" },
-  { year: "2020", event: "Began planning and designing the sustainable retreat" },
-  { year: "2021", event: "Installed renewable energy system with battery storage" },
+  { year: "2021", event: "Purchased the lakeside property in Mount Pisa and began planning the sustainable retreat" },
   { year: "2022", event: "Opened Dome Pinot and welcomed first guests" },
   { year: "2023", event: "Added Dome Ros\u00e9 and the Lakeside Cottage" },
   { year: "2024", event: "Celebrated 127th five-star review and 45% return guest rate" },
@@ -59,7 +57,7 @@ export default function OurStoryPage() {
             <p className="text-lg leading-8 text-muted mb-4">
               We&apos;re Stephen and Sandy, and Lakeside Retreat is the culmination of our dream to
               create New Zealand&apos;s premier sustainably powered luxury accommodation. When we
-              first discovered this land on the shores of Lake Dunstan, we knew we&apos;d found
+              purchased this land on the shores of Lake Dunstan in 2021, we knew we&apos;d found
               something special &mdash; panoramic views, proximity to world-class wineries, and
               access to the famous Otago Rail Trail.
             </p>
