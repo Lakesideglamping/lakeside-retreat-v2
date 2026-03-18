@@ -27,13 +27,15 @@ export async function GET(
 ) {
   const { accommodation } = await params;
 
-  if (!ACCOMMODATION_NAMES[accommodation]) {
+  // "all" returns combined feed for all properties (Uplisting uses one global Partner iCal URL)
+  const isAll = accommodation === "all";
+  if (!isAll && !ACCOMMODATION_NAMES[accommodation]) {
     return new NextResponse("Not found", { status: 404 });
   }
 
   const bookings = await prisma.bookings.findMany({
     where: {
-      accommodation,
+      ...(isAll ? {} : { accommodation }),
       status: { in: ["confirmed", "completed"] },
       booking_source: "website",
       check_out: { gte: new Date() },
@@ -42,6 +44,7 @@ export async function GET(
       id: true,
       guest_name: true,
       guest_email: true,
+      accommodation: true,
       check_in: true,
       check_out: true,
       guests: true,
@@ -50,7 +53,7 @@ export async function GET(
     orderBy: { check_in: "asc" },
   });
 
-  const propertyName = ACCOMMODATION_NAMES[accommodation];
+  const propertyName = isAll ? "Lakeside Retreat" : ACCOMMODATION_NAMES[accommodation];
   const now = formatICalDateTime(new Date());
 
   const events = bookings
@@ -65,6 +68,10 @@ export async function GET(
       );
       const emailVal = b.guest_email || "noreply@lakesideretreat.co.nz";
 
+      const locationName = escapeICalText(
+        ACCOMMODATION_NAMES[b.accommodation] || b.accommodation
+      );
+
       return [
         "BEGIN:VEVENT",
         `UID:${uid}`,
@@ -74,6 +81,7 @@ export async function GET(
         `CREATED:${created}`,
         `SUMMARY:${guestName}`,
         `DESCRIPTION:${description}`,
+        `LOCATION:${locationName}`,
         `ORGANIZER;CN=${guestName}:mailto:${emailVal}`,
         "STATUS:CONFIRMED",
         "END:VEVENT",
