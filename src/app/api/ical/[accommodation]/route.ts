@@ -7,8 +7,14 @@ const ACCOMMODATION_NAMES: Record<string, string> = {
   "lakeside-cottage": "Lakeside Retreat in a Vineyard By Lake Dunstan",
 };
 
-function formatICalDate(date: Date): string {
+// Full datetime stamp for DTSTAMP (UTC)
+function formatICalDateTime(date: Date): string {
   return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+}
+
+// Date-only format for check-in/check-out (YYYYMMDD) — no timezone confusion
+function formatICalDateOnly(date: Date): string {
+  return date.toISOString().split("T")[0].replace(/-/g, "");
 }
 
 function escapeICalText(text: string): string {
@@ -44,14 +50,14 @@ export async function GET(
   });
 
   const propertyName = ACCOMMODATION_NAMES[accommodation];
-  const now = formatICalDate(new Date());
+  const now = formatICalDateTime(new Date());
 
   const events = bookings
     .map((b) => {
       const uid = `${b.id}@lakesideretreat.co.nz`;
-      const dtstart = formatICalDate(new Date(b.check_in));
-      const dtend = formatICalDate(new Date(b.check_out));
-      const created = b.created_at ? formatICalDate(new Date(b.created_at)) : now;
+      const dtstart = formatICalDateOnly(new Date(b.check_in));
+      const dtend = formatICalDateOnly(new Date(b.check_out));
+      const created = b.created_at ? formatICalDateTime(new Date(b.created_at)) : now;
       const summary = escapeICalText(`Website Booking - ${b.guest_name}`);
       const description = escapeICalText(
         `Direct booking via Lakeside Retreat website. Guests: ${b.guests}`
@@ -61,8 +67,8 @@ export async function GET(
         "BEGIN:VEVENT",
         `UID:${uid}`,
         `DTSTAMP:${now}`,
-        `DTSTART:${dtstart}`,
-        `DTEND:${dtend}`,
+        `DTSTART;VALUE=DATE:${dtstart}`,
+        `DTEND;VALUE=DATE:${dtend}`,
         `CREATED:${created}`,
         `SUMMARY:${summary}`,
         `DESCRIPTION:${description}`,
