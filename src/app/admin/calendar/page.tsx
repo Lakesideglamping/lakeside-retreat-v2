@@ -1,22 +1,41 @@
 import { prisma } from "@/lib/db";
 import { CalendarView } from "@/components/admin/calendar/calendar-view";
+import { fetchBlockedDates } from "@/lib/uplisting";
+
+const PROPERTIES = ["dome-pinot", "dome-rose", "lakeside-cottage"] as const;
+
+function groupConsecutiveDates(dates: string[]): Array<{ from: string; to: string }> {
+  if (dates.length === 0) return [];
+  const sorted = [...dates].sort();
+  const ranges: Array<{ from: string; to: string }> = [];
+  let rangeStart = sorted[0];
+  let rangeEnd = sorted[0];
+  for (let i = 1; i < sorted.length; i++) {
+    const curr = sorted[i];
+    const next = new Date(rangeEnd);
+    next.setDate(next.getDate() + 1);
+    if (next.toISOString().split("T")[0] === curr) {
+      rangeEnd = curr;
+    } else {
+      ranges.push({ from: rangeStart, to: rangeEnd });
+      rangeStart = curr;
+      rangeEnd = curr;
+    }
+  }
+  ranges.push({ from: rangeStart, to: rangeEnd });
+  return ranges;
+}
 
 export default async function CalendarPage() {
-  // Use NZ timezone to determine current month (Render servers run UTC)
   const nzParts = new Intl.DateTimeFormat("en-NZ", {
     timeZone: "Pacific/Auckland",
     year: "numeric", month: "2-digit", day: "2-digit",
   }).formatToParts(new Date());
   const nzYear = Number(nzParts.find((p) => p.type === "year")!.value);
   const nzMonth = Number(nzParts.find((p) => p.type === "month")!.value) - 1;
-  const monthStart = new Date(Date.UTC(nzYear, nzMonth, 1));
-  const monthEnd = new Date(Date.UTC(nzYear, nzMonth + 1, 0));
 
-  // Extend range to cover partial weeks at month boundaries
-  const rangeStart = new Date(monthStart);
-  rangeStart.setDate(rangeStart.getDate() - 7);
-  const rangeEnd = new Date(monthEnd);
-  rangeEnd.setDate(rangeEnd.getDate() + 7);
+  const rangeStart = new Date(Date.UTC(nzYear, nzMonth - 1, 1));
+  const rangeEnd = new Date(Date.UTC(nzYear, nzMonth + 4, 0));
 
   const [blockedDates, bookings] = await Promise.all([
     prisma.blocked_dates.findMany({
@@ -24,12 +43,7 @@ export default async function CalendarPage() {
         OR: [
           { start_date: { gte: rangeStart, lte: rangeEnd } },
           { end_date: { gte: rangeStart, lte: rangeEnd } },
-          {
-            AND: [
-              { start_date: { lte: rangeStart } },
-              { end_date: { gte: rangeEnd } },
-            ],
-          },
+          { AND: [{ start_date: { lte: rangeStart } }, { end_date: { gte: rangeEnd } }] },
         ],
       },
       orderBy: { start_date: "asc" },
@@ -41,12 +55,7 @@ export default async function CalendarPage() {
         OR: [
           { check_in: { gte: rangeStart, lte: rangeEnd } },
           { check_out: { gte: rangeStart, lte: rangeEnd } },
-          {
-            AND: [
-              { check_in: { lte: rangeStart } },
-              { check_out: { gte: rangeEnd } },
-            ],
-          },
+          { AND: [{ check_in: { lte: rangeStart } }, { check_out: { gte: rangeEnd } }] },
         ],
       },
       select: {
@@ -56,10 +65,15 @@ export default async function CalendarPage() {
         check_in: true,
         check_out: true,
         status: true,
+        booking_source: true,
       },
       orderBy: { check_in: "asc" },
     }),
   ]);
+
+  const uplistingBlockedArrays = await Promise.all(
+    PROPERTIES.map((p) => fetchBlockedDates(p).catch(() => [] as string[]))
+  );
 
   const serializedBlocked = blockedDates.map((b) => ({
     id: b.id,
@@ -77,7 +91,13 @@ export default async function CalendarPage() {
     check_in: b.check_in.toISOString().split("T")[0],
     check_out: b.check_out.toISOString().split("T")[0],
     status: b.status,
+    booking_source: b.booking_source ?? null,
   }));
+
+  const initialUplistingBlocked: Record<string, Array<{ from: string; to: string }>> = {};
+  PROPERTIES.forEach((prop, i) => {
+    initialUplistingBlocked[prop] = groupConsecutiveDates(uplistingBlockedArrays[i]);
+  });
 
   return (
     <CalendarView
@@ -85,6 +105,7 @@ export default async function CalendarPage() {
       initialBookings={serializedBookings}
       initialYear={nzYear}
       initialMonth={nzMonth}
+      initialUplistingBlocked={initialUplistingBlocked}
     />
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { adminGet, adminDelete } from "@/lib/admin-api";
 import { BlockDatesForm } from "./block-dates-form";
 import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
@@ -22,6 +22,12 @@ interface CalendarBooking {
   check_in: string;
   check_out: string;
   status: string | null;
+  booking_source: string | null;
+}
+
+interface UplistingRange {
+  from: string;
+  to: string;
 }
 
 interface CalendarViewProps {
@@ -29,101 +35,61 @@ interface CalendarViewProps {
   initialBookings: CalendarBooking[];
   initialYear: number;
   initialMonth: number;
+  initialUplistingBlocked: Record<string, UplistingRange[]>;
 }
 
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const DAYS_VISIBLE = 28;
+const DAY_WIDTH = 50;
+const LEFT_COL = 210;
 
-const PROPERTY_FILTERS = [
-  { value: "all", label: "All" },
-  { value: "dome-pinot", label: "Dome Pinot" },
-  { value: "dome-rose", label: "Dome Rosé" },
-  { value: "lakeside-cottage", label: "Cottage" },
+const PROPERTIES = [
+  { id: "lakeside-cottage", label: "Lakeside Retreat in a Vineyard By Lake Dunstan" },
+  { id: "dome-pinot", label: "Lakeside Glamping - Dome Pinot" },
+  { id: "dome-rose", label: "Lakeside Glamping - Dome Rosé" },
 ];
 
-const ACCOMMODATION_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  "dome-pinot": { bg: "bg-teal-100", text: "text-teal-800", border: "border-teal-300" },
-  "dome-rose": { bg: "bg-rose-100", text: "text-rose-800", border: "border-rose-300" },
-  "lakeside-cottage": { bg: "bg-amber-100", text: "text-amber-800", border: "border-amber-300" },
+const SOURCE_STYLES: Record<string, { bg: string; border: string; text: string; label: string }> = {
+  "booking.com": { bg: "#dbeafe", border: "#3b82f6", text: "#1e40af", label: "Booking.com" },
+  "airbnb":      { bg: "#fce7f3", border: "#ec4899", text: "#9d174d", label: "Airbnb" },
+  "website":     { bg: "#d1fae5", border: "#10b981", text: "#065f46", label: "Direct" },
+  "uplisting":   { bg: "#ede9fe", border: "#8b5cf6", text: "#5b21b6", label: "Uplisting" },
+  "manual":      { bg: "#f3f4f6", border: "#9ca3af", text: "#374151", label: "Manual" },
 };
 
-function getMonthDays(year: number, month: number) {
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-
-  // Get Monday-based day of week (0=Mon, 6=Sun)
-  let startDow = firstDay.getDay() - 1;
-  if (startDow < 0) startDow = 6;
-
-  const days: { date: string; dayNum: number; isCurrentMonth: boolean }[] = [];
-
-  // Previous month padding
-  for (let i = startDow - 1; i >= 0; i--) {
-    const d = new Date(year, month, -i);
-    days.push({
-      date: d.toISOString().split("T")[0],
-      dayNum: d.getDate(),
-      isCurrentMonth: false,
-    });
-  }
-
-  // Current month days
-  for (let d = 1; d <= lastDay.getDate(); d++) {
-    const date = new Date(year, month, d);
-    days.push({
-      date: date.toISOString().split("T")[0],
-      dayNum: d,
-      isCurrentMonth: true,
-    });
-  }
-
-  // Next month padding to fill the grid
-  const remaining = 7 - (days.length % 7);
-  if (remaining < 7) {
-    for (let i = 1; i <= remaining; i++) {
-      const d = new Date(year, month + 1, i);
-      days.push({
-        date: d.toISOString().split("T")[0],
-        dayNum: d.getDate(),
-        isCurrentMonth: false,
-      });
-    }
-  }
-
-  return days;
+function addDays(dateStr: string, days: number): string {
+  const d = new Date(dateStr);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().split("T")[0];
 }
 
-function isDateInRange(date: string, start: string, end: string): boolean {
-  return date >= start && date <= end;
+function daysBetween(a: string, b: string): number {
+  return Math.round((new Date(b).getTime() - new Date(a).getTime()) / 86400000);
 }
 
-function formatMonthYear(year: number, month: number): string {
-  return new Date(year, month).toLocaleDateString("en-US", {
-    month: "long",
-    year: "numeric",
-  });
+function todayNZ(): string {
+  return new Intl.DateTimeFormat("en-NZ", {
+    timeZone: "Pacific/Auckland",
+    year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date()).split("/").reverse().join("-");
 }
 
 export function CalendarView({
   initialBlockedDates,
   initialBookings,
-  initialYear,
-  initialMonth,
+  initialUplistingBlocked,
 }: CalendarViewProps) {
-  const [year, setYear] = useState(initialYear);
-  const [month, setMonth] = useState(initialMonth);
+  const today = todayNZ();
+
+  const [startDate, setStartDate] = useState(() => addDays(today, -3));
   const [blockedDates, setBlockedDates] = useState<BlockedDate[]>(initialBlockedDates);
   const [bookings, setBookings] = useState<CalendarBooking[]>(initialBookings);
-  const [propertyFilter, setPropertyFilter] = useState("all");
-  const [showBlockForm, setShowBlockForm] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showBlockForm, setShowBlockForm] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  const isInitialMonth = year === initialYear && month === initialMonth;
-
-  const fetchCalendarData = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const [blockedRes, bookingsRes] = await Promise.all([
         adminGet<{ blockedDates: BlockedDate[] }>("/api/admin/blocked-dates"),
@@ -135,14 +101,8 @@ export function CalendarView({
       setBookings(
         bookingsRes.bookings.map((b) => ({
           ...b,
-          check_in:
-            typeof b.check_in === "string"
-              ? b.check_in.split("T")[0]
-              : new Date(b.check_in).toISOString().split("T")[0],
-          check_out:
-            typeof b.check_out === "string"
-              ? b.check_out.split("T")[0]
-              : new Date(b.check_out).toISOString().split("T")[0],
+          check_in: String(b.check_in).split("T")[0],
+          check_out: String(b.check_out).split("T")[0],
         }))
       );
     } catch (err) {
@@ -152,88 +112,55 @@ export function CalendarView({
     }
   }, []);
 
-  // Fetch data when navigating away from the initial month
-  useEffect(() => {
-    if (!isInitialMonth) {
-      fetchCalendarData();
-    }
-  }, [isInitialMonth, fetchCalendarData]);
+  // Build visible date array
+  const dates: string[] = Array.from({ length: DAYS_VISIBLE }, (_, i) => addDays(startDate, i));
+  const endDate = dates[dates.length - 1];
 
-  const goToPrevMonth = () => {
-    if (month === 0) {
-      setYear((y) => y - 1);
-      setMonth(11);
-    } else {
-      setMonth((m) => m - 1);
-    }
-  };
-
-  const goToNextMonth = () => {
-    if (month === 11) {
-      setYear((y) => y + 1);
-      setMonth(0);
-    } else {
-      setMonth((m) => m + 1);
-    }
-  };
-
-  const goToToday = () => {
-    const now = new Date();
-    setYear(now.getFullYear());
-    setMonth(now.getMonth());
-  };
-
-  const handleDayClick = (date: string) => {
-    setSelectedDate(date);
-    setShowBlockForm(true);
-  };
+  function getBarStyle(checkIn: string, checkOut: string) {
+    if (checkOut <= startDate || checkIn > endDate) return null;
+    const clampedStart = checkIn < startDate ? startDate : checkIn;
+    const clampedEnd = checkOut > addDays(endDate, 1) ? addDays(endDate, 1) : checkOut;
+    const left = daysBetween(startDate, clampedStart) * DAY_WIDTH;
+    const width = daysBetween(clampedStart, clampedEnd) * DAY_WIDTH;
+    if (width <= 0) return null;
+    return { left, width };
+  }
 
   const handleBlockCreated = () => {
     setShowBlockForm(false);
     setSelectedDate(null);
-    fetchCalendarData();
+    fetchData();
   };
 
   const handleDeleteBlocked = async (id: number) => {
     try {
       await adminDelete(`/api/admin/blocked-dates/${id}`);
-      fetchCalendarData();
+      fetchData();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete blocked date");
     }
   };
 
-  const days = getMonthDays(year, month);
-  const todayStr = new Date().toISOString().split("T")[0];
-
-  const filteredBlockedDates =
-    propertyFilter === "all"
-      ? blockedDates
-      : blockedDates.filter((b) => b.property === propertyFilter);
-
-  const filteredBookings =
-    propertyFilter === "all"
-      ? bookings
-      : bookings.filter((b) => b.accommodation === propertyFilter);
+  // Format date range label
+  const rangeLabel = `${new Date(startDate).toLocaleDateString("en-NZ", { day: "numeric", month: "short", year: "numeric" })} — ${new Date(endDate).toLocaleDateString("en-NZ", { day: "numeric", month: "short", year: "numeric" })}`;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Calendar</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Manage availability and blocked dates
-          </p>
+          <p className="text-sm text-gray-500">Manage availability and bookings</p>
         </div>
-        <button
-          onClick={() => {
-            setSelectedDate(todayStr);
-            setShowBlockForm(true);
-          }}
-          className="rounded-lg bg-[#2d5a5a] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#234848]"
-        >
-          Block Dates
-        </button>
+        <div className="flex items-center gap-3">
+          {loading && <LoadingSpinner size="sm" />}
+          <button
+            onClick={() => { setSelectedDate(today); setShowBlockForm(true); }}
+            className="rounded-lg bg-[#2d5a5a] px-4 py-2 text-sm font-medium text-white hover:bg-[#234848]"
+          >
+            Block Dates
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -242,146 +169,212 @@ export function CalendarView({
         </Alert>
       )}
 
-      {/* Property filter */}
-      <div className="flex gap-2">
-        {PROPERTY_FILTERS.map((filter) => (
-          <button
-            key={filter.value}
-            onClick={() => setPropertyFilter(filter.value)}
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              propertyFilter === filter.value
-                ? "bg-[#2d5a5a] text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            {filter.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Month navigation */}
-      <div className="flex items-center justify-between rounded-xl bg-white p-4 shadow-sm border border-gray-100">
+      {/* Navigation */}
+      <div className="flex items-center gap-2">
         <button
-          onClick={goToPrevMonth}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-gray-600 transition-colors hover:bg-gray-50"
+          onClick={() => setStartDate(addDays(startDate, -7))}
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
         </button>
-        <div className="flex items-center gap-3">
-          <h2 className="text-lg font-semibold text-gray-900">
-            {formatMonthYear(year, month)}
-          </h2>
-          {loading && <LoadingSpinner size="sm" />}
-          <button
-            onClick={goToToday}
-            className="rounded-lg border border-gray-300 px-3 py-1 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50"
-          >
-            Today
-          </button>
-        </div>
         <button
-          onClick={goToNextMonth}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-gray-600 transition-colors hover:bg-gray-50"
+          onClick={() => setStartDate(addDays(startDate, 7))}
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
           </svg>
         </button>
+        <button
+          onClick={() => setStartDate(addDays(today, -3))}
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+        >
+          Today
+        </button>
+        <span className="text-sm text-gray-500">{rangeLabel}</span>
       </div>
 
-      {/* Calendar grid */}
-      <div className="rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden">
-        {/* Weekday headers */}
-        <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50">
-          {WEEKDAYS.map((day) => (
-            <div
-              key={day}
-              className="px-2 py-2 text-center text-xs font-semibold uppercase tracking-wider text-gray-500"
-            >
-              {day}
-            </div>
-          ))}
-        </div>
+      {/* Timeline */}
+      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div style={{ minWidth: LEFT_COL + DAYS_VISIBLE * DAY_WIDTH }}>
 
-        {/* Days grid */}
-        <div className="grid grid-cols-7">
-          {days.map((day, i) => {
-            const isToday = day.date === todayStr;
-            const dayBlocked = filteredBlockedDates.filter((b) =>
-              isDateInRange(day.date, b.start_date, b.end_date)
-            );
-            const dayBookings = filteredBookings.filter((b) =>
-              isDateInRange(day.date, b.check_in, b.check_out)
-            );
-            const isBlocked = dayBlocked.length > 0;
+          {/* Date header */}
+          <div className="flex border-b border-gray-200 bg-gray-50">
+            <div
+              style={{ width: LEFT_COL, minWidth: LEFT_COL }}
+              className="shrink-0 border-r border-gray-200 px-3 py-2 text-xs font-semibold text-gray-500"
+            >
+              Property
+            </div>
+            {dates.map((date) => {
+              const d = new Date(date + "T12:00:00");
+              const isToday = date === today;
+              const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+              return (
+                <div
+                  key={date}
+                  style={{ width: DAY_WIDTH, minWidth: DAY_WIDTH }}
+                  className={`shrink-0 border-r border-gray-100 px-0 py-1 text-center text-[10px] ${
+                    isToday ? "bg-[#2d5a5a] text-white" : isWeekend ? "bg-gray-100 text-gray-600" : "text-gray-600"
+                  }`}
+                >
+                  <div className="font-medium uppercase leading-tight">
+                    {d.toLocaleDateString("en-NZ", { weekday: "short" })}
+                  </div>
+                  <div className={`text-sm font-bold leading-tight ${isToday ? "text-white" : "text-gray-900"}`}>
+                    {d.getDate()}
+                  </div>
+                  <div className="leading-tight text-[9px] opacity-70">
+                    {d.toLocaleDateString("en-NZ", { month: "short" })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Property rows */}
+          {PROPERTIES.map((property, propIdx) => {
+            const propBookings = bookings.filter((b) => b.accommodation === property.id);
+            const propBlocked = blockedDates.filter((b) => b.property === property.id);
+            const uplistingRanges = (initialUplistingBlocked[property.id] ?? []).filter((range) => {
+              // Only show if not already covered by a DB booking
+              return !propBookings.some((b) => b.check_in <= range.from && b.check_out >= addDays(range.to, 1));
+            });
 
             return (
               <div
-                key={i}
-                onClick={() => handleDayClick(day.date)}
-                className={`relative min-h-[100px] border-b border-r border-gray-100 p-1.5 cursor-pointer transition-colors hover:bg-gray-50 ${
-                  !day.isCurrentMonth ? "bg-gray-50/50" : ""
-                } ${isBlocked ? "bg-red-50" : ""}`}
+                key={property.id}
+                className={`flex ${propIdx < PROPERTIES.length - 1 ? "border-b border-gray-200" : ""}`}
               >
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm ${
-                      isToday
-                        ? "bg-[#2d5a5a] font-bold text-white"
-                        : day.isCurrentMonth
-                        ? "font-medium text-gray-900"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {day.dayNum}
+                {/* Property label */}
+                <div
+                  style={{ width: LEFT_COL, minWidth: LEFT_COL }}
+                  className="shrink-0 border-r border-gray-200 px-3 py-3 flex items-start"
+                >
+                  <span className="text-xs font-semibold text-gray-700 leading-tight">
+                    {property.label}
                   </span>
-                  {isBlocked && (
-                    <span className="text-xs text-red-600" title={dayBlocked.map((b) => `${b.property}: ${b.reason ?? "blocked"}`).join(", ")}>
-                      blocked
-                    </span>
-                  )}
                 </div>
 
-                {/* Blocked date indicators */}
-                {dayBlocked.map((blocked) => (
-                  <div
-                    key={`blocked-${blocked.id}`}
-                    className="group mt-0.5 flex items-center justify-between rounded bg-red-100 px-1 py-0.5 text-[10px] text-red-700"
-                    title={`${blocked.property} - ${blocked.reason ?? "blocked"}${blocked.notes ? `: ${blocked.notes}` : ""}`}
-                  >
-                    <span className="truncate">{blocked.reason ?? "blocked"}</span>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteBlocked(blocked.id);
-                      }}
-                      className="ml-1 hidden shrink-0 text-red-500 hover:text-red-700 group-hover:inline"
-                      title="Remove block"
-                    >
-                      x
-                    </button>
+                {/* Timeline area */}
+                <div
+                  className="relative"
+                  style={{ width: DAYS_VISIBLE * DAY_WIDTH, minHeight: 80 }}
+                >
+                  {/* Day cell backgrounds */}
+                  <div className="absolute inset-0 flex">
+                    {dates.map((date) => {
+                      const d = new Date(date + "T12:00:00");
+                      const isToday = date === today;
+                      const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+                      return (
+                        <div
+                          key={date}
+                          style={{ width: DAY_WIDTH }}
+                          onClick={() => { setSelectedDate(date); setShowBlockForm(true); }}
+                          className={`h-full shrink-0 cursor-pointer border-r border-gray-100 transition-colors hover:bg-blue-50/30 ${
+                            isToday ? "bg-teal-50/40" : isWeekend ? "bg-gray-50/60" : ""
+                          }`}
+                        />
+                      );
+                    })}
                   </div>
-                ))}
 
-                {/* Booking bars */}
-                {dayBookings.map((booking) => {
-                  const colors = ACCOMMODATION_COLORS[booking.accommodation] ?? {
-                    bg: "bg-gray-100",
-                    text: "text-gray-700",
-                    border: "border-gray-300",
-                  };
-                  return (
-                    <div
-                      key={`booking-${booking.id}`}
-                      className={`mt-0.5 truncate rounded border px-1 py-0.5 text-[10px] font-medium ${colors.bg} ${colors.text} ${colors.border}`}
-                      title={`${booking.guest_name} - ${booking.accommodation} (${booking.check_in} to ${booking.check_out})`}
-                    >
-                      {booking.guest_name}
-                    </div>
-                  );
-                })}
+                  {/* Uplisting / external OTA blocked ranges */}
+                  {uplistingRanges.map((range, i) => {
+                    const style = getBarStyle(range.from, addDays(range.to, 1));
+                    if (!style) return null;
+                    return (
+                      <div
+                        key={`ext-${i}`}
+                        className="absolute rounded flex items-center overflow-hidden pointer-events-none"
+                        style={{
+                          top: 10,
+                          height: 36,
+                          left: style.left + 2,
+                          width: style.width - 4,
+                          background: "#f3f4f6",
+                          border: "1px solid #d1d5db",
+                        }}
+                      >
+                        <span className="truncate px-2 text-[10px] font-medium text-gray-500">
+                          Booked
+                        </span>
+                      </div>
+                    );
+                  })}
+
+                  {/* DB bookings */}
+                  {propBookings.map((booking) => {
+                    const style = getBarStyle(booking.check_in, booking.check_out);
+                    if (!style) return null;
+                    const sourceKey = booking.booking_source?.toLowerCase() ?? "manual";
+                    const s = SOURCE_STYLES[sourceKey] ?? SOURCE_STYLES.manual;
+                    return (
+                      <div
+                        key={`bk-${booking.id}`}
+                        className="absolute rounded flex items-center overflow-hidden"
+                        style={{
+                          top: 10,
+                          height: 36,
+                          left: style.left + 2,
+                          width: style.width - 4,
+                          background: s.bg,
+                          border: `1px solid ${s.border}`,
+                        }}
+                        title={`${booking.guest_name} — ${booking.check_in} to ${booking.check_out} (${s.label})`}
+                      >
+                        <div className="flex min-w-0 flex-col px-2 leading-tight">
+                          <span
+                            className="truncate text-[11px] font-semibold"
+                            style={{ color: s.text }}
+                          >
+                            {booking.guest_name}
+                          </span>
+                          <span className="text-[9px]" style={{ color: s.text, opacity: 0.7 }}>
+                            {s.label}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {/* Manual blocked dates (from our DB) */}
+                  {propBlocked.map((blocked) => {
+                    const style = getBarStyle(
+                      blocked.start_date,
+                      addDays(blocked.end_date, 1)
+                    );
+                    if (!style) return null;
+                    return (
+                      <div
+                        key={`bl-${blocked.id}`}
+                        className="group absolute flex items-center justify-between overflow-hidden rounded"
+                        style={{
+                          top: 52,
+                          height: 18,
+                          left: style.left + 2,
+                          width: style.width - 4,
+                          background: "#fee2e2",
+                          border: "1px solid #fca5a5",
+                        }}
+                        title={`Blocked: ${blocked.reason ?? "no reason"}`}
+                      >
+                        <span className="truncate px-1.5 text-[9px] font-medium text-red-700">
+                          {blocked.reason ?? "Blocked"}
+                        </span>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleDeleteBlocked(blocked.id); }}
+                          className="hidden group-hover:flex shrink-0 pr-1 text-[11px] text-red-400 hover:text-red-600"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             );
           })}
@@ -390,25 +383,26 @@ export function CalendarView({
 
       {/* Legend */}
       <div className="flex flex-wrap gap-4 text-xs text-gray-600">
-        <div className="flex items-center gap-1.5">
-          <div className="h-3 w-3 rounded bg-red-100 border border-red-300" />
-          <span>Blocked</span>
-        </div>
-        {Object.entries(ACCOMMODATION_COLORS).map(([key, colors]) => (
+        {Object.entries(SOURCE_STYLES).map(([key, s]) => (
           <div key={key} className="flex items-center gap-1.5">
-            <div className={`h-3 w-3 rounded ${colors.bg} border ${colors.border}`} />
-            <span>{key.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase())}</span>
+            <div className="h-3 w-6 rounded border" style={{ background: s.bg, borderColor: s.border }} />
+            <span>{s.label}</span>
           </div>
         ))}
+        <div className="flex items-center gap-1.5">
+          <div className="h-3 w-6 rounded border border-gray-300 bg-gray-100" />
+          <span>External/OTA</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-3 w-6 rounded border border-red-300 bg-red-100" />
+          <span>Blocked</span>
+        </div>
       </div>
 
       {/* Block dates modal */}
       <BlockDatesForm
         open={showBlockForm}
-        onClose={() => {
-          setShowBlockForm(false);
-          setSelectedDate(null);
-        }}
+        onClose={() => { setShowBlockForm(false); setSelectedDate(null); }}
         onSuccess={handleBlockCreated}
         initialDate={selectedDate}
       />
