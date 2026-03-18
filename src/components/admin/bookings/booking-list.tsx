@@ -158,6 +158,30 @@ export function BookingList() {
     setPage(1);
   }, [search, status, accommodation, source, dateFrom, dateTo]);
 
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState<string | null>(null);
+
+  const handleSync = async () => {
+    setSyncing(true);
+    setSyncResult(null);
+    try {
+      const res = await fetch("/api/admin/import-bookings", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Sync failed");
+      const summary = data.results
+        .map((r: { property: string; imported: number; skipped: number; errors: number }) =>
+          `${r.property}: +${r.imported} new, ${r.skipped} updated`
+        )
+        .join(" | ");
+      setSyncResult(`Synced — ${summary}`);
+      fetchBookings();
+    } catch (err) {
+      setSyncResult(err instanceof Error ? err.message : "Sync failed");
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const handleExport = () => {
     const params = new URLSearchParams();
     if (search) params.set("search", search);
@@ -244,6 +268,13 @@ export function BookingList() {
         </div>
         <div className="flex gap-3">
           <button
+            onClick={handleSync}
+            disabled={syncing}
+            className="rounded-lg border border-[#2d5a5a] px-4 py-2 text-sm font-medium text-[#2d5a5a] transition-colors hover:bg-[#2d5a5a]/10 disabled:opacity-50"
+          >
+            {syncing ? "Syncing…" : "Sync from Uplisting"}
+          </button>
+          <button
             onClick={handleExport}
             className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
           >
@@ -261,6 +292,15 @@ export function BookingList() {
       {error && (
         <Alert variant="error" dismissible onDismiss={() => setError(null)}>
           {error}
+        </Alert>
+      )}
+      {syncResult && (
+        <Alert
+          variant={syncResult.startsWith("Synced") ? "success" : "error"}
+          dismissible
+          onDismiss={() => setSyncResult(null)}
+        >
+          {syncResult}
         </Alert>
       )}
 
