@@ -220,7 +220,7 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
               available: false,
               from: data.checkIn,
               to: data.checkOut,
-              note: `Direct Website Booking - ${data.guestName}`,
+              reason: `Direct Website Booking - ${data.guestName}`,
             }],
           },
         }),

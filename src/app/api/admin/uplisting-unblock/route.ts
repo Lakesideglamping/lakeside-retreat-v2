@@ -16,7 +16,7 @@ function authHeader(): string {
 
 // POST: block or unblock dates, optionally with a note
 export async function POST(request: Request) {
-  const { accommodation, from, to, available = true, note } = await request.json();
+  const { accommodation, from, to, available = true, reason } = await request.json();
 
   const propertyId = PROPERTY_IDS[accommodation];
   if (!propertyId) {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   }
 
   const day: Record<string, unknown> = { available, from, to };
-  if (note) day.note = note;
+  if (reason) day.reason = reason;
 
   const res = await fetch(`${API_BASE}/calendar/${propertyId}`, {
     method: "POST",
@@ -40,5 +40,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: body, status: res.status }, { status: 500 });
   }
 
-  return NextResponse.json({ success: true, accommodation, from, to, available, note });
+  return NextResponse.json({ success: true, accommodation, from, to, available, reason });
 }
