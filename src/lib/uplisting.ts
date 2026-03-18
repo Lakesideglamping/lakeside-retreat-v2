@@ -216,7 +216,12 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
         },
         body: JSON.stringify({
           calendar: {
-            days: [{ available: false, from: data.checkIn, to: data.checkOut }],
+            days: [{
+              available: false,
+              from: data.checkIn,
+              to: data.checkOut,
+              note: `Direct Website Booking - ${data.guestName}`,
+            }],
           },
         }),
       }

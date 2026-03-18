@@ -14,13 +14,17 @@ function authHeader(): string {
   return `Basic ${Buffer.from(key).toString("base64")}`;
 }
 
+// POST: block or unblock dates, optionally with a note
 export async function POST(request: Request) {
-  const { accommodation, from, to } = await request.json();
+  const { accommodation, from, to, available = true, note } = await request.json();
 
   const propertyId = PROPERTY_IDS[accommodation];
   if (!propertyId) {
     return NextResponse.json({ error: "Unknown accommodation" }, { status: 400 });
   }
+
+  const day: Record<string, unknown> = { available, from, to };
+  if (note) day.note = note;
 
   const res = await fetch(`${API_BASE}/calendar/${propertyId}`, {
     method: "POST",
@@ -28,11 +32,7 @@ export async function POST(request: Request) {
       Authorization: authHeader(),
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      calendar: {
-        days: [{ available: true, from, to }],
-      },
-    }),
+    body: JSON.stringify({ calendar: { days: [day] } }),
   });
 
   const body = await res.text();
@@ -40,5 +40,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: body, status: res.status }, { status: 500 });
   }
 
-  return NextResponse.json({ success: true, accommodation, from, to });
+  return NextResponse.json({ success: true, accommodation, from, to, available, note });
 }
