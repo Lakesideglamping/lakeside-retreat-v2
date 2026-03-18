@@ -2,9 +2,15 @@ import { prisma } from "@/lib/db";
 import { CalendarView } from "@/components/admin/calendar/calendar-view";
 
 export default async function CalendarPage() {
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  // Use NZ timezone to determine current month (Render servers run UTC)
+  const nzParts = new Intl.DateTimeFormat("en-NZ", {
+    timeZone: "Pacific/Auckland",
+    year: "numeric", month: "2-digit", day: "2-digit",
+  }).formatToParts(new Date());
+  const nzYear = Number(nzParts.find((p) => p.type === "year")!.value);
+  const nzMonth = Number(nzParts.find((p) => p.type === "month")!.value) - 1;
+  const monthStart = new Date(Date.UTC(nzYear, nzMonth, 1));
+  const monthEnd = new Date(Date.UTC(nzYear, nzMonth + 1, 0));
 
   // Extend range to cover partial weeks at month boundaries
   const rangeStart = new Date(monthStart);
@@ -77,8 +83,8 @@ export default async function CalendarPage() {
     <CalendarView
       initialBlockedDates={serializedBlocked}
       initialBookings={serializedBookings}
-      initialYear={now.getFullYear()}
-      initialMonth={now.getMonth()}
+      initialYear={nzYear}
+      initialMonth={nzMonth}
     />
   );
 }

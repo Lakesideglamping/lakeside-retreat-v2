@@ -48,57 +48,59 @@ export async function POST() {
 
       for (const b of bookingList) {
         const uplistingId = String(b.id || "");
-
-        // Skip if already exists
-        if (uplistingId) {
-          const existing = await prisma.bookings.findFirst({
-            where: { uplisting_id: uplistingId },
-          });
-          if (existing) {
-            skipped++;
-            continue;
-          }
-        }
+        if (!uplistingId) continue;
 
         const source = b.channel || b.source || "channel";
         const guestName = b.guest_name || b.guest?.name || "Channel Guest";
         const guestEmail = b.guest_email || b.guest?.email || "";
         const guestPhone = b.guest_phone || b.guest?.phone || null;
+        const bookingData = {
+          guest_name: guestName,
+          guest_email: guestEmail,
+          guest_phone: guestPhone,
+          accommodation: prop.slug,
+          check_in: new Date(b.check_in),
+          check_out: new Date(b.check_out),
+          guests: Number(b.number_of_guests || b.guests) || 1,
+          total_price: b.total_payout
+            ? Number(b.total_payout)
+            : b.accomodation_total
+              ? Number(b.accomodation_total)
+              : b.total
+                ? Number(b.total)
+                : null,
+          status: b.status === "cancelled" ? "cancelled" : "confirmed",
+          payment_status: "paid_external",
+          booking_source:
+            source.startsWith("airbnb")
+              ? "airbnb"
+              : source.startsWith("booking")
+                ? "booking.com"
+                : source === "uplisting"
+                  ? "direct"
+                  : `channel:${source}`,
+          uplisting_id: uplistingId,
+          uplisting_sync_status: "synced",
+          security_deposit_status: "not_applicable",
+        };
 
         try {
-          await prisma.bookings.create({
-            data: {
-              id: randomUUID(),
-              guest_name: guestName,
-              guest_email: guestEmail,
-              guest_phone: guestPhone,
-              accommodation: prop.slug,
-              check_in: new Date(b.check_in),
-              check_out: new Date(b.check_out),
-              guests: Number(b.number_of_guests || b.guests) || 1,
-              total_price: b.total_payout
-                ? Number(b.total_payout)
-                : b.accomodation_total
-                  ? Number(b.accomodation_total)
-                  : b.total
-                    ? Number(b.total)
-                    : null,
-              status: b.status === "cancelled" ? "cancelled" : "confirmed",
-              payment_status: "paid_external",
-              booking_source:
-                source.startsWith("airbnb")
-                  ? "airbnb"
-                  : source.startsWith("booking")
-                    ? "booking.com"
-                    : source === "uplisting"
-                      ? "direct"
-                      : `channel:${source}`,
-              uplisting_id: uplistingId,
-              uplisting_sync_status: "synced",
-              security_deposit_status: "not_applicable",
-            },
+          const existing = await prisma.bookings.findFirst({
+            where: { uplisting_id: uplistingId },
           });
-          imported++;
+
+          if (existing) {
+            await prisma.bookings.update({
+              where: { id: existing.id },
+              data: bookingData,
+            });
+            skipped++; // count as "updated"
+          } else {
+            await prisma.bookings.create({
+              data: { id: randomUUID(), ...bookingData },
+            });
+            imported++;
+          }
         } catch (dbErr) {
           console.error(`[import] DB error for booking ${uplistingId}:`, dbErr);
           errors++;
