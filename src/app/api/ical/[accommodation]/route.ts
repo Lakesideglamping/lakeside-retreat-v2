@@ -41,6 +41,7 @@ export async function GET(
     select: {
       id: true,
       guest_name: true,
+      guest_email: true,
       check_in: true,
       check_out: true,
       guests: true,
@@ -58,10 +59,11 @@ export async function GET(
       const dtstart = formatICalDateOnly(new Date(b.check_in));
       const dtend = formatICalDateOnly(new Date(b.check_out));
       const created = b.created_at ? formatICalDateTime(new Date(b.created_at)) : now;
-      const summary = escapeICalText(`Website Booking - ${b.guest_name}`);
+      const guestName = escapeICalText(b.guest_name);
       const description = escapeICalText(
         `Direct booking via Lakeside Retreat website. Guests: ${b.guests}`
       );
+      const emailVal = b.guest_email || "noreply@lakesideretreat.co.nz";
 
       return [
         "BEGIN:VEVENT",
@@ -70,8 +72,9 @@ export async function GET(
         `DTSTART;VALUE=DATE:${dtstart}`,
         `DTEND;VALUE=DATE:${dtend}`,
         `CREATED:${created}`,
-        `SUMMARY:${summary}`,
+        `SUMMARY:${guestName}`,
         `DESCRIPTION:${description}`,
+        `ORGANIZER;CN=${guestName}:mailto:${emailVal}`,
         "STATUS:CONFIRMED",
         "END:VEVENT",
       ].join("\r\n");
