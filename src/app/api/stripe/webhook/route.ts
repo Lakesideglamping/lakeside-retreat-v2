@@ -127,6 +127,7 @@ export async function POST(request: Request) {
           guestEmail: metadata.guestEmail || "",
           guestPhone: metadata.guestPhone,
           guests: Number(metadata.guests) || 1,
+          totalPrice: (session.amount_total || 0) / 100,
         })
           .then(() => {
             prisma.bookings

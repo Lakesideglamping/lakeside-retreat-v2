@@ -130,12 +130,13 @@ interface SyncBookingData {
   guestEmail: string;
   guestPhone?: string;
   guests: number;
+  totalPrice?: number;
 }
 
 /**
- * Block dates on Uplisting calendar when a direct booking is made.
- * The public API doesn't have a create-booking endpoint, so we use
- * the calendar update endpoint to mark dates as unavailable.
+ * Create a reservation in Uplisting when a direct website booking is made.
+ * Uses the reservations API so it appears as a proper booking (not just "unavailable").
+ * Falls back to calendar blocking if the reservations endpoint fails.
  */
 export async function syncBooking(data: SyncBookingData): Promise<void> {
   if (!isConfigured()) {
@@ -149,6 +150,61 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
     return;
   }
 
+  // Split full name into first/last for the API
+  const nameParts = data.guestName.trim().split(" ");
+  const firstName = nameParts[0] || data.guestName;
+  const lastName = nameParts.slice(1).join(" ") || "-";
+
+  // Try to create a proper reservation so it shows as a booking in Uplisting
+  try {
+    const res = await fetchWithRetry(
+      `${API_BASE}/reservations`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: authHeader(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reservation: {
+            property_id: propertyId,
+            check_in: data.checkIn,
+            check_out: data.checkOut,
+            adults: data.guests,
+            children: 0,
+            source: "direct",
+            guest_first_name: firstName,
+            guest_last_name: lastName,
+            guest_email: data.guestEmail,
+            guest_phone: data.guestPhone || "",
+            total_price: data.totalPrice ?? 0,
+            currency: "NZD",
+            notes: "Booked via Lakeside Retreat website",
+          },
+        }),
+      }
+    );
+
+    if (res.ok) {
+      const body = await res.json().catch(() => ({}));
+      console.log(
+        `[uplisting] Reservation created for ${data.guestName} (${data.checkIn} → ${data.checkOut})`,
+        body
+      );
+      setCache(`blocked-dates-${data.accommodation}`, null);
+      return;
+    }
+
+    const errBody = await res.text();
+    console.warn(
+      `[uplisting] Reservation creation failed (${res.status}), falling back to calendar block:`,
+      errBody
+    );
+  } catch (err) {
+    console.warn("[uplisting] Reservation API error, falling back to calendar block:", err);
+  }
+
+  // Fallback: block dates on calendar so at minimum the dates are unavailable
   try {
     const res = await fetchWithRetry(
       `${API_BASE}/calendar/${propertyId}`,
@@ -160,13 +216,7 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
         },
         body: JSON.stringify({
           calendar: {
-            days: [
-              {
-                available: false,
-                from: data.checkIn,
-                to: data.checkOut,
-              },
-            ],
+            days: [{ available: false, from: data.checkIn, to: data.checkOut }],
           },
         }),
       }
@@ -174,17 +224,16 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
 
     if (!res.ok) {
       const body = await res.text();
-      console.error(`[uplisting] Calendar sync failed: ${res.status}`, body);
+      console.error(`[uplisting] Calendar fallback also failed: ${res.status}`, body);
     } else {
       console.log(
-        `[uplisting] Blocked dates ${data.checkIn} to ${data.checkOut} for ${data.accommodation}`
+        `[uplisting] Fallback: blocked dates ${data.checkIn} to ${data.checkOut} for ${data.accommodation}`
       );
     }
   } catch (err) {
-    console.error("[uplisting] Calendar sync error:", err);
+    console.error("[uplisting] Calendar fallback error:", err);
   }
 
-  // Invalidate blocked dates cache for this accommodation
   setCache(`blocked-dates-${data.accommodation}`, null);
 }
 
