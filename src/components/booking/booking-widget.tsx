@@ -238,7 +238,7 @@ export function BookingWidget() {
                   <button
                     type="button"
                     onClick={() => setGuests(Math.max(1, guests - 1))}
-                    className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
+                    className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
                     disabled={guests <= 1}
                   >
                     &minus;
@@ -251,7 +251,7 @@ export function BookingWidget() {
                     onClick={() =>
                       setGuests(Math.min(acc.maxGuests, guests + 1))
                     }
-                    className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
+                    className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
                     disabled={guests >= acc.maxGuests}
                   >
                     +
@@ -276,7 +276,7 @@ export function BookingWidget() {
                     <button
                       type="button"
                       onClick={() => setPets(Math.max(0, pets - 1))}
-                      className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
+                      className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
                       disabled={pets <= 0}
                     >
                       &minus;
@@ -287,7 +287,7 @@ export function BookingWidget() {
                     <button
                       type="button"
                       onClick={() => setPets(Math.min(2, pets + 1))}
-                      className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
+                      className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
                       disabled={pets >= 2}
                     >
                       +

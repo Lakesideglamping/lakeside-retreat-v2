@@ -112,7 +112,7 @@ function MonthGrid({
           const isToday = day.date === todayStr;
 
           let cellClass =
-            "relative h-10 flex items-center justify-center text-sm transition-colors ";
+            "relative h-11 flex items-center justify-center text-sm transition-colors ";
 
           if (!day.isCurrentMonth) {
             cellClass += "text-gray-300 ";

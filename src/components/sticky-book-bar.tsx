@@ -23,7 +23,7 @@ export function StickyBookBar() {
         </p>
         <Link
           href="/book"
-          className="bg-burgundy text-white no-underline px-6 py-2.5 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity"
+          className="bg-burgundy text-white no-underline px-6 py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity min-h-[44px] flex items-center"
         >
           Book Now
         </Link>

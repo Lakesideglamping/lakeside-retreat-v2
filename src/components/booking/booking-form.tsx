@@ -157,7 +157,7 @@ export function BookingForm({
           <button
             type="button"
             onClick={onBack}
-            className="text-sm text-burgundy hover:underline"
+            className="text-sm text-burgundy hover:underline px-3 py-2 -my-2 -mx-3 rounded min-h-[44px] min-w-[44px]"
           >
             Change dates
           </button>
