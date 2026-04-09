@@ -15,6 +15,12 @@ setInterval(() => {
   }
 }, 5 * 60 * 1000);
 
+export function clearRateLimit(keyPrefix: string): void {
+  for (const key of rateLimitMap.keys()) {
+    if (key.startsWith(keyPrefix)) rateLimitMap.delete(key);
+  }
+}
+
 export function checkRateLimit(
   key: string,
   windowMs: number,

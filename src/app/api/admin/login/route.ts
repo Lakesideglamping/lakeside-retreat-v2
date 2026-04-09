@@ -15,6 +15,10 @@ const failedAttempts = new Map<
   { count: number; lockedUntil: number }
 >();
 
+export function clearFailedAttempts(): void {
+  failedAttempts.clear();
+}
+
 export async function POST(request: Request) {
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
