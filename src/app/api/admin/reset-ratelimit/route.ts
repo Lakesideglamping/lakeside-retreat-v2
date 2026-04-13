@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { clearRateLimit } from "@/lib/rate-limit";
-import { clearFailedAttempts } from "@/app/api/admin/login/route";
+import { clearAllFailedAttempts } from "@/lib/login-attempts";
 
 // Emergency rate-limit reset. Requires RESET_TOKEN env var.
 // GET /api/admin/reset-ratelimit?token=YOUR_RESET_TOKEN
@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   }
 
   clearRateLimit("login:");
-  clearFailedAttempts();
+  clearAllFailedAttempts();
 
   return NextResponse.json({
     success: true,

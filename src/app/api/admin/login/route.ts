@@ -8,23 +8,18 @@ import {
 import { loginSchema } from "@/lib/admin-validations";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { auditLog } from "@/lib/audit";
-
-// Track failed attempts for exponential backoff
-const failedAttempts = new Map<
-  string,
-  { count: number; lockedUntil: number }
->();
-
-export function clearFailedAttempts(): void {
-  failedAttempts.clear();
-}
+import {
+  getFailedAttempt,
+  deleteFailedAttempt,
+  recordFailedAttempt,
+} from "@/lib/login-attempts";
 
 export async function POST(request: Request) {
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 
   // Check exponential backoff
-  const attempt = failedAttempts.get(ip);
+  const attempt = getFailedAttempt(ip);
   if (attempt && attempt.lockedUntil > Date.now()) {
     const waitSeconds = Math.ceil((attempt.lockedUntil - Date.now()) / 1000);
     return NextResponse.json(
@@ -77,6 +72,7 @@ export async function POST(request: Request) {
     if (!valid) {
       recordFailedAttempt(ip);
       await auditLog("unknown", "login_failed", { username, ip });
+
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }
@@ -84,7 +80,7 @@ export async function POST(request: Request) {
     }
 
     // Success — clear failed attempts
-    failedAttempts.delete(ip);
+    deleteFailedAttempt(ip);
 
     // Create JWT
     const token = await createToken(username);
@@ -110,18 +106,3 @@ export async function POST(request: Request) {
   }
 }
 
-function recordFailedAttempt(ip: string): void {
-  const current = failedAttempts.get(ip);
-  const count = (current?.count ?? 0) + 1;
-
-  if (count >= 3) {
-    // Exponential backoff: 1min, 2min, 4min, 8min... max 30min
-    const lockMinutes = Math.min(Math.pow(2, count - 3), 30);
-    failedAttempts.set(ip, {
-      count,
-      lockedUntil: Date.now() + lockMinutes * 60 * 1000,
-    });
-  } else {
-    failedAttempts.set(ip, { count, lockedUntil: 0 });
-  }
-}
