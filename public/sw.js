@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lakeside-retreat-v3';
+const CACHE_NAME = 'lakeside-retreat-v4';
 
 // Only cache static assets - NOT HTML files
 // HTML should always be fetched fresh to get latest CSP headers and content
@@ -36,6 +36,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     // Only handle same-origin requests to avoid CSP issues
     if (!event.request.url.startsWith(self.location.origin)) {
+        return;
+    }
+
+    // Never intercept admin pages or API calls — let them go direct to the network
+    const url = new URL(event.request.url);
+    if (url.pathname.startsWith('/admin') || url.pathname.startsWith('/api/')) {
         return;
     }
 
