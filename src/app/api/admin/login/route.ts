@@ -64,9 +64,15 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify password
-    const hash = await getAdminPasswordHash();
-    const valid = await verifyPassword(password, hash);
+    // Verify password — plain-text env var takes priority over hash
+    let valid = false;
+    const plainPassword = process.env.ADMIN_PASSWORD;
+    if (plainPassword) {
+      valid = password === plainPassword;
+    } else {
+      const hash = await getAdminPasswordHash();
+      valid = await verifyPassword(password, hash);
+    }
 
     if (!valid) {
       recordFailedAttempt(ip);
