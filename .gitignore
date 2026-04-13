@@ -40,4 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/src/generated/prisma
+# /src/generated/prisma — committed to git so Render build has it
