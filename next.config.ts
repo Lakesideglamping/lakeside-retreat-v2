@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Skip Next's built-in TypeScript check during `next build`. It OOMs on
+  // Render Starter's 460MB cap (compile itself passes, the separate tsc
+  // pass is what dies). We already run `tsc --noEmit` locally before every
+  // push, so this strips a redundant check, not a real safety net.
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   async headers() {
     return [
       {
