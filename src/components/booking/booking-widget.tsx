@@ -97,13 +97,19 @@ export function BookingWidget() {
       return;
     }
 
-    // Validate: no blocked dates in range
+    // Validate: no blocked dates in range.
+    // Parse YYYY-MM-DD into a local-midnight Date (not UTC) so the string
+    // we re-derive below stays in the same timezone as the calendar buttons.
     const blockedSet = new Set(blockedDates);
-    const current = new Date(checkIn);
-    const end = new Date(date);
+    const [ciY, ciM, ciD] = checkIn.split("-").map(Number);
+    const [coY, coM, coD] = date.split("-").map(Number);
+    const current = new Date(ciY, ciM - 1, ciD);
+    const end = new Date(coY, coM - 1, coD);
     current.setDate(current.getDate() + 1);
     while (current < end) {
-      const dateStr = current.toISOString().split("T")[0];
+      const dateStr = `${current.getFullYear()}-${String(
+        current.getMonth() + 1
+      ).padStart(2, "0")}-${String(current.getDate()).padStart(2, "0")}`;
       if (blockedSet.has(dateStr)) {
         setDateError(
           "Your selected range includes unavailable dates. Please choose different dates."

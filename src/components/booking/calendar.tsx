@@ -19,6 +19,18 @@ interface CalendarProps {
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
+// Format a Date as YYYY-MM-DD using its LOCAL components.
+// Using `toISOString().split("T")[0]` converts to UTC first, which for NZ
+// users (UTC+12/+13) lands on the previous day — the button shows "18" but
+// the value sent to the API is "2026-04-17". Use local date parts to keep
+// visible day and API value aligned.
+function toLocalDateString(d: Date): string {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function getMonthDays(year: number, month: number): CalendarDay[] {
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
@@ -31,7 +43,7 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
   for (let i = startDow - 1; i >= 0; i--) {
     const d = new Date(year, month, -i);
     days.push({
-      date: d.toISOString().split("T")[0],
+      date: toLocalDateString(d),
       dayNum: d.getDate(),
       isCurrentMonth: false,
     });
@@ -40,7 +52,7 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
   for (let d = 1; d <= lastDay.getDate(); d++) {
     const date = new Date(year, month, d);
     days.push({
-      date: date.toISOString().split("T")[0],
+      date: toLocalDateString(date),
       dayNum: d,
       isCurrentMonth: true,
     });
@@ -51,7 +63,7 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
     for (let i = 1; i <= remaining; i++) {
       const d = new Date(year, month + 1, i);
       days.push({
-        date: d.toISOString().split("T")[0],
+        date: toLocalDateString(d),
         dayNum: d.getDate(),
         isCurrentMonth: false,
       });
@@ -175,7 +187,7 @@ export function BookingCalendar({
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
-  const todayStr = now.toISOString().split("T")[0];
+  const todayStr = toLocalDateString(now);
 
   const blockedSet = useMemo(
     () => new Set(blockedDates),
