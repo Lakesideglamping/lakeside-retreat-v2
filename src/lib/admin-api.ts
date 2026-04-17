@@ -22,13 +22,52 @@ async function handleResponse<T>(res: Response): Promise<T> {
     throw new Error("Unauthorized");
   }
 
-  const data = await res.json();
+  const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    throw new Error(data.error ?? `Request failed (${res.status})`);
+    throw new Error(data?.error ?? `Request failed (${res.status})`);
   }
 
   return data as T;
+}
+
+type Method = "POST" | "PUT" | "PATCH" | "DELETE";
+
+/**
+ * Perform a CSRF-protected mutation with automatic retry on stale-token 403s.
+ * Shared by adminPost/adminPut/adminPatch/adminDelete so the retry behaviour
+ * is consistent across every admin mutation.
+ */
+async function csrfMutation<T>(
+  method: Method,
+  url: string,
+  body?: unknown
+): Promise<T> {
+  const send = async (tokenToUse: string): Promise<Response> => {
+    const headers: Record<string, string> = {
+      "x-csrf-token": tokenToUse,
+    };
+    if (body !== undefined) headers["Content-Type"] = "application/json";
+    return fetch(url, {
+      method,
+      headers,
+      credentials: "include",
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+  };
+
+  const token = await getCsrfToken();
+  const res = await send(token);
+
+  // CSRF token might be stale (2h lifetime) — refetch and retry once.
+  if (res.status === 403) {
+    csrfToken = null;
+    const fresh = await getCsrfToken();
+    const retry = await send(fresh);
+    return handleResponse<T>(retry);
+  }
+
+  return handleResponse<T>(res);
 }
 
 export async function adminGet<T>(url: string): Promise<T> {
@@ -37,70 +76,17 @@ export async function adminGet<T>(url: string): Promise<T> {
 }
 
 export async function adminPost<T>(url: string, body?: unknown): Promise<T> {
-  const token = await getCsrfToken();
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-csrf-token": token,
-    },
-    credentials: "include",
-    body: body ? JSON.stringify(body) : undefined,
-  });
-
-  // CSRF token might be stale — retry once
-  if (res.status === 403) {
-    csrfToken = null;
-    const freshToken = await getCsrfToken();
-    const retry = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-csrf-token": freshToken,
-      },
-      credentials: "include",
-      body: body ? JSON.stringify(body) : undefined,
-    });
-    return handleResponse<T>(retry);
-  }
-
-  return handleResponse<T>(res);
+  return csrfMutation<T>("POST", url, body);
 }
 
 export async function adminPut<T>(url: string, body: unknown): Promise<T> {
-  const token = await getCsrfToken();
-  const res = await fetch(url, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "x-csrf-token": token,
-    },
-    credentials: "include",
-    body: JSON.stringify(body),
-  });
-  return handleResponse<T>(res);
-}
-
-export async function adminDelete<T>(url: string): Promise<T> {
-  const token = await getCsrfToken();
-  const res = await fetch(url, {
-    method: "DELETE",
-    headers: { "x-csrf-token": token },
-    credentials: "include",
-  });
-  return handleResponse<T>(res);
+  return csrfMutation<T>("PUT", url, body);
 }
 
 export async function adminPatch<T>(url: string, body?: unknown): Promise<T> {
-  const token = await getCsrfToken();
-  const res = await fetch(url, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "x-csrf-token": token,
-    },
-    credentials: "include",
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  return handleResponse<T>(res);
+  return csrfMutation<T>("PATCH", url, body);
+}
+
+export async function adminDelete<T>(url: string): Promise<T> {
+  return csrfMutation<T>("DELETE", url);
 }

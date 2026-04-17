@@ -47,14 +47,21 @@ export function Modal({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
       onClick={onClose}
+      role="presentation"
     >
       <div
         className={`relative mx-4 w-full ${sizeClasses[size]} rounded-xl bg-white p-6 shadow-xl`}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          <h2 id="modal-title" className="text-lg font-semibold text-gray-900">
+            {title}
+          </h2>
           <button
+            type="button"
             onClick={onClose}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
             aria-label="Close"

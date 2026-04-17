@@ -9,7 +9,7 @@ export async function POST(request: Request) {
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       "unknown";
 
-    const { success } = checkRateLimit(
+    const { success } = await checkRateLimit(
       `contact:${ip}`,
       10 * 60 * 1000,
       3

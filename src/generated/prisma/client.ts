@@ -112,6 +112,11 @@ export type system_settings = Prisma.system_settingsModel
  */
 export type token_blacklist = Prisma.token_blacklistModel
 /**
+ * Model rate_limits
+ * 
+ */
+export type rate_limits = Prisma.rate_limitsModel
+/**
  * Model blocked_dates
  * 
  */

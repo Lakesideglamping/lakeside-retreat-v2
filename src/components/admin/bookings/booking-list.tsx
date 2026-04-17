@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { adminGet } from "@/lib/admin-api";
+import { adminGet, adminPost } from "@/lib/admin-api";
 import { DataTable } from "@/components/admin/ui/data-table";
 import { SearchInput } from "@/components/admin/ui/search-input";
 import { Badge } from "@/components/admin/ui/badge";
@@ -153,10 +153,16 @@ export function BookingList() {
     fetchBookings();
   }, [fetchBookings]);
 
-  // Reset page when filters change
-  useEffect(() => {
-    setPage(1);
-  }, [search, status, accommodation, source, dateFrom, dateTo]);
+  // Wrap filter setters so page resets atomically with the filter change.
+  // Without this, a filter change would trigger two fetches: one from the
+  // filter dep changing, and a second from the page reset happening after.
+  const updateFilter = useCallback(
+    <T,>(setter: (value: T) => void, value: T) => {
+      setter(value);
+      setPage(1);
+    },
+    []
+  );
 
   const [syncing, setSyncing] = useState(false);
   const [syncResult, setSyncResult] = useState<string | null>(null);
@@ -165,12 +171,17 @@ export function BookingList() {
     setSyncing(true);
     setSyncResult(null);
     try {
-      const res = await fetch("/api/admin/import-bookings", { method: "POST" });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Sync failed");
+      const data = await adminPost<{
+        results: Array<{
+          property: string;
+          imported: number;
+          skipped: number;
+          errors: number;
+        }>;
+      }>("/api/admin/import-bookings");
       const summary = data.results
-        .map((r: { property: string; imported: number; skipped: number; errors: number }) =>
-          `${r.property}: +${r.imported} new, ${r.skipped} updated`
+        .map(
+          (r) => `${r.property}: +${r.imported} new, ${r.skipped} updated`
         )
         .join(" | ");
       setSyncResult(`Synced — ${summary}`);
@@ -309,12 +320,12 @@ export function BookingList() {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <SearchInput
             value={search}
-            onChange={setSearch}
+            onChange={(v) => updateFilter(setSearch, v)}
             placeholder="Search guest name or email..."
           />
           <select
             value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => updateFilter(setStatus, e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-1 focus:ring-[#2d5a5a]"
           >
             {STATUS_OPTIONS.map((opt) => (
@@ -325,7 +336,7 @@ export function BookingList() {
           </select>
           <select
             value={accommodation}
-            onChange={(e) => setAccommodation(e.target.value)}
+            onChange={(e) => updateFilter(setAccommodation, e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-1 focus:ring-[#2d5a5a]"
           >
             {ACCOMMODATION_OPTIONS.map((opt) => (
@@ -336,7 +347,7 @@ export function BookingList() {
           </select>
           <select
             value={source}
-            onChange={(e) => setSource(e.target.value)}
+            onChange={(e) => updateFilter(setSource, e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-1 focus:ring-[#2d5a5a]"
           >
             {SOURCE_OPTIONS.map((opt) => (
@@ -352,7 +363,7 @@ export function BookingList() {
             <input
               type="date"
               value={dateFrom}
-              onChange={(e) => setDateFrom(e.target.value)}
+              onChange={(e) => updateFilter(setDateFrom, e.target.value)}
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-1 focus:ring-[#2d5a5a]"
             />
           </div>
@@ -361,7 +372,7 @@ export function BookingList() {
             <input
               type="date"
               value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
+              onChange={(e) => updateFilter(setDateTo, e.target.value)}
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-1 focus:ring-[#2d5a5a]"
             />
           </div>
@@ -374,6 +385,7 @@ export function BookingList() {
                 setSource("");
                 setDateFrom("");
                 setDateTo("");
+                setPage(1);
               }}
               className="text-sm font-medium text-[#2d5a5a] hover:text-[#234848]"
             >

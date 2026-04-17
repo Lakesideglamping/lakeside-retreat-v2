@@ -105,16 +105,23 @@ export function PromotionsContent() {
   const activeCount = promos.filter((p) => p.status === "active").length;
   const totalUsage = promos.reduce((sum, p) => sum + (p.usage_count ?? 0), 0);
 
+  // Both handlers re-throw so PromoForm surfaces the error inline in the modal.
+  // Side-effects (success alert, close, refetch) run outside the try so they
+  // don't get swallowed and misreported as "Failed to save".
   const handleCreate = async (formData: PromoFormData) => {
-    await adminPost("/api/admin/promotions", {
-      ...formData,
-      min_stay: formData.min_stay || undefined,
-      usage_limit: formData.usage_limit || undefined,
-      description: formData.description || undefined,
-      partner_info: formData.partner_info || undefined,
-      valid_from: formData.valid_from || undefined,
-      valid_until: formData.valid_until || undefined,
-    });
+    try {
+      await adminPost("/api/admin/promotions", {
+        ...formData,
+        min_stay: formData.min_stay || undefined,
+        usage_limit: formData.usage_limit || undefined,
+        description: formData.description || undefined,
+        partner_info: formData.partner_info || undefined,
+        valid_from: formData.valid_from || undefined,
+        valid_until: formData.valid_until || undefined,
+      });
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to create promo code");
+    }
     setSuccess("Promo code created");
     setCreateModal(false);
     fetchPromos();
@@ -122,15 +129,19 @@ export function PromotionsContent() {
 
   const handleEdit = async (formData: PromoFormData) => {
     if (!editTarget) return;
-    await adminPut(`/api/admin/promotions/${editTarget.id}`, {
-      ...formData,
-      min_stay: formData.min_stay || undefined,
-      usage_limit: formData.usage_limit || undefined,
-      description: formData.description || undefined,
-      partner_info: formData.partner_info || undefined,
-      valid_from: formData.valid_from || undefined,
-      valid_until: formData.valid_until || undefined,
-    });
+    try {
+      await adminPut(`/api/admin/promotions/${editTarget.id}`, {
+        ...formData,
+        min_stay: formData.min_stay || undefined,
+        usage_limit: formData.usage_limit || undefined,
+        description: formData.description || undefined,
+        partner_info: formData.partner_info || undefined,
+        valid_from: formData.valid_from || undefined,
+        valid_until: formData.valid_until || undefined,
+      });
+    } catch (err) {
+      throw err instanceof Error ? err : new Error("Failed to update promo code");
+    }
     setSuccess("Promo code updated");
     setEditTarget(null);
     fetchPromos();

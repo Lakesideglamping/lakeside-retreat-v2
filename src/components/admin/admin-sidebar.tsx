@@ -113,7 +113,10 @@ export function AdminSidebar() {
 
   const isActive = (href: string) => {
     if (href === "/admin") return pathname === "/admin";
-    return pathname.startsWith(href);
+    // Match exact route or a sub-route, but not sibling routes that happen to
+    // share the prefix (e.g. "/admin/bookings-archive" must not activate
+    // "/admin/bookings").
+    return pathname === href || pathname.startsWith(href + "/");
   };
 
   return (

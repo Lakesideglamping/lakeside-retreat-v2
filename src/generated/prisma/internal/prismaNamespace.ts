@@ -398,6 +398,7 @@ export const ModelName = {
   social_content_drafts: 'social_content_drafts',
   system_settings: 'system_settings',
   token_blacklist: 'token_blacklist',
+  rate_limits: 'rate_limits',
   blocked_dates: 'blocked_dates',
   promo_codes: 'promo_codes'
 } as const
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "abandoned_checkout_reminders" | "audit_logs" | "bookings" | "contact_messages" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "seasonal_rates" | "social_content_drafts" | "system_settings" | "token_blacklist" | "blocked_dates" | "promo_codes"
+    modelProps: "abandoned_checkout_reminders" | "audit_logs" | "bookings" | "contact_messages" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "seasonal_rates" | "social_content_drafts" | "system_settings" | "token_blacklist" | "rate_limits" | "blocked_dates" | "promo_codes"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1455,6 +1456,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    rate_limits: {
+      payload: Prisma.$rate_limitsPayload<ExtArgs>
+      fields: Prisma.rate_limitsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.rate_limitsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.rate_limitsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload>
+        }
+        findFirst: {
+          args: Prisma.rate_limitsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.rate_limitsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload>
+        }
+        findMany: {
+          args: Prisma.rate_limitsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload>[]
+        }
+        create: {
+          args: Prisma.rate_limitsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload>
+        }
+        createMany: {
+          args: Prisma.rate_limitsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.rate_limitsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload>[]
+        }
+        delete: {
+          args: Prisma.rate_limitsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload>
+        }
+        update: {
+          args: Prisma.rate_limitsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload>
+        }
+        deleteMany: {
+          args: Prisma.rate_limitsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.rate_limitsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.rate_limitsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload>[]
+        }
+        upsert: {
+          args: Prisma.rate_limitsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rate_limitsPayload>
+        }
+        aggregate: {
+          args: Prisma.Rate_limitsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRate_limits>
+        }
+        groupBy: {
+          args: Prisma.rate_limitsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Rate_limitsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.rate_limitsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Rate_limitsCountAggregateOutputType> | number
+        }
+      }
+    }
     blocked_dates: {
       payload: Prisma.$blocked_datesPayload<ExtArgs>
       fields: Prisma.blocked_datesFieldRefs
@@ -1852,6 +1927,15 @@ export const Token_blacklistScalarFieldEnum = {
 export type Token_blacklistScalarFieldEnum = (typeof Token_blacklistScalarFieldEnum)[keyof typeof Token_blacklistScalarFieldEnum]
 
 
+export const Rate_limitsScalarFieldEnum = {
+  key: 'key',
+  count: 'count',
+  reset_time: 'reset_time'
+} as const
+
+export type Rate_limitsScalarFieldEnum = (typeof Rate_limitsScalarFieldEnum)[keyof typeof Rate_limitsScalarFieldEnum]
+
+
 export const Blocked_datesScalarFieldEnum = {
   id: 'id',
   property: 'property',
@@ -2102,6 +2186,7 @@ export type GlobalOmitConfig = {
   social_content_drafts?: Prisma.social_content_draftsOmit
   system_settings?: Prisma.system_settingsOmit
   token_blacklist?: Prisma.token_blacklistOmit
+  rate_limits?: Prisma.rate_limitsOmit
   blocked_dates?: Prisma.blocked_datesOmit
   promo_codes?: Prisma.promo_codesOmit
 }

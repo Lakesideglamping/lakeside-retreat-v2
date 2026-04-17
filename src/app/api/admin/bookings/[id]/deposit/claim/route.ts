@@ -49,12 +49,27 @@ export async function POST(request: Request, { params }: RouteParams) {
             );
           } catch (fallbackErr) {
             console.error("[deposit/claim] Fallback capture error:", fallbackErr);
-            const message = fallbackErr instanceof Error ? fallbackErr.message : "Stripe capture failed";
-            return NextResponse.json({ error: `Stripe capture failed: ${message}` }, { status: 500 });
+            await auditLog(admin.username, "deposit_claim_failed", {
+              bookingId: id,
+              stripeIntentId: booking.security_deposit_intent_id,
+              fallbackIntentId: booking.stripe_payment_id,
+              error: fallbackErr instanceof Error ? fallbackErr.message : "Unknown error",
+            }, ip);
+            return NextResponse.json(
+              { error: "Stripe capture failed" },
+              { status: 500 }
+            );
           }
         } else {
-          const message = stripeErr instanceof Error ? stripeErr.message : "Stripe capture failed";
-          return NextResponse.json({ error: `Stripe capture failed: ${message}` }, { status: 500 });
+          await auditLog(admin.username, "deposit_claim_failed", {
+            bookingId: id,
+            stripeIntentId: booking.security_deposit_intent_id,
+            error: stripeErr instanceof Error ? stripeErr.message : "Unknown error",
+          }, ip);
+          return NextResponse.json(
+            { error: "Stripe capture failed" },
+            { status: 500 }
+          );
         }
       }
     }

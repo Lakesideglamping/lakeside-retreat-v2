@@ -1,7 +1,8 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { adminPost, resetCsrfToken } from "@/lib/admin-api";
 
 interface AdminTopBarProps {
   username: string;
@@ -19,17 +20,22 @@ function getTitleFromPathname(pathname: string): string {
 
 export function AdminTopBar({ username }: AdminTopBarProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [loggingOut, setLoggingOut] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const title = getTitleFromPathname(pathname);
 
   async function handleLogout() {
     setLoggingOut(true);
+    setError(null);
     try {
-      await fetch("/api/admin/logout", { method: "POST" });
-      router.push("/admin/login");
-    } catch {
+      await adminPost("/api/admin/logout");
+      resetCsrfToken();
+      // Use window.location.href (not router.push) so AdminShell fully
+      // unmounts and the login page renders without cached admin state.
+      window.location.href = "/admin/login";
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Logout failed");
       setLoggingOut(false);
     }
   }
@@ -42,6 +48,12 @@ export function AdminTopBar({ username }: AdminTopBarProps) {
       </h1>
 
       <div className="flex items-center gap-4">
+        {error && (
+          <span className="text-xs text-red-600" role="alert">
+            {error}
+          </span>
+        )}
+
         {/* Notification bell placeholder */}
         <button
           type="button"

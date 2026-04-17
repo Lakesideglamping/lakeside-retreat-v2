@@ -65,6 +65,7 @@ export const ModelName = {
   social_content_drafts: 'social_content_drafts',
   system_settings: 'system_settings',
   token_blacklist: 'token_blacklist',
+  rate_limits: 'rate_limits',
   blocked_dates: 'blocked_dates',
   promo_codes: 'promo_codes'
 } as const
@@ -293,6 +294,15 @@ export const Token_blacklistScalarFieldEnum = {
 } as const
 
 export type Token_blacklistScalarFieldEnum = (typeof Token_blacklistScalarFieldEnum)[keyof typeof Token_blacklistScalarFieldEnum]
+
+
+export const Rate_limitsScalarFieldEnum = {
+  key: 'key',
+  count: 'count',
+  reset_time: 'reset_time'
+} as const
+
+export type Rate_limitsScalarFieldEnum = (typeof Rate_limitsScalarFieldEnum)[keyof typeof Rate_limitsScalarFieldEnum]
 
 
 export const Blocked_datesScalarFieldEnum = {

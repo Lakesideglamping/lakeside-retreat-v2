@@ -1,9 +1,26 @@
 import { NextResponse } from "next/server";
+import type Stripe from "stripe";
 import { constructWebhookEvent, stripe, isDevMode } from "@/lib/stripe";
 import { sendBookingConfirmation, sendSystemAlert } from "@/lib/email";
 import { syncBooking } from "@/lib/uplisting";
 import { prisma } from "@/lib/db";
 import { randomUUID } from "crypto";
+
+/**
+ * Safely extract a PaymentIntent ID, handling both string and expanded-object forms.
+ * Stripe can return payment_intent as a string ID or a full object depending on
+ * API version and expansion — casting with `as string` corrupts the expanded form.
+ */
+function extractPaymentIntentId(
+  pi: string | Stripe.PaymentIntent | null | undefined
+): string | null {
+  if (!pi) return null;
+  if (typeof pi === "string") return pi;
+  if (typeof pi === "object" && "id" in pi && typeof pi.id === "string") {
+    return pi.id;
+  }
+  return null;
+}
 
 export async function POST(request: Request) {
   if (isDevMode) {
@@ -21,7 +38,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const event = constructWebhookEvent(body, signature);
+    // Signature verification failure is a permanent client error → 400.
+    let event: Stripe.Event;
+    try {
+      event = constructWebhookEvent(body, signature);
+    } catch (sigErr) {
+      console.error("[stripe webhook] Signature verification failed:", sigErr);
+      return NextResponse.json(
+        { error: "Invalid signature" },
+        { status: 400 }
+      );
+    }
 
     // Webhook deduplication — skip if already processed
     const existing = await prisma.processed_webhook_events.findUnique({
@@ -36,6 +63,7 @@ export async function POST(request: Request) {
       case "checkout.session.completed": {
         const session = event.data.object;
         const metadata = session.metadata || {};
+        const paymentIntentId = extractPaymentIntentId(session.payment_intent);
 
         console.log(
           "[stripe webhook] checkout.session.completed:",
@@ -45,8 +73,10 @@ export async function POST(request: Request) {
           metadata.checkOut
         );
 
-        // Save booking to database
+        // 1) Save booking as "authorized" first — capture happens next.
+        //    This avoids marking the booking "paid" before Stripe actually captures.
         const bookingId = randomUUID();
+        let bookingSaved = false;
         try {
           await prisma.bookings.create({
             data: {
@@ -60,39 +90,36 @@ export async function POST(request: Request) {
               guests: Number(metadata.guests) || 1,
               total_price: (session.amount_total || 0) / 100,
               status: "confirmed",
-              payment_status: "paid",
+              payment_status: "authorized",
               notes: metadata.specialRequests || null,
               stripe_session_id: session.id,
-              stripe_payment_id:
-                (session.payment_intent as string) || null,
+              stripe_payment_id: paymentIntentId,
               booking_source: "website",
               uplisting_sync_status: "pending",
               security_deposit_status: "held",
               security_deposit_amount: Number(
                 metadata.securityDeposit || 300
               ),
-              security_deposit_intent_id:
-                (session.payment_intent as string) || null,
+              security_deposit_intent_id: paymentIntentId,
               deposit_release_due: new Date(
                 new Date(metadata.checkOut).getTime() +
                   2 * 24 * 60 * 60 * 1000
               ).toISOString(),
             },
           });
+          bookingSaved = true;
           console.log(
-            `[stripe webhook] Booking saved to DB: ${bookingId}`
+            `[stripe webhook] Booking saved (authorized): ${bookingId}`
           );
         } catch (dbErr) {
           console.error("[stripe webhook] DB save error:", dbErr);
-          // Log to failed_webhook_events for manual resolution
           await prisma.failed_webhook_events
             .create({
               data: {
                 event_id: event.id,
                 event_type: event.type,
                 stripe_session_id: session.id,
-                stripe_payment_id:
-                  (session.payment_intent as string) || null,
+                stripe_payment_id: paymentIntentId,
                 booking_id: bookingId,
                 event_data: JSON.stringify(metadata),
                 error_message:
@@ -111,63 +138,14 @@ export async function POST(request: Request) {
               ).catch(() => {});
             })
             .catch((e) =>
-              console.error(
-                "[stripe webhook] Failed to log error:",
-                e
-              )
+              console.error("[stripe webhook] Failed to log error:", e)
             );
         }
 
-        // Sync booking to Uplisting (non-blocking)
-        syncBooking({
-          accommodation: metadata.accommodation || "",
-          checkIn: metadata.checkIn || "",
-          checkOut: metadata.checkOut || "",
-          guestName: metadata.guestName || "",
-          guestEmail: metadata.guestEmail || "",
-          guestPhone: metadata.guestPhone,
-          guests: Number(metadata.guests) || 1,
-          totalPrice: (session.amount_total || 0) / 100,
-        })
-          .then(() => {
-            prisma.bookings
-              .update({
-                where: { id: bookingId },
-                data: { uplisting_sync_status: "synced" },
-              })
-              .catch(() => {});
-          })
-          .catch((err) => {
-            console.error(
-              "[stripe webhook] Uplisting sync error:",
-              err
-            );
-            prisma.bookings
-              .update({
-                where: { id: bookingId },
-                data: { uplisting_sync_status: "failed" },
-              })
-              .catch(() => {});
-          });
-
-        // Send booking confirmation email (non-blocking)
-        sendBookingConfirmation({
-          guestName: metadata.guestName || "",
-          guestEmail: metadata.guestEmail || "",
-          accommodation:
-            metadata.accommodationName ||
-            metadata.accommodation ||
-            "",
-          checkIn: metadata.checkIn || "",
-          checkOut: metadata.checkOut || "",
-          guests: Number(metadata.guests) || 1,
-          totalAmount: (session.amount_total || 0) / 100,
-        }).catch((err) =>
-          console.error("[stripe webhook] Email error:", err)
-        );
-
-        // Capture the booking amount (not the security deposit)
-        if (stripe && session.payment_intent) {
+        // 2) Capture the booking amount (minus the security-bond hold).
+        //    Only mark the booking "paid" once Stripe confirms the capture.
+        let captureSucceeded = false;
+        if (bookingSaved && stripe && paymentIntentId) {
           try {
             const depositAmount =
               Number(metadata.securityDeposit || 300) * 100;
@@ -175,20 +153,100 @@ export async function POST(request: Request) {
               (session.amount_total || 0) - depositAmount;
 
             if (captureAmount > 0) {
-              await stripe.paymentIntents.capture(
-                session.payment_intent as string,
-                { amount_to_capture: captureAmount }
-              );
+              await stripe.paymentIntents.capture(paymentIntentId, {
+                amount_to_capture: captureAmount,
+              });
               console.log(
                 `[stripe webhook] Captured $${captureAmount / 100}, deposit hold: $${depositAmount / 100}`
               );
             }
+            captureSucceeded = true;
+
+            await prisma.bookings.update({
+              where: { id: bookingId },
+              data: {
+                payment_status: "paid",
+                updated_at: new Date(),
+              },
+            });
           } catch (captureErr) {
-            console.error(
-              "[stripe webhook] Capture error:",
-              captureErr
-            );
+            console.error("[stripe webhook] Capture error:", captureErr);
+            const errMsg =
+              captureErr instanceof Error
+                ? captureErr.message
+                : "Unknown capture error";
+            await prisma.bookings
+              .update({
+                where: { id: bookingId },
+                data: {
+                  payment_status: "capture_failed",
+                  updated_at: new Date(),
+                },
+              })
+              .catch(() => {});
+            sendSystemAlert(
+              "STRIPE_CAPTURE_FAILURE",
+              `Payment capture failed for booking ${bookingId}`,
+              `Guest: ${metadata.guestName} (${metadata.guestEmail})\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nPaymentIntent: ${paymentIntentId}\nError: ${errMsg}`
+            ).catch(() => {});
           }
+        }
+
+        // 3) Sync to Uplisting and send confirmation — only if capture succeeded.
+        //    If capture failed, don't block calendar or email the guest.
+        if (bookingSaved && captureSucceeded) {
+          syncBooking({
+            accommodation: metadata.accommodation || "",
+            checkIn: metadata.checkIn || "",
+            checkOut: metadata.checkOut || "",
+            guestName: metadata.guestName || "",
+            guestEmail: metadata.guestEmail || "",
+            guestPhone: metadata.guestPhone,
+            guests: Number(metadata.guests) || 1,
+            totalPrice: (session.amount_total || 0) / 100,
+          })
+            .then(() => {
+              prisma.bookings
+                .update({
+                  where: { id: bookingId },
+                  data: { uplisting_sync_status: "synced" },
+                })
+                .catch(() => {});
+            })
+            .catch((err) => {
+              console.error(
+                "[stripe webhook] Uplisting sync error:",
+                err
+              );
+              prisma.bookings
+                .update({
+                  where: { id: bookingId },
+                  data: { uplisting_sync_status: "failed" },
+                })
+                .catch(() => {});
+              const errMsg =
+                err instanceof Error ? err.message : "Unknown sync error";
+              sendSystemAlert(
+                "UPLISTING_SYNC_FAILURE",
+                `Uplisting sync failed for booking ${bookingId}`,
+                `Guest: ${metadata.guestName} (${metadata.guestEmail})\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nDouble-booking risk — block dates manually until this is resolved.\nError: ${errMsg}`
+              ).catch(() => {});
+            });
+
+          sendBookingConfirmation({
+            guestName: metadata.guestName || "",
+            guestEmail: metadata.guestEmail || "",
+            accommodation:
+              metadata.accommodationName ||
+              metadata.accommodation ||
+              "",
+            checkIn: metadata.checkIn || "",
+            checkOut: metadata.checkOut || "",
+            guests: Number(metadata.guests) || 1,
+            totalAmount: (session.amount_total || 0) / 100,
+          }).catch((err) =>
+            console.error("[stripe webhook] Email error:", err)
+          );
         }
 
         break;
@@ -196,7 +254,7 @@ export async function POST(request: Request) {
 
       case "charge.refunded": {
         const charge = event.data.object;
-        const paymentIntentId = charge.payment_intent as string;
+        const paymentIntentId = extractPaymentIntentId(charge.payment_intent);
 
         console.log(
           "[stripe webhook] charge.refunded:",
@@ -205,7 +263,6 @@ export async function POST(request: Request) {
           charge.amount_refunded
         );
 
-        // Find the booking by stripe_payment_id and update status
         if (paymentIntentId) {
           try {
             await prisma.bookings.updateMany({
@@ -237,7 +294,6 @@ export async function POST(request: Request) {
           "— deposit hold released by Stripe"
         );
 
-        // Update deposit status if this was an uncaptured deposit hold
         try {
           await prisma.bookings.updateMany({
             where: {
@@ -282,10 +338,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ received: true });
   } catch (err) {
+    // Non-signature errors (DB, Stripe API, etc.) are treated as transient —
+    // return 500 so Stripe retries. Returning 400 tells Stripe to give up.
     console.error("[api/stripe/webhook] Error:", err);
     return NextResponse.json(
       { error: "Webhook handler failed" },
-      { status: 400 }
+      { status: 500 }
     );
   }
 }

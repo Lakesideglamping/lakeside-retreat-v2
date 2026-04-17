@@ -20,6 +20,21 @@ export function isConfigured(): boolean {
   return !!process.env.UPLISTING_API_KEY;
 }
 
+/**
+ * Format a Date as YYYY-MM-DD in the Pacific/Auckland timezone.
+ * Using `toISOString().split("T")[0]` converts to UTC first — for a NZ-based
+ * business on a server running UTC, that can be off by one day.
+ */
+export function nzDateString(date: Date = new Date()): string {
+  // en-CA gives ISO-style YYYY-MM-DD output.
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Pacific/Auckland",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
 async function fetchWithRetry(
   url: string,
   options: RequestInit,
@@ -30,13 +45,24 @@ async function fetchWithRetry(
     try {
       const res = await fetch(url, options);
       if (res.ok) return res;
-      if (res.status >= 500) {
+
+      // Retry on 429 (rate limit) and 5xx (server error).
+      // Respect Retry-After header when Uplisting sends one.
+      if (res.status === 429 || res.status >= 500) {
         lastError = new Error(`Uplisting API error: ${res.status}`);
-        await new Promise((r) =>
-          setTimeout(r, Math.pow(2, attempt) * 1000)
-        );
-        continue;
+        const retryAfterHeader = res.headers.get("retry-after");
+        const retryAfterMs =
+          retryAfterHeader && !Number.isNaN(Number(retryAfterHeader))
+            ? Number(retryAfterHeader) * 1000
+            : Math.pow(2, attempt) * 1000;
+        if (attempt < maxRetries - 1) {
+          await new Promise((r) => setTimeout(r, retryAfterMs));
+          continue;
+        }
+        return res; // give up after maxRetries, return the last response
       }
+
+      // 4xx (non-429) — no point retrying
       return res;
     } catch (err) {
       lastError = err as Error;
@@ -63,11 +89,11 @@ export async function fetchBlockedDates(
   if (!propertyId) return [];
 
   try {
-    // Use calendar endpoint for availability — more efficient than bookings
-    const today = new Date().toISOString().split("T")[0];
+    // Calendar range: today → today + 1 year, in NZ local time.
+    const today = nzDateString();
     const futureDate = new Date();
     futureDate.setFullYear(futureDate.getFullYear() + 1);
-    const toDate = futureDate.toISOString().split("T")[0];
+    const toDate = nzDateString(futureDate);
 
     const res = await fetchWithRetry(
       `${API_BASE}/calendar/${propertyId}?from=${today}&to=${toDate}`,
@@ -114,7 +140,7 @@ export async function checkAvailability(
   const current = new Date(start);
 
   while (current < end) {
-    const dateStr = current.toISOString().split("T")[0];
+    const dateStr = nzDateString(current);
     if (blocked.includes(dateStr)) return false;
     current.setDate(current.getDate() + 1);
   }
@@ -135,8 +161,10 @@ interface SyncBookingData {
 
 /**
  * Create a reservation in Uplisting when a direct website booking is made.
- * Uses the reservations API so it appears as a proper booking (not just "unavailable").
- * Falls back to calendar blocking if the reservations endpoint fails.
+ * Throws on failure — the caller is responsible for handling (alerting,
+ * marking sync_status=failed, etc). The previous silent calendar-block
+ * fallback was removed because it masked real failures: OTAs could still see
+ * dates as "unavailable" but no actual guest record existed in Uplisting.
  */
 export async function syncBooking(data: SyncBookingData): Promise<void> {
   if (!isConfigured()) {
@@ -146,8 +174,7 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
 
   const propertyId = PROPERTY_IDS[data.accommodation];
   if (!propertyId) {
-    console.error(`[uplisting] No property ID for ${data.accommodation}`);
-    return;
+    throw new Error(`No Uplisting property ID for ${data.accommodation}`);
   }
 
   // Split full name into first/last for the API
@@ -155,90 +182,44 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
   const firstName = nameParts[0] || data.guestName;
   const lastName = nameParts.slice(1).join(" ") || "-";
 
-  // Try to create a proper reservation so it shows as a booking in Uplisting
-  try {
-    const res = await fetchWithRetry(
-      `${API_BASE}/reservations`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: authHeader(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reservation: {
-            property_id: propertyId,
-            check_in: data.checkIn,
-            check_out: data.checkOut,
-            adults: data.guests,
-            children: 0,
-            source: "direct",
-            guest_first_name: firstName,
-            guest_last_name: lastName,
-            guest_email: data.guestEmail,
-            guest_phone: data.guestPhone || "",
-            total_price: data.totalPrice ?? 0,
-            currency: "NZD",
-            notes: "Booked via Lakeside Retreat website",
-          },
-        }),
-      }
-    );
+  const res = await fetchWithRetry(`${API_BASE}/reservations`, {
+    method: "POST",
+    headers: {
+      Authorization: authHeader(),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      reservation: {
+        property_id: propertyId,
+        check_in: data.checkIn,
+        check_out: data.checkOut,
+        adults: data.guests,
+        children: 0,
+        source: "direct",
+        guest_first_name: firstName,
+        guest_last_name: lastName,
+        guest_email: data.guestEmail,
+        guest_phone: data.guestPhone || "",
+        total_price: data.totalPrice ?? 0,
+        currency: "NZD",
+        notes: "Booked via Lakeside Retreat website",
+      },
+    }),
+  });
 
-    if (res.ok) {
-      const body = await res.json().catch(() => ({}));
-      console.log(
-        `[uplisting] Reservation created for ${data.guestName} (${data.checkIn} → ${data.checkOut})`,
-        body
-      );
-      setCache(`blocked-dates-${data.accommodation}`, null);
-      return;
-    }
-
-    const errBody = await res.text();
-    console.warn(
-      `[uplisting] Reservation creation failed (${res.status}), falling back to calendar block:`,
-      errBody
+  if (!res.ok) {
+    const errBody = await res.text().catch(() => "");
+    throw new Error(
+      `Uplisting reservation creation failed (${res.status}): ${errBody.slice(0, 500)}`
     );
-  } catch (err) {
-    console.warn("[uplisting] Reservation API error, falling back to calendar block:", err);
   }
 
-  // Fallback: block dates on calendar so at minimum the dates are unavailable
-  try {
-    const res = await fetchWithRetry(
-      `${API_BASE}/calendar/${propertyId}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: authHeader(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          calendar: {
-            days: [{
-              available: false,
-              from: data.checkIn,
-              to: data.checkOut,
-              reason: `Direct Website Booking - ${data.guestName}`,
-            }],
-          },
-        }),
-      }
-    );
-
-    if (!res.ok) {
-      const body = await res.text();
-      console.error(`[uplisting] Calendar fallback also failed: ${res.status}`, body);
-    } else {
-      console.log(
-        `[uplisting] Fallback: blocked dates ${data.checkIn} to ${data.checkOut} for ${data.accommodation}`
-      );
-    }
-  } catch (err) {
-    console.error("[uplisting] Calendar fallback error:", err);
-  }
-
+  const body = await res.json().catch(() => ({}));
+  console.log(
+    `[uplisting] Reservation created for ${data.guestName} (${data.checkIn} → ${data.checkOut})`,
+    body
+  );
+  // Invalidate blocked-dates cache so the new reservation appears immediately.
   setCache(`blocked-dates-${data.accommodation}`, null);
 }
 

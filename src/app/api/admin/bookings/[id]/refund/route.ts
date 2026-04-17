@@ -74,9 +74,18 @@ export async function POST(request: Request, { params }: RouteParams) {
       return NextResponse.json({ ...updated, refund });
     } catch (error) {
       console.error("Stripe refund error:", error);
-      const message =
-        error instanceof Error ? error.message : "Refund failed";
-      return NextResponse.json({ error: message }, { status: 500 });
+      await auditLog(
+        admin.username,
+        "booking_refund_failed",
+        {
+          bookingId: id,
+          stripePaymentId: booking.stripe_payment_id,
+          error: error instanceof Error ? error.message : "Unknown error",
+        },
+        ip
+      );
+      // Generic message to the client — full error is only in server logs + audit.
+      return NextResponse.json({ error: "Refund failed" }, { status: 500 });
     }
   });
 }

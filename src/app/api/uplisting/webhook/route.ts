@@ -14,6 +14,20 @@ function getAccommodationSlug(propertyId: string | number): string {
   return PROPERTY_SLUG_MAP[String(propertyId)] || "unknown";
 }
 
+/**
+ * Normalize a date string into a UTC midnight Date — matches how Prisma
+ * stores DATE columns. Accepts YYYY-MM-DD, ISO timestamps, or anything
+ * `new Date()` can parse. Returns null for invalid input.
+ */
+function toUtcMidnight(value: unknown): Date | null {
+  if (!value) return null;
+  const str = String(value);
+  const ymd = str.slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return null;
+  const d = new Date(`${ymd}T00:00:00.000Z`);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
 export async function POST(request: Request) {
   if (!isConfigured()) {
     return NextResponse.json({ received: true, devMode: true });
@@ -23,14 +37,25 @@ export async function POST(request: Request) {
     const body = await request.text();
     const signature = request.headers.get("x-uplisting-signature") || "";
 
-    if (process.env.UPLISTING_WEBHOOK_SECRET) {
-      const valid = verifyWebhookSignature(body, signature);
-      if (!valid) {
-        return NextResponse.json(
-          { error: "Invalid signature" },
-          { status: 401 }
-        );
-      }
+    // Require the shared secret in production — fail closed if unset.
+    // This prevents an attacker from POSTing fake bookings when the secret
+    // is accidentally removed or never configured.
+    if (!process.env.UPLISTING_WEBHOOK_SECRET) {
+      console.error(
+        "[uplisting webhook] UPLISTING_WEBHOOK_SECRET is not set — rejecting request"
+      );
+      return NextResponse.json(
+        { error: "Webhook secret not configured" },
+        { status: 500 }
+      );
+    }
+
+    const valid = verifyWebhookSignature(body, signature);
+    if (!valid) {
+      return NextResponse.json(
+        { error: "Invalid signature" },
+        { status: 401 }
+      );
     }
 
     // Uplisting webhook payload is a flat booking object POSTed directly.
@@ -46,9 +71,11 @@ export async function POST(request: Request) {
       case "booking_created": {
         const propertyId = String(data.property_id || "");
         const accommodation = getAccommodationSlug(propertyId);
-        const source = data.channel || "channel";
+        const source = String(data.channel || data.source || "channel").toLowerCase();
+        const checkIn = toUtcMidnight(data.check_in);
+        const checkOut = toUtcMidnight(data.check_out);
 
-        // Skip if this booking already exists
+        // Skip if this booking already exists (dedup by uplisting_id)
         if (uplistingId) {
           const existing = await prisma.bookings.findFirst({
             where: { uplisting_id: uplistingId },
@@ -61,13 +88,17 @@ export async function POST(request: Request) {
           }
         }
 
-        // Skip if it was a direct booking we synced via calendar block
-        if (source === "uplisting") {
+        // If this is a direct booking coming back from Uplisting (because we
+        // pushed it there ourselves), link it to the existing website booking
+        // instead of creating a duplicate. Uplisting returns direct bookings
+        // with source "direct" — accept legacy "uplisting" for safety.
+        const isDirect = source === "direct" || source === "uplisting" || source === "website";
+        if (isDirect && checkIn && checkOut) {
           const matchingBooking = await prisma.bookings.findFirst({
             where: {
               accommodation,
-              check_in: new Date(data.check_in),
-              check_out: new Date(data.check_out),
+              check_in: checkIn,
+              check_out: checkOut,
               booking_source: "website",
               uplisting_sync_status: { in: ["synced", "pending"] },
             },
@@ -91,6 +122,17 @@ export async function POST(request: Request) {
         // Create a new booking from external channel (Airbnb, Booking.com, etc.)
         const guestName = data.guest_name || "Channel Guest";
 
+        if (!checkIn || !checkOut) {
+          console.error(
+            `[uplisting webhook] Missing/invalid dates for booking ${uplistingId}`,
+            { check_in: data.check_in, check_out: data.check_out }
+          );
+          return NextResponse.json(
+            { error: "Invalid check_in/check_out" },
+            { status: 400 }
+          );
+        }
+
         try {
           await prisma.bookings.create({
             data: {
@@ -99,8 +141,8 @@ export async function POST(request: Request) {
               guest_email: data.guest_email || "",
               guest_phone: data.guest_phone || null,
               accommodation,
-              check_in: new Date(data.check_in),
-              check_out: new Date(data.check_out),
+              check_in: checkIn,
+              check_out: checkOut,
               guests: Number(data.number_of_guests) || 1,
               total_price: data.total_payout
                 ? Number(data.total_payout)
@@ -109,12 +151,11 @@ export async function POST(request: Request) {
                   : null,
               status: data.status === "cancelled" ? "cancelled" : "confirmed",
               payment_status: "paid_external",
-              booking_source:
-                source.startsWith("airbnb")
-                  ? "airbnb"
-                  : source.startsWith("booking")
-                    ? "booking.com"
-                    : `channel:${source}`,
+              booking_source: source.startsWith("airbnb")
+                ? "airbnb"
+                : source.startsWith("booking")
+                  ? "booking.com"
+                  : `channel:${source}`,
               uplisting_id: uplistingId,
               uplisting_sync_status: "synced",
               security_deposit_status: "not_applicable",
@@ -125,6 +166,7 @@ export async function POST(request: Request) {
           );
         } catch (dbErr) {
           console.error("[uplisting webhook] DB create error:", dbErr);
+          throw dbErr; // let outer catch return 500 so Uplisting retries
         }
         break;
       }
@@ -137,10 +179,10 @@ export async function POST(request: Request) {
             updated_at: new Date(),
           };
 
-          if (data.check_in)
-            updateData.check_in = new Date(data.check_in);
-          if (data.check_out)
-            updateData.check_out = new Date(data.check_out);
+          const newCheckIn = toUtcMidnight(data.check_in);
+          const newCheckOut = toUtcMidnight(data.check_out);
+          if (newCheckIn) updateData.check_in = newCheckIn;
+          if (newCheckOut) updateData.check_out = newCheckOut;
           if (data.number_of_guests)
             updateData.guests = Number(data.number_of_guests);
           if (data.guest_name)
@@ -162,6 +204,7 @@ export async function POST(request: Request) {
           );
         } catch (dbErr) {
           console.error("[uplisting webhook] DB update error:", dbErr);
+          throw dbErr;
         }
         break;
       }
@@ -186,6 +229,7 @@ export async function POST(request: Request) {
             "[uplisting webhook] DB cancel error:",
             dbErr
           );
+          throw dbErr;
         }
         break;
       }
@@ -198,10 +242,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ received: true });
   } catch (err) {
+    // Return 500 so Uplisting retries transient failures (DB outage etc).
     console.error("[api/uplisting/webhook] Error:", err);
     return NextResponse.json(
       { error: "Webhook handler failed" },
-      { status: 400 }
+      { status: 500 }
     );
   }
 }

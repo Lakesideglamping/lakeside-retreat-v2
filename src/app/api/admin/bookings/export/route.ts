@@ -43,6 +43,10 @@ function buildBookingFilters(url: URL): Record<string, unknown> {
   return where;
 }
 
+// Hard cap on export size to prevent runaway memory use on large result sets.
+// Admins who need more should filter by date range.
+const EXPORT_LIMIT = 5000;
+
 export async function GET(request: Request) {
   return withAdmin(request, async (_admin, req) => {
     const url = new URL(req.url);
@@ -51,6 +55,7 @@ export async function GET(request: Request) {
     const bookings = await prisma.bookings.findMany({
       where,
       orderBy: { created_at: "desc" },
+      take: EXPORT_LIMIT,
     });
 
     const headers = [

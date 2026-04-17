@@ -83,10 +83,9 @@ export async function POST(request: Request, { params }: RouteParams) {
         error: error instanceof Error ? error.message : "Unknown error",
       }, ip);
 
-      const message =
-        error instanceof Error ? error.message : "Sync failed";
+      // Generic message to the client — full error is only in server logs + audit.
       return NextResponse.json(
-        { success: false, error: message },
+        { success: false, error: "Sync failed" },
         { status: 500 }
       );
     }

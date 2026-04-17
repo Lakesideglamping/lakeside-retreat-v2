@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   }
 
   // Rate limit: 3 per 15 minutes
-  const rateCheck = checkRateLimit(`login:${ip}`, 15 * 60 * 1000, 3);
+  const rateCheck = await checkRateLimit(`login:${ip}`, 15 * 60 * 1000, 3);
   if (!rateCheck.success) {
     return NextResponse.json(
       { error: "Too many login attempts. Please wait 15 minutes." },
@@ -59,15 +59,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify password — plain-text env var takes priority over hash
-    let valid = false;
-    const plainPassword = process.env.ADMIN_PASSWORD;
-    if (plainPassword) {
-      valid = password === plainPassword;
-    } else {
-      const hash = await getAdminPasswordHash();
-      valid = await verifyPassword(password, hash);
-    }
+    // Verify password against bcrypt hash (DB-first, then ADMIN_PASSWORD_HASH env).
+    // Note: plain-text ADMIN_PASSWORD support has been removed — only hashes are accepted.
+    const hash = await getAdminPasswordHash();
+    const valid = await verifyPassword(password, hash);
 
     if (!valid) {
       recordFailedAttempt(ip);
