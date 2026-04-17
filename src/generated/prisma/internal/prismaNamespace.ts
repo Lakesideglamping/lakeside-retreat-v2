@@ -399,6 +399,7 @@ export const ModelName = {
   system_settings: 'system_settings',
   token_blacklist: 'token_blacklist',
   rate_limits: 'rate_limits',
+  login_attempts: 'login_attempts',
   blocked_dates: 'blocked_dates',
   promo_codes: 'promo_codes'
 } as const
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "abandoned_checkout_reminders" | "audit_logs" | "bookings" | "contact_messages" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "seasonal_rates" | "social_content_drafts" | "system_settings" | "token_blacklist" | "rate_limits" | "blocked_dates" | "promo_codes"
+    modelProps: "abandoned_checkout_reminders" | "audit_logs" | "bookings" | "contact_messages" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "seasonal_rates" | "social_content_drafts" | "system_settings" | "token_blacklist" | "rate_limits" | "login_attempts" | "blocked_dates" | "promo_codes"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1530,6 +1531,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    login_attempts: {
+      payload: Prisma.$login_attemptsPayload<ExtArgs>
+      fields: Prisma.login_attemptsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.login_attemptsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.login_attemptsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload>
+        }
+        findFirst: {
+          args: Prisma.login_attemptsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.login_attemptsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload>
+        }
+        findMany: {
+          args: Prisma.login_attemptsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload>[]
+        }
+        create: {
+          args: Prisma.login_attemptsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload>
+        }
+        createMany: {
+          args: Prisma.login_attemptsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.login_attemptsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload>[]
+        }
+        delete: {
+          args: Prisma.login_attemptsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload>
+        }
+        update: {
+          args: Prisma.login_attemptsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload>
+        }
+        deleteMany: {
+          args: Prisma.login_attemptsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.login_attemptsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.login_attemptsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload>[]
+        }
+        upsert: {
+          args: Prisma.login_attemptsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_attemptsPayload>
+        }
+        aggregate: {
+          args: Prisma.Login_attemptsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLogin_attempts>
+        }
+        groupBy: {
+          args: Prisma.login_attemptsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Login_attemptsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.login_attemptsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Login_attemptsCountAggregateOutputType> | number
+        }
+      }
+    }
     blocked_dates: {
       payload: Prisma.$blocked_datesPayload<ExtArgs>
       fields: Prisma.blocked_datesFieldRefs
@@ -1936,6 +2011,16 @@ export const Rate_limitsScalarFieldEnum = {
 export type Rate_limitsScalarFieldEnum = (typeof Rate_limitsScalarFieldEnum)[keyof typeof Rate_limitsScalarFieldEnum]
 
 
+export const Login_attemptsScalarFieldEnum = {
+  ip: 'ip',
+  count: 'count',
+  locked_until: 'locked_until',
+  updated_at: 'updated_at'
+} as const
+
+export type Login_attemptsScalarFieldEnum = (typeof Login_attemptsScalarFieldEnum)[keyof typeof Login_attemptsScalarFieldEnum]
+
+
 export const Blocked_datesScalarFieldEnum = {
   id: 'id',
   property: 'property',
@@ -2187,6 +2272,7 @@ export type GlobalOmitConfig = {
   system_settings?: Prisma.system_settingsOmit
   token_blacklist?: Prisma.token_blacklistOmit
   rate_limits?: Prisma.rate_limitsOmit
+  login_attempts?: Prisma.login_attemptsOmit
   blocked_dates?: Prisma.blocked_datesOmit
   promo_codes?: Prisma.promo_codesOmit
 }

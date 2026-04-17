@@ -204,6 +204,15 @@ model rate_limits {
   @@index([reset_time], map: "idx_rate_limits_reset_time")
 }
 
+model login_attempts {
+  ip            String   @id
+  count         Int      @default(0)
+  locked_until  DateTime @default(dbgenerated("to_timestamp(0)")) @db.Timestamp(6)
+  updated_at    DateTime @default(now()) @db.Timestamp(6)
+
+  @@index([locked_until], map: "idx_login_attempts_locked_until")
+}
+
 model blocked_dates {
   id         Int       @id @default(autoincrement())
   property   String

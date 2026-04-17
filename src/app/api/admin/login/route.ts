@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 
   // Check exponential backoff
-  const attempt = getFailedAttempt(ip);
+  const attempt = await getFailedAttempt(ip);
   if (attempt && attempt.lockedUntil > Date.now()) {
     const waitSeconds = Math.ceil((attempt.lockedUntil - Date.now()) / 1000);
     return NextResponse.json(
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
 
     // Verify username
     if (username !== process.env.ADMIN_USERNAME) {
-      recordFailedAttempt(ip);
+      await recordFailedAttempt(ip);
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     const valid = await verifyPassword(password, hash);
 
     if (!valid) {
-      recordFailedAttempt(ip);
+      await recordFailedAttempt(ip);
       await auditLog("unknown", "login_failed", { username, ip });
 
       return NextResponse.json(
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
     }
 
     // Success — clear failed attempts
-    deleteFailedAttempt(ip);
+    await deleteFailedAttempt(ip);
 
     // Create JWT
     const token = await createToken(username);

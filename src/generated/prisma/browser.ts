@@ -93,6 +93,11 @@ export type token_blacklist = Prisma.token_blacklistModel
  */
 export type rate_limits = Prisma.rate_limitsModel
 /**
+ * Model login_attempts
+ * 
+ */
+export type login_attempts = Prisma.login_attemptsModel
+/**
  * Model blocked_dates
  * 
  */

@@ -66,6 +66,7 @@ export const ModelName = {
   system_settings: 'system_settings',
   token_blacklist: 'token_blacklist',
   rate_limits: 'rate_limits',
+  login_attempts: 'login_attempts',
   blocked_dates: 'blocked_dates',
   promo_codes: 'promo_codes'
 } as const
@@ -303,6 +304,16 @@ export const Rate_limitsScalarFieldEnum = {
 } as const
 
 export type Rate_limitsScalarFieldEnum = (typeof Rate_limitsScalarFieldEnum)[keyof typeof Rate_limitsScalarFieldEnum]
+
+
+export const Login_attemptsScalarFieldEnum = {
+  ip: 'ip',
+  count: 'count',
+  locked_until: 'locked_until',
+  updated_at: 'updated_at'
+} as const
+
+export type Login_attemptsScalarFieldEnum = (typeof Login_attemptsScalarFieldEnum)[keyof typeof Login_attemptsScalarFieldEnum]
 
 
 export const Blocked_datesScalarFieldEnum = {

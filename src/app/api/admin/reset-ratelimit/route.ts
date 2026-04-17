@@ -3,17 +3,27 @@ import { timingSafeEqual } from "crypto";
 import { clearRateLimit } from "@/lib/rate-limit";
 import { clearAllFailedAttempts } from "@/lib/login-attempts";
 
-// Emergency rate-limit reset. Requires RESET_TOKEN env var.
-// GET /api/admin/reset-ratelimit?token=YOUR_RESET_TOKEN
+/**
+ * Emergency rate-limit + lockout reset.
+ *
+ * Requires RESET_TOKEN env var. Token is read from the `x-reset-token`
+ * request header (POST only) — never from a URL, because URLs leak to
+ * access logs, browser history, and Referer headers.
+ *
+ *   curl -X POST https://.../api/admin/reset-ratelimit \
+ *        -H "x-reset-token: $RESET_TOKEN"
+ */
 
-export async function GET(request: Request) {
-  const token = new URL(request.url).searchParams.get("token") ?? "";
+export async function POST(request: Request) {
   const expected = process.env.RESET_TOKEN;
-
   if (!expected) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  const token = request.headers.get("x-reset-token") ?? "";
+
+  // Constant-time compare; short-circuit on length to avoid a throw from
+  // timingSafeEqual when buffers don't match length.
   const tokenBuf = Buffer.from(token);
   const expectedBuf = Buffer.from(expected);
   const valid =
@@ -25,7 +35,7 @@ export async function GET(request: Request) {
   }
 
   await clearRateLimit("login:");
-  clearAllFailedAttempts();
+  await clearAllFailedAttempts();
 
   return NextResponse.json({
     success: true,
