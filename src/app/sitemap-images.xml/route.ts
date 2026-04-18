@@ -170,6 +170,116 @@ const pages: PageImages[] = [
       },
     ],
   },
+  {
+    path: "/winter-glamping-central-otago",
+    images: [
+      {
+        loc: "/images/domesmountainview.jpeg",
+        title: "Winter glamping domes with snow-capped Pisa Range backdrop",
+        caption: "Adults-only winter glamping on Lake Dunstan, Central Otago",
+      },
+      {
+        loc: "/images/dome-rose-spa1.jpeg",
+        title: "Private saltwater spa with winter mountain views",
+      },
+    ],
+  },
+  {
+    path: "/couples-retreat-central-otago",
+    images: [
+      {
+        loc: "/images/dome-rose-spa1.jpeg",
+        title: "Couples retreat dome with private outdoor spa",
+        caption: "Adults-only couples retreat in Central Otago wine country",
+      },
+    ],
+  },
+  {
+    path: "/central-otago-wine-trail",
+    images: [
+      {
+        loc: "/images/vineyard.jpeg",
+        title: "Central Otago wine trail — vineyards near Cromwell",
+        caption: "30+ cellar doors within 15 minutes of Lakeside Retreat",
+      },
+    ],
+  },
+  {
+    path: "/dog-friendly-accommodation-central-otago",
+    images: [
+      {
+        loc: "/images/lakeside-cottage-exterior.jpeg",
+        title: "Dog-friendly Lakeside Cottage on Lake Dunstan",
+        caption: "Adults-only pet-friendly lakefront stay in Cromwell",
+      },
+    ],
+  },
+  {
+    path: "/otago-rail-trail-accommodation",
+    images: [
+      {
+        loc: "/images/lakeside-cottage-exterior.jpeg",
+        title: "Otago Rail Trail accommodation — 300m from the trailhead",
+        caption: "Adults-only lakefront cottage on the Otago Rail Trail",
+      },
+    ],
+  },
+  {
+    path: "/luxury-accommodation-cromwell",
+    images: [
+      {
+        loc: "/images/PinotLakeView.jpeg",
+        title: "Luxury accommodation in Cromwell — Lake Dunstan views",
+        caption: "Adults-only luxury glamping and cottage in Cromwell, Central Otago",
+      },
+    ],
+  },
+  {
+    path: "/food-dining-central-otago",
+    images: [
+      {
+        loc: "/images/vineyard.jpeg",
+        title: "Central Otago food and wine — vineyard dining",
+      },
+    ],
+  },
+  {
+    path: "/cromwell-activities",
+    images: [
+      {
+        loc: "/images/lakeview.jpeg",
+        title: "Cromwell activities — Lake Dunstan, cycling, wine trails",
+      },
+    ],
+  },
+  {
+    path: "/wanaka-day-trip",
+    images: [
+      {
+        loc: "/images/lake-mountains-perfect.jpg",
+        title: "Wanaka day-trip base — Lake Dunstan, 30 minutes from Wanaka",
+      },
+    ],
+  },
+  {
+    path: "/weekend-getaway-queenstown",
+    images: [
+      {
+        loc: "/images/magical-sunset.jpg",
+        title: "Weekend getaway from Queenstown — Lakeside Retreat",
+        caption: "Adults-only weekend escape 45 minutes from Queenstown",
+      },
+    ],
+  },
+  {
+    path: "/reviews",
+    images: [
+      {
+        loc: "/images/domes-vineyard-sunset.jpg",
+        title: "Lakeside Retreat guest reviews — 4.9 stars, 416+ reviews",
+      },
+    ],
+  },
 ];
 
 function escapeXml(str: string): string {

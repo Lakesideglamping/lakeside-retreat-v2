@@ -249,7 +249,6 @@ export function NotificationsContent({
 }
 
 function NotificationSection({
-  title: _title,
   items,
   category,
 }: {

@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: "Dog-Friendly Accommodation Central Otago | Lakeside Cottage, Cromwell",
   description:
     "Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, a secure outdoor area, and a BBQ deck. $365/night.",
+
+  alternates: { canonical: "/dog-friendly-accommodation-central-otago" },
+  openGraph: {
+    title: "Dog-Friendly Accommodation Central Otago | Lakeside Cottage, Cromwell",
+    description: "Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, a secure outdoor area, and a BBQ deck. $365/night.",
+    url: "https://lakesideretreat.co.nz/dog-friendly-accommodation-central-otago",
+    images: [
+      {
+        url: "/images/lakeside-cottage-exterior.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Dog-friendly Lakeside Cottage on Lake Dunstan, Central Otago",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const features = [
@@ -45,7 +61,7 @@ export default function DogFriendlyAccommodationPage() {
           { question: "Is there dog-friendly accommodation in Central Otago?", answer: "Yes — Lakeside Retreat's Lakeside Cottage on Lake Dunstan is dog-friendly and welcomes well-behaved dogs with prior approval. The cottage has direct lake access, a secure outdoor area, and is 300 metres from the dog-friendly Otago Rail Trail. A flat $50 pet fee applies per stay." },
           { question: "Can I bring my dog to Cromwell?", answer: "Cromwell is a great destination for dogs. Lakeside Retreat's Lakeside Cottage accommodates dogs and puts you close to dog-friendly walks including the Otago Rail Trail, Lake Dunstan shoreline, and Bannockburn Sluicings. The Cromwell Heritage Precinct also has outdoor areas suitable for dogs." },
           { question: "What is the pet fee at Lakeside Retreat?", answer: "A flat $50 pet fee applies per stay (not per night). This covers additional cleaning and any wear and tear from your pet. Please notify us when booking that you're bringing a dog." },
-          { question: "Are the glamping domes dog-friendly?", answer: "No — Dome Pinot and Dome Rosé are adults-only and not suitable for pets. However, our Lakeside Cottage is specifically designed to welcome families and dogs." },
+          { question: "Are the glamping domes dog-friendly?", answer: "No — Dome Pinot and Dome Rosé are adults-only and strictly no pets. Our adults-only Lakeside Cottage is the one property that welcomes dogs." },
         ]),
       ]} />
 
@@ -65,8 +81,8 @@ export default function DogFriendlyAccommodationPage() {
             Dog-Friendly Accommodation<br />Central Otago
           </h1>
           <p className="text-xl mb-8 opacity-95">
-            Bring the whole family — including the four-legged members.
-            Lakeside Cottage on Lake Dunstan welcomes dogs.
+            Adults-only lakefront cottage that welcomes your dog too.
+            Step off the deck into Lake Dunstan.
           </p>
           <Button href="/book?a=lakeside-cottage">Book the Cottage</Button>
         </div>
@@ -202,7 +218,7 @@ export default function DogFriendlyAccommodationPage() {
           <div className="grid sm:grid-cols-3 gap-4">
             {[
               { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail Guide", desc: "300m away — walk to the Cromwell trailhead" },
-              { href: "/glamping-central-otago", title: "Glamping Domes", desc: "For couples (adults only — no dogs, no kids)" },
+              { href: "/glamping-central-otago", title: "Glamping Domes", desc: "For couples (strictly 18+ adults only, no pets)" },
               { href: "/luxury-accommodation-cromwell", title: "All Our Accommodation", desc: "Compare all three properties at Lakeside Retreat" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
@@ -219,7 +235,7 @@ export default function DogFriendlyAccommodationPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Dog-Friendly Stay</h2>
           <p className="text-lg text-muted mb-8">
-            Lakeside Cottage from $365/night. Direct lake access. Otago Rail Trail 300m away.
+            Lakeside Cottage $365/night. Direct lake access. Otago Rail Trail 300m away.
             Dogs welcome with prior approval.
           </p>
           <Button href="/book?a=lakeside-cottage">Check Availability</Button>

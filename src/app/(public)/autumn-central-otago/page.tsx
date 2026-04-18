@@ -7,7 +7,23 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Autumn in Central Otago | Golden Vineyards & Harvest Season Accommodation",
   description:
-    "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat from $365/night.",
+    "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — $365/night.",
+
+  alternates: { canonical: "/autumn-central-otago" },
+  openGraph: {
+    title: "Autumn in Central Otago | Golden Vineyards & Harvest Season Accommodation",
+    description: "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — $365/night.",
+    url: "https://lakesideretreat.co.nz/autumn-central-otago",
+    images: [
+      {
+        url: "/images/vineyard.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Golden autumn vineyards in Central Otago with Lake Dunstan in the background",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const autumnHighlights = [

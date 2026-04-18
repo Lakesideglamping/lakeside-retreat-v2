@@ -232,7 +232,7 @@ export default async function HomePage() {
           <div className="grid sm:grid-cols-2 gap-8 mb-12">
             {[
               { author: "Sarah", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "January 2026", text: "Outstanding experience. The continental breakfast, vineyard walks, and lake swimming made this the perfect Central Otago getaway. The stargazing skylight was magical." },
-              { author: "Ryan", accommodation: "Lakeside Cottage", image: "/images/lakeside-cottage-exterior.jpeg", date: "February 2026", text: "Such a lovely place. Morning swims off the deck, the dog welcomed like one of the family, and hosts who think of everything. Unforgettable family holiday." },
+              { author: "Ryan", accommodation: "Lakeside Cottage", image: "/images/lakeside-cottage-exterior.jpeg", date: "February 2026", text: "Such a lovely spot. Morning swims off the deck, our dog welcomed like a regular, and hosts who think of everything. An unforgettable adults-only escape." },
               { author: "Emma", accommodation: "Dome Ros\u00e9", image: "/images/dome-rose-spa1.jpeg", date: "December 2025", text: "A hidden gem in wine country. The private spa overlooking the vineyards was heavenly. Stephen and Sandy are wonderful hosts who think of everything." },
               { author: "James", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "November 2025", text: "Booked for one night, stayed for three. Watched the sun rise over the lake from the spa. We\u2019ll be back every anniversary now." },
             ].map((review) => (

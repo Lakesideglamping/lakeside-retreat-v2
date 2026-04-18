@@ -7,7 +7,6 @@ export interface Accommodation {
   basePrice: number;
   minStay: number;
   securityDeposit: number;
-  cleaningFee: number;
   adultsOnly: boolean;
   /** Minimum guest age in years. All properties are strictly adults-only (18+). */
   minimumAge: number;
@@ -32,7 +31,6 @@ const accommodations: Accommodation[] = [
     basePrice: 635,
     minStay: 1,
     securityDeposit: 300,
-    cleaningFee: 0,
     adultsOnly: true,
     minimumAge: 18,
     amenities: ["Super King bed", "Private spa", "Panoramic views", "Solar powered"],
@@ -47,7 +45,6 @@ const accommodations: Accommodation[] = [
     basePrice: 615,
     minStay: 1,
     securityDeposit: 300,
-    cleaningFee: 0,
     adultsOnly: true,
     minimumAge: 18,
     amenities: ["Super King bed", "Outdoor spa", "Mountain views", "Solar powered"],
@@ -62,7 +59,6 @@ const accommodations: Accommodation[] = [
     basePrice: 365,
     minStay: 2,
     securityDeposit: 300,
-    cleaningFee: 0,
     adultsOnly: true,
     minimumAge: 18,
     extraGuestFee: 50,

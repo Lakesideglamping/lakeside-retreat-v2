@@ -95,7 +95,7 @@ export async function fetchBlockedDates(
   if (cached) return cached;
 
   // L2: Postgres (survives deploys, shared across instances)
-  const dbCached = await getDbCached<string[]>(dbCacheKey, CACHE_TTL);
+  const dbCached = await getDbCached<string[]>(dbCacheKey);
   if (dbCached) {
     setCache(cacheKey, dbCached); // warm L1
     return dbCached;

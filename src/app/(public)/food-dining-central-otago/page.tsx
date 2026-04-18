@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: "Food & Dining in Central Otago | Best Restaurants Near Cromwell",
   description:
     "Best restaurants, cafés, and food experiences near Lakeside Retreat — Cromwell Heritage Precinct, winery restaurants, local stone fruit, farmers markets, and fine dining.",
+
+  alternates: { canonical: "/food-dining-central-otago" },
+  openGraph: {
+    title: "Food & Dining in Central Otago | Best Restaurants Near Cromwell",
+    description: "Best restaurants, cafés, and food experiences near Lakeside Retreat — Cromwell Heritage Precinct, winery restaurants, local stone fruit, farmers markets, and fine dining.",
+    url: "https://lakesideretreat.co.nz/food-dining-central-otago",
+    images: [
+      {
+        url: "/images/vineyard.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Central Otago food and wine — cellar doors and vineyard dining",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const categories = [
@@ -242,7 +258,7 @@ export default function FoodDiningPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Stay</h2>
           <p className="text-lg text-muted mb-8">
             Winery restaurants, stone fruit stalls, and Cromwell&apos;s best cafés — all on your doorstep.
-            Domes from $615 &bull; Cottage from $365/night.
+            Domes $615 &bull; Cottage $365/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

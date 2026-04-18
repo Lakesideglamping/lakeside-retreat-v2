@@ -45,7 +45,6 @@ export function calculatePrice(
   });
 
   // Cleaning is bundled into the nightly rate — no separate line item.
-  // accommodation.cleaningFee is kept on the type for back-compat + future use.
 
   // Extra guest fee
   if (accommodation.extraGuestFee && guests > accommodation.baseGuests) {

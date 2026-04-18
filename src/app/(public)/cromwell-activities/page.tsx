@@ -8,12 +8,28 @@ export const metadata: Metadata = {
   title: "Things to Do in Cromwell | Activities Guide — Cycling, Wine & Lake Dunstan",
   description:
     "Complete guide to Cromwell activities: Otago Rail Trail cycling, Lake Dunstan water sports, Central Otago wine tasting, heritage precinct, and day trips to Queenstown.",
+
+  alternates: { canonical: "/cromwell-activities" },
+  openGraph: {
+    title: "Things to Do in Cromwell | Activities Guide — Cycling, Wine & Lake Dunstan",
+    description: "Complete guide to Cromwell activities: Otago Rail Trail cycling, Lake Dunstan water sports, Central Otago wine tasting, heritage precinct, and day trips to Queenstown.",
+    url: "https://lakesideretreat.co.nz/cromwell-activities",
+    images: [
+      {
+        url: "/images/lakeview.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Lake Dunstan and Cromwell activities — cycling, wine trails, heritage walks",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const waterActivities = [
   { title: "Swimming", desc: "Clear calm water with multiple beach access points" },
-  { title: "Kayaking", desc: "Hidden inlets and rocky coves, rental available in Cromwell" },
-  { title: "Paddleboarding", desc: "Calm morning conditions, perfect for beginners" },
+  { title: "Lake Walks", desc: "Shoreline paths with uninterrupted Pisa Range views" },
+  { title: "Paddleboarding", desc: "Calm morning conditions, perfect for beginners (rentals in Cromwell)" },
   { title: "Fishing", desc: "Brown and rainbow trout, landlocked salmon" },
 ];
 

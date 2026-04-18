@@ -8,12 +8,12 @@ import { PropertyAvailability } from "@/components/booking/property-availability
 export const metadata: Metadata = {
   title: "Dome Ros\u00e9 | Romantic Getaway Central Otago | $615/night",
   description:
-    "Dome Ros\u00e9 — intimate 40sqm glamping dome perfect for couples in Cromwell, Central Otago. Outdoor spa, mountain views, vineyard setting on Lake Dunstan. Book direct from $615/night.",
+    "Dome Ros\u00e9 — intimate 40sqm glamping dome perfect for couples in Cromwell, Central Otago. Outdoor spa, mountain views, vineyard setting on Lake Dunstan. Book direct — $615/night.",
   alternates: { canonical: '/dome-rose' },
   openGraph: {
     title: "Dome Rosé | Romantic Glamping Dome — Vineyard Views, Central Otago",
     description:
-      "40sqm romantic dome with private outdoor spa, vineyard and mountain views. The perfect couples escape from $615/night in Central Otago wine country.",
+      "40sqm romantic dome with private outdoor spa, vineyard and mountain views. The perfect couples escape — $615/night in Central Otago wine country.",
     url: "https://lakesideretreat.co.nz/dome-rose",
     images: [
       {
@@ -63,7 +63,7 @@ const pricingFeatures = [
 const guides = [
   { href: "/central-otago-wine-trail", title: "Wine Trail Guide", desc: "Discover 30+ cellar doors in Bannockburn, Cromwell Basin & beyond." },
   { href: "/couples-retreat-central-otago", title: "Romantic Getaway Guide", desc: "Two-night itinerary for the perfect couples retreat in wine country." },
-  { href: "/cromwell-activities", title: "Cromwell Activities", desc: "Cycling, kayaking, heritage walks and seasonal events near Lake Dunstan." },
+  { href: "/cromwell-activities", title: "Cromwell Activities", desc: "Cycling, wine trails, heritage walks and seasonal events near Lake Dunstan." },
   { href: "/weekend-getaway-queenstown", title: "Weekend from Queenstown", desc: "45 minutes away — a peaceful lakeside alternative to Queenstown." },
 ];
 
@@ -113,7 +113,7 @@ export default function DomeRosePage() {
             Soak under the stars. Wake among the vines.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=dome-rose" ariaLabel="Book Dome Rosé now from $615 per night">
+            <Button href="/book?a=dome-rose" ariaLabel="Book Dome Rosé now — $615 per night">
               Book Now — $615/night
             </Button>
             <Button href="#gallery" variant="outline">
@@ -330,7 +330,7 @@ export default function DomeRosePage() {
           </p>
           <Button
             href="/book?a=dome-rose"
-            ariaLabel="Book Dome Rosé now from $615 per night"
+            ariaLabel="Book Dome Rosé now — $615 per night"
           >
             Book Dome Rosé Now
           </Button>

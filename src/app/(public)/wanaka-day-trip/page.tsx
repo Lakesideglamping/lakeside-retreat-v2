@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: "Wanaka Day Trip Guide | Lakes, Mountains & That Tree — from Lakeside Retreat",
   description:
     "Wanaka is just 45 minutes from Lakeside Retreat. Day trip guide: That Wanaka Tree, Roy's Peak, Rippon Vineyard, Puzzling World, lake walks, and the best cafés.",
+
+  alternates: { canonical: "/wanaka-day-trip" },
+  openGraph: {
+    title: "Wanaka Day Trip Guide | Lakes, Mountains & That Tree — from Lakeside Retreat",
+    description: "Wanaka is just 45 minutes from Lakeside Retreat. Day trip guide: That Wanaka Tree, Roy's Peak, Rippon Vineyard, Puzzling World, lake walks, and the best cafés.",
+    url: "https://lakesideretreat.co.nz/wanaka-day-trip",
+    images: [
+      {
+        url: "/images/lake-mountains-perfect.jpg",
+        width: 1200,
+        height: 800,
+        alt: "Wanaka day trip base — Lake Dunstan, 30 minutes from Wanaka",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const activities = [
@@ -301,7 +317,7 @@ export default function WanakaDayTripPage() {
             {[
               { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "$635/night", note: "Private spa, skylight, breakfast included" },
               { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "$615/night", note: "Private spa, vineyard views, kitchenette" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "$365/night", note: "Sleeps 3, wood-fired hot tub, lake access, dogs welcome" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Adults-Only · Pet Friendly", price: "$365/night", note: "Sleeps 3, wood-fired hot tub, lake access, dogs welcome" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -352,7 +368,7 @@ export default function WanakaDayTripPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Central Otago Base</h2>
           <p className="text-lg text-muted mb-8">
             Wanaka, Queenstown, and wine country — all within 45 minutes.
-            Luxury domes from $615 &bull; Cottage from $365/night.
+            Luxury domes $615 &bull; Cottage $365/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

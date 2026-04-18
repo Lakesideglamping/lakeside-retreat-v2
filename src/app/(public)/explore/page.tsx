@@ -152,10 +152,10 @@ export default function ExplorePage() {
                 className="w-full h-[250px] object-cover"
               />
               <div className="p-6">
-                <h3 className="font-display text-xl mb-2">Lake Dunstan Water Sports</h3>
+                <h3 className="font-display text-xl mb-2">Lake Dunstan &amp; Shoreline</h3>
                 <p className="text-muted text-sm">
-                  Crystal-clear waters for swimming, kayaking, and paddleboarding. The Lakeside
-                  Cottage has direct lake access — bring your own kayak or hire in Cromwell.
+                  Crystal-clear water for swimming and fishing straight off the deck at
+                  Lakeside Cottage. Paddleboards and other gear can be hired in Cromwell.
                 </p>
               </div>
             </div>

@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: "Central Otago Wine Trail | Best Wineries Near Cromwell & Bannockburn",
   description:
     "Explore New Zealand's finest Pinot Noir country. 30+ wineries within 15 minutes of Lakeside Retreat — Bannockburn, Cromwell Basin, Mt Difficulty, Carrick, Felton Road.",
+
+  alternates: { canonical: "/central-otago-wine-trail" },
+  openGraph: {
+    title: "Central Otago Wine Trail | Best Wineries Near Cromwell & Bannockburn",
+    description: "Explore New Zealand's finest Pinot Noir country. 30+ wineries within 15 minutes of Lakeside Retreat — Bannockburn, Cromwell Basin, Mt Difficulty, Carrick, Felton Road.",
+    url: "https://lakesideretreat.co.nz/central-otago-wine-trail",
+    images: [
+      {
+        url: "/images/vineyard.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Central Otago wine trail — vineyards and cellar doors near Cromwell",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const regions = [
@@ -247,7 +263,7 @@ export default function WineTrailPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Wine Country Escape</h2>
           <p className="text-lg text-muted mb-8">
             30+ cellar doors within 15 minutes. Spa or hot tub to return to each evening.
-            Domes from $615 &bull; Cottage from $365/night.
+            Domes $615 &bull; Cottage $365/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

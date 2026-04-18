@@ -252,7 +252,7 @@ export function createArticleSchema(params: ArticleSchemaParams) {
     url: `${BASE_URL}${params.path}`,
     image: params.image ? `${BASE_URL}/images/${params.image}` : undefined,
     datePublished: params.datePublished || "2025-01-01",
-    dateModified: params.dateModified || "2026-03-01",
+    dateModified: params.dateModified || new Date().toISOString().split("T")[0],
     author: { "@type": "Organization", name: "Lakeside Retreat Central Otago" },
     publisher: {
       "@type": "Organization",

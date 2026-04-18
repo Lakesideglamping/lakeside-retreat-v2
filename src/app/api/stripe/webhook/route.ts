@@ -250,14 +250,17 @@ export async function POST(request: Request) {
         }
 
         // Increment promo code usage counter now that payment has confirmed.
-        // Fire-and-forget — a failure here is non-critical.
+        // Uses a raw atomic update so a race between two concurrent webhooks
+        // can't push usage_count past usage_limit. Fire-and-forget: a failure
+        // here never blocks the booking.
         if (bookingSaved && metadata.promoCode) {
-          prisma.promo_codes
-            .updateMany({
-              where: { code: metadata.promoCode },
-              data: { usage_count: { increment: 1 }, updated_at: new Date() },
-            })
-            .catch(() => {});
+          prisma.$executeRaw`
+            UPDATE promo_codes
+            SET usage_count = COALESCE(usage_count, 0) + 1,
+                updated_at = NOW()
+            WHERE code = ${metadata.promoCode}
+              AND (usage_limit IS NULL OR COALESCE(usage_count, 0) < usage_limit)
+          `.catch(() => {});
         }
 
         // 2) Create a separate off-session PaymentIntent for the security deposit

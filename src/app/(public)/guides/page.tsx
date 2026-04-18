@@ -35,7 +35,7 @@ const guides = [
     category: "Accommodation",
     title: "Dog-Friendly Accommodation in Central Otago",
     image: "/images/lakeside-cottage-exterior.jpeg",
-    excerpt: "Bring the whole family — including your dog. Lakeside Cottage on Lake Dunstan welcomes pets.",
+    excerpt: "Adults-only lakefront cottage that welcomes your dog too. Direct Lake Dunstan access and a wood-fired hot tub.",
     href: "/dog-friendly-accommodation-central-otago",
   },
   {
@@ -47,9 +47,9 @@ const guides = [
   },
   {
     category: "Water Activities",
-    title: "Lake Dunstan: Swimming, Kayaking & More",
+    title: "Lake Dunstan: Swimming, Fishing & More",
     image: "/images/magical-sunset.jpg",
-    excerpt: "Your guide to water activities on Lake Dunstan, from swimming spots to kayaking routes.",
+    excerpt: "Your guide to water activities on Lake Dunstan, from swimming spots to the best fishing coves.",
     href: "/cromwell-activities",
   },
   {

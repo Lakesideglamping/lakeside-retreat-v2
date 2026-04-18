@@ -8,7 +8,7 @@ import { PropertyAvailability } from "@/components/booking/property-availability
 export const metadata: Metadata = {
   title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay | $365/night",
   description:
-    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Adults-only lakefront stay in Central Otago from $365/night.",
+    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Adults-only lakefront stay in Central Otago — $365/night.",
   alternates: { canonical: '/lakeside-cottage' },
   openGraph: {
     title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay",
@@ -68,7 +68,7 @@ const pricingFeatures = [
 const guides = [
   { href: "/central-otago-wine-trail", title: "Wine Trail Guide", desc: "Discover 30+ cellar doors in Bannockburn, Cromwell Basin & beyond." },
   { href: "/couples-retreat-central-otago", title: "Romantic Getaway Guide", desc: "Two-night itinerary for the perfect couples retreat in wine country." },
-  { href: "/cromwell-activities", title: "Cromwell Activities", desc: "Cycling, kayaking, heritage walks and seasonal events near Lake Dunstan." },
+  { href: "/cromwell-activities", title: "Cromwell Activities", desc: "Cycling, wine trails, heritage walks and seasonal events near Lake Dunstan." },
   { href: "/weekend-getaway-queenstown", title: "Weekend from Queenstown", desc: "45 minutes away — a peaceful lakeside alternative to Queenstown." },
 ];
 
@@ -96,7 +96,7 @@ export default function LakesideCottagePage() {
         createFaqSchema([
           { question: "Can I bring my dog to Lakeside Cottage?", answer: "Yes! The Lakeside Cottage is pet-friendly. Well-behaved dogs are welcome with a $50 flat pet fee per stay. Maximum 2 dogs." },
           { question: "How many people can stay at Lakeside Cottage?", answer: "The cottage accommodates up to 3 guests (2 base, extra guest $100/night)." },
-          { question: "Is there lake access from the cottage?", answer: "Yes, the Lakeside Cottage has direct access to Lake Dunstan for swimming and fishing. Bring your own kayak or hire one in Cromwell." },
+          { question: "Is there lake access from the cottage?", answer: "Yes, the Lakeside Cottage has direct access to Lake Dunstan for swimming and fishing straight from your deck." },
         ]),
       ]} />
       {/* Hero */}
@@ -118,7 +118,7 @@ export default function LakesideCottagePage() {
             Step off the deck, into the lake. Dogs welcome too.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=lakeside-cottage" ariaLabel="Book Lakeside Cottage now from $365 per night">
+            <Button href="/book?a=lakeside-cottage" ariaLabel="Book Lakeside Cottage now — $365 per night">
               Book Now — $365/night
             </Button>
             <Button href="#gallery" variant="outline">
@@ -335,7 +335,7 @@ export default function LakesideCottagePage() {
           </p>
           <Button
             href="/book?a=lakeside-cottage"
-            ariaLabel="Book Lakeside Cottage now from $365 per night"
+            ariaLabel="Book Lakeside Cottage now — $365 per night"
           >
             Book Lakeside Cottage Now
           </Button>

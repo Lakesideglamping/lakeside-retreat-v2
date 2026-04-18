@@ -18,7 +18,7 @@ interface CachePayload<T> {
   expiresAt: number; // Unix ms
 }
 
-export async function getDbCached<T>(key: string, ttlMs: number): Promise<T | null> {
+export async function getDbCached<T>(key: string): Promise<T | null> {
   try {
     const row = await prisma.system_settings.findUnique({
       where: { setting_key: key },

@@ -8,12 +8,12 @@ import { PropertyAvailability } from "@/components/booking/property-availability
 export const metadata: Metadata = {
   title: "Dome Pinot | Geodesic Dome Accommodation NZ | $635/night",
   description:
-    "Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct from $635/night.",
+    "Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct — $635/night.",
   alternates: { canonical: '/dome-pinot' },
   openGraph: {
     title: "Dome Pinot | Luxury Geodesic Dome — Lake Dunstan, Central Otago",
     description:
-      "50sqm luxury glamping dome with private outdoor spa, stargazing skylight, and panoramic Lake Dunstan views. Adults-only escape from $635/night.",
+      "50sqm luxury glamping dome with private outdoor spa, stargazing skylight, and panoramic Lake Dunstan views. Adults-only escape — $635/night.",
     url: "https://lakesideretreat.co.nz/dome-pinot",
     images: [
       {
@@ -64,7 +64,7 @@ const pricingFeatures = [
 const guides = [
   { href: "/central-otago-wine-trail", title: "Wine Trail Guide", desc: "Discover 30+ cellar doors in Bannockburn, Cromwell Basin & beyond." },
   { href: "/couples-retreat-central-otago", title: "Romantic Getaway Guide", desc: "Two-night itinerary for the perfect couples retreat in wine country." },
-  { href: "/cromwell-activities", title: "Cromwell Activities", desc: "Cycling, kayaking, heritage walks and seasonal events near Lake Dunstan." },
+  { href: "/cromwell-activities", title: "Cromwell Activities", desc: "Cycling, wine trails, heritage walks and seasonal events near Lake Dunstan." },
   { href: "/weekend-getaway-queenstown", title: "Weekend from Queenstown", desc: "45 minutes away — a peaceful lakeside alternative to Queenstown." },
 ];
 
@@ -115,7 +115,7 @@ export default function DomePinotPage() {
             Our flagship. The lake from the bed. The Milky Way through the roof.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=dome-pinot" ariaLabel="Book Dome Pinot now from $635 per night">
+            <Button href="/book?a=dome-pinot" ariaLabel="Book Dome Pinot now — $635 per night">
               Book Now — $635/night
             </Button>
             <Button href="#gallery" variant="outline">
@@ -333,7 +333,7 @@ export default function DomePinotPage() {
           </p>
           <Button
             href="/book?a=dome-pinot"
-            ariaLabel="Book Dome Pinot now from $635 per night"
+            ariaLabel="Book Dome Pinot now — $635 per night"
           >
             Book Dome Pinot Now
           </Button>

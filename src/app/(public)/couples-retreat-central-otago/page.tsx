@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: "Couples Retreat Central Otago | Romantic Glamping Domes with Private Spas",
   description:
     "Adults-only luxury geodesic domes with private outdoor spas, stargazing skylights, and Central Otago wine country at your doorstep. The perfect romantic escape.",
+
+  alternates: { canonical: "/couples-retreat-central-otago" },
+  openGraph: {
+    title: "Couples Retreat Central Otago | Romantic Glamping Domes with Private Spas",
+    description: "Adults-only luxury geodesic domes with private outdoor spas, stargazing skylights, and Central Otago wine country at your doorstep. The perfect romantic escape.",
+    url: "https://lakesideretreat.co.nz/couples-retreat-central-otago",
+    images: [
+      {
+        url: "/images/dome-rose-spa1.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Couples retreat dome with private outdoor spa, Central Otago",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const itinerary = [

@@ -7,7 +7,23 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
   description:
-    "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and a family lakeside cottage. 4.9★ rated. $365/night.",
+    "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $365/night.",
+
+  alternates: { canonical: "/luxury-accommodation-cromwell" },
+  openGraph: {
+    title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
+    description: "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $365/night.",
+    url: "https://lakesideretreat.co.nz/luxury-accommodation-cromwell",
+    images: [
+      {
+        url: "/images/Pinotfront.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Luxury glamping domes and lakefront cottage in Cromwell, Central Otago",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const luxuryAmenities = [
@@ -184,7 +200,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 bookHref: "/book?a=lakeside-cottage",
                 image: "/images/lakeside-cottage-exterior.jpeg",
                 title: "Lakeside Cottage",
-                badge: "Family & Pet Friendly",
+                badge: "Adults-Only · Pet Friendly",
                 price: "$365/night",
                 size: "Sleeps 3",
                 desc: "Self-contained cottage with direct lake access, wood-fired hot tub, BBQ, kitchenette, and dog-friendly.",

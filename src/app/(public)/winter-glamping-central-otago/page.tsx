@@ -7,12 +7,12 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Winter Glamping Central Otago | Cosy Domes, Outdoor Spas & Snow Views",
   description:
-    "Winter glamping on Lake Dunstan — soak in your private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes from $615/night. Central Otago's best winter escape.",
+    "Winter glamping on Lake Dunstan — soak in your private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes $615/night. Central Otago's best winter escape.",
   alternates: { canonical: "/winter-glamping-central-otago" },
   openGraph: {
     title: "Winter Glamping Central Otago | Cosy Domes, Outdoor Spas & Snow Views",
     description:
-      "Soak in a private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes on Lake Dunstan from $615/night.",
+      "Soak in a private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes on Lake Dunstan — $615/night.",
     url: "https://lakesideretreat.co.nz/winter-glamping-central-otago",
     images: [
       {

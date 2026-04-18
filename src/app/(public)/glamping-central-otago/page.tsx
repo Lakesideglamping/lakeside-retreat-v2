@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Glamping Central Otago | Luxury Geodesic Domes on Lake Dunstan",
     description:
-      "Luxury geodesic domes with private saltwater spas, stargazing skylights, and vineyard views on Lake Dunstan. Adults-only glamping from $615/night.",
+      "Luxury geodesic domes with private saltwater spas, stargazing skylights, and vineyard views on Lake Dunstan. Adults-only glamping — $615/night.",
     url: "https://lakesideretreat.co.nz/glamping-central-otago",
     images: [
       {
@@ -93,7 +93,7 @@ export default function GlampingCentralOtagoPage() {
         ]),
         createFaqSchema([
           { question: "What is glamping in Central Otago like?", answer: "Glamping in Central Otago combines luxury accommodation with stunning natural surroundings. At Lakeside Retreat, our geodesic domes offer private outdoor spas, stargazing skylights, panoramic Lake Dunstan views, and vineyard scenery — far more comfortable than traditional camping but deeply connected to the landscape." },
-          { question: "How much does glamping in Central Otago cost?", answer: "Lakeside Retreat's luxury glamping domes start from $615/night (Dome Rosé) and $635/night (Dome Pinot), including continental breakfast. Our Lakeside Cottage starts from $365/night and sleeps up to 3 guests." },
+          { question: "How much does glamping in Central Otago cost?", answer: "Lakeside Retreat's luxury glamping domes start at $615/night (Dome Rosé) and $635/night (Dome Pinot), including continental breakfast. Our Lakeside Cottage is $365/night and sleeps up to 3 guests." },
           { question: "Where is the best glamping in New Zealand?", answer: "Central Otago is widely regarded as one of New Zealand's best glamping regions thanks to its dramatic landscapes, world-class wineries, and dark skies. Lakeside Retreat on Lake Dunstan offers a combination of private spas, stargazing, vineyard access, and the Otago Rail Trail — making it one of NZ's top-rated glamping experiences." },
           { question: "Is glamping suitable for couples?", answer: "Absolutely. Both of our glamping domes are adults-only and designed specifically for couples — private outdoor spas, stargazing skylights, premium bedding, and complete seclusion. Many guests use Lakeside Retreat for anniversary trips, honeymoons, and romantic getaways." },
         ]),

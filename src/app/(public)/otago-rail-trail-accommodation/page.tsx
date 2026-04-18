@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: "Otago Rail Trail Accommodation | Luxury Stay 300m from the Trail",
   description:
     "Luxury accommodation for Otago Rail Trail cyclists — just 300m from the trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $365/night.",
+
+  alternates: { canonical: "/otago-rail-trail-accommodation" },
+  openGraph: {
+    title: "Otago Rail Trail Accommodation | Luxury Stay 300m from the Trail",
+    description: "Luxury accommodation for Otago Rail Trail cyclists — just 300m from the trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $365/night.",
+    url: "https://lakesideretreat.co.nz/otago-rail-trail-accommodation",
+    images: [
+      {
+        url: "/images/lakeside-cottage-exterior.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Otago Rail Trail accommodation — Lakeside Cottage 300m from the trailhead",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const trailSections = [
@@ -199,7 +215,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 href: "/lakeside-cottage",
                 image: "/images/lakeside-cottage-exterior.jpeg",
                 title: "Lakeside Cottage",
-                badge: "Pet & Family Friendly",
+                badge: "Adults-Only · Pet Friendly",
                 price: "$365/night",
                 notes: "Queen + sofa bed, sleeps 3, wood-fired hot tub, direct lake access",
               },

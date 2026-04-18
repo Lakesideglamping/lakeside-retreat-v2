@@ -232,7 +232,7 @@ export function checkoutThankYouHtml(data: BookingEmailData): string {
       <p style="margin:0;">Your security bond authorisation hold will be automatically released within <strong>7 days</strong>. You don't need to do anything &mdash; it will drop off your statement on its own.</p>
     </div>
 
-    <p>If you enjoyed your stay, we'd love to hear about it! A quick review helps other travellers discover us and means the world to our small family-run retreat.</p>
+    <p>If you enjoyed your stay, we'd love to hear about it! A quick review helps other travellers discover us and means the world to our small owner-run retreat.</p>
 
     <div style="text-align:center;margin:24px 0;">
       <a href="${googleReviewUrl}" ${ctaButton("#4285f4")} style="display:inline-block;background-color:#4285f4;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;margin:4px;">Review on Google</a>
