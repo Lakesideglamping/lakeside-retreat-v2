@@ -179,7 +179,7 @@ export default async function HomePage() {
               image="/images/Pinotfront.jpeg"
               title="Dome Pinot"
               badge="Adults Only"
-              description="50sqm luxury dome with panoramic Lake Dunstan views, private spa, and stargazing skylight."
+              description="Fifty square metres of calm. Lake from the bed, stars through the roof, spa out the door."
               features={["Lake Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
               price="From $530/night"
             />
@@ -188,7 +188,7 @@ export default async function HomePage() {
               image="/images/dome-rose-spa1.jpeg"
               title="Dome Rosé"
               badge="Adults Only"
-              description="40sqm romantic retreat with vineyard views, private spa, and complete cooking facilities."
+              description="40sqm geodesic dome tucked into the vines. Private spa, super-king bed, vineyard at the window."
               features={["Vineyard Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
               price="From $510/night"
             />
@@ -196,8 +196,8 @@ export default async function HomePage() {
               href="/lakeside-cottage"
               image="/images/lakeside-cottage-exterior.jpeg"
               title="Lakeside Cottage"
-              description="Spacious family cottage with direct Lake Dunstan access, full kitchen, and pet-friendly."
-              features={["Lake Access", "Pet Friendly", "2 Bedrooms", "Kayaks Included"]}
+              description="Self-contained lakefront cottage, sleeps 3. Direct Lake Dunstan access, BBQ, and pet-friendly."
+              features={["Lake Access", "Pet Friendly", "Sleeps 3", "BBQ"]}
               price="From $295/night"
             />
           </div>
@@ -232,7 +232,7 @@ export default async function HomePage() {
           <div className="grid sm:grid-cols-2 gap-8 mb-12">
             {[
               { author: "Sarah", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "January 2026", text: "Outstanding experience. The continental breakfast, vineyard walks, and lake swimming made this the perfect Central Otago getaway. The stargazing skylight was magical." },
-              { author: "Ryan", accommodation: "Lakeside Cottage", image: "/images/lakeside-cottage-exterior.jpeg", date: "February 2026", text: "Such a lovely place. The lake views from the deck, morning kayaks with the kids, and the attentive hosts made our family holiday unforgettable." },
+              { author: "Ryan", accommodation: "Lakeside Cottage", image: "/images/lakeside-cottage-exterior.jpeg", date: "February 2026", text: "Such a lovely place. Morning swims off the deck, the dog welcomed like one of the family, and hosts who think of everything. Unforgettable family holiday." },
               { author: "Emma", accommodation: "Dome Ros\u00e9", image: "/images/dome-rose-spa1.jpeg", date: "December 2025", text: "A hidden gem in wine country. The private spa overlooking the vineyards was heavenly. Stephen and Sandy are wonderful hosts who think of everything." },
               { author: "James", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "November 2025", text: "Booked for one night, stayed for three. Watched the sun rise over the lake from the hot tub. We\u2019ll be back every anniversary now." },
             ].map((review) => (
@@ -326,7 +326,7 @@ export default async function HomePage() {
           <div className="space-y-4">
             {[
               { q: "Where is Lakeside Retreat located?", a: "We\u2019re at 96 Smiths Way, Mount Pisa, just 12km from Cromwell. Directly on Lake Dunstan in Central Otago wine country, with the cycle trail 300m away." },
-              { q: "What accommodation do you offer?", a: "Two luxury geodesic domes (Dome Pinot 50sqm and Dome Ros\u00e9 40sqm) for couples, plus a family-friendly Lakeside Cottage with direct lake access. All have private spas." },
+              { q: "What accommodation do you offer?", a: "Two luxury geodesic domes (Dome Pinot 50sqm and Dome Ros\u00e9 40sqm) for couples, each with a private saltwater spa. Plus a family-friendly Lakeside Cottage with direct lake access and a wood-fired hot tub (no chemicals)." },
               { q: "How far from Queenstown and Wanaka?", a: "45 minutes from Queenstown via the Kawarau Gorge, and 30\u201335 minutes from Wanaka." },
               { q: "Can I bring my pet?", a: "The Lakeside Cottage is pet-friendly ($50 flat fee, max 2 dogs). The domes are adults-only and not suitable for pets." },
               { q: "What\u2019s the cancellation policy?", a: "Full refund if cancelled 7+ days before check-in. 50% refund for 3\u20136 days. No refund within 3 days." },

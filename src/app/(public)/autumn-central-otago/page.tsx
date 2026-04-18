@@ -45,7 +45,7 @@ const autumnActivities = [
   {
     title: "Lake Dunstan Swimming",
     distance: "On-site",
-    desc: "Early autumn (March–April) the lake is still warm from summer. The water is glassy calm in the mornings — perfect for a swim or kayak from the cottage beach.",
+    desc: "Early autumn (March–April) the lake is still warm from summer. The water is glassy calm in the mornings — perfect for a swim straight off the cottage deck.",
   },
   {
     title: "Bannockburn Heritage Walk",
@@ -92,7 +92,7 @@ export default function AutumnCentralOtagoPage() {
           { question: "When is autumn in Central Otago?", answer: "Autumn in Central Otago runs from March through May. March and April are the peak harvest months with the most dramatic colour in the vineyards. May brings cooler temperatures and the first frosts, which create spectacular conditions for the spa and stargazing." },
           { question: "What is Central Otago like in autumn?", answer: "Autumn is arguably the most beautiful season in Central Otago. The vineyards turn gold and amber during pinot noir harvest (March–April), the Otago Rail Trail is at its best with autumn foliage, the lake is still warm enough for swimming, and the evenings are perfect for soaking in a private outdoor spa under clear skies." },
           { question: "Is the Otago Rail Trail good in autumn?", answer: "Autumn is the best season for the Otago Rail Trail. Temperatures are comfortable for cycling (typically 10–20°C during the day), the poplars and willows along the trail turn brilliant gold in April, and the crowds are far smaller than summer. The Cromwell to Clyde section starts just 300m from Lakeside Retreat." },
-          { question: "Can I swim in Lake Dunstan in autumn?", answer: "Yes — Lake Dunstan stays warm well into autumn. March and April are ideal for swimming, with water temperatures typically around 18–20°C following the summer. The Lakeside Cottage has direct lake access for swimming and complimentary kayaks." },
+          { question: "Can I swim in Lake Dunstan in autumn?", answer: "Yes — Lake Dunstan stays warm well into autumn. March and April are ideal for swimming, with water temperatures typically around 18–20°C following the summer. The Lakeside Cottage has direct lake access for swimming straight off the deck." },
           { question: "What is the pinot noir harvest season in Central Otago?", answer: "The Central Otago pinot noir harvest typically runs from late March through April. It's a wonderful time to visit the region — cellar doors are busy, many wineries offer harvest experiences and special tastings, and the vineyard landscapes are at their most spectacular with golden and amber tones." },
         ]),
       ]} />
@@ -299,7 +299,7 @@ export default function AutumnCentralOtagoPage() {
           <div className="mt-8 bg-cream rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="font-display text-xl text-burgundy mb-1">Lakeside Cottage</h3>
-              <p className="text-muted text-sm">From $295/night &bull; 2 bedrooms &bull; Dog-friendly &bull; Direct lake access</p>
+              <p className="text-muted text-sm">From $295/night &bull; Sleeps 3 &bull; Dog-friendly &bull; Direct lake access</p>
             </div>
             <Button href="/book?a=lakeside-cottage">Book Cottage &rarr;</Button>
           </div>

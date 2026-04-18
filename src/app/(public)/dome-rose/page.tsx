@@ -36,7 +36,7 @@ const features = [
 ];
 
 const amenities = [
-  { title: "Full Kitchenette", desc: "Induction cooktop, fridge, microwave, coffee machine" },
+  { title: "Kitchenette", desc: "Induction cooktop, fridge, microwave, coffee machine" },
   { title: "Ensuite Bathroom", desc: "Rainfall shower with premium toiletries" },
   { title: "Climate Control", desc: "Underfloor heating and air conditioning" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
@@ -136,15 +136,13 @@ export default function DomeRosePage() {
       <section className="py-20 px-5">
         <div className="max-w-[1200px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">
-            Romance in Wine Country
+            A bed by the vineyard. A spa under the stars.
           </h2>
           <p className="max-w-[800px] mx-auto text-center text-lg leading-8 text-muted mb-12">
-            Dome Rosé offers an intimate 40sqm retreat perfectly positioned among the
-            vineyards of Central Otago. Named after the region&apos;s famous ros&eacute; wines,
-            this romantic dome features stunning views of the surrounding mountains and vineyard
-            rows. With your own private outdoor spa, you can soak under the stars while enjoying a
-            glass of local wine. The perfect escape for couples seeking tranquility and romance in
-            New Zealand&apos;s premier wine region.
+            Forty square metres tucked into the vines. A super-king bed where
+            the mountains rise out of rows of pinot, and a private spa out
+            back warm enough to forget the hour. Pour something local, climb
+            in, look up. This is what we mean by a weekend away.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f) => (
@@ -310,11 +308,11 @@ export default function DomeRosePage() {
       <section className="py-20 px-5 bg-white text-center">
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">
-            Ready for Romance in Wine Country?
+            The vines are waiting.
           </h2>
           <p className="text-lg text-muted mb-8">
-            Book direct for the best rates and complimentary continental breakfast.
-            Just 45 minutes from Queenstown, 30 minutes from Wanaka.
+            Forty-five minutes from Queenstown. A world away from it. Book
+            direct &mdash; breakfast is on us.
           </p>
           <Button
             href="/book?a=dome-rose"

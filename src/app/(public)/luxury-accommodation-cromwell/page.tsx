@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const luxuryAmenities = [
   { category: "Sleep", items: ["Super king bed with premium hotel-quality linens", "Blackout curtains and temperature control", "Heated bathroom floors", "Plush bathrobes and premium toiletries"] },
   { category: "Spa & Relaxation", items: ["Private saltwater outdoor spa (domes)", "Panoramic stargazing skylight (Dome Pinot)", "Outdoor lounging deck", "Complimentary bathrobes"] },
-  { category: "Dining & Kitchen", items: ["Continental breakfast stocked and included", "Full kitchenette or kitchen in every property", "Outdoor BBQ and dining area", "Locally sourced welcome provisions"] },
+  { category: "Dining & Kitchen", items: ["Continental breakfast stocked and included", "Self-catering kitchenette in every property", "Outdoor BBQ and dining area", "Locally sourced welcome provisions"] },
   { category: "Location & Views", items: ["Panoramic Lake Dunstan and Pisa Range views", "300m from Otago Rail Trail", "15 min to 30+ Central Otago wineries", "45 min to Queenstown"] },
 ];
 
@@ -41,7 +41,7 @@ export default function LuxuryAccommodationCromwellPage() {
         createFaqSchema([
           { question: "What is the most luxurious accommodation in Cromwell?", answer: "Lakeside Retreat at Mount Pisa is widely regarded as Cromwell's most luxurious accommodation. With a 4.9/5 rating from 416+ guests, the property features two adults-only geodesic domes with private outdoor spas and a lakeside cottage — all with panoramic Lake Dunstan views and positioned in the heart of Central Otago wine country." },
           { question: "Is there luxury accommodation near Queenstown?", answer: "Lakeside Retreat is 45 minutes from Queenstown and offers a genuine luxury escape from the crowds. Luxury geodesic domes with private spas, stargazing skylights, and vineyard views — at better value than equivalent Queenstown properties." },
-          { question: "What makes Lakeside Retreat a luxury property?", answer: "Every detail at Lakeside Retreat is curated for luxury: premium hotel-quality linens, private saltwater outdoor spas, continental breakfast included, panoramic mountain and lake views, full kitchens, heated bathrooms, and personal service from hosts Stephen and Sandy. The geodesic domes are architecturally unique and unlike anything else in Central Otago." },
+          { question: "What makes Lakeside Retreat a luxury property?", answer: "Every detail at Lakeside Retreat is curated for luxury: premium hotel-quality linens, private saltwater outdoor spas, continental breakfast included, panoramic mountain and lake views, self-catering kitchenettes, heated bathrooms, and personal service from hosts Stephen and Sandy. The geodesic domes are architecturally unique and unlike anything else in Central Otago." },
         ]),
       ]} />
 
@@ -108,7 +108,7 @@ export default function LuxuryAccommodationCromwellPage() {
               Pisa Range.
             </p>
             <p className="text-lg leading-8 text-muted mb-6">
-              Every stay includes premium hotel-quality linens, fully equipped kitchens,
+              Every stay includes premium hotel-quality linens, self-catering kitchenettes,
               heated bathrooms, and personal host service from Stephen and Sandy. The domes
               also include continental breakfast and private outdoor saltwater spas.
             </p>
@@ -186,8 +186,8 @@ export default function LuxuryAccommodationCromwellPage() {
                 title: "Lakeside Cottage",
                 badge: "Family & Pet Friendly",
                 price: "From $295/night",
-                size: "2 bedrooms",
-                desc: "Spacious cottage with direct lake access, full kitchen, complimentary kayaks, and dog-friendly.",
+                size: "Sleeps 3",
+                desc: "Self-contained cottage with direct lake access, kitchenette, BBQ, and dog-friendly.",
               },
             ].map((acc) => (
               <div key={acc.href} className="bg-white rounded-2xl overflow-hidden shadow-lg">

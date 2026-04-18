@@ -209,7 +209,7 @@ function formatComparisonResponse(kb: KnowledgeBase): string {
   response +=
     "The domes are perfect for romantic getaways with spa access and breakfast included. ";
   response +=
-    "The cottage is ideal for families with full kitchen, lake access, and pet-friendly options.\n\n";
+    "The cottage is ideal for families with a kitchenette, direct lake access, BBQ, and pet-friendly options.\n\n";
   response += "Which accommodation interests you most?";
   return response;
 }

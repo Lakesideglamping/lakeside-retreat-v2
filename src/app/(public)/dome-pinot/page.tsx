@@ -32,11 +32,11 @@ const features = [
   { title: "Stargazing Skylight", desc: "Fall asleep watching the Milky Way" },
   { title: "Luxury Super King Bed", desc: "Premium bedding with lake views from your pillow" },
   { title: "Eco-Powered", desc: "100% renewable energy with backup power" },
-  { title: "Panoramic Views", desc: "Floor-to-ceiling windows overlooking Lake Dunstan" },
+  { title: "Lake-facing window", desc: "A wide view of Lake Dunstan right from the bed" },
 ];
 
 const amenities = [
-  { title: "Full Kitchenette", desc: "Induction cooktop, fridge, microwave, coffee machine" },
+  { title: "Kitchenette", desc: "Induction cooktop, fridge, microwave, coffee machine" },
   { title: "Ensuite Bathroom", desc: "Rainfall shower with premium toiletries" },
   { title: "Climate Control", desc: "Underfloor heating and air conditioning" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
@@ -91,7 +91,7 @@ export default function DomePinotPage() {
           { question: "What makes Dome Pinot different from other glamping in Central Otago?", answer: "Dome Pinot is our flagship 50sqm luxury geodesic dome featuring panoramic Lake Dunstan views, a private outdoor spa, stargazing skylight, super king bed, and complimentary continental breakfast." },
           { question: "How far is Dome Pinot from Queenstown?", answer: "Approximately 45 minutes' drive from Queenstown and 30 minutes from Wanaka." },
           { question: "Is Dome Pinot suitable for children?", answer: "No, Dome Pinot is strictly adults-only accommodation designed for couples. For families, we recommend our Lakeside Cottage." },
-          { question: "What is included in a stay at Dome Pinot?", answer: "Every stay includes a private outdoor spa, complimentary continental breakfast, premium bed linen, underfloor heating, full kitchen facilities, and direct access to the Lake Dunstan Cycle Trail." },
+          { question: "What is included in a stay at Dome Pinot?", answer: "Every stay includes a private outdoor spa, complimentary continental breakfast, premium bed linen, underfloor heating, a kitchenette (induction cooktop, fridge, microwave, coffee machine), and direct access to the Lake Dunstan Cycle Trail." },
         ]),
       ]} />
       {/* Hero */}
@@ -110,7 +110,7 @@ export default function DomePinotPage() {
             Dome Pinot
           </h1>
           <p className="text-xl mb-8 opacity-95">
-            Our flagship. Floor-to-sky glass. Nothing between you and the lake.
+            Our flagship. The lake from the bed. The Milky Way through the roof.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button href="/book?a=dome-pinot" ariaLabel="Book Dome Pinot now from $530 per night">
@@ -138,15 +138,14 @@ export default function DomePinotPage() {
       <section className="py-20 px-5">
         <div className="max-w-[1200px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">
-            The Ultimate Romantic Escape
+            The bed looks at the lake. The roof looks at the stars.
           </h2>
           <p className="max-w-[800px] mx-auto text-center text-lg leading-8 text-muted mb-12">
-            Welcome to Dome Pinot, Lakeside Retreat&apos;s flagship experience. Our largest and most
-            spacious luxury dome offers an unforgettable 50sqm open living space, where the serenity
-            of nature combines seamlessly with five-star accommodation comforts. Purposely built for
-            couples seeking the ultimate romantic escape, Dome Pinot features panoramic
-            floor-to-ceiling windows showcasing breathtaking views of Lake Dunstan and the
-            surrounding Central Otago mountains.
+            Fifty square metres of calm. A super-king bed angled at the window,
+            so the first thing you see each morning is Lake Dunstan and the
+            mountains behind it. A stargazing skylight overhead. A private spa
+            out back for when you want the stars closer. This is the one we
+            built for couples who wanted to stop talking for a while.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f) => (
@@ -312,11 +311,11 @@ export default function DomePinotPage() {
       <section className="py-20 px-5 bg-white text-center">
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">
-            Ready to Experience Dome Pinot?
+            The bed is made. The stars are out.
           </h2>
           <p className="text-lg text-muted mb-8">
-            Book direct for the best rates and complimentary continental breakfast. Just 45 minutes from
-            Queenstown, 30 minutes from Wanaka.
+            Forty-five minutes from Queenstown. A world away from it.
+            Book direct — breakfast is on us.
           </p>
           <Button
             href="/book?a=dome-pinot"

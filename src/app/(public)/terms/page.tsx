@@ -187,7 +187,7 @@ export default function TermsConditionsPage() {
               personal property.
             </li>
             <li>
-              Guests use all facilities (spa pool, lake access, kayaks, bikes) at
+              Guests use all facilities (spa pool, lake access, BBQ) at
               their own risk.
             </li>
           </ul>

@@ -19,10 +19,10 @@ const timeline = [
 ];
 
 const values = [
-  { title: "Sustainability", desc: "Sustainable operations that give back to the environment" },
-  { title: "Hospitality", desc: "Personal touches that make every guest feel special" },
-  { title: "Connection", desc: "Helping guests connect with nature and local culture" },
-  { title: "Excellence", desc: "Attention to detail in everything we do" },
+  { title: "Quiet", desc: "The kind you drive a long way to find." },
+  { title: "Care", desc: "Your bed made, your kettle on." },
+  { title: "Place", desc: "What the lake gives, we give back." },
+  { title: "Detail", desc: "Down to the last tea bag." },
 ];
 
 export default function OurStoryPage() {
@@ -55,19 +55,19 @@ export default function OurStoryPage() {
       <section className="py-20 px-5">
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="font-display text-4xl mb-6">Welcome to Our Dream</h2>
+            <h2 className="font-display text-4xl mb-6">The day we found it</h2>
             <p className="text-lg leading-8 text-muted mb-4">
-              We&apos;re Stephen and Sandy, and Lakeside Retreat is the culmination of our dream to
-              create New Zealand&apos;s premier sustainably powered luxury accommodation. When we
-              purchased this land on the shores of Lake Dunstan in 2021, we knew we&apos;d found
-              something special &mdash; panoramic views, proximity to world-class wineries, and
-              access to the famous Otago Rail Trail.
+              We&apos;re Stephen and Sandy. In 2021 we stood on a dusty paddock
+              above Lake Dunstan, watched the light move across the Pisa Range,
+              and knew we&apos;d be staying. Everything you see here &mdash;
+              the domes, the vines, the solar array humming quietly in the sun
+              &mdash; grew out of that first evening.
             </p>
             <p className="text-lg leading-8 text-muted">
-              Our geodesic domes were chosen for their efficiency &mdash; offering exceptional
-              insulation, structural integrity, and panoramic windows. In 2025 we took another step
-              forward with a new commercial-grade solar system and advanced battery storage, feeding
-              surplus energy back into the national grid.
+              The domes came next, chosen for the way they sit quietly in the
+              landscape and let the view do the talking. The solar came after
+              that &mdash; enough now that we put more back into the grid than
+              we take out.
             </p>
           </div>
           <Image
@@ -100,7 +100,7 @@ export default function OurStoryPage() {
       {/* Values */}
       <section className="py-20 px-5">
         <div className="max-w-[1200px] mx-auto">
-          <h2 className="font-display text-4xl text-center mb-12">What We Value</h2>
+          <h2 className="font-display text-4xl text-center mb-12">What we care about</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v) => (
               <div
@@ -118,14 +118,13 @@ export default function OurStoryPage() {
       {/* Promise */}
       <section className="py-20 px-5 bg-white">
         <div className="max-w-[800px] mx-auto text-center">
-          <h2 className="font-display text-4xl mb-6">Our Promise to You</h2>
+          <h2 className="font-display text-4xl mb-6">What we promise</h2>
           <p className="text-lg leading-8 text-muted mb-6">
-            We&apos;re committed to combining luxury with sustainability, adventure with relaxation,
-            world-class hospitality with Kiwi warmth. Every detail at Lakeside Retreat has been
-            carefully considered to create unforgettable experiences for our guests.
+            A bed made with real care. Coffee already waiting. The kind of
+            quiet you drive a long way to find. When you leave, we want the
+            lake to still be in your head a week later.
           </p>
           <p className="text-lg text-muted italic">
-            With warm regards,<br />
             Stephen &amp; Sandy
           </p>
         </div>

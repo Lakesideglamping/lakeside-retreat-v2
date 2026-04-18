@@ -7,15 +7,15 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Dog-Friendly Accommodation Central Otago | Lakeside Cottage, Cromwell",
   description:
-    "Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, secure outdoor area, and complimentary kayaks. From $295/night.",
+    "Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, a secure outdoor area, and a BBQ deck. From $295/night.",
 };
 
 const features = [
   { title: "Direct Lake Access", desc: "Walk from your cottage door straight to Lake Dunstan for a swim. Dogs love the calm, clear water." },
   { title: "Secure Outdoor Area", desc: "Fenced outdoor space so your dog can roam safely while you relax on the deck." },
   { title: "Flat Pet Fee", desc: "A single flat $50 pet fee per stay — not per night. No hidden charges." },
-  { title: "Complimentary Kayaks", desc: "Explore the lake shores by kayak. Some dogs love a paddling companion on board!" },
-  { title: "Full Kitchen & BBQ", desc: "Cook your own meals with a full kitchen and outdoor BBQ. No worries about restaurants." },
+  { title: "Deck by the Water", desc: "Your own deck overlooking the lake — a safe spot to sit with your dog as the sun sets." },
+  { title: "Kitchenette & BBQ", desc: "Cook at home with a hotplate, microwave, dishwasher, and a gas BBQ on the deck. No worries about restaurants." },
   { title: "Dog-Friendly Trails", desc: "The Otago Rail Trail is 300m away and dog-friendly. Lake Dunstan Cycle Trail too." },
 ];
 
@@ -104,11 +104,11 @@ export default function DogFriendlyAccommodationPage() {
             <div className="bg-cream rounded-xl p-5">
               <p className="font-semibold text-body mb-1">Lakeside Cottage — Quick Facts</p>
               <ul className="text-sm text-muted space-y-1">
-                <li>&#10003; 2 bedrooms, sleeps up to 3 guests</li>
+                <li>&#10003; Queen bed + sofa pullout, sleeps 3</li>
                 <li>&#10003; Direct Lake Dunstan access</li>
                 <li>&#10003; Dogs welcome (prior approval, $50 flat fee)</li>
-                <li>&#10003; Full kitchen &amp; outdoor BBQ</li>
-                <li>&#10003; Complimentary kayaks</li>
+                <li>&#10003; Kitchenette &amp; outdoor BBQ</li>
+                <li>&#10003; Underfloor heating</li>
                 <li>&#10003; From $295/night</li>
               </ul>
             </div>

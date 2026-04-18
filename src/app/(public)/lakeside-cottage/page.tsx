@@ -7,12 +7,12 @@ import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema }
 export const metadata: Metadata = {
   title: "Lakeside Cottage | Pet Friendly Accommodation Cromwell | $295/night",
   description:
-    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. 2 bedrooms, full kitchen, direct lake access. Family accommodation in Central Otago from $295/night.",
+    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Family accommodation in Central Otago from $295/night.",
   alternates: { canonical: '/lakeside-cottage' },
   openGraph: {
     title: "Lakeside Cottage | Pet-Friendly Family Accommodation on Lake Dunstan",
     description:
-      "Family-friendly cottage with direct Lake Dunstan access, 2 bedrooms, full kitchen, kayaks included, and pet-friendly. From $295/night in Cromwell, Central Otago.",
+      "Family-friendly cottage with direct Lake Dunstan access, sleeps 3, kitchenette, BBQ, and pet-friendly. From $295/night in Cromwell, Central Otago.",
     url: "https://lakesideretreat.co.nz/lakeside-cottage",
     images: [
       {
@@ -28,11 +28,11 @@ export const metadata: Metadata = {
 
 const features = [
   { title: "Direct Lake Access", desc: "Step straight from your deck into Lake Dunstan" },
-  { title: "Sleeps 3 Guests", desc: "2 bedrooms with flexible sleeping arrangements" },
+  { title: "Wood-Fired Hot Tub", desc: "Chemical-free cedar tub by the lake — fired by you, steaming under the stars" },
+  { title: "Sleeps 3 Guests", desc: "Queen bed plus sofa pullout in the living area" },
   { title: "Pet Friendly", desc: "Bring your furry family members along" },
-  { title: "Full Kitchen", desc: "Everything you need for family meals" },
-  { title: "Eco-Powered", desc: "100% renewable energy with backup power" },
-  { title: "Kayaks Included", desc: "Complimentary kayaks for lake adventures" },
+  { title: "Kitchenette", desc: "Hotplate, fridge, microwave, coffee machine, dishwasher" },
+  { title: "BBQ on the Deck", desc: "Gas BBQ and outdoor dining overlooking the lake" },
 ];
 
 const amenities = [
@@ -46,6 +46,7 @@ const amenities = [
 
 const galleryImages = [
   { src: "/images/lakeside-cottage-exterior.jpeg", alt: "Lakeside Cottage exterior with lake views" },
+  { src: "/images/cottage-hottub.jpg", alt: "Wood-fired cedar hot tub at Lakeside Cottage with Lake Dunstan and Pisa Range views" },
   { src: "/images/lakeview.jpeg", alt: "Lake Dunstan views from Lakeside Cottage" },
   { src: "/images/cottagebedroom.jpeg", alt: "Lakeside Cottage bedroom with mountain views" },
   { src: "/images/cottagebathroom.jpeg", alt: "Lakeside Cottage bathroom with timber vanity" },
@@ -57,7 +58,7 @@ const pricingFeatures = [
   "Extra guests: $100/person/night (max 3)",
   "Pets: $50 flat fee per stay",
   "Minimum 2 nights (3 nights peak season)",
-  "Kayaks and BBQ included",
+  "BBQ and direct lake access included",
   "Security Bond: $300 (refundable, released 48 hours after checkout)",
   "Children welcome",
 ];
@@ -76,13 +77,13 @@ export default function LakesideCottagePage() {
         createPropertySchema({
           id: "lakeside-cottage",
           name: "Lakeside Cottage",
-          description: "Family-friendly lakefront cottage with direct Lake Dunstan access, 2 bedrooms, full kitchen, and pet-friendly accommodation.",
+          description: "Family-friendly lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, and pet-friendly accommodation.",
           price: 295,
           floorSize: 65,
           maxOccupancy: 3,
           bedType: "Queen",
           images: ["lakeside-cottage-exterior.jpeg", "cottagebedroom.jpeg"],
-          amenities: ["Direct Lake Access", "Pet Friendly", "Full Kitchen", "2 Bedrooms", "Kayaks Included", "Free WiFi", "Free Parking", "BBQ"],
+          amenities: ["Direct Lake Access", "Pet Friendly", "Kitchenette", "Sleeps 3", "Free WiFi", "Free Parking", "BBQ"],
           reviewCount: "191",
         }),
         createBreadcrumbSchema([
@@ -93,7 +94,7 @@ export default function LakesideCottagePage() {
         createFaqSchema([
           { question: "Can I bring my dog to Lakeside Cottage?", answer: "Yes! The Lakeside Cottage is pet-friendly. Well-behaved dogs are welcome with a $50 flat pet fee per stay. Maximum 2 dogs." },
           { question: "How many people can stay at Lakeside Cottage?", answer: "The cottage accommodates up to 3 guests (2 base, extra guest $100/night)." },
-          { question: "Is there lake access from the cottage?", answer: "Yes, the Lakeside Cottage has direct access to Lake Dunstan for swimming, kayaking, and fishing. Kayaks are included." },
+          { question: "Is there lake access from the cottage?", answer: "Yes, the Lakeside Cottage has direct access to Lake Dunstan for swimming and fishing. Bring your own kayak or hire one in Cromwell." },
         ]),
       ]} />
       {/* Hero */}
@@ -148,11 +149,11 @@ export default function LakesideCottagePage() {
             Your Family Lakeside Escape
           </h2>
           <p className="max-w-[800px] mx-auto text-center text-lg leading-8 text-muted mb-12">
-            Lakeside Cottage offers the perfect family getaway with direct access to Lake
-            Dunstan&apos;s crystal-clear waters. This spacious cottage sleeps up to 3 guests across
-            two bedrooms, making it ideal for families. Enjoy morning swims, kayaking adventures,
-            and evening BBQs on your private deck overlooking the lake. As our only pet-friendly
-            accommodation, your furry family members are welcome too!
+            Lakeside Cottage is a self-contained holiday home right on Lake Dunstan.
+            A queen bed in the bedroom, a sofa pullout in the living area — sleeps three,
+            ideal for a small family or friends. Mornings for a swim off the deck,
+            evenings for a BBQ with the lake at your feet, nights in the wood-fired
+            cedar tub while the sky goes black. Dogs welcome too.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f) => (
@@ -312,11 +313,11 @@ export default function LakesideCottagePage() {
       <section className="py-20 px-5 bg-white text-center">
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">
-            Ready for a Family Lake Adventure?
+            Step off the deck. Into the lake. Dog at your heels.
           </h2>
           <p className="text-lg text-muted mb-8">
-            Book direct for the best rates. Kayaks, BBQ, and lake access included. Just 45 minutes
-            from Queenstown, 30 minutes from Wanaka.
+            Forty-five minutes from Queenstown, thirty from Wanaka. Book direct —
+            BBQ and lake access included, dogs welcome for $50.
           </p>
           <Button
             href="/book?a=lakeside-cottage"

@@ -155,7 +155,7 @@ export default function ExplorePage() {
                 <h3 className="font-display text-xl mb-2">Lake Dunstan Water Sports</h3>
                 <p className="text-muted text-sm">
                   Crystal-clear waters for swimming, kayaking, and paddleboarding. The Lakeside
-                  Cottage has direct lake access with complimentary kayaks.
+                  Cottage has direct lake access — bring your own kayak or hire in Cromwell.
                 </p>
               </div>
             </div>

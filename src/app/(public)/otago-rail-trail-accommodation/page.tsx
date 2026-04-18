@@ -193,7 +193,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 title: "Dome Ros\u00e9",
                 badge: "Adults Only",
                 price: "From $510/night",
-                notes: "Private spa, vineyard views, full kitchen",
+                notes: "Private spa, vineyard views, kitchenette",
               },
               {
                 href: "/lakeside-cottage",
@@ -201,7 +201,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 title: "Lakeside Cottage",
                 badge: "Pet & Family Friendly",
                 price: "From $295/night",
-                notes: "2 bedrooms, sleeps 3, direct lake access",
+                notes: "Queen + sofa bed, sleeps 3, direct lake access",
               },
             ].map((acc) => (
               <Link

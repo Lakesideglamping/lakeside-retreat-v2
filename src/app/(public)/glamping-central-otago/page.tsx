@@ -32,7 +32,7 @@ const comparisonPoints = [
   { feature: "Private outdoor spa", basic: false, lakeside: true },
   { feature: "Stargazing skylight", basic: false, lakeside: true },
   { feature: "Continental breakfast included", basic: false, lakeside: true },
-  { feature: "Full kitchenette", basic: false, lakeside: true },
+  { feature: "Kitchenette", basic: false, lakeside: true },
   { feature: "Lake Dunstan views", basic: false, lakeside: true },
   { feature: "Otago Rail Trail access (300m)", basic: false, lakeside: true },
   { feature: "30+ wineries within 15 min", basic: false, lakeside: true },
@@ -48,7 +48,7 @@ const domes = [
     price: "From $530/night",
     image: "/images/Pinotfront.jpeg",
     tagline: "Larger of the two domes with panoramic Lake Dunstan views, stargazing skylight, private saltwater spa, and continental breakfast included.",
-    highlights: ["50sqm geodesic dome", "Stargazing skylight above bed", "Private saltwater outdoor spa", "Lake & Pisa Range views", "Full kitchenette", "Continental breakfast"],
+    highlights: ["50sqm geodesic dome", "Stargazing skylight above bed", "Private saltwater outdoor spa", "Lake & Pisa Range views", "Kitchenette", "Continental breakfast"],
   },
   {
     slug: "dome-rose",
@@ -57,7 +57,7 @@ const domes = [
     price: "From $510/night",
     image: "/images/dome-rose-spa1.jpeg",
     tagline: "Intimate retreat with vineyard and mountain views, private outdoor spa, luxury super king bed, and outdoor dining deck.",
-    highlights: ["40sqm geodesic dome", "Private saltwater outdoor spa", "Vineyard & mountain views", "Luxury super king bed", "Outdoor dining deck", "Full kitchen"],
+    highlights: ["40sqm geodesic dome", "Private saltwater outdoor spa", "Vineyard & mountain views", "Luxury super king bed", "Outdoor dining deck", "Kitchenette"],
   },
 ];
 

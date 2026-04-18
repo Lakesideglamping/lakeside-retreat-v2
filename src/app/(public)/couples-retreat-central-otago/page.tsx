@@ -121,7 +121,7 @@ export default function CouplesRetreatPage() {
                   <li>&bull; Private outdoor spa with lake views</li>
                   <li>&bull; Stargazing skylight</li>
                   <li>&bull; Continental breakfast included</li>
-                  <li>&bull; Full kitchenette</li>
+                  <li>&bull; Kitchenette</li>
                 </ul>
               </div>
             </Link>
@@ -136,7 +136,7 @@ export default function CouplesRetreatPage() {
                   <li>&bull; Private outdoor spa</li>
                   <li>&bull; Mountain and vineyard views</li>
                   <li>&bull; Luxury super king bed</li>
-                  <li>&bull; Full kitchenette</li>
+                  <li>&bull; Kitchenette</li>
                 </ul>
               </div>
             </Link>

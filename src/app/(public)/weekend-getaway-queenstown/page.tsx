@@ -292,7 +292,7 @@ export default function WeekendGetawayPage() {
             {[
               { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night", note: "Private spa, skylight, breakfast" },
               { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night", note: "Private spa, vineyard views" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "2 bedrooms, lake access, dogs welcome" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "Sleeps 3, lake access, dogs welcome" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -324,7 +324,7 @@ export default function WeekendGetawayPage() {
           <h2 className="font-display text-2xl text-center mb-8">Also Explore</h2>
           <div className="grid sm:grid-cols-3 gap-4">
             {[
-              { href: "/cromwell-activities", title: "Lake Dunstan Activities", desc: "Swimming, kayaking & cycling right from your door" },
+              { href: "/cromwell-activities", title: "Lake Dunstan Activities", desc: "Swimming, cycling & lakeside walks from your door" },
               { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail", desc: "NZ's iconic cycle trail starts 300m away" },
               { href: "/central-otago-wine-trail", title: "Central Otago Wine Trail", desc: "30+ cellar doors within 15 minutes of the retreat" },
             ].map((link) => (

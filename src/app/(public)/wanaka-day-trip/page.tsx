@@ -299,8 +299,8 @@ export default function WanakaDayTripPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night", note: "Private spa, skylight, breakfast included" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night", note: "Private spa, vineyard views, full kitchen" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "2 bedrooms, lake access, dogs welcome" },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night", note: "Private spa, vineyard views, kitchenette" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "Sleeps 3, lake access, dogs welcome" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -333,7 +333,7 @@ export default function WanakaDayTripPage() {
           <div className="grid sm:grid-cols-3 gap-4">
             {[
               { href: "/weekend-getaway-queenstown", title: "Queenstown Day Trip", desc: "Bungy, gondola, jet boat — 45 min in the other direction" },
-              { href: "/cromwell-activities", title: "Cromwell & Lake Dunstan", desc: "Activities right from your door — kayaks, cycle trails, wineries" },
+              { href: "/cromwell-activities", title: "Cromwell & Lake Dunstan", desc: "Activities right from your door — cycle trails, lake, wineries" },
               { href: "/central-otago-wine-trail", title: "Central Otago Wine Trail", desc: "30+ cellar doors within 15 minutes of the retreat" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
