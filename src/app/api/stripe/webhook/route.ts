@@ -141,8 +141,9 @@ export async function POST(request: Request) {
           }
         }
 
-        // 1) Save booking as "authorized" first — capture happens next.
-        //    This avoids marking the booking "paid" before Stripe actually captures.
+        // 1) Save booking — accommodation has already been auto-captured by Stripe
+        //    (no more capture_method: manual on the checkout session). The security
+        //    deposit will be a separate off-session PI created in step 2.
         const bookingId = randomUUID();
         let bookingSaved = false;
         try {
@@ -158,17 +159,17 @@ export async function POST(request: Request) {
               guests: Number(metadata.guests) || 1,
               total_price: (session.amount_total || 0) / 100,
               status: "confirmed",
-              payment_status: "authorized",
+              payment_status: "paid",
               notes: metadata.specialRequests || null,
               stripe_session_id: session.id,
               stripe_payment_id: paymentIntentId,
               booking_source: "website",
               uplisting_sync_status: "pending",
-              security_deposit_status: "held",
+              security_deposit_status: "pending",
               security_deposit_amount: Number(
                 metadata.securityDeposit || 300
               ),
-              security_deposit_intent_id: paymentIntentId,
+              security_deposit_intent_id: null,
               deposit_release_due: new Date(
                 new Date(metadata.checkOut).getTime() +
                   2 * 24 * 60 * 60 * 1000
@@ -216,67 +217,97 @@ export async function POST(request: Request) {
             );
         }
 
-        // 2) Capture the booking amount (minus the security-bond hold).
-        //    Only mark the booking "paid" once Stripe confirms the capture.
-        let captureSucceeded = false;
+        // 2) Create a separate off-session PaymentIntent for the security deposit
+        //    (capture_method: manual, auto-confirmed against the saved payment method).
+        //    This replaces the previous partial-capture trick, which locked the deposit
+        //    amount into the same PI as the accommodation and made later capture/release
+        //    mathematically impossible.
         if (bookingSaved && stripe && paymentIntentId) {
           try {
+            // Fetch the main PI to get the saved payment_method.
+            const mainPi =
+              await stripe.paymentIntents.retrieve(paymentIntentId);
+            const paymentMethodId =
+              typeof mainPi.payment_method === "string"
+                ? mainPi.payment_method
+                : mainPi.payment_method?.id;
+            const customerId =
+              typeof session.customer === "string"
+                ? session.customer
+                : session.customer?.id;
+
+            if (!paymentMethodId || !customerId) {
+              throw new Error(
+                "Missing customer or payment_method on checkout session"
+              );
+            }
+
             const depositAmount =
               Number(metadata.securityDeposit || 300) * 100;
-            const captureAmount =
-              (session.amount_total || 0) - depositAmount;
 
-            if (captureAmount > 0) {
-              await stripe.paymentIntents.capture(paymentIntentId, {
-                amount_to_capture: captureAmount,
-              });
-              logger.info("stripe capture succeeded", {
-                bookingId,
-                captured: captureAmount / 100,
-                depositHeld: depositAmount / 100,
-              });
-            }
-            captureSucceeded = true;
+            const depositPi = await stripe.paymentIntents.create(
+              {
+                amount: depositAmount,
+                currency: "nzd",
+                customer: customerId,
+                payment_method: paymentMethodId,
+                capture_method: "manual",
+                confirm: true,
+                off_session: true,
+                description: `Security deposit hold — booking ${bookingId}`,
+                metadata: {
+                  bookingId,
+                  type: "security_deposit",
+                },
+              },
+              { idempotencyKey: `deposit_${bookingId}` }
+            );
 
             await prisma.bookings.update({
               where: { id: bookingId },
               data: {
-                payment_status: "paid",
+                security_deposit_intent_id: depositPi.id,
+                security_deposit_status: "held",
                 updated_at: new Date(),
               },
             });
-          } catch (captureErr) {
-            logger.error("stripe capture failed", {
+
+            logger.info("deposit hold created", {
+              bookingId,
+              depositPiId: depositPi.id,
+              amount: depositAmount / 100,
+            });
+          } catch (depErr) {
+            logger.error("deposit hold creation failed", {
               bookingId,
               error:
-                captureErr instanceof Error
-                  ? captureErr.message
-                  : String(captureErr),
+                depErr instanceof Error ? depErr.message : String(depErr),
             });
             const errMsg =
-              captureErr instanceof Error
-                ? captureErr.message
-                : "Unknown capture error";
+              depErr instanceof Error
+                ? depErr.message
+                : "Unknown deposit-hold error";
             await prisma.bookings
               .update({
                 where: { id: bookingId },
                 data: {
-                  payment_status: "capture_failed",
+                  security_deposit_status: "failed_to_hold",
                   updated_at: new Date(),
                 },
               })
               .catch(() => {});
             sendSystemAlert(
-              "STRIPE_CAPTURE_FAILURE",
-              `Payment capture failed for booking ${bookingId}`,
-              `Guest: ${metadata.guestName} (${metadata.guestEmail})\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nPaymentIntent: ${paymentIntentId}\nError: ${errMsg}`
+              "DEPOSIT_HOLD_FAILURE",
+              `Security deposit hold failed for booking ${bookingId}`,
+              `Guest: ${metadata.guestName} (${metadata.guestEmail})\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nAccommodation already paid; deposit NOT held — contact guest to arrange manually.\nError: ${errMsg}`
             ).catch(() => {});
           }
         }
 
-        // 3) Sync to Uplisting and send confirmation — only if capture succeeded.
-        //    If capture failed, don't block calendar or email the guest.
-        if (bookingSaved && captureSucceeded) {
+        // 3) Sync to Uplisting and send confirmation — run regardless of deposit
+        //    outcome. Accommodation is paid; deposit failure is a separate concern
+        //    handled by the admin alert above.
+        if (bookingSaved) {
           syncBooking({
             accommodation: metadata.accommodation || "",
             checkIn: metadata.checkIn || "",

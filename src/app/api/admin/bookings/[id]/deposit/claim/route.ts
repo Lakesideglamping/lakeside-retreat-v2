@@ -30,7 +30,10 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     const ip = getClientIp(req);
 
-    // Actually capture the deposit via Stripe
+    // Capture the deposit hold. The deposit PI is a separate auth-only
+    // PaymentIntent created by the webhook after checkout — capturing it here
+    // actually charges the guest. No fallback: if it fails, the hold either
+    // expired (Stripe 7-day limit) or was already released.
     if (!isDevMode && stripe && booking.security_deposit_intent_id) {
       try {
         await stripe.paymentIntents.capture(
@@ -38,39 +41,21 @@ export async function POST(request: Request, { params }: RouteParams) {
           { amount_to_capture: Math.round(Number(claimAmount) * 100) }
         );
       } catch (stripeErr) {
-        console.error("[deposit/claim] Stripe capture error:", stripeErr);
-
-        // If the intent was already fully captured or expired, try the main payment intent
-        if (booking.stripe_payment_id) {
-          try {
-            await stripe.paymentIntents.capture(
-              booking.stripe_payment_id,
-              { amount_to_capture: Math.round(Number(claimAmount) * 100) }
-            );
-          } catch (fallbackErr) {
-            console.error("[deposit/claim] Fallback capture error:", fallbackErr);
-            await auditLog(admin.username, "deposit_claim_failed", {
-              bookingId: id,
-              stripeIntentId: booking.security_deposit_intent_id,
-              fallbackIntentId: booking.stripe_payment_id,
-              error: fallbackErr instanceof Error ? fallbackErr.message : "Unknown error",
-            }, ip);
-            return NextResponse.json(
-              { error: "Stripe capture failed" },
-              { status: 500 }
-            );
-          }
-        } else {
-          await auditLog(admin.username, "deposit_claim_failed", {
+        await auditLog(
+          admin.username,
+          "deposit_claim_failed",
+          {
             bookingId: id,
             stripeIntentId: booking.security_deposit_intent_id,
-            error: stripeErr instanceof Error ? stripeErr.message : "Unknown error",
-          }, ip);
-          return NextResponse.json(
-            { error: "Stripe capture failed" },
-            { status: 500 }
-          );
-        }
+            error:
+              stripeErr instanceof Error ? stripeErr.message : "Unknown error",
+          },
+          ip
+        );
+        return NextResponse.json(
+          { error: "Stripe capture failed" },
+          { status: 500 }
+        );
       }
     }
 

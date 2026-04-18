@@ -70,12 +70,10 @@ export function calculateLineItems(
     });
   }
 
-  // Security deposit (authorization hold)
-  items.push({
-    name: "Security bond (pre-authorisation only \u2014 released after checkout)",
-    amount: accommodation.securityDeposit * 100,
-    quantity: 1,
-  });
+  // Security deposit is NOT a line item — it's a separate off-session
+  // PaymentIntent (manual capture) created by the webhook after checkout
+  // completes. Keeping it out of the Checkout total avoids the partial-capture
+  // trap (once a PI is partial-captured, the remainder can't be captured later).
 
   const totalAmount = items.reduce((sum, i) => sum + i.amount * i.quantity, 0);
 
@@ -132,13 +130,16 @@ export async function createCheckoutSession(
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     customer_email: params.guestEmail,
+    customer_creation: "always",
     expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
     payment_intent_data: {
-      capture_method: "manual",
+      // Save the payment method to the customer so the webhook can create an
+      // off-session deposit hold PaymentIntent against the same card.
+      setup_future_usage: "off_session",
     },
     custom_text: {
       submit: {
-        message: `Security bond ($${acc.securityDeposit} NZD) will be pre-authorised only — it is NOT charged and will be released within 48 hours of checkout.`,
+        message: `A $${acc.securityDeposit} NZD security bond will be pre-authorised on your card separately after booking and released within 48 hours of checkout.`,
       },
     },
     line_items: lineItems.map((item, i) => ({

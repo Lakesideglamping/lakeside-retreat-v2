@@ -8,6 +8,10 @@ import { stripe, isDevMode } from "@/lib/stripe";
 // Runs periodically. Cancels any security-deposit PaymentIntent whose
 // deposit_release_due has passed and the deposit is still "held". Stripe's
 // payment_intent.canceled webhook then updates the row to "released".
+export async function GET(request: Request) {
+  return POST(request);
+}
+
 export async function POST(request: Request) {
   if (!verifyCronSecret(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

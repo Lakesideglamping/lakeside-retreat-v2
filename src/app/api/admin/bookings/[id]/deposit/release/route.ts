@@ -18,15 +18,14 @@ export async function POST(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
     }
 
-    // Cancel the uncaptured deposit hold on Stripe
-    // After partial capture, the uncaptured portion (deposit) can be released
-    // by canceling the remaining amount on the payment intent
+    // Cancel the deposit hold on Stripe. The deposit is a dedicated off-session
+    // PaymentIntent (capture_method: manual) — canceling it releases the auth
+    // immediately. Non-fatal on error: if it's already released/expired we still
+    // mark the booking row as released so the admin UI stays consistent.
     if (!isDevMode && stripe && booking.security_deposit_intent_id) {
       try {
         await stripe.paymentIntents.cancel(booking.security_deposit_intent_id);
       } catch (stripeErr) {
-        // If cancel fails (e.g., already captured/expired), log but continue
-        // The hold will auto-expire per Stripe's 7-day policy
         console.warn("[deposit/release] Stripe cancel (non-fatal):", stripeErr);
       }
     }
