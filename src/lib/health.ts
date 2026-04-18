@@ -15,7 +15,7 @@ export async function checkHealth(): Promise<HealthStatus> {
   let dbStatus: "connected" | "disconnected" = "disconnected";
 
   try {
-    await prisma.$queryRawUnsafe("SELECT 1");
+    await prisma.$queryRaw`SELECT 1`;
     dbStatus = "connected";
   } catch {
     // DB unreachable

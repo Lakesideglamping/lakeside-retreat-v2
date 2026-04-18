@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Image from "next/image";
 import { BookingWidget } from "@/components/booking/booking-widget";
 import {
   JsonLd,
@@ -27,14 +28,16 @@ export default function BookPage() {
       />
 
       {/* Hero */}
-      <section
-        className="relative min-h-[40vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/images/domes-vineyard-sunset.jpg')",
-        }}
-      >
-        <div className="max-w-[700px] px-5 pt-20">
+      <section className="relative min-h-[40vh] flex items-center justify-center text-center text-white">
+        <Image
+          src="/images/domes-vineyard-sunset.jpg"
+          alt="Glamping domes at sunset overlooking Lake Dunstan"
+          fill
+          priority
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/45" />
+        <div className="relative z-10 max-w-[700px] px-5 pt-20">
           <h1 className="font-display text-4xl md:text-5xl text-white mb-3 drop-shadow-lg">
             Book Your Stay
           </h1>

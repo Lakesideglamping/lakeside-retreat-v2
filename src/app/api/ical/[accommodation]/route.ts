@@ -22,9 +22,20 @@ function escapeICalText(text: string): string {
 }
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ accommodation: string }> }
 ) {
+  // Require a secret token when ICAL_SECRET is configured (production).
+  // External calendar services (e.g. Uplisting) should include ?token=<secret>
+  // in the subscribed URL. Without a token this feed exposes guest PII.
+  const icalSecret = process.env.ICAL_SECRET;
+  if (icalSecret) {
+    const { searchParams } = new URL(request.url);
+    if (searchParams.get("token") !== icalSecret) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+  }
+
   const { accommodation } = await params;
 
   // "all" returns combined feed for all properties (Uplisting uses one global Partner iCal URL)

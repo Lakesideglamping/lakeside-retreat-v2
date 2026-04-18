@@ -1,4 +1,4 @@
-import { logger } from "./logger";
+const PII_FIELDS = new Set(["email", "phone", "guest_email"]);
 
 export function maskEmail(email: string): string {
   const [local, domain] = email.split("@");
@@ -12,8 +12,6 @@ export function maskPhone(phone: string): string {
   return `***${digits.slice(-4)}`;
 }
 
-const PII_FIELDS = new Set(["email", "phone", "guest_email"]);
-
 export function redactPII(data: Record<string, unknown>): Record<string, unknown> {
   const clone: Record<string, unknown> = { ...data };
   for (const key of Object.keys(clone)) {
@@ -26,25 +24,4 @@ export function redactPII(data: Record<string, unknown>): Record<string, unknown
     }
   }
   return clone;
-}
-
-export function generateRequestId(): string {
-  const random = Math.random().toString(36).slice(2, 8);
-  return `req_${Date.now()}_${random}`;
-}
-
-export function trackBookingStart(requestId: string, data: Record<string, unknown>): void {
-  logger.info("Booking started", { requestId, ...redactPII(data) });
-}
-
-export function trackBookingStep(requestId: string, step: string, data?: Record<string, unknown>): void {
-  logger.info("Booking step", { requestId, step, ...(data ? redactPII(data) : {}) });
-}
-
-export function trackBookingSuccess(requestId: string, bookingId: string): void {
-  logger.info("Booking succeeded", { requestId, bookingId });
-}
-
-export function trackBookingFailure(requestId: string, error: string): void {
-  logger.error("Booking failed", { requestId, error });
 }

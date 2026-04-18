@@ -35,6 +35,7 @@ export const paymentSessionSchema = z.object({
   guestPhone: z.string().optional(),
   specialRequests: z.string().max(500).optional(),
   pets: z.number().int().min(0).max(2).optional(),
+  promoCode: z.string().max(50).optional(),
 });
 
 export type PaymentSessionData = z.infer<typeof paymentSessionSchema>;

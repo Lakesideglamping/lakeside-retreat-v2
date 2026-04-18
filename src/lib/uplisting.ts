@@ -149,7 +149,12 @@ export async function checkAvailability(
   checkIn: string,
   checkOut: string
 ): Promise<boolean> {
-  if (!isConfigured()) return true; // fail-open in dev
+  if (!isConfigured()) {
+    // In production, no API key means we cannot verify availability — fail closed
+    // so we don't accidentally accept bookings on already-occupied dates.
+    // In dev/staging, fail open so the UI works without credentials.
+    return process.env.NODE_ENV !== "production";
+  }
 
   const blocked = await fetchBlockedDates(accommodation);
   const start = new Date(checkIn);

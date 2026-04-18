@@ -137,15 +137,23 @@ export async function POST(request: Request) {
         // Re-verify the charged amount against a server-side calculation.
         // This catches cases where the session metadata was tampered with or
         // the price logic drifts between session creation and capture.
+        // seasonalMultiplier and discountAmountCents are stored in metadata at
+        // session-creation time so verification always uses the same values.
         const acc = getById(metadata.accommodation || "");
         if (acc && metadata.checkIn && metadata.checkOut) {
-          const { totalAmount: expectedTotal } = calculateLineItems(
+          const seasonalMultiplier =
+            parseFloat(metadata.seasonalMultiplier || "1") || 1;
+          const discountCents =
+            parseInt(metadata.discountAmountCents || "0") || 0;
+          const { totalAmount: baseTotal } = calculateLineItems(
             acc,
             metadata.checkIn,
             metadata.checkOut,
             Number(metadata.guests) || 1,
-            Number(metadata.pets) || 0
+            Number(metadata.pets) || 0,
+            seasonalMultiplier
           );
+          const expectedTotal = baseTotal - discountCents;
           if (session.amount_total !== expectedTotal) {
             log.error("stripe webhook amount mismatch", {
               sessionTotal: session.amount_total,
@@ -239,6 +247,17 @@ export async function POST(request: Request) {
                 error: e instanceof Error ? e.message : String(e),
               })
             );
+        }
+
+        // Increment promo code usage counter now that payment has confirmed.
+        // Fire-and-forget — a failure here is non-critical.
+        if (bookingSaved && metadata.promoCode) {
+          prisma.promo_codes
+            .updateMany({
+              where: { code: metadata.promoCode },
+              data: { usage_count: { increment: 1 }, updated_at: new Date() },
+            })
+            .catch(() => {});
         }
 
         // 2) Create a separate off-session PaymentIntent for the security deposit

@@ -24,20 +24,55 @@ export interface LineItem {
   quantity: number;
 }
 
+/**
+ * Look up the highest active seasonal rate multiplier that overlaps [checkIn, checkOut).
+ * Returns 1.0 when no rates apply or on any DB error (fail-safe).
+ */
+export async function getSeasonalMultiplier(
+  checkIn: string,
+  checkOut: string
+): Promise<number> {
+  try {
+    const { prisma } = await import("./db");
+    const rates = await prisma.seasonal_rates.findMany({
+      where: {
+        is_active: true,
+        start_date: { lte: new Date(checkOut) },
+        end_date: { gte: new Date(checkIn) },
+      },
+      select: { multiplier: true },
+    });
+    if (!rates.length) return 1.0;
+    return Math.max(...rates.map((r) => Number(r.multiplier ?? 1)));
+  } catch {
+    return 1.0;
+  }
+}
+
+/**
+ * Calculate line items for a booking.
+ * Pass seasonalMultiplier > 1.0 to apply peak/seasonal pricing to the nightly rate.
+ * The security deposit is NOT included — it is a separate off-session PaymentIntent.
+ */
 export function calculateLineItems(
   accommodation: Accommodation,
   checkIn: string,
   checkOut: string,
   guests: number,
-  pets: number = 0
+  pets: number = 0,
+  seasonalMultiplier: number = 1.0
 ): { lineItems: LineItem[]; totalAmount: number } {
   const nights = daysBetween(checkIn, checkOut);
   const items: LineItem[] = [];
 
-  // Nightly rate
+  const nightlyRateCents = Math.round(accommodation.basePrice * seasonalMultiplier * 100);
+  const nightlyLabel = seasonalMultiplier !== 1.0
+    ? `${accommodation.name} — peak season (${nights} night${nights > 1 ? "s" : ""})`
+    : `${accommodation.name} (${nights} night${nights > 1 ? "s" : ""})`;
+
   items.push({
-    name: `${accommodation.name} (${nights} night${nights > 1 ? "s" : ""})`,
-    amount: accommodation.basePrice * 100,
+    name: nightlyLabel,
+    amount: nightlyRateCents,
     quantity: nights,
   });
 
@@ -90,6 +125,12 @@ interface CreateSessionParams {
   guestPhone?: string;
   specialRequests?: string;
   pets?: number;
+  /** Pre-computed seasonal multiplier from getSeasonalMultiplier(). If omitted, computed internally. */
+  seasonalMultiplier?: number;
+  /** Promo code string (for metadata and coupon label). */
+  promoCode?: string;
+  /** Discount to apply in cents (positive integer). Shown as a Stripe coupon deduction. */
+  discountAmountCents?: number;
 }
 
 export async function createCheckoutSession(
@@ -106,12 +147,17 @@ export async function createCheckoutSession(
     };
   }
 
+  const multiplier =
+    params.seasonalMultiplier ??
+    (await getSeasonalMultiplier(params.checkIn, params.checkOut));
+
   const { lineItems } = calculateLineItems(
     acc,
     params.checkIn,
     params.checkOut,
     params.guests,
-    params.pets || 0
+    params.pets || 0,
+    multiplier
   );
 
   const checkInFormatted = new Date(params.checkIn).toLocaleDateString("en-NZ", {
@@ -126,6 +172,27 @@ export async function createCheckoutSession(
     month: "short",
     year: "numeric",
   });
+
+  // Create an ephemeral Stripe coupon when a promo discount is being applied.
+  // The coupon shows as a named deduction in Stripe Checkout, separate from the
+  // line items, so the guest can see exactly what they saved.
+  let stripeCouponId: string | undefined;
+  if (params.discountAmountCents && params.discountAmountCents > 0) {
+    const coupon = await stripe.coupons.create(
+      {
+        amount_off: params.discountAmountCents,
+        currency: "nzd",
+        duration: "once",
+        name: params.promoCode
+          ? `Promo code: ${params.promoCode}`
+          : "Promotional discount",
+      },
+      {
+        idempotencyKey: `coupon_${params.accommodation}_${params.checkIn}_${params.promoCode ?? "discount"}`,
+      }
+    );
+    stripeCouponId = coupon.id;
+  }
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -142,6 +209,7 @@ export async function createCheckoutSession(
         message: `A $${acc.securityDeposit} NZD security bond will be pre-authorised on your card separately after booking and released within 48 hours of checkout.`,
       },
     },
+    ...(stripeCouponId ? { discounts: [{ coupon: stripeCouponId }] } : {}),
     line_items: lineItems.map((item, i) => ({
       price_data: {
         currency: "nzd",
@@ -168,6 +236,9 @@ export async function createCheckoutSession(
       specialRequests: params.specialRequests || "",
       pets: String(params.pets || 0),
       securityDeposit: String(acc.securityDeposit),
+      seasonalMultiplier: String(multiplier),
+      promoCode: params.promoCode || "",
+      discountAmountCents: String(params.discountAmountCents || 0),
     },
     success_url: `${baseUrl()}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${baseUrl()}/booking-cancelled`,

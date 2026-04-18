@@ -105,7 +105,11 @@ export const passwordChangeSchema = z.object({
 });
 
 export const contentUpdateSchema = z.object({
-  sections: z.record(z.string(), z.string()),
+  sections: z
+    .record(z.string(), z.string().max(5000))
+    .refine((val) => Object.keys(val).length <= 50, {
+      message: "Too many content sections (max 50)",
+    }),
 });
 
 export const pricingConfigSchema = z.object({

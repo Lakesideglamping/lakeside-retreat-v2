@@ -7,9 +7,9 @@ import { auditLog } from "@/lib/audit";
 const API_BASE = "https://connect.uplisting.io";
 
 const PROPERTIES = [
-  { slug: "dome-pinot", id: process.env.UPLISTING_PINOT_ID || "82753" },
-  { slug: "dome-rose", id: process.env.UPLISTING_ROSE_ID || "82754" },
-  { slug: "lakeside-cottage", id: process.env.UPLISTING_COTTAGE_ID || "80360" },
+  { slug: "dome-pinot", id: process.env.UPLISTING_PINOT_ID },
+  { slug: "dome-rose", id: process.env.UPLISTING_ROSE_ID },
+  { slug: "lakeside-cottage", id: process.env.UPLISTING_COTTAGE_ID },
 ];
 
 function authHeader(): string {
@@ -30,6 +30,11 @@ export async function POST(request: Request) {
       let imported = 0;
       let skipped = 0;
       let errors = 0;
+
+      if (!prop.id) {
+        results.push({ property: prop.slug, imported: 0, skipped: 0, errors: 1 });
+        continue;
+      }
 
       try {
         const res = await fetch(`${API_BASE}/bookings/${prop.id}`, {

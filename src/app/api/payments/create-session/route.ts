@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { paymentSessionSchema } from "@/lib/validations";
 import { getById } from "@/lib/accommodations";
-import { createCheckoutSession, calculateLineItems } from "@/lib/stripe";
+import { createCheckoutSession, calculateLineItems, getSeasonalMultiplier } from "@/lib/stripe";
 import { checkAvailability } from "@/lib/uplisting";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { prisma } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
@@ -94,13 +95,83 @@ export async function POST(request: Request) {
       );
     }
 
-    // Calculate expected pricing for verification
+    // Seasonal multiplier — computed once, passed to both calculateLineItems
+    // (for totalAmount response) and createCheckoutSession (to avoid a second lookup).
+    const seasonalMultiplier = await getSeasonalMultiplier(data.checkIn, data.checkOut);
+
+    // Promo code validation and discount computation
+    let discountAmountCents = 0;
+    let appliedPromoCode: string | undefined;
+
+    if (data.promoCode) {
+      const code = data.promoCode.trim().toUpperCase();
+      const now = new Date();
+
+      const promo = await prisma.promo_codes.findFirst({
+        where: {
+          code: { equals: code, mode: "insensitive" },
+          status: "active",
+          AND: [
+            { OR: [{ valid_from: null }, { valid_from: { lte: now } }] },
+            { OR: [{ valid_until: null }, { valid_until: { gte: now } }] },
+          ],
+        },
+      });
+
+      if (!promo) {
+        return NextResponse.json(
+          { error: "Invalid or expired promo code" },
+          { status: 400 }
+        );
+      }
+      if (promo.usage_limit && (promo.usage_count ?? 0) >= promo.usage_limit) {
+        return NextResponse.json(
+          { error: "This promo code has reached its usage limit" },
+          { status: 400 }
+        );
+      }
+      if (promo.min_stay && nights < promo.min_stay) {
+        return NextResponse.json(
+          {
+            error: `This promo code requires a minimum stay of ${promo.min_stay} night${promo.min_stay > 1 ? "s" : ""}`,
+          },
+          { status: 400 }
+        );
+      }
+
+      // Compute discount against the seasonally-adjusted base total
+      const { totalAmount: baseTotal } = calculateLineItems(
+        accommodation,
+        data.checkIn,
+        data.checkOut,
+        data.guests,
+        data.pets || 0,
+        seasonalMultiplier
+      );
+
+      if (promo.discount_type === "percentage") {
+        discountAmountCents = Math.round(
+          baseTotal * (Number(promo.discount_value) / 100)
+        );
+      } else {
+        // Fixed NZD discount — cap at the booking total
+        discountAmountCents = Math.min(
+          Math.round(Number(promo.discount_value) * 100),
+          baseTotal
+        );
+      }
+
+      appliedPromoCode = promo.code;
+    }
+
+    // Calculate expected pricing for the response
     const { totalAmount } = calculateLineItems(
       accommodation,
       data.checkIn,
       data.checkOut,
       data.guests,
-      data.pets || 0
+      data.pets || 0,
+      seasonalMultiplier
     );
 
     // Create Stripe session
@@ -114,13 +185,16 @@ export async function POST(request: Request) {
       guestPhone: data.guestPhone,
       specialRequests: data.specialRequests,
       pets: data.pets,
+      seasonalMultiplier,
+      promoCode: appliedPromoCode,
+      discountAmountCents,
     });
 
     return NextResponse.json({
       success: true,
       sessionId: session.sessionId,
       url: session.url,
-      totalAmount: totalAmount / 100,
+      totalAmount: (totalAmount - discountAmountCents) / 100,
     });
   } catch (err) {
     console.error("[api/payments/create-session] Error:", err);

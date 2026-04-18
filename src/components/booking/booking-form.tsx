@@ -41,6 +41,7 @@ export function BookingForm({
     guestPhone: "",
     specialRequests: "",
   });
+  const [promoCode, setPromoCode] = useState("");
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<keyof FormFields, string>>
   >({});
@@ -106,6 +107,7 @@ export function BookingForm({
           guestEmail: form.guestEmail.trim(),
           guestPhone: form.guestPhone.trim() || undefined,
           specialRequests: form.specialRequests.trim() || undefined,
+          ...(promoCode.trim() ? { promoCode: promoCode.trim().toUpperCase() } : {}),
         }),
       });
 
@@ -275,6 +277,23 @@ export function BookingForm({
           {fieldErrors.specialRequests && (
             <p className={errorClass}>{fieldErrors.specialRequests}</p>
           )}
+        </div>
+
+        <div>
+          <label htmlFor="promoCode" className="block text-sm font-semibold mb-1">
+            Promo / partner code{" "}
+            <span className="text-muted font-normal">(optional)</span>
+          </label>
+          <input
+            id="promoCode"
+            type="text"
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}
+            className={inputClass}
+            placeholder="Enter code"
+            autoComplete="off"
+            spellCheck={false}
+          />
         </div>
 
         <div className="pt-2">
