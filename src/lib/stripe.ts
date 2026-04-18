@@ -76,12 +76,8 @@ export function calculateLineItems(
     quantity: nights,
   });
 
-  // Cleaning fee
-  items.push({
-    name: "Cleaning fee",
-    amount: accommodation.cleaningFee * 100,
-    quantity: 1,
-  });
+  // Cleaning is bundled into the nightly rate — no separate line item.
+  // accommodation.cleaningFee is kept on the type for back-compat + future use.
 
   // Extra guest fee
   if (

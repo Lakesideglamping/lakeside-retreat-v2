@@ -189,9 +189,9 @@ export default function FoodDiningPage() {
           <h2 className="font-display text-4xl text-center mb-10">Stay in the Heart of It</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night", note: "Private spa, vineyard views, breakfast included" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Rosé", badge: "Adults Only", price: "From $510/night", note: "Private spa, mountain views, kitchenette" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "From $295/night", note: "Sleeps 3, wood-fired hot tub, direct lake access" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "$635/night", note: "Private spa, vineyard views, breakfast included" },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Rosé", badge: "Adults Only", price: "$615/night", note: "Private spa, mountain views, kitchenette" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "$365/night", note: "Sleeps 3, wood-fired hot tub, direct lake access" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -242,7 +242,7 @@ export default function FoodDiningPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Stay</h2>
           <p className="text-lg text-muted mb-8">
             Winery restaurants, stone fruit stalls, and Cromwell&apos;s best cafés — all on your doorstep.
-            Domes from $510 &bull; Cottage from $295/night.
+            Domes from $615 &bull; Cottage from $365/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

@@ -200,9 +200,9 @@ export default function WineTrailPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", price: "From $530/night" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", price: "From $510/night" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", price: "From $295/night" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", price: "$635/night" },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", price: "$615/night" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", price: "$365/night" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -247,7 +247,7 @@ export default function WineTrailPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Wine Country Escape</h2>
           <p className="text-lg text-muted mb-8">
             30+ cellar doors within 15 minutes. Spa or hot tub to return to each evening.
-            Domes from $510 &bull; Cottage from $295/night.
+            Domes from $615 &bull; Cottage from $365/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

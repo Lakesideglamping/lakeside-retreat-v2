@@ -7,7 +7,7 @@ import { JsonLd, createLodgingBusinessSchema, createBreadcrumbSchema } from "@/l
 export const metadata: Metadata = {
   title: "Luxury Accommodation Central Otago | Glamping Domes & Lakeside Cottage",
   description:
-    "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Stargazing skylights, vineyard views. From $295/night.",
+    "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Stargazing skylights, vineyard views. $365/night.",
 };
 
 const accommodations = [
@@ -16,7 +16,7 @@ const accommodations = [
     image: "/images/Pinotfront.jpeg",
     title: "Dome Pinot",
     adultsOnly: true,
-    price: "$530",
+    price: "$635",
     tagline: "50sqm luxury dome with panoramic Lake Dunstan views, private spa, and stargazing skylight.",
     features: [
       "Super King bed with premium linens",
@@ -32,7 +32,7 @@ const accommodations = [
     image: "/images/dome-rose-spa1.jpeg",
     title: "Dome Ros\u00e9",
     adultsOnly: true,
-    price: "$510",
+    price: "$615",
     tagline: "40sqm romantic retreat with vineyard views, private spa, and a kitchenette for in-dome dining.",
     features: [
       "Super King bed with luxury bedding",
@@ -48,7 +48,7 @@ const accommodations = [
     image: "/images/lakeside-cottage-exterior.jpeg",
     title: "Lakeside Cottage",
     adultsOnly: false,
-    price: "$295",
+    price: "$365",
     tagline: "Right on the water. Wood-fired tub steaming under the stars. BBQ on the deck, dog at your feet.",
     features: [
       "Queen bed + sofa pullout, sleeps 3",

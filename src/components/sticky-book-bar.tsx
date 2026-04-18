@@ -18,8 +18,9 @@ export function StickyBookBar() {
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-sm border-t border-white/10 py-3 px-5 transition-all">
       <div className="max-w-[1200px] mx-auto flex items-center justify-between gap-4">
         <p className="text-white text-sm leading-tight">
-          <span className="font-display text-lg">From $295</span>
+          <span className="font-display text-lg">$365</span>
           <span className="text-white/90">/night</span>
+          <span className="block text-xs text-white/70 mt-0.5">Cleaning included</span>
         </p>
         <Link
           href="/book"

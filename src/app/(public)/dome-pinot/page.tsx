@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
-  title: "Dome Pinot | Geodesic Dome Accommodation NZ | $530/night",
+  title: "Dome Pinot | Geodesic Dome Accommodation NZ | $635/night",
   description:
-    "Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct from $530/night.",
+    "Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct from $635/night.",
   alternates: { canonical: '/dome-pinot' },
   openGraph: {
     title: "Dome Pinot | Luxury Geodesic Dome — Lake Dunstan, Central Otago",
     description:
-      "50sqm luxury glamping dome with private outdoor spa, stargazing skylight, and panoramic Lake Dunstan views. Adults-only escape from $530/night.",
+      "50sqm luxury glamping dome with private outdoor spa, stargazing skylight, and panoramic Lake Dunstan views. Adults-only escape from $635/night.",
     url: "https://lakesideretreat.co.nz/dome-pinot",
     images: [
       {
@@ -38,7 +39,7 @@ const features = [
 const amenities = [
   { title: "Kitchenette", desc: "Induction cooktop, fridge, microwave, coffee machine" },
   { title: "Ensuite Bathroom", desc: "Rainfall shower with premium toiletries" },
-  { title: "Climate Control", desc: "Underfloor heating plus heat pump for year-round comfort" },
+  { title: "Climate Control", desc: "Heat pump for heating and air conditioning year-round" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
   { title: "Free Parking", desc: "Private parking right at your dome" },
   { title: "Cycle Trail Access", desc: "300m to Otago Rail Trail" },
@@ -52,10 +53,11 @@ const galleryImages = [
 ];
 
 const pricingFeatures = [
-  "Nightly rate: $530/night",
+  "Nightly rate: $635/night (GST incl.)",
+  "Cleaning fee: included in your nightly rate",
+  "Continental breakfast: included",
   "Minimum 2 nights (3 nights peak season)",
-  "All amenities included",
-  "Continental breakfast included",
+  "Strictly 18+ — adults only",
   "Security Bond: $300 (refundable, released 48 hours after checkout)",
 ];
 
@@ -74,12 +76,12 @@ export default function DomePinotPage() {
           id: "dome-pinot",
           name: "Dome Pinot",
           description: "Flagship 50sqm luxury geodesic dome with panoramic Lake Dunstan views, private outdoor spa, stargazing skylight, and eco-luxury comfort.",
-          price: 530,
+          price: 635,
           floorSize: 50,
           maxOccupancy: 2,
           bedType: "Super King",
           images: ["Pinotfront.jpeg", "gallerydecksitting.jpeg", "pinotinternal.jpeg"],
-          amenities: ["Private Outdoor Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Underfloor Heating", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
+          amenities: ["Private Outdoor Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
           reviewCount: "127",
         }),
         createBreadcrumbSchema([
@@ -90,8 +92,8 @@ export default function DomePinotPage() {
         createFaqSchema([
           { question: "What makes Dome Pinot different from other glamping in Central Otago?", answer: "Dome Pinot is our flagship 50sqm luxury geodesic dome featuring panoramic Lake Dunstan views, a private outdoor spa, stargazing skylight, super king bed, and complimentary continental breakfast." },
           { question: "How far is Dome Pinot from Queenstown?", answer: "Approximately 45 minutes' drive from Queenstown and 30 minutes from Wanaka." },
-          { question: "Is Dome Pinot suitable for children?", answer: "No, Dome Pinot is strictly adults-only accommodation designed for couples. For families, we recommend our Lakeside Cottage." },
-          { question: "What is included in a stay at Dome Pinot?", answer: "Every stay includes a private outdoor spa, complimentary continental breakfast, premium bed linen, underfloor heating, a kitchenette (induction cooktop, fridge, microwave, coffee machine), and direct access to the Lake Dunstan Cycle Trail." },
+          { question: "Is Dome Pinot suitable for children?", answer: "No. Dome Pinot — like every property at Lakeside Retreat — is strictly 18+. No children or guests under 18 are permitted on the property." },
+          { question: "What is included in a stay at Dome Pinot?", answer: "Every stay includes a private outdoor spa, complimentary continental breakfast, premium bed linen, a heat pump for heating and cooling, a kitchenette (induction cooktop, fridge, microwave, coffee machine), and direct access to the Lake Dunstan Cycle Trail." },
         ]),
       ]} />
       {/* Hero */}
@@ -113,8 +115,8 @@ export default function DomePinotPage() {
             Our flagship. The lake from the bed. The Milky Way through the roof.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=dome-pinot" ariaLabel="Book Dome Pinot now from $530 per night">
-              Book Now - From $530/night
+            <Button href="/book?a=dome-pinot" ariaLabel="Book Dome Pinot now from $635 per night">
+              Book Now — $635/night
             </Button>
             <Button href="#gallery" variant="outline">
               View Gallery
@@ -201,13 +203,25 @@ export default function DomePinotPage() {
         </div>
       </section>
 
+      {/* Live availability */}
+      <section className="py-20 px-5 bg-white" id="availability">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-4xl text-center mb-3">Live availability</h2>
+          <p className="text-center text-muted mb-8">
+            Two months at a glance &mdash; straight from our booking system.
+          </p>
+          <PropertyAvailability accommodationId="dome-pinot" minStay={2} />
+        </div>
+      </section>
+
       {/* Pricing */}
-      <section className="py-20 px-5 bg-white">
+      <section className="py-20 px-5 bg-cream/40">
         <div className="max-w-[500px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">Pricing</h2>
           <div className="bg-cream rounded-3xl p-10 text-center shadow-xl">
-            <div className="text-5xl font-bold text-burgundy mb-1">From $530</div>
-            <p className="text-muted mb-6">per night (2 guests)</p>
+            <div className="text-5xl font-bold text-burgundy mb-1">$635</div>
+            <p className="text-muted mb-1">per night (2 guests)</p>
+            <p className="text-sm text-teal font-semibold mb-6">GST and cleaning included — no hidden fees</p>
             <ul className="text-left space-y-3 mb-6">
               {pricingFeatures.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-sm">
@@ -258,7 +272,7 @@ export default function DomePinotPage() {
                 <p className="text-muted text-sm mb-3">
                   40sqm romantic dome with outdoor spa and vineyard views. Perfect for couples.
                 </p>
-                <p className="text-burgundy font-semibold">From $510/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$615/night &rarr;</p>
               </div>
             </Link>
             <Link
@@ -277,9 +291,9 @@ export default function DomePinotPage() {
               <div className="p-6">
                 <h3 className="font-display text-xl text-burgundy mb-2">Lakeside Cottage</h3>
                 <p className="text-muted text-sm mb-3">
-                  Spacious family cottage with direct lake access. Sleeps up to 3 guests.
+                  Adults-only lakefront cottage with wood-fired hot tub. Sleeps up to 3.
                 </p>
-                <p className="text-burgundy font-semibold">From $295/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$365/night &rarr;</p>
               </div>
             </Link>
           </div>
@@ -319,7 +333,7 @@ export default function DomePinotPage() {
           </p>
           <Button
             href="/book?a=dome-pinot"
-            ariaLabel="Book Dome Pinot now from $530 per night"
+            ariaLabel="Book Dome Pinot now from $635 per night"
           >
             Book Dome Pinot Now
           </Button>

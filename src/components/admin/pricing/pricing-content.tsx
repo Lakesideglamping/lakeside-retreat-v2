@@ -334,7 +334,7 @@ export function PricingContent({
                   type="number"
                   value={basePricing[acc.id]?.base ?? ""}
                   onChange={(v) => updateBasePricing(acc.id, "base", v)}
-                  placeholder="e.g. 295"
+                  placeholder="e.g. 365"
                 />
                 <FormField
                   label="Weekend Surcharge"

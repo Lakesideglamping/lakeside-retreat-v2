@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
-  title: "Lakeside Cottage | Pet Friendly Accommodation Cromwell | $295/night",
+  title: "Lakeside Cottage | Pet Friendly Accommodation Cromwell | $365/night",
   description:
-    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Family accommodation in Central Otago from $295/night.",
+    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Family accommodation in Central Otago from $365/night.",
   alternates: { canonical: '/lakeside-cottage' },
   openGraph: {
     title: "Lakeside Cottage | Pet-Friendly Family Accommodation on Lake Dunstan",
     description:
-      "Family-friendly cottage with direct Lake Dunstan access, sleeps 3, kitchenette, BBQ, and pet-friendly. From $295/night in Cromwell, Central Otago.",
+      "Family-friendly cottage with direct Lake Dunstan access, sleeps 3, kitchenette, BBQ, and pet-friendly. $365/night in Cromwell, Central Otago.",
     url: "https://lakesideretreat.co.nz/lakeside-cottage",
     images: [
       {
@@ -54,13 +55,14 @@ const galleryImages = [
 ];
 
 const pricingFeatures = [
-  "Nightly rate: $295/night",
+  "Nightly rate: $365/night (GST incl.)",
+  "Cleaning fee: included in your nightly rate",
   "Extra guests: $100/person/night (max 3)",
   "Pets: $50 flat fee per stay",
   "Minimum 2 nights (3 nights peak season)",
   "BBQ and direct lake access included",
+  "Strictly 18+ — adults only",
   "Security Bond: $300 (refundable, released 48 hours after checkout)",
-  "Children welcome",
 ];
 
 const guides = [
@@ -78,7 +80,7 @@ export default function LakesideCottagePage() {
           id: "lakeside-cottage",
           name: "Lakeside Cottage",
           description: "Family-friendly lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, and pet-friendly accommodation.",
-          price: 295,
+          price: 365,
           floorSize: 65,
           maxOccupancy: 3,
           bedType: "Queen",
@@ -116,8 +118,8 @@ export default function LakesideCottagePage() {
             Step off the deck, into the lake. Dogs welcome too.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=lakeside-cottage" ariaLabel="Book Lakeside Cottage now from $295 per night">
-              Book Now - From $295/night
+            <Button href="/book?a=lakeside-cottage" ariaLabel="Book Lakeside Cottage now from $365 per night">
+              Book Now — $365/night
             </Button>
             <Button href="#gallery" variant="outline">
               View Gallery
@@ -209,13 +211,25 @@ export default function LakesideCottagePage() {
         </div>
       </section>
 
+      {/* Live availability */}
+      <section className="py-20 px-5 bg-white" id="availability">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-4xl text-center mb-3">Live availability</h2>
+          <p className="text-center text-muted mb-8">
+            Two months at a glance &mdash; straight from our booking system.
+          </p>
+          <PropertyAvailability accommodationId="lakeside-cottage" minStay={2} />
+        </div>
+      </section>
+
       {/* Pricing */}
-      <section className="py-20 px-5 bg-white">
+      <section className="py-20 px-5 bg-cream/40">
         <div className="max-w-[500px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">Pricing</h2>
           <div className="bg-cream rounded-3xl p-10 text-center shadow-xl">
-            <div className="text-5xl font-bold text-burgundy mb-1">From $295</div>
-            <p className="text-muted mb-6">per night (2 guests base)</p>
+            <div className="text-5xl font-bold text-burgundy mb-1">$365</div>
+            <p className="text-muted mb-1">per night (2 guests base)</p>
+            <p className="text-sm text-teal font-semibold mb-6">GST and cleaning included — no hidden fees</p>
             <ul className="text-left space-y-3 mb-6">
               {pricingFeatures.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-sm">
@@ -260,7 +274,7 @@ export default function LakesideCottagePage() {
                 <p className="text-muted text-sm mb-3">
                   Our flagship 50sqm luxury dome with panoramic Lake Dunstan views and private spa.
                 </p>
-                <p className="text-burgundy font-semibold">From $530/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$635/night &rarr;</p>
               </div>
             </Link>
             <Link
@@ -281,7 +295,7 @@ export default function LakesideCottagePage() {
                 <p className="text-muted text-sm mb-3">
                   40sqm romantic dome with outdoor spa and vineyard views. Perfect for couples.
                 </p>
-                <p className="text-burgundy font-semibold">From $510/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$615/night &rarr;</p>
               </div>
             </Link>
           </div>
@@ -321,7 +335,7 @@ export default function LakesideCottagePage() {
           </p>
           <Button
             href="/book?a=lakeside-cottage"
-            ariaLabel="Book Lakeside Cottage now from $295 per night"
+            ariaLabel="Book Lakeside Cottage now from $365 per night"
           >
             Book Lakeside Cottage Now
           </Button>

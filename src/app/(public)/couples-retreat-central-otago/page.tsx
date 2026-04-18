@@ -116,7 +116,7 @@ export default function CouplesRetreatPage() {
               </div>
               <div className="p-6">
                 <h3 className="font-display text-xl text-burgundy mb-1">Dome Pinot</h3>
-                <p className="text-burgundy font-semibold text-sm mb-3">From $530/night &middot; 50sqm</p>
+                <p className="text-burgundy font-semibold text-sm mb-3">$635/night &middot; 50sqm</p>
                 <ul className="text-sm text-muted space-y-1">
                   <li>&bull; Private outdoor spa with lake views</li>
                   <li>&bull; Stargazing skylight</li>
@@ -131,7 +131,7 @@ export default function CouplesRetreatPage() {
               </div>
               <div className="p-6">
                 <h3 className="font-display text-xl text-burgundy mb-1">Dome Rosé</h3>
-                <p className="text-burgundy font-semibold text-sm mb-3">From $510/night &middot; 40sqm</p>
+                <p className="text-burgundy font-semibold text-sm mb-3">$615/night &middot; 40sqm</p>
                 <ul className="text-sm text-muted space-y-1">
                   <li>&bull; Private outdoor spa</li>
                   <li>&bull; Mountain and vineyard views</li>

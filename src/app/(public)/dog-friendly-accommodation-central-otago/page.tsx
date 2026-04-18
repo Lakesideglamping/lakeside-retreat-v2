@@ -7,7 +7,7 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Dog-Friendly Accommodation Central Otago | Lakeside Cottage, Cromwell",
   description:
-    "Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, a secure outdoor area, and a BBQ deck. From $295/night.",
+    "Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, a secure outdoor area, and a BBQ deck. $365/night.",
 };
 
 const features = [
@@ -111,7 +111,7 @@ export default function DogFriendlyAccommodationPage() {
                 <li>&#10003; Wood-fired cedar hot tub (no chemicals)</li>
                 <li>&#10003; Kitchenette &amp; outdoor BBQ</li>
                 <li>&#10003; Heat pump (heating &amp; AC)</li>
-                <li>&#10003; From $295/night</li>
+                <li>&#10003; $365/night</li>
               </ul>
             </div>
           </div>
@@ -219,7 +219,7 @@ export default function DogFriendlyAccommodationPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Dog-Friendly Stay</h2>
           <p className="text-lg text-muted mb-8">
-            Lakeside Cottage from $295/night. Direct lake access. Otago Rail Trail 300m away.
+            Lakeside Cottage from $365/night. Direct lake access. Otago Rail Trail 300m away.
             Dogs welcome with prior approval.
           </p>
           <Button href="/book?a=lakeside-cottage">Check Availability</Button>

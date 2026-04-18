@@ -7,7 +7,7 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Winter Glamping Central Otago | Cosy Domes, Outdoor Spas & Snow Views",
   description:
-    "Winter glamping on Lake Dunstan — soak in your private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes from $510/night. Central Otago's best winter escape.",
+    "Winter glamping on Lake Dunstan — soak in your private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes from $615/night. Central Otago's best winter escape.",
 };
 
 const winterHighlights = [
@@ -19,7 +19,7 @@ const winterHighlights = [
   },
   {
     title: "Cosy Dome Interiors",
-    desc: "Our geodesic domes are engineered for exceptional insulation. Underfloor heating, insulated twin-wall panels, and a warm interior make them a perfect winter cocoon.",
+    desc: "Our geodesic domes are engineered for exceptional insulation. An efficient heat pump, insulated twin-wall panels, and a warm interior make them a perfect winter cocoon.",
     image: "/images/windowview.jpeg",
     alt: "Warm cosy interior of Dome Pinot with views over winter Lake Dunstan",
   },
@@ -90,7 +90,7 @@ export default function WinterGlampingPage() {
         ]),
         createFaqSchema([
           { question: "Is glamping in winter Central Otago worth it?", answer: "Absolutely. Winter is arguably the best time to glamp at Lakeside Retreat. The private outdoor spas feel incredible in the cold, the mountain views are dramatic with snow on the Pisa Range, and the night skies are at their clearest. Cardrona ski field is 55 minutes away, and Central Otago's 30+ wineries are open year-round." },
-          { question: "Are the glamping domes warm enough in winter?", answer: "Yes — both domes are engineered for exceptional insulation. They feature underfloor heating, a heat pump, insulated twin-wall panels, and a fully heated bathroom. Guests frequently stay in winter and comment on how cosy the domes are." },
+          { question: "Are the glamping domes warm enough in winter?", answer: "Yes — both domes are engineered for exceptional insulation. They feature a heat pump, insulated twin-wall panels, and a fully heated bathroom. Guests frequently stay in winter and comment on how cosy the domes are." },
           { question: "How cold does it get in Central Otago in winter?", answer: "Central Otago has a continental climate — cold, clear winters. Temperatures typically range from around -2°C overnight to 12°C during the day. Snow falls on surrounding mountains (including the Pisa Range directly behind Lakeside Retreat) and occasionally at property level, though this is less common." },
           { question: "Can I ski and glamp in Central Otago?", answer: "Yes — Cardrona Ski Resort is 55 minutes from Lakeside Retreat and Treble Cone is 75 minutes. Many guests ski during the day and return to their private spa and warm dome in the evening. It's one of the most popular winter itineraries at the retreat." },
           { question: "What is the best time to visit Central Otago?", answer: "Central Otago is spectacular year-round. Winter (June–August) offers snow views, ski access, and cosy spa evenings. Autumn (March–May) brings golden vineyards and harvest season. Summer (December–February) has long sunny days and lake swimming. Spring (September–November) has orchard blossoms and emerging greenery." },
@@ -255,16 +255,16 @@ export default function WinterGlampingPage() {
                 bookHref: "/book?a=dome-pinot",
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
-                price: "From $530/night",
-                winter: ["Underfloor heating", "Stargazing skylight above bed", "Private outdoor saltwater spa", "Panoramic Pisa Range snow views"],
+                price: "$635/night",
+                winter: ["Heat pump climate control", "Stargazing skylight above bed", "Private outdoor saltwater spa", "Panoramic Pisa Range snow views"],
               },
               {
                 href: "/dome-rose",
                 bookHref: "/book?a=dome-rose",
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
-                price: "From $510/night",
-                winter: ["Underfloor heating", "Private outdoor saltwater spa", "Mountain & vineyard views", "Outdoor dining deck with heater"],
+                price: "$615/night",
+                winter: ["Heat pump climate control", "Private outdoor saltwater spa", "Mountain & vineyard views", "Outdoor dining deck with heater"],
               },
             ].map((dome) => (
               <div key={dome.href} className="bg-cream rounded-2xl overflow-hidden shadow-lg">

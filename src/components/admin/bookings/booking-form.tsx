@@ -195,7 +195,7 @@ export function BookingForm() {
               type="number"
               value={totalPrice}
               onChange={setTotalPrice}
-              placeholder="e.g. 530"
+              placeholder="e.g. 635"
               error={fieldErrors.total_price}
             />
           </div>

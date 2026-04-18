@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
-  title: "Dome Ros\u00e9 | Romantic Getaway Central Otago | $510/night",
+  title: "Dome Ros\u00e9 | Romantic Getaway Central Otago | $615/night",
   description:
-    "Dome Ros\u00e9 — intimate 40sqm glamping dome perfect for couples in Cromwell, Central Otago. Outdoor spa, mountain views, vineyard setting on Lake Dunstan. Book direct from $510/night.",
+    "Dome Ros\u00e9 — intimate 40sqm glamping dome perfect for couples in Cromwell, Central Otago. Outdoor spa, mountain views, vineyard setting on Lake Dunstan. Book direct from $615/night.",
   alternates: { canonical: '/dome-rose' },
   openGraph: {
     title: "Dome Rosé | Romantic Glamping Dome — Vineyard Views, Central Otago",
     description:
-      "40sqm romantic dome with private outdoor spa, vineyard and mountain views. The perfect couples escape from $510/night in Central Otago wine country.",
+      "40sqm romantic dome with private outdoor spa, vineyard and mountain views. The perfect couples escape from $615/night in Central Otago wine country.",
     url: "https://lakesideretreat.co.nz/dome-rose",
     images: [
       {
@@ -38,7 +39,7 @@ const features = [
 const amenities = [
   { title: "Kitchenette", desc: "Induction cooktop, fridge, microwave, coffee machine" },
   { title: "Ensuite Bathroom", desc: "Rainfall shower with premium toiletries" },
-  { title: "Climate Control", desc: "Underfloor heating plus heat pump for year-round comfort" },
+  { title: "Climate Control", desc: "Heat pump keeps the dome cosy year-round" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
   { title: "Free Parking", desc: "Private parking right at your dome" },
   { title: "Cycle Trail Access", desc: "300m to Otago Rail Trail" },
@@ -51,10 +52,11 @@ const galleryImages = [
 ];
 
 const pricingFeatures = [
-  "Nightly rate: $510/night",
+  "Nightly rate: $615/night (GST incl.)",
+  "Cleaning fee: included in your nightly rate",
+  "Continental breakfast: included",
   "Minimum 2 nights (3 nights peak season)",
-  "All amenities included",
-  "Continental breakfast included",
+  "Strictly 18+ — adults only",
   "Security Bond: $300 (refundable, released 48 hours after checkout)",
 ];
 
@@ -73,12 +75,12 @@ export default function DomeRosePage() {
           id: "dome-rose",
           name: "Dome Ros\u00e9",
           description: "Romantic 40sqm luxury geodesic dome with vineyard views, private outdoor spa, and intimate wine country setting.",
-          price: 510,
+          price: 615,
           floorSize: 40,
           maxOccupancy: 2,
           bedType: "Super King",
           images: ["dome-rose-spa1.jpeg", "dome-rose-interior.jpeg"],
-          amenities: ["Private Outdoor Spa", "Mountain Views", "Super King Bed", "Vineyard Setting", "Sustainably Powered", "Underfloor Heating", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
+          amenities: ["Private Outdoor Spa", "Mountain Views", "Super King Bed", "Vineyard Setting", "Sustainably Powered", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
           reviewCount: "98",
         }),
         createBreadcrumbSchema([
@@ -111,8 +113,8 @@ export default function DomeRosePage() {
             Soak under the stars. Wake among the vines.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=dome-rose" ariaLabel="Book Dome Rosé now from $510 per night">
-              Book Now - From $510/night
+            <Button href="/book?a=dome-rose" ariaLabel="Book Dome Rosé now from $615 per night">
+              Book Now — $615/night
             </Button>
             <Button href="#gallery" variant="outline">
               View Gallery
@@ -198,13 +200,25 @@ export default function DomeRosePage() {
         </div>
       </section>
 
+      {/* Live availability */}
+      <section className="py-20 px-5 bg-white" id="availability">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-display text-4xl text-center mb-3">Live availability</h2>
+          <p className="text-center text-muted mb-8">
+            Two months at a glance &mdash; straight from our booking system.
+          </p>
+          <PropertyAvailability accommodationId="dome-rose" minStay={2} />
+        </div>
+      </section>
+
       {/* Pricing */}
-      <section className="py-20 px-5 bg-white">
+      <section className="py-20 px-5 bg-cream/40">
         <div className="max-w-[500px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">Pricing</h2>
           <div className="bg-cream rounded-3xl p-10 text-center shadow-xl">
-            <div className="text-5xl font-bold text-burgundy mb-1">From $510</div>
-            <p className="text-muted mb-6">per night (2 guests)</p>
+            <div className="text-5xl font-bold text-burgundy mb-1">$615</div>
+            <p className="text-muted mb-1">per night (2 guests)</p>
+            <p className="text-sm text-teal font-semibold mb-6">GST and cleaning included — no hidden fees</p>
             <ul className="text-left space-y-3 mb-6">
               {pricingFeatures.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-sm">
@@ -255,7 +269,7 @@ export default function DomeRosePage() {
                 <p className="text-muted text-sm mb-3">
                   Our flagship 50sqm luxury dome with panoramic Lake Dunstan views and private spa.
                 </p>
-                <p className="text-burgundy font-semibold">From $530/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$635/night &rarr;</p>
               </div>
             </Link>
             <Link
@@ -276,7 +290,7 @@ export default function DomeRosePage() {
                 <p className="text-muted text-sm mb-3">
                   Spacious family cottage with direct lake access. Sleeps up to 3 guests.
                 </p>
-                <p className="text-burgundy font-semibold">From $295/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$365/night &rarr;</p>
               </div>
             </Link>
           </div>
@@ -316,7 +330,7 @@ export default function DomeRosePage() {
           </p>
           <Button
             href="/book?a=dome-rose"
-            ariaLabel="Book Dome Rosé now from $510 per night"
+            ariaLabel="Book Dome Rosé now from $615 per night"
           >
             Book Dome Rosé Now
           </Button>

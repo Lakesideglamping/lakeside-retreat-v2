@@ -59,7 +59,7 @@ export default async function HomePage() {
           </p>
           <Button href="/book">Book Your Escape</Button>
           <p className="text-white/85 text-sm mt-5">
-            From <span className="font-semibold text-white">$295/night</span> &middot; Free cancellation 7+ days before
+            From <span className="font-semibold text-white">$365/night</span> &middot; Free cancellation 7+ days before
           </p>
         </div>
       </section>
@@ -181,7 +181,7 @@ export default async function HomePage() {
               badge="Adults Only"
               description="Fifty square metres of calm. Lake from the bed, stars through the roof, spa out the door."
               features={["Lake Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
-              price="From $530/night"
+              price="$635/night"
             />
             <AccommodationCard
               href="/dome-rose"
@@ -190,7 +190,7 @@ export default async function HomePage() {
               badge="Adults Only"
               description="40sqm geodesic dome tucked into the vines. Private spa, super-king bed, vineyard at the window."
               features={["Vineyard Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
-              price="From $510/night"
+              price="$615/night"
             />
             <AccommodationCard
               href="/lakeside-cottage"
@@ -198,7 +198,7 @@ export default async function HomePage() {
               title="Lakeside Cottage"
               description="Self-contained lakefront cottage, sleeps 3. Direct Lake Dunstan access, BBQ, and pet-friendly."
               features={["Lake Access", "Pet Friendly", "Sleeps 3", "BBQ"]}
-              price="From $295/night"
+              price="$365/night"
             />
           </div>
         </div>

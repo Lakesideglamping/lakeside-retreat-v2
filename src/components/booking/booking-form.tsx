@@ -20,6 +20,7 @@ interface FormFields {
   guestEmail: string;
   guestPhone: string;
   specialRequests: string;
+  adultsOnlyConfirmed: boolean;
 }
 
 type Status = "idle" | "submitting" | "error";
@@ -42,6 +43,7 @@ export function BookingForm({
     guestEmail: "",
     guestPhone: "",
     specialRequests: "",
+    adultsOnlyConfirmed: false,
   });
   const [promoCode, setPromoCode] = useState("");
   const [fieldErrors, setFieldErrors] = useState<
@@ -64,7 +66,7 @@ export function BookingForm({
       (1000 * 60 * 60 * 24)
   );
 
-  function updateField(field: keyof FormFields, value: string) {
+  function updateField<K extends keyof FormFields>(field: K, value: FormFields[K]) {
     setForm((prev) => ({ ...prev, [field]: value }));
     if (fieldErrors[field]) {
       setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
@@ -82,6 +84,10 @@ export function BookingForm({
     }
     if (form.specialRequests && form.specialRequests.length > 500) {
       errors.specialRequests = "Special requests must be under 500 characters";
+    }
+    if (!form.adultsOnlyConfirmed) {
+      errors.adultsOnlyConfirmed =
+        "Please confirm every guest in your party is 18 years or older";
     }
 
     setFieldErrors(errors);
@@ -297,6 +303,29 @@ export function BookingForm({
             autoComplete="off"
             spellCheck={false}
           />
+        </div>
+
+        <div className="rounded-lg border border-gray-300 bg-cream/40 p-4">
+          <label
+            htmlFor="adultsOnlyConfirmed"
+            className="flex items-start gap-3 cursor-pointer"
+          >
+            <input
+              id="adultsOnlyConfirmed"
+              type="checkbox"
+              checked={form.adultsOnlyConfirmed}
+              onChange={(e) => updateField("adultsOnlyConfirmed", e.target.checked)}
+              className="mt-1 h-5 w-5 accent-burgundy"
+            />
+            <span className="text-sm leading-relaxed">
+              I confirm every guest in my party is <strong>18 years or older</strong>.
+              Lakeside Retreat is strictly adults-only &mdash; parties arriving with
+              anyone under 18 will be refused check-in with no refund.
+            </span>
+          </label>
+          {fieldErrors.adultsOnlyConfirmed && (
+            <p className={errorClass}>{fieldErrors.adultsOnlyConfirmed}</p>
+          )}
         </div>
 
         <div className="pt-2">

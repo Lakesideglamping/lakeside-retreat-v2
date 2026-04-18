@@ -44,13 +44,8 @@ export function calculatePrice(
     total: nightlyRate * nights,
   });
 
-  // Cleaning fee
-  items.push({
-    label: "Cleaning fee",
-    amount: accommodation.cleaningFee,
-    quantity: 1,
-    total: accommodation.cleaningFee,
-  });
+  // Cleaning is bundled into the nightly rate — no separate line item.
+  // accommodation.cleaningFee is kept on the type for back-compat + future use.
 
   // Extra guest fee
   if (accommodation.extraGuestFee && guests > accommodation.baseGuests) {

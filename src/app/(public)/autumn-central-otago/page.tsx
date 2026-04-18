@@ -7,7 +7,7 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Autumn in Central Otago | Golden Vineyards & Harvest Season Accommodation",
   description:
-    "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat from $295/night.",
+    "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat from $365/night.",
 };
 
 const autumnHighlights = [
@@ -262,7 +262,7 @@ export default function AutumnCentralOtagoPage() {
                 bookHref: "/book?a=dome-pinot",
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
-                price: "From $530/night",
+                price: "$635/night",
                 autumn: ["Private outdoor spa for cool evenings", "Stargazing skylight — clear autumn skies", "Panoramic vineyard & lake views", "Continental breakfast included"],
               },
               {
@@ -270,7 +270,7 @@ export default function AutumnCentralOtagoPage() {
                 bookHref: "/book?a=dome-rose",
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
-                price: "From $510/night",
+                price: "$615/night",
                 autumn: ["Private outdoor spa", "Vineyard & mountain views", "Luxury super king bed", "Outdoor dining deck — perfect in autumn"],
               },
             ].map((dome) => (
@@ -299,7 +299,7 @@ export default function AutumnCentralOtagoPage() {
           <div className="mt-8 bg-cream rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="font-display text-xl text-burgundy mb-1">Lakeside Cottage</h3>
-              <p className="text-muted text-sm">From $295/night &bull; Sleeps 3 &bull; Wood-fired hot tub &bull; Dog-friendly &bull; Direct lake access</p>
+              <p className="text-muted text-sm">$365/night &bull; Sleeps 3 &bull; Wood-fired hot tub &bull; Dog-friendly &bull; Direct lake access</p>
             </div>
             <Button href="/book?a=lakeside-cottage">Book Cottage &rarr;</Button>
           </div>

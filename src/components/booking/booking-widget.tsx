@@ -427,7 +427,8 @@ function AccommodationOption({
       <p className="text-sm text-muted mt-0.5">{accommodation.description}</p>
       <div className="flex items-center justify-between mt-2">
         <span className="text-burgundy font-semibold text-sm">
-          From ${accommodation.basePrice}/night
+          ${accommodation.basePrice}/night
+          <span className="block text-xs text-muted font-normal">Cleaning included</span>
         </span>
         {accommodation.adultsOnly && (
           <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">

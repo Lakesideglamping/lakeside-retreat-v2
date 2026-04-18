@@ -7,7 +7,7 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Otago Rail Trail Accommodation | Luxury Stay 300m from the Trail",
   description:
-    "Luxury accommodation for Otago Rail Trail cyclists — just 300m from the trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. From $295/night.",
+    "Luxury accommodation for Otago Rail Trail cyclists — just 300m from the trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $365/night.",
 };
 
 const trailSections = [
@@ -61,7 +61,7 @@ export default function OtagoRailTrailAccommodationPage() {
           { name: "Otago Rail Trail Accommodation", path: "/otago-rail-trail-accommodation" },
         ]),
         createFaqSchema([
-          { question: "What is the best accommodation for the Otago Rail Trail?", answer: "Lakeside Retreat at Mount Pisa is perfectly located for the Otago Rail Trail — just 300m from the Cromwell trailhead. Cyclists stay in luxury geodesic domes or a lakeside cottage, with bike storage, early breakfast, laundry facilities, and a private outdoor spa for post-ride recovery. From $295/night." },
+          { question: "What is the best accommodation for the Otago Rail Trail?", answer: "Lakeside Retreat at Mount Pisa is perfectly located for the Otago Rail Trail — just 300m from the Cromwell trailhead. Cyclists stay in luxury geodesic domes or a lakeside cottage, with bike storage, early breakfast, laundry facilities, and a private outdoor spa for post-ride recovery. $365/night." },
           { question: "Where does the Otago Rail Trail start?", answer: "The Otago Rail Trail runs between Clyde and Middlemarch (150km). The Cromwell to Clyde section is the most popular starting point and is just 300 metres from Lakeside Retreat. Cromwell is approximately 45 minutes from Queenstown." },
           { question: "How many days does the Otago Rail Trail take?", answer: "The full Otago Rail Trail takes 4–5 days to complete at a relaxed pace. Many cyclists do just the Cromwell to Clyde section (2–3 hours) as a day ride. Lakeside Retreat is ideal as a base for the first 1–2 days or as the final night before completing the trail." },
           { question: "Is the Otago Rail Trail suitable for beginners?", answer: "Yes — the Otago Rail Trail is graded as an easy to moderate ride with most sections being flat or gently undulating on a well-maintained gravel surface. The Cromwell to Clyde section is completely flat and follows Lake Dunstan — ideal for first-time trail riders." },
@@ -184,7 +184,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
                 badge: "Adults Only",
-                price: "From $530/night",
+                price: "$635/night",
                 notes: "Private spa, stargazing skylight, breakfast included",
               },
               {
@@ -192,7 +192,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
                 badge: "Adults Only",
-                price: "From $510/night",
+                price: "$615/night",
                 notes: "Private spa, vineyard views, kitchenette",
               },
               {
@@ -200,7 +200,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 image: "/images/lakeside-cottage-exterior.jpeg",
                 title: "Lakeside Cottage",
                 badge: "Pet & Family Friendly",
-                price: "From $295/night",
+                price: "$365/night",
                 notes: "Queen + sofa bed, sleeps 3, wood-fired hot tub, direct lake access",
               },
             ].map((acc) => (

@@ -7,7 +7,7 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
   description:
-    "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and a family lakeside cottage. 4.9★ rated. From $295/night.",
+    "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and a family lakeside cottage. 4.9★ rated. $365/night.",
 };
 
 const luxuryAmenities = [
@@ -165,7 +165,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
                 badge: "Adults Only",
-                price: "From $530/night",
+                price: "$635/night",
                 size: "50sqm",
                 desc: "Larger dome with stargazing skylight, panoramic lake views, private saltwater spa, and continental breakfast.",
               },
@@ -175,7 +175,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
                 badge: "Adults Only",
-                price: "From $510/night",
+                price: "$615/night",
                 size: "40sqm",
                 desc: "Intimate retreat with vineyard and mountain views, private outdoor spa, luxury super king bed.",
               },
@@ -185,7 +185,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/lakeside-cottage-exterior.jpeg",
                 title: "Lakeside Cottage",
                 badge: "Family & Pet Friendly",
-                price: "From $295/night",
+                price: "$365/night",
                 size: "Sleeps 3",
                 desc: "Self-contained cottage with direct lake access, wood-fired hot tub, BBQ, kitchenette, and dog-friendly.",
               },

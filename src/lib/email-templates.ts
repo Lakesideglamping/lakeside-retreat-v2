@@ -98,13 +98,9 @@ const signOff = `<p style="margin-top:28px;">Warm regards,<br/>Stephen &amp; San
 
 export function bookingConfirmationHtml(data: BookingEmailData): string {
   const name = formatAccommodationName(data.accommodation);
-  const isDome = data.accommodation === "dome-pinot" || data.accommodation === "dome-rose";
-
-  const domeNotice = isDome
-    ? `<div ${alertBox("#ffc107")}>
-        <p style="margin:0;"><strong>Please note:</strong> ${name} is an adults-only accommodation. Guests arriving with children will not be accommodated and no refund will be given.</p>
-      </div>`
-    : "";
+  const domeNotice = `<div ${alertBox("#ffc107")}>
+        <p style="margin:0;"><strong>Please note:</strong> ${name} is strictly 18+ adults only. Guests arriving with anyone under 18 will not be accommodated and no refund will be given.</p>
+      </div>`;
 
   return layout("Booking Confirmed", `
     <p>Hi ${data.guest_name},</p>
@@ -149,8 +145,9 @@ export function preArrivalHtml(data: BookingEmailData): string {
     </div>`;
   } else if (isCottage) {
     propertyTips = `<div ${alertBox("#2196F3")}>
-      <h4 style="margin:0 0 6px;">Pet Policy</h4>
-      <p style="margin:0;">Pets are welcome at Lakeside Cottage ($50 flat fee per stay). Please keep them off the furniture and clean up after them on the property.</p>
+      <h4 style="margin:0 0 6px;">Cottage Reminder</h4>
+      <p style="margin:0 0 8px;">Lakeside Cottage is strictly <strong>18+ adults only</strong>. Guests arriving with anyone under 18 will not be accommodated and no refund will be given.</p>
+      <p style="margin:0;">Well-behaved dogs are welcome ($50 flat fee per stay). Please keep them off the furniture and clean up after them on the property.</p>
     </div>`;
   }
 

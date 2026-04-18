@@ -122,16 +122,28 @@ export default function TermsConditionsPage() {
             </li>
           </ul>
           <h3 className="font-display text-xl mt-6 mb-3">
-            Lakeside Cottage (Pet Friendly)
+            Lakeside Cottage (Adults Only &mdash; Pet Friendly)
           </h3>
           <ul>
-            <li>Maximum 3 guests (2 base, 1 extra at $100/person/night)</li>
-            <li>Well-behaved dogs welcome (maximum 2 dogs)</li>
+            <li>Maximum 3 guests, all aged 18+ (2 base, 1 extra at $50/person/night)</li>
+            <li>No children or infants permitted</li>
+            <li>Well-behaved dogs welcome (maximum 2 dogs, $50 flat pet fee per stay)</li>
             <li>Pets must not be left unattended in the property</li>
             <li>
               Pet owners are responsible for cleaning up after their animals
             </li>
           </ul>
+
+          <h3 className="font-display text-xl mt-6 mb-3">
+            Strict 18+ Adults-Only Policy (All Properties)
+          </h3>
+          <p>
+            All three Lakeside Retreat properties are strictly reserved for adult guests
+            aged 18 years or over. By completing a booking you confirm that every guest
+            in your party meets this minimum age requirement. Parties arriving with
+            anyone under 18 will be refused check-in and the booking will be cancelled
+            without refund.
+          </p>
 
           <h2 className="font-display text-2xl mt-10 mb-4">6. Property Rules</h2>
           <ul>
@@ -160,7 +172,7 @@ export default function TermsConditionsPage() {
             </li>
             <li>
               <strong>Lake access:</strong> Swimming and water activities are at
-              your own risk. Children must be supervised at all times near water.
+              your own risk.
             </li>
           </ul>
 

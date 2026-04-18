@@ -299,9 +299,9 @@ export default function WanakaDayTripPage() {
           <h2 className="font-display text-4xl text-center mb-10">Your Central Otago Base</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night", note: "Private spa, skylight, breakfast included" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night", note: "Private spa, vineyard views, kitchenette" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "Sleeps 3, wood-fired hot tub, lake access, dogs welcome" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "$635/night", note: "Private spa, skylight, breakfast included" },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "$615/night", note: "Private spa, vineyard views, kitchenette" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "$365/night", note: "Sleeps 3, wood-fired hot tub, lake access, dogs welcome" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -352,7 +352,7 @@ export default function WanakaDayTripPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Central Otago Base</h2>
           <p className="text-lg text-muted mb-8">
             Wanaka, Queenstown, and wine country — all within 45 minutes.
-            Luxury domes from $510 &bull; Cottage from $295/night.
+            Luxury domes from $615 &bull; Cottage from $365/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

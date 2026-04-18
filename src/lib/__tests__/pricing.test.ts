@@ -2,17 +2,19 @@ import { describe, it, expect } from "vitest";
 import { calculatePrice } from "../pricing";
 import type { Accommodation } from "../accommodations";
 
+// Test fixtures mirror the real accommodations data (GST-incl, cleaning bundled).
 const dome: Accommodation = {
   id: "dome-pinot",
   name: "Dome Pinot",
   description: "",
   maxGuests: 2,
   baseGuests: 2,
-  basePrice: 530,
+  basePrice: 635,
   minStay: 1,
   securityDeposit: 300,
-  cleaningFee: 50,
+  cleaningFee: 0,
   adultsOnly: true,
+  minimumAge: 18,
   amenities: [],
   images: [],
 };
@@ -23,28 +25,30 @@ const cottage: Accommodation = {
   description: "",
   maxGuests: 3,
   baseGuests: 2,
-  basePrice: 295,
+  basePrice: 365,
   minStay: 2,
   securityDeposit: 300,
-  cleaningFee: 50,
-  adultsOnly: false,
-  extraGuestFee: 100,
+  cleaningFee: 0,
+  adultsOnly: true,
+  minimumAge: 18,
+  extraGuestFee: 50,
   petFee: 50,
   amenities: [],
   images: [],
 };
 
 describe("calculatePrice", () => {
-  it("computes nightly rate × nights + cleaning fee + deposit", () => {
+  it("computes nightly rate × nights + deposit (no cleaning line item)", () => {
     const { totalAmount, lineItems } = calculatePrice(
       dome,
       "2026-06-01",
       "2026-06-03",
       2
     );
-    // 2 nights × $530 + $50 cleaning + $300 deposit
-    expect(totalAmount).toBe(530 * 2 + 50 + 300);
-    expect(lineItems).toHaveLength(3); // nightly, cleaning, deposit
+    // 2 nights × $635 + $300 deposit (no cleaning)
+    expect(totalAmount).toBe(635 * 2 + 300);
+    expect(lineItems).toHaveLength(2); // nightly, deposit
+    expect(lineItems.find((i) => i.label.toLowerCase().includes("cleaning"))).toBeUndefined();
   });
 
   it("adds extra guest fee for guests above base", () => {
@@ -54,8 +58,8 @@ describe("calculatePrice", () => {
       "2026-06-03",
       3 // 1 extra guest
     );
-    // 2 nights × $295 + $50 cleaning + 2 nights × 1 extra guest × $100 + $300 deposit
-    expect(totalAmount).toBe(295 * 2 + 50 + 2 * 1 * 100 + 300);
+    // 2 nights × $365 + 2 nights × 1 extra guest × $50 + $300 deposit
+    expect(totalAmount).toBe(365 * 2 + 2 * 1 * 50 + 300);
   });
 
   it("does not add extra guest fee when at base occupancy", () => {
@@ -75,17 +79,16 @@ describe("calculatePrice", () => {
     const petItem = lineItems.find((i) => i.label.includes("Pet fee"));
     expect(petItem).toBeDefined();
     expect(petItem!.total).toBe(100); // 2 pets × $50
-    expect(totalAmount).toBe(295 * 2 + 50 + 100 + 300);
+    expect(totalAmount).toBe(365 * 2 + 100 + 300);
   });
 
   it("applies seasonal multiplier to nightly rate", () => {
     const base = calculatePrice(dome, "2026-12-20", "2026-12-23", 2);
     const peak = calculatePrice(dome, "2026-12-20", "2026-12-23", 2, 0, 1.2);
-    // Peak nightly rate = round(530 * 1.2) = 636
     expect(peak.totalAmount).toBeGreaterThan(base.totalAmount);
     const peakNightly = peak.lineItems.find((i) => i.label.includes("peak season"));
     expect(peakNightly).toBeDefined();
-    expect(peakNightly!.amount).toBe(Math.round(530 * 1.2));
+    expect(peakNightly!.amount).toBe(Math.round(635 * 1.2));
   });
 
   it("does not label line item as peak season when multiplier is 1.0", () => {
@@ -99,6 +102,6 @@ describe("calculatePrice", () => {
     const deposit = lineItems.find((i) => i.label.startsWith("Security bond"));
     expect(deposit).toBeDefined();
     const bookingTotal = totalAmount - deposit!.total;
-    expect(bookingTotal).toBe(530 + 50); // 1 night + cleaning
+    expect(bookingTotal).toBe(635); // 1 night, cleaning is bundled
   });
 });

@@ -54,7 +54,7 @@ export function createLodgingBusinessSchema(rating?: AggregateRatingStats) {
     geo,
     telephone: "+64 21 368 682",
     email: "info@lakesideretreat.co.nz",
-    priceRange: "$295-$530 NZD per night",
+    priceRange: "$365-$635 NZD per night",
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue,
@@ -68,6 +68,11 @@ export function createLodgingBusinessSchema(rating?: AggregateRatingStats) {
       { "@type": "LocationFeatureSpecification", name: "Lake Access", value: true },
       { "@type": "LocationFeatureSpecification", name: "Cycle Trail Access", value: true },
     ],
+    audience: {
+      "@type": "PeopleAudience",
+      name: "Adults only (18+)",
+      suggestedMinAge: 18,
+    },
     checkinTime: "15:00",
     checkoutTime: "10:00",
     sameAs,
@@ -183,6 +188,11 @@ export function createPropertySchema(params: PropertySchemaParams) {
       ratingValue: "4.9",
       reviewCount: params.reviewCount,
       bestRating: "5",
+    },
+    audience: {
+      "@type": "PeopleAudience",
+      name: "Adults only (18+)",
+      suggestedMinAge: 18,
     },
     potentialAction: {
       "@type": "ReserveAction",
