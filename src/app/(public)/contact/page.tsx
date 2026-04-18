@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: "Contact Lakeside Retreat | Cromwell, Central Otago",
   description:
     "Get in touch with Lakeside Retreat in Cromwell, Central Otago. Enquiries, availability, and bookings for luxury glamping domes and lakeside cottage. Call or email Stephen & Sandy.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact Lakeside Retreat",
+    description:
+      "Enquiries, availability, and bookings for luxury glamping domes and lakeside cottage in Cromwell, Central Otago.",
+    url: "https://lakesideretreat.co.nz/contact",
+    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat" }],
+    type: "website",
+  },
 };
 
 const contactInfo = [

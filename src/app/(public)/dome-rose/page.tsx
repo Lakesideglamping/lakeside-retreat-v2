@@ -90,7 +90,7 @@ export default function DomeRosePage() {
         ]),
         createFaqSchema([
           { question: "What makes Dome Ros\u00e9 special?", answer: "Dome Ros\u00e9 is a romantic 40sqm retreat with private outdoor spa, vineyard and mountain views, and a cosy intimate atmosphere perfect for couples." },
-          { question: "Is Dome Ros\u00e9 suitable for families?", answer: "No, Dome Ros\u00e9 is strictly adults-only. For families, we recommend our Lakeside Cottage." },
+          { question: "Is Dome Ros\u00e9 suitable for families?", answer: "No. Lakeside Retreat is strictly adults-only (18+) across all accommodations \u2014 Dome Ros\u00e9, Dome Pinot, and the Lakeside Cottage. Guests arriving with anyone under 18 will be refused check-in with no refund." },
           { question: "What's the difference between Dome Pinot and Dome Ros\u00e9?", answer: "Dome Pinot is larger (50sqm vs 40sqm) with lake views and a stargazing skylight. Dome Ros\u00e9 offers a more intimate setting with vineyard and mountain views." },
         ]),
       ]} />

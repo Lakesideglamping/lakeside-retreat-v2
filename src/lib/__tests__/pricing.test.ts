@@ -36,17 +36,19 @@ const cottage: Accommodation = {
 };
 
 describe("calculatePrice", () => {
-  it("computes nightly rate × nights + deposit (no cleaning line item)", () => {
-    const { totalAmount, lineItems } = calculatePrice(
+  it("computes nightly rate × nights, excludes deposit, no cleaning line item", () => {
+    const { totalAmount, lineItems, securityDeposit } = calculatePrice(
       dome,
       "2026-06-01",
       "2026-06-03",
       2
     );
-    // 2 nights × $635 + $300 deposit (no cleaning)
-    expect(totalAmount).toBe(635 * 2 + 300);
-    expect(lineItems).toHaveLength(2); // nightly, deposit
+    // 2 nights × $635 (no cleaning, no deposit in total)
+    expect(totalAmount).toBe(635 * 2);
+    expect(lineItems).toHaveLength(1); // nightly only
+    expect(securityDeposit).toBe(300);
     expect(lineItems.find((i) => i.label.toLowerCase().includes("cleaning"))).toBeUndefined();
+    expect(lineItems.find((i) => i.label.toLowerCase().includes("security"))).toBeUndefined();
   });
 
   it("adds extra guest fee for guests above base", () => {
@@ -56,8 +58,8 @@ describe("calculatePrice", () => {
       "2026-06-03",
       3 // 1 extra guest
     );
-    // 2 nights × $365 + 2 nights × 1 extra guest × $50 + $300 deposit
-    expect(totalAmount).toBe(365 * 2 + 2 * 1 * 50 + 300);
+    // 2 nights × $365 + 2 nights × 1 extra guest × $50
+    expect(totalAmount).toBe(365 * 2 + 2 * 1 * 50);
   });
 
   it("does not add extra guest fee when at base occupancy", () => {
@@ -77,7 +79,7 @@ describe("calculatePrice", () => {
     const petItem = lineItems.find((i) => i.label.includes("Pet fee"));
     expect(petItem).toBeDefined();
     expect(petItem!.total).toBe(100); // 2 pets × $50
-    expect(totalAmount).toBe(365 * 2 + 100 + 300);
+    expect(totalAmount).toBe(365 * 2 + 100);
   });
 
   it("applies seasonal multiplier to nightly rate", () => {
@@ -95,11 +97,14 @@ describe("calculatePrice", () => {
     expect(nightly.label).not.toContain("peak season");
   });
 
-  it("booking total excludes the security deposit", () => {
-    const { lineItems, totalAmount } = calculatePrice(dome, "2026-06-01", "2026-06-02", 2);
-    const deposit = lineItems.find((i) => i.label.startsWith("Security bond"));
-    expect(deposit).toBeDefined();
-    const bookingTotal = totalAmount - deposit!.total;
-    expect(bookingTotal).toBe(635); // 1 night, cleaning is bundled
+  it("returns security deposit separately from the charged total", () => {
+    const { totalAmount, securityDeposit } = calculatePrice(
+      dome,
+      "2026-06-01",
+      "2026-06-02",
+      2
+    );
+    expect(totalAmount).toBe(635); // 1 night, cleaning bundled, no bond
+    expect(securityDeposit).toBe(300);
   });
 });

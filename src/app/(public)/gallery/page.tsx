@@ -6,6 +6,15 @@ export const metadata: Metadata = {
   title: "Photo Gallery | Luxury Glamping Domes & Cottage, Central Otago",
   description:
     "Photos of Lakeside Retreat: luxury geodesic domes, private outdoor spas, Lake Dunstan views, and Central Otago landscapes. 4.9★ rated accommodation, Cromwell.",
+  alternates: { canonical: "/gallery" },
+  openGraph: {
+    title: "Photo Gallery | Lakeside Retreat",
+    description:
+      "Photos of Lakeside Retreat: luxury geodesic domes, private spas, Lake Dunstan views, Central Otago.",
+    url: "https://lakesideretreat.co.nz/gallery",
+    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat gallery" }],
+    type: "website",
+  },
 };
 
 export default function GalleryPage() {

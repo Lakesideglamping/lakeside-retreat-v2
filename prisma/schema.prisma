@@ -66,7 +66,6 @@ model bookings {
   @@index([booking_source], map: "idx_bookings_booking_source")
   @@index([check_in], map: "idx_bookings_check_in")
   @@index([check_out], map: "idx_bookings_check_out")
-  @@index([created_at], map: "idx_bookings_created")
   @@index([created_at], map: "idx_bookings_created_at")
   @@index([check_in, check_out], map: "idx_bookings_dates")
   @@index([payment_status], map: "idx_bookings_payment_status")

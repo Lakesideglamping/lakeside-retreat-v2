@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: "About Lakeside Retreat | Sustainable Luxury Accommodation, Central Otago",
   description:
     "Meet Stephen and Sandy, hosts of Central Otago's premier sustainably powered retreat on Lake Dunstan. Our story of building luxury glamping domes and a lakeside cottage.",
+  alternates: { canonical: "/our-story" },
+  openGraph: {
+    title: "About Lakeside Retreat | Our Story",
+    description:
+      "Meet Stephen and Sandy, hosts of Central Otago's premier sustainably powered retreat on Lake Dunstan.",
+    url: "https://lakesideretreat.co.nz/our-story",
+    images: [{ url: "/images/solarpanel.jpeg", width: 1200, height: 800, alt: "Lakeside Retreat \u2014 solar powered" }],
+    type: "website",
+  },
 };
 
 const timeline = [

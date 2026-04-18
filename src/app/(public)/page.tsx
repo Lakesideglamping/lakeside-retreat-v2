@@ -5,7 +5,18 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createLodgingBusinessSchema, createOrganizationSchema, createWebSiteSchema, createFaqSchema, createBreadcrumbSchema, fetchReviewStats } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
+  title: "Lakeside Retreat | Luxury Glamping Domes & Lakeside Cottage, Central Otago",
+  description:
+    "Adults-only luxury glamping domes and pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Private spas, vineyard and mountain views, 4.9\u2605 guest reviews.",
   alternates: { canonical: "/" },
+  openGraph: {
+    title: "Lakeside Retreat | Luxury Glamping on Lake Dunstan",
+    description:
+      "Adults-only luxury glamping domes and pet-friendly lakeside cottage on Lake Dunstan, Central Otago. Private spas, vineyard views, 4.9\u2605 reviews.",
+    url: "https://lakesideretreat.co.nz/",
+    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat \u2014 luxury glamping on Lake Dunstan" }],
+    type: "website",
+  },
 };
 
 export default async function HomePage() {
@@ -29,7 +40,7 @@ export default async function HomePage() {
           { question: "How far is Lakeside Retreat from Queenstown?", answer: "Approximately 45 minutes' drive from Queenstown via the scenic Kawarau Gorge. Wanaka is just 30 minutes in the other direction. We're perfectly positioned as a quieter, more affordable alternative to Queenstown accommodation." },
           { question: "Can I bring my dog to Lakeside Retreat?", answer: "Yes! The Lakeside Cottage is pet-friendly and welcomes well-behaved dogs with prior approval. A flat $50 pet fee applies. The cottage has direct lake access and a secure outdoor area. The glamping domes are adults-only and not suitable for pets." },
           { question: "Is Lakeside Retreat close to the Otago Rail Trail?", answer: "The Otago Rail Trail (New Zealand's original Great Ride) is just 300 metres from Lakeside Retreat. You can walk from your accommodation to the trail start. The Cromwell to Clyde section is flat and spectacular — ideal for cyclists of all fitness levels." },
-          { question: "What is the minimum stay at Lakeside Retreat?", answer: "Our luxury domes (Dome Pinot and Dome Ros\u00e9) have a 1-night minimum stay, though 2+ nights is recommended to fully experience the retreat. The Lakeside Cottage has a 2-night minimum stay." },
+          { question: "What is the minimum stay at Lakeside Retreat?", answer: "Our luxury domes (Dome Pinot and Dome Ros\u00e9) have a 1-night minimum stay, though 2+ nights is recommended to fully experience the retreat. The Lakeside Cottage has a 2-night minimum stay (3 nights in peak season)." },
           { question: "What's the cancellation policy?", answer: "Full refund if cancelled 7+ days before check-in. 50% refund for 3-6 days. No refund within 3 days." },
           { question: "Why book direct instead of Airbnb?", answer: "Booking direct saves you 12-18% in service fees that platforms charge. You get the same luxury stay at a lower price with direct host communication and the ability to discuss special requests with Stephen and Sandy." },
         ]),

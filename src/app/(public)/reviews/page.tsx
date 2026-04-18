@@ -10,6 +10,15 @@ export const metadata: Metadata = {
   title: "Guest Reviews | 4.9★ Rated Accommodation, Central Otago",
   description:
     "Read 416 verified guest reviews of Lakeside Retreat, Cromwell. 4.9/5 stars across Airbnb, Booking.com, and direct bookings. Central Otago's top-rated glamping.",
+  alternates: { canonical: "/reviews" },
+  openGraph: {
+    title: "Guest Reviews | Lakeside Retreat",
+    description:
+      "416 verified reviews, 4.9\u2605 average. Central Otago's top-rated glamping and lakeside cottage.",
+    url: "https://lakesideretreat.co.nz/reviews",
+    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat reviews" }],
+    type: "website",
+  },
 };
 
 export default async function ReviewsPage() {
@@ -34,7 +43,7 @@ export default async function ReviewsPage() {
     { label: "Overall Rating", value: avgRating !== "0.0" ? avgRating : "4.9", sub: "out of 5 stars" },
     { label: "Verified Reviews", value: String(totalReviews), sub: "across all platforms" },
     { label: "Return Guests", value: "45%", sub: "come back again" },
-    { label: "Would Recommend", value: "98%", sub: "to friends & family" },
+    { label: "Would Recommend", value: "98%", sub: "to friends" },
   ];
 
   // Serialize for client component

@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: "Things to Do Near Cromwell | Wineries, Cycling & Lake Dunstan Activities",
   description:
     "Everything to do near Lakeside Retreat: Otago Rail Trail cycling, Central Otago wineries, Lake Dunstan water sports, and day trips to Queenstown, Wanaka, and Arrowtown.",
+  alternates: { canonical: "/explore" },
+  openGraph: {
+    title: "Things to Do Near Cromwell | Lakeside Retreat",
+    description:
+      "Wineries, cycling, water sports, and day trips to Queenstown, Wanaka, and Arrowtown \u2014 all from Lakeside Retreat.",
+    url: "https://lakesideretreat.co.nz/explore",
+    images: [{ url: "/images/lakeview.jpeg", width: 1200, height: 800, alt: "Things to do near Cromwell" }],
+    type: "website",
+  },
 };
 
 const distances = [

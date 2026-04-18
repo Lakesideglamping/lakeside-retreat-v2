@@ -8,6 +8,15 @@ export const metadata: Metadata = {
   title: "Luxury Accommodation Central Otago | Glamping Domes & Lakeside Cottage",
   description:
     "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Stargazing skylights, vineyard views. $365/night.",
+  alternates: { canonical: "/stay" },
+  openGraph: {
+    title: "Luxury Accommodation Central Otago | Glamping Domes & Lakeside Cottage",
+    description:
+      "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell.",
+    url: "https://lakesideretreat.co.nz/stay",
+    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat accommodation" }],
+    type: "website",
+  },
 };
 
 const accommodations = [

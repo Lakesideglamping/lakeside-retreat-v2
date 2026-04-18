@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: "Central Otago Travel Guides | Insider Tips from Lakeside Retreat",
   description:
     "Expert guides for your Central Otago stay: Otago Rail Trail cycling, Lake Dunstan activities, Central Otago wine trails, and day trips to Queenstown and Wanaka.",
+  alternates: { canonical: "/guides" },
+  openGraph: {
+    title: "Central Otago Travel Guides | Lakeside Retreat",
+    description:
+      "Otago Rail Trail, Lake Dunstan activities, wine trails, and day trips \u2014 local insider tips from your Cromwell hosts.",
+    url: "https://lakesideretreat.co.nz/guides",
+    images: [{ url: "/images/lakeview.jpeg", width: 1200, height: 800, alt: "Central Otago travel guides" }],
+    type: "website",
+  },
 };
 
 const guides = [

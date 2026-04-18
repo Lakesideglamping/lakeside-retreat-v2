@@ -168,8 +168,9 @@ export async function POST(request: Request) {
               security_deposit_status: "not_applicable",
             },
           });
+          // Log without guest name (PII). The uplisting_id is enough to trace.
           console.log(
-            `[uplisting webhook] Created channel booking: ${guestName} at ${accommodation} (${source})`
+            `[uplisting webhook] Created channel booking ${uplistingId} at ${accommodation} (${source})`
           );
         } catch (dbErr) {
           console.error("[uplisting webhook] DB create error:", dbErr);
