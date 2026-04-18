@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { JsonLd, createLodgingBusinessSchema, createOrganizationSchema, createWebSiteSchema, createFaqSchema, createBreadcrumbSchema } from "@/lib/structured-data";
+import { JsonLd, createLodgingBusinessSchema, createOrganizationSchema, createWebSiteSchema, createFaqSchema, createBreadcrumbSchema, fetchReviewStats } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const reviewStats = await fetchReviewStats();
   return (
     <>
       <JsonLd data={[
-        createLodgingBusinessSchema(),
+        createLodgingBusinessSchema(reviewStats),
         createOrganizationSchema(),
         createWebSiteSchema(),
         createBreadcrumbSchema([

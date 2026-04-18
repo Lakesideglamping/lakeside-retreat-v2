@@ -21,7 +21,24 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/maintenance", request.url));
   }
 
-  // Only protect /admin/* except /admin/login and /api/admin/login
+  // Only protect /admin/* except /admin/login and /api/admin/login.
+  //
+  // Auth enforcement is split across two layers intentionally:
+  //
+  //   1. Middleware (here): fast JWT signature + expiry check. Redirects
+  //      unauthenticated visitors before any page work happens. Does NOT
+  //      check the token blacklist — the Edge runtime cannot safely reach
+  //      Postgres on every request.
+  //
+  //   2. Admin layout + withAdmin() (lib/admin-route.ts): full verifyToken()
+  //      which includes the blacklist lookup. This is the authoritative
+  //      enforcement point. All server-rendered admin pages go through the
+  //      layout; all admin API routes go through withAdmin/withAdminMutation.
+  //
+  // A blacklisted (logged-out) token therefore passes this middleware check
+  // but is blocked by the layout/API layer before any data is served.
+  // Never add admin routes that bypass the layout without an explicit
+  // withAdmin() call.
   if (
     pathname.startsWith("/admin") &&
     pathname !== "/admin/login" &&

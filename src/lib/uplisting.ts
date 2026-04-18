@@ -1,4 +1,5 @@
 import { getCached, setCache } from "./cache";
+import { getDbCached, setDbCache, invalidateDbCache } from "./db-cache";
 import crypto from "crypto";
 
 const API_BASE = "https://connect.uplisting.io";
@@ -87,8 +88,18 @@ export async function fetchBlockedDates(
   if (!isConfigured()) return [];
 
   const cacheKey = `blocked-dates-${accommodation}`;
+  const dbCacheKey = `cache:blocked-dates:${accommodation}`;
+
+  // L1: in-memory (fast, cleared on deploy)
   const cached = getCached<string[]>(cacheKey, CACHE_TTL);
   if (cached) return cached;
+
+  // L2: Postgres (survives deploys, shared across instances)
+  const dbCached = await getDbCached<string[]>(dbCacheKey, CACHE_TTL);
+  if (dbCached) {
+    setCache(cacheKey, dbCached); // warm L1
+    return dbCached;
+  }
 
   const propertyId = PROPERTY_IDS[accommodation];
   if (!propertyId) return [];
@@ -125,6 +136,7 @@ export async function fetchBlockedDates(
     }
 
     setCache(cacheKey, blocked);
+    setDbCache(dbCacheKey, blocked, CACHE_TTL).catch(() => {}); // async, non-blocking
     return blocked;
   } catch (err) {
     console.error("[uplisting] Error fetching blocked dates:", err);
@@ -225,6 +237,7 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
     `[uplisting] Calendar blocked for ${data.guestName} (${data.checkIn} → ${data.checkOut}, last night ${toDate})`
   );
   setCache(`blocked-dates-${data.accommodation}`, null);
+  invalidateDbCache(`cache:blocked-dates:${data.accommodation}`).catch(() => {});
 }
 
 export function verifyWebhookSignature(

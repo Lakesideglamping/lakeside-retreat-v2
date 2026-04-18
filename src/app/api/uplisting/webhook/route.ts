@@ -3,12 +3,19 @@ import { verifyWebhookSignature, isConfigured } from "@/lib/uplisting";
 import { prisma } from "@/lib/db";
 import { randomUUID } from "crypto";
 
-// Map Uplisting property IDs back to our accommodation slugs
-const PROPERTY_SLUG_MAP: Record<string, string> = {
-  [process.env.UPLISTING_PINOT_ID || "82753"]: "dome-pinot",
-  [process.env.UPLISTING_ROSE_ID || "82754"]: "dome-rose",
-  [process.env.UPLISTING_COTTAGE_ID || "80360"]: "lakeside-cottage",
-};
+// Map Uplisting property IDs back to our accommodation slugs.
+// No fallback values — if the env vars are missing we fail closed rather than
+// silently routing events to hardcoded live property IDs, which would corrupt
+// data on any environment that doesn't have these vars set.
+function buildPropertySlugMap(): Record<string, string> {
+  const map: Record<string, string> = {};
+  if (process.env.UPLISTING_PINOT_ID) map[process.env.UPLISTING_PINOT_ID] = "dome-pinot";
+  if (process.env.UPLISTING_ROSE_ID) map[process.env.UPLISTING_ROSE_ID] = "dome-rose";
+  if (process.env.UPLISTING_COTTAGE_ID) map[process.env.UPLISTING_COTTAGE_ID] = "lakeside-cottage";
+  return map;
+}
+
+const PROPERTY_SLUG_MAP = buildPropertySlugMap();
 
 function getAccommodationSlug(propertyId: string | number): string {
   return PROPERTY_SLUG_MAP[String(propertyId)] || "unknown";

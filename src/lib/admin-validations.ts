@@ -1,4 +1,10 @@
 import { z } from "zod";
+import { getValidIds } from "./accommodations";
+
+const accommodationField = () =>
+  z.string().refine((val) => getValidIds().includes(val), {
+    message: "Invalid accommodation",
+  });
 
 export const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -9,7 +15,7 @@ export const bookingCreateSchema = z.object({
   guest_name: z.string().min(2).max(100),
   guest_email: z.string().email(),
   guest_phone: z.string().optional(),
-  accommodation: z.string().min(1),
+  accommodation: accommodationField(),
   check_in: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   check_out: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   guests: z.number().int().min(1).max(10),
@@ -23,13 +29,13 @@ export const bookingUpdateSchema = z.object({
   guest_name: z.string().min(2).max(100).optional(),
   guest_email: z.string().email().optional(),
   guest_phone: z.string().optional(),
-  accommodation: z.string().optional(),
+  accommodation: accommodationField().optional(),
   check_in: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   check_out: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   guests: z.number().int().min(1).max(10).optional(),
   total_price: z.number().min(0).optional(),
-  status: z.string().optional(),
-  payment_status: z.string().optional(),
+  status: z.enum(["pending", "confirmed", "cancelled", "completed"]).optional(),
+  payment_status: z.enum(["pending", "paid", "refunded", "failed", "paid_external"]).optional(),
   notes: z.string().max(1000).optional(),
 });
 

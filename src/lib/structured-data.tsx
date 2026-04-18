@@ -35,7 +35,13 @@ const sameAs = [
   "https://www.instagram.com/lakesideretreatnz",
 ];
 
-export function createLodgingBusinessSchema() {
+interface AggregateRatingStats {
+  ratingValue: string;
+  reviewCount: string;
+}
+
+export function createLodgingBusinessSchema(rating?: AggregateRatingStats) {
+  const { ratingValue, reviewCount } = rating ?? { ratingValue: "4.9", reviewCount: "416" };
   return {
     "@context": "https://schema.org",
     "@type": "LodgingBusiness",
@@ -51,8 +57,8 @@ export function createLodgingBusinessSchema() {
     priceRange: "$295-$530 NZD per night",
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "416",
+      ratingValue,
+      reviewCount,
       bestRating: "5",
     },
     amenityFeature: [
@@ -245,4 +251,45 @@ export function createArticleSchema(params: ArticleSchemaParams) {
     },
     inLanguage: "en-NZ",
   };
+}
+
+/**
+ * Fetch live review stats from the DB for use in structured data.
+ * Only counts approved reviews so the schema rating reflects real published data.
+ * Falls back to safe static values on DB error.
+ *
+ * Call this in server components (pages) and pass the result to
+ * createLodgingBusinessSchema() and createPropertySchema().
+ */
+export async function fetchReviewStats(property?: string): Promise<AggregateRatingStats> {
+  try {
+    // Dynamic import keeps this server-only — avoids bundling Prisma into client chunks.
+    const { prisma } = await import("./db");
+
+    const where = {
+      status: "approved",
+      rating: { not: null },
+      ...(property ? { property } : {}),
+    };
+
+    const result = await prisma.reviews.aggregate({
+      where,
+      _avg: { rating: true },
+      _count: { rating: true },
+    });
+
+    const count = result._count.rating;
+    const avg = result._avg.rating;
+
+    if (!count || !avg) {
+      return { ratingValue: "4.9", reviewCount: "416" };
+    }
+
+    return {
+      ratingValue: avg.toFixed(1),
+      reviewCount: String(count),
+    };
+  } catch {
+    return { ratingValue: "4.9", reviewCount: "416" };
+  }
 }

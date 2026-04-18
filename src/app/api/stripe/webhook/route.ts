@@ -38,6 +38,18 @@ function extractPaymentIntentId(
 }
 
 export async function POST(request: Request) {
+  // In production, a missing STRIPE_SECRET_KEY must be a hard failure — not a
+  // silent no-op. Returning 200 here would tell Stripe "received OK" and it
+  // would stop retrying, silently losing every booking. Return 503 so Stripe
+  // keeps retrying until the key is restored.
+  if (process.env.NODE_ENV === "production" && isDevMode) {
+    logger.error("stripe webhook: STRIPE_SECRET_KEY not set in production");
+    return NextResponse.json(
+      { error: "Stripe not configured" },
+      { status: 503 }
+    );
+  }
+
   if (isDevMode) {
     return NextResponse.json({ received: true, devMode: true });
   }
@@ -67,12 +79,24 @@ export async function POST(request: Request) {
       );
     }
 
-    // Webhook deduplication — skip if already processed
-    const existing = await prisma.processed_webhook_events.findUnique({
-      where: { event_id: event.id },
-    });
-    if (existing) {
-      logger.info("stripe webhook duplicate event skipped", {
+    // Scoped logger stamps every entry with a shared requestId so concurrent
+    // webhook events don't interleave indistinguishably in production logs.
+    const log = logger.withRequestId();
+
+    // Webhook deduplication — claim the event ID before processing. Writing
+    // the record here (not after the switch) closes the race where processing
+    // succeeds but the dedup write fails, causing a duplicate on the next
+    // Stripe retry. If we crash after this write but before finishing, the
+    // event is silently skipped — acceptable given the booking's
+    // stripe_session_id unique constraint acts as a backstop for the most
+    // important idempotency case (duplicate bookings).
+    try {
+      await prisma.processed_webhook_events.create({
+        data: { event_id: event.id },
+      });
+    } catch {
+      // Unique constraint violation — already processed on a prior attempt.
+      log.info("stripe webhook duplicate event skipped", {
         eventId: event.id,
       });
       return NextResponse.json({ received: true, duplicate: true });
@@ -84,7 +108,7 @@ export async function POST(request: Request) {
         const metadata = session.metadata || {};
         const paymentIntentId = extractPaymentIntentId(session.payment_intent);
 
-        logger.info("checkout.session.completed", {
+        log.info("checkout.session.completed", {
           accommodation: metadata.accommodation,
           checkIn: metadata.checkIn,
           checkOut: metadata.checkOut,
@@ -94,7 +118,7 @@ export async function POST(request: Request) {
         // Currency guard: if Stripe ever returns a non-NZD currency we'd be
         // persisting an amount in the wrong denomination.
         if ((session.currency || "").toLowerCase() !== "nzd") {
-          logger.error("stripe webhook currency mismatch", {
+          log.error("stripe webhook currency mismatch", {
             expected: "nzd",
             received: session.currency,
             sessionId: session.id,
@@ -123,7 +147,7 @@ export async function POST(request: Request) {
             Number(metadata.pets) || 0
           );
           if (session.amount_total !== expectedTotal) {
-            logger.error("stripe webhook amount mismatch", {
+            log.error("stripe webhook amount mismatch", {
               sessionTotal: session.amount_total,
               expected: expectedTotal,
               sessionId: session.id,
@@ -177,12 +201,12 @@ export async function POST(request: Request) {
             },
           });
           bookingSaved = true;
-          logger.info("booking saved (authorized)", {
+          log.info("booking saved (authorized)", {
             bookingId,
             guestEmailMasked: maskEmail(metadata.guestEmail),
           });
         } catch (dbErr) {
-          logger.error("stripe webhook DB save error", {
+          log.error("stripe webhook DB save error", {
             bookingId,
             error: dbErr instanceof Error ? dbErr.message : String(dbErr),
           });
@@ -211,7 +235,7 @@ export async function POST(request: Request) {
               ).catch(() => {});
             })
             .catch((e) =>
-              logger.error("stripe webhook failed to log error", {
+              log.error("stripe webhook failed to log error", {
                 error: e instanceof Error ? e.message : String(e),
               })
             );
@@ -272,13 +296,13 @@ export async function POST(request: Request) {
               },
             });
 
-            logger.info("deposit hold created", {
+            log.info("deposit hold created", {
               bookingId,
               depositPiId: depositPi.id,
               amount: depositAmount / 100,
             });
           } catch (depErr) {
-            logger.error("deposit hold creation failed", {
+            log.error("deposit hold creation failed", {
               bookingId,
               error:
                 depErr instanceof Error ? depErr.message : String(depErr),
@@ -327,7 +351,7 @@ export async function POST(request: Request) {
                 .catch(() => {});
             })
             .catch((err) => {
-              logger.error("uplisting sync failed", {
+              log.error("uplisting sync failed", {
                 bookingId,
                 error: err instanceof Error ? err.message : String(err),
               });
@@ -358,7 +382,7 @@ export async function POST(request: Request) {
             guests: Number(metadata.guests) || 1,
             totalAmount: (session.amount_total || 0) / 100,
           }).catch((err) =>
-            logger.error("booking confirmation email failed", {
+            log.error("booking confirmation email failed", {
               bookingId,
               error: err instanceof Error ? err.message : String(err),
             })
@@ -372,12 +396,17 @@ export async function POST(request: Request) {
         const charge = event.data.object;
         const paymentIntentId = extractPaymentIntentId(charge.payment_intent);
 
-        logger.info("charge.refunded", {
+        log.info("charge.refunded", {
           paymentIntentId,
           amountRefunded: charge.amount_refunded,
+          amountTotal: charge.amount,
         });
 
-        if (paymentIntentId) {
+        // Only cancel the booking on a full refund. Partial refunds (e.g. a
+        // goodwill adjustment) must not cancel an active stay.
+        const isFullRefund = charge.amount_refunded >= charge.amount;
+
+        if (paymentIntentId && isFullRefund) {
           try {
             await prisma.bookings.updateMany({
               where: { stripe_payment_id: paymentIntentId },
@@ -387,20 +416,26 @@ export async function POST(request: Request) {
                 updated_at: new Date(),
               },
             });
-            logger.info("booking marked refunded", { paymentIntentId });
+            log.info("booking marked refunded (full refund)", { paymentIntentId });
           } catch (dbErr) {
-            logger.error("refund DB update failed", {
+            log.error("refund DB update failed", {
               paymentIntentId,
               error: dbErr instanceof Error ? dbErr.message : String(dbErr),
             });
           }
+        } else if (paymentIntentId && !isFullRefund) {
+          log.info("partial refund — booking status unchanged", {
+            paymentIntentId,
+            amountRefunded: charge.amount_refunded,
+            amountTotal: charge.amount,
+          });
         }
         break;
       }
 
       case "payment_intent.canceled": {
         const pi = event.data.object;
-        logger.info("payment_intent.canceled — deposit hold released", {
+        log.info("payment_intent.canceled — deposit hold released", {
           paymentIntentId: pi.id,
         });
 
@@ -417,7 +452,7 @@ export async function POST(request: Request) {
             },
           });
         } catch (dbErr) {
-          logger.error("deposit release DB update failed", {
+          log.error("deposit release DB update failed", {
             paymentIntentId: pi.id,
             error: dbErr instanceof Error ? dbErr.message : String(dbErr),
           });
@@ -427,7 +462,7 @@ export async function POST(request: Request) {
 
       case "payment_intent.payment_failed": {
         const paymentIntent = event.data.object;
-        logger.warn("payment_intent.payment_failed", {
+        log.warn("payment_intent.payment_failed", {
           paymentIntentId: paymentIntent.id,
           error: paymentIntent.last_payment_error?.message,
         });
@@ -435,13 +470,8 @@ export async function POST(request: Request) {
       }
 
       default:
-        logger.debug("unhandled stripe event", { type: event.type });
+        log.debug("unhandled stripe event", { type: event.type });
     }
-
-    // Mark event as processed (deduplication)
-    await prisma.processed_webhook_events
-      .create({ data: { event_id: event.id } })
-      .catch(() => {});
 
     return NextResponse.json({ received: true });
   } catch (err) {
