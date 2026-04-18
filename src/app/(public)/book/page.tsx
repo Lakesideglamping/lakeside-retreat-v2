@@ -42,7 +42,7 @@ export default function BookPage() {
             Book Your Stay
           </h1>
           <p className="text-lg opacity-95">
-            The full experience. None of the middleman fees.
+            Your stay begins here.
           </p>
         </div>
       </section>

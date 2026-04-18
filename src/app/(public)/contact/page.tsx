@@ -37,7 +37,7 @@ export default function ContactPage() {
         <div className="pt-20 px-5">
           <h1 className="font-display text-5xl text-white mb-4">Contact Us</h1>
           <p className="text-xl opacity-95">
-            Questions about your stay? Stephen and Sandy reply personally.
+            Ask us anything. Stephen and Sandy reply personally.
           </p>
         </div>
       </section>

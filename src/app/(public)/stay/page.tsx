@@ -84,7 +84,7 @@ export default function StayPage() {
             Our Accommodations
           </h1>
           <p className="text-xl opacity-95">
-            Two domes, one cottage, one extraordinary place.
+            Choose your retreat. The lake takes care of the rest.
           </p>
         </div>
       </section>
