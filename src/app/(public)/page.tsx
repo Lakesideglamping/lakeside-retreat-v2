@@ -54,9 +54,8 @@ export default async function HomePage() {
             <span className="text-white font-semibold text-sm">4.9/5</span>
             <span className="text-white/90 text-sm">&bull; 416 verified reviews</span>
           </div>
-          <p className="text-xl mb-8 opacity-95">
-            Luxury glamping domes and lakefront cottage in the heart of Central
-            Otago&apos;s wine country
+          <p className="text-xl md:text-2xl mb-8 opacity-95 font-light tracking-wide">
+            Wake to the lake. Dine in the vines. Sleep beneath the stars.
           </p>
           <Button href="/book">Book Your Escape</Button>
         </div>
