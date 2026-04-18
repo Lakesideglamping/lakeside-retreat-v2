@@ -58,6 +58,9 @@ export default async function HomePage() {
             Wake to the lake. Dine in the vines. Sleep beneath the stars.
           </p>
           <Button href="/book">Book Your Escape</Button>
+          <p className="text-white/85 text-sm mt-5">
+            From <span className="font-semibold text-white">$295/night</span> &middot; Free cancellation 7+ days before
+          </p>
         </div>
       </section>
 
@@ -130,22 +133,18 @@ export default async function HomePage() {
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="font-display text-4xl mb-4">
-              Perfect Central Otago Location
+              Everything worth doing. None of the driving.
             </h2>
-            <ul className="space-y-3 mb-8">
-              {[
-                "300m direct access to Lake Dunstan Trail",
-                "45 minutes from Queenstown Airport",
-                "30 minutes from Wanaka township",
-                "Surrounded by world-class wineries",
-                "Five ski fields within range",
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-body">
-                  <span className="text-burgundy">&#10003;</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <p className="text-lg leading-8 text-muted mb-4">
+              Step off the deck and onto the lake trail. Taste your way through
+              thirty cellar doors before lunch. Ski at first light, soak under
+              the stars by dinner.
+            </p>
+            <p className="text-lg leading-8 text-muted mb-8">
+              Queenstown&apos;s forty-five minutes away when you want the
+              bustle. Wanaka, thirty. By sunset, the rest of the world feels
+              very far away.
+            </p>
             <Button href="/explore">Explore Local Area</Button>
           </div>
           <Image
@@ -163,14 +162,14 @@ export default async function HomePage() {
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-12">
             <h2 className="font-display text-4xl mb-4">
-              Three Unique Experiences
+              Pick your view. Pick your pace.
             </h2>
             <p className="text-lg text-muted">
-              Luxury domes for couples and a family cottage — all with lake access
-              and sustainably powered.
+              Two domes for two. A cottage for the whole tribe. All with the
+              lake at your door.
             </p>
             <p className="text-sm text-muted mt-2">
-              Only 3 properties — book early for peak season
+              Only three keys on the hook — peak season goes fast.
             </p>
           </div>
 
@@ -230,25 +229,37 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid sm:grid-cols-2 gap-8 mb-12">
             {[
-              { author: "Sarah", accommodation: "Dome Pinot", date: "January 2026", text: "Outstanding experience. The continental breakfast, vineyard walks, and lake swimming made this the perfect Central Otago getaway. The stargazing skylight was magical." },
-              { author: "Ryan", accommodation: "Lakeside Cottage", date: "February 2026", text: "Such a lovely place. The lake views from the deck, morning kayaks with the kids, and the attentive hosts made our family holiday unforgettable." },
-              { author: "Emma", accommodation: "Dome Ros\u00e9", date: "December 2025", text: "A hidden gem in wine country. The private spa overlooking the vineyards was heavenly. Stephen and Sandy are wonderful hosts who think of everything." },
+              { author: "Sarah", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "January 2026", text: "Outstanding experience. The continental breakfast, vineyard walks, and lake swimming made this the perfect Central Otago getaway. The stargazing skylight was magical." },
+              { author: "Ryan", accommodation: "Lakeside Cottage", image: "/images/lakeside-cottage-exterior.jpeg", date: "February 2026", text: "Such a lovely place. The lake views from the deck, morning kayaks with the kids, and the attentive hosts made our family holiday unforgettable." },
+              { author: "Emma", accommodation: "Dome Ros\u00e9", image: "/images/dome-rose-spa1.jpeg", date: "December 2025", text: "A hidden gem in wine country. The private spa overlooking the vineyards was heavenly. Stephen and Sandy are wonderful hosts who think of everything." },
+              { author: "James", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "November 2025", text: "Booked for one night, stayed for three. Watched the sun rise over the lake from the hot tub. We\u2019ll be back every anniversary now." },
             ].map((review) => (
-              <div key={review.author} className="bg-white rounded-2xl p-8 shadow-md">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-burgundy to-teal flex items-center justify-center text-white font-semibold text-sm">
-                    {review.author[0]}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-sm">{review.author}</p>
-                    <p className="text-xs text-muted">{review.date}</p>
-                  </div>
+              <div key={review.author} className="bg-white rounded-2xl overflow-hidden shadow-md flex flex-col sm:flex-row">
+                <div className="relative sm:w-48 h-48 sm:h-auto shrink-0">
+                  <Image
+                    src={review.image}
+                    alt={review.accommodation}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 200px"
+                  />
                 </div>
-                <p className="text-yellow-500 mb-3">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
-                <p className="text-sm text-muted italic leading-relaxed">&ldquo;{review.text}&rdquo;</p>
-                <p className="text-xs text-burgundy mt-4 bg-cream inline-block px-3 py-1 rounded-full">{review.accommodation}</p>
+                <div className="p-6 flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-burgundy flex items-center justify-center text-white font-semibold text-sm">
+                      {review.author[0]}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm">{review.author}</p>
+                      <p className="text-xs text-muted">{review.date}</p>
+                    </div>
+                  </div>
+                  <p className="text-yellow-500 mb-3">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+                  <p className="text-sm text-muted italic leading-relaxed">&ldquo;{review.text}&rdquo;</p>
+                  <p className="text-xs text-burgundy mt-4 bg-cream inline-block px-3 py-1 rounded-full">{review.accommodation}</p>
+                </div>
               </div>
             ))}
           </div>
