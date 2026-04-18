@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Roboto } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
+const fraunces = Fraunces({
   variable: "--font-playfair",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -10,7 +10,7 @@ const playfair = Playfair_Display({
   preload: true,
 });
 
-const roboto = Roboto({
+const inter = Inter({
   variable: "--font-roboto",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -62,8 +62,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-NZ">
-      <body className={`${playfair.variable} ${roboto.variable} antialiased`}>
+    <html lang="en-NZ" className={`${fraunces.variable} ${inter.variable}`}>
+      <body className="antialiased">
         {children}
         <script
           dangerouslySetInnerHTML={{
