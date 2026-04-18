@@ -9,6 +9,7 @@ const accommodationField = () =>
 export const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
+  totpCode: z.string().length(6).regex(/^\d{6}$/).optional(),
 });
 
 export const bookingCreateSchema = z.object({

@@ -13,6 +13,7 @@ import {
   deleteFailedAttempt,
   recordFailedAttempt,
 } from "@/lib/login-attempts";
+import { getTotpSecret, verifyTotp } from "@/lib/totp";
 
 export async function POST(request: Request) {
   const ip =
@@ -76,6 +77,24 @@ export async function POST(request: Request) {
 
     // Success — clear failed attempts
     await deleteFailedAttempt(ip);
+
+    // Check if 2FA is enabled. If so, require a valid TOTP code before issuing JWT.
+    const totpSecret = await getTotpSecret();
+    if (totpSecret) {
+      const { totpCode } = parsed.data as { totpCode?: string };
+      if (!totpCode) {
+        // Password correct — tell client to prompt for the TOTP code
+        return NextResponse.json({ require2FA: true });
+      }
+      if (!verifyTotp(totpSecret, totpCode)) {
+        await recordFailedAttempt(ip);
+        await auditLog("unknown", "2fa_failed", { username, ip });
+        return NextResponse.json(
+          { error: "Invalid verification code" },
+          { status: 401 }
+        );
+      }
+    }
 
     // Create JWT
     const token = await createToken(username);

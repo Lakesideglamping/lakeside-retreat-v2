@@ -3,13 +3,17 @@
 import { useState, type FormEvent } from "react";
 import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
 
+type Step = "credentials" | "totp";
+
 export function LoginForm() {
+  const [step, setStep] = useState<Step>("credentials");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [totpCode, setTotpCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleCredentials(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -29,8 +33,40 @@ export function LoginForm() {
         return;
       }
 
-      // Full navigation (not router.push) so the admin layout
-      // re-renders with AdminShell instead of reusing the login layout
+      if (data.require2FA) {
+        setStep("totp");
+        return;
+      }
+
+      window.location.href = "/admin";
+    } catch {
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleTotp(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ username, password, totpCode }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error ?? "Invalid code");
+        setTotpCode("");
+        return;
+      }
+
       window.location.href = "/admin";
     } catch {
       setError("An unexpected error occurred. Please try again.");
@@ -60,63 +96,117 @@ export function LoginForm() {
             </div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label
-                htmlFor="username"
-                className="mb-1.5 block text-sm font-medium text-gray-700"
-              >
-                Username
-              </label>
-              <input
-                id="username"
-                type="text"
-                required
-                autoComplete="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                disabled={loading}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/20 disabled:opacity-50"
-                placeholder="Enter your username"
-              />
-            </div>
+          {step === "credentials" && (
+            <form onSubmit={handleCredentials} className="space-y-5">
+              <div>
+                <label htmlFor="username" className="mb-1.5 block text-sm font-medium text-gray-700">
+                  Username
+                </label>
+                <input
+                  id="username"
+                  type="text"
+                  required
+                  autoComplete="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  disabled={loading}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/20 disabled:opacity-50"
+                  placeholder="Enter your username"
+                />
+              </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="mb-1.5 block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                required
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={loading}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/20 disabled:opacity-50"
-                placeholder="Enter your password"
-              />
-            </div>
+              <div>
+                <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-gray-700">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/20 disabled:opacity-50"
+                  placeholder="Enter your password"
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2d5a5a] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#234848] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/50 focus:ring-offset-2 disabled:opacity-50"
-            >
-              {loading ? (
-                <>
-                  <LoadingSpinner size="sm" className="text-white" />
-                  Signing in...
-                </>
-              ) : (
-                "Sign in"
-              )}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2d5a5a] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#234848] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/50 focus:ring-offset-2 disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <LoadingSpinner size="sm" className="text-white" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign in"
+                )}
+              </button>
+            </form>
+          )}
+
+          {step === "totp" && (
+            <form onSubmit={handleTotp} className="space-y-5">
+              <div className="text-center">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#2d5a5a]/10">
+                  <svg className="h-6 w-6 text-[#2d5a5a]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 8.25h3m-3 3h3m-3 3h3" />
+                  </svg>
+                </div>
+                <p className="text-sm text-gray-600">
+                  Open your authenticator app and enter the 6-digit code.
+                </p>
+              </div>
+
+              <div>
+                <label htmlFor="totpCode" className="mb-1.5 block text-sm font-medium text-gray-700">
+                  Verification code
+                </label>
+                <input
+                  id="totpCode"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="\d{6}"
+                  maxLength={6}
+                  required
+                  autoFocus
+                  autoComplete="one-time-code"
+                  value={totpCode}
+                  onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  disabled={loading}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-center text-2xl font-mono tracking-[0.5em] text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/20 disabled:opacity-50"
+                  placeholder="000000"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading || totpCode.length !== 6}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2d5a5a] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#234848] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/50 focus:ring-offset-2 disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <LoadingSpinner size="sm" className="text-white" />
+                    Verifying...
+                  </>
+                ) : (
+                  "Verify"
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { setStep("credentials"); setError(""); setTotpCode(""); }}
+                className="w-full text-center text-sm text-gray-500 hover:text-gray-700"
+              >
+                ← Back to login
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>
