@@ -25,17 +25,23 @@ export function calculatePrice(
   checkIn: string,
   checkOut: string,
   guests: number,
-  pets: number = 0
+  pets: number = 0,
+  seasonalMultiplier: number = 1.0
 ): PriceBreakdown {
   const nights = daysBetween(checkIn, checkOut);
   const items: PriceLineItem[] = [];
 
+  const nightlyRate = Math.round(accommodation.basePrice * seasonalMultiplier);
+  const nightlyLabel = seasonalMultiplier !== 1.0
+    ? `${accommodation.name} — peak season (${nights} night${nights > 1 ? "s" : ""})`
+    : `${accommodation.name} (${nights} night${nights > 1 ? "s" : ""})`;
+
   // Nightly rate
   items.push({
-    label: `${accommodation.name} (${nights} night${nights > 1 ? "s" : ""})`,
-    amount: accommodation.basePrice,
+    label: nightlyLabel,
+    amount: nightlyRate,
     quantity: nights,
-    total: accommodation.basePrice * nights,
+    total: nightlyRate * nights,
   });
 
   // Cleaning fee

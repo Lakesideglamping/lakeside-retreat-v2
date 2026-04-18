@@ -36,6 +36,7 @@ export function BookingWidget() {
   const [availability, setAvailability] =
     useState<AvailabilityStatus>("idle");
   const [dateError, setDateError] = useState("");
+  const [seasonalMultiplier, setSeasonalMultiplier] = useState(1.0);
 
   const acc: Accommodation | null = accommodation ? (getById(accommodation) ?? null) : null;
 
@@ -67,8 +68,20 @@ export function BookingWidget() {
       setCheckOut(null);
       setAvailability("idle");
       setDateError("");
+      setSeasonalMultiplier(1.0);
     }
   }, [accommodation, fetchBlocked]);
+
+  // Fetch seasonal multiplier whenever accommodation + dates are both set
+  useEffect(() => {
+    if (!accommodation || !checkIn || !checkOut) return;
+    fetch(
+      `/api/pricing?accommodation=${accommodation}&checkIn=${checkIn}&checkOut=${checkOut}`
+    )
+      .then((r) => r.json())
+      .then((d) => setSeasonalMultiplier(d.seasonalMultiplier ?? 1.0))
+      .catch(() => setSeasonalMultiplier(1.0));
+  }, [accommodation, checkIn, checkOut]);
 
   // Reset guests/pets when accommodation changes
   useEffect(() => {
@@ -315,6 +328,7 @@ export function BookingWidget() {
               checkOut={checkOut}
               guests={guests}
               pets={pets}
+              seasonalMultiplier={seasonalMultiplier}
             />
           )}
 
@@ -343,6 +357,7 @@ export function BookingWidget() {
           guests={guests}
           pets={pets}
           onBack={handleBack}
+          seasonalMultiplier={seasonalMultiplier}
         />
       )}
     </div>

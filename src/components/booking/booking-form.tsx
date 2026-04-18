@@ -12,6 +12,7 @@ interface BookingFormProps {
   guests: number;
   pets: number;
   onBack: () => void;
+  seasonalMultiplier?: number;
 }
 
 interface FormFields {
@@ -34,6 +35,7 @@ export function BookingForm({
   guests,
   pets,
   onBack,
+  seasonalMultiplier = 1.0,
 }: BookingFormProps) {
   const [form, setForm] = useState<FormFields>({
     guestName: "",
@@ -53,7 +55,8 @@ export function BookingForm({
     checkIn,
     checkOut,
     guests,
-    pets
+    pets,
+    seasonalMultiplier
   );
 
   const nights = Math.round(

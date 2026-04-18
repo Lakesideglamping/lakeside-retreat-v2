@@ -9,6 +9,7 @@ interface PriceSummaryProps {
   checkOut: string | null;
   guests: number;
   pets: number;
+  seasonalMultiplier?: number;
 }
 
 export function PriceSummary({
@@ -17,6 +18,7 @@ export function PriceSummary({
   checkOut,
   guests,
   pets,
+  seasonalMultiplier = 1.0,
 }: PriceSummaryProps) {
   if (!accommodation || !checkIn || !checkOut) return null;
 
@@ -25,7 +27,8 @@ export function PriceSummary({
     checkIn,
     checkOut,
     guests,
-    pets
+    pets,
+    seasonalMultiplier
   );
 
   // Separate deposit from other items for display
