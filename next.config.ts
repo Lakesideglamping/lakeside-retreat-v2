@@ -12,6 +12,16 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
+    // 'unsafe-eval' is only required in development for React Fast Refresh
+    // and Next's dev overlay. Strip it in production so XSS payloads can't
+    // use eval/new Function. 'unsafe-inline' on scripts is still needed
+    // for Next's inline bootstrap until we wire per-request nonces via
+    // middleware — tracked separately.
+    const isDev = process.env.NODE_ENV !== "production";
+    const scriptSrc = isDev
+      ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com"
+      : "script-src 'self' 'unsafe-inline' https://js.stripe.com";
+
     return [
       {
         // Security headers for all routes
@@ -40,12 +50,12 @@ const nextConfig: NextConfig = {
           },
           {
             // CSP: allow Stripe (checkout, JS SDK, webhooks) and self. Tailwind
-            // and Next.js hydration need 'unsafe-inline' for styles; script
-            // 'unsafe-inline' is Next's inline bootstrap until nonces are wired.
+            // needs 'unsafe-inline' for styles; scripts inherit Next's inline
+            // bootstrap requirement. 'unsafe-eval' is dev-only (see above).
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
+              scriptSrc,
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data: https://fonts.gstatic.com",

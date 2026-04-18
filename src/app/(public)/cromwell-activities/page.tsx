@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
+import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "Things to Do in Cromwell | Activities Guide — Cycling, Wine & Lake Dunstan",
@@ -61,6 +61,12 @@ export default function CromwellActivitiesPage() {
           { name: "Home", path: "/" },
           { name: "Guides", path: "/guides" },
           { name: "Cromwell Activities", path: "/cromwell-activities" },
+        ]),
+        createFaqSchema([
+          { question: "What are the best things to do in Cromwell?", answer: "Cromwell sits on Lake Dunstan in the heart of Central Otago. Top activities include cycling the Lake Dunstan Cycle Trail and Otago Rail Trail, wine tasting at 30+ cellar doors within 15 minutes, swimming and paddleboarding on Lake Dunstan, visiting the historic Heritage Precinct, and day trips to Queenstown, Wanaka, and Arrowtown." },
+          { question: "How far is Cromwell from Queenstown?", answer: "Cromwell is 45 minutes' drive from Queenstown via the scenic Kawarau Gorge. Wanaka is just 30 minutes in the other direction, making Cromwell an ideal base for exploring both." },
+          { question: "Is the Otago Rail Trail close to Cromwell?", answer: "Yes. The Otago Rail Trail passes 300 metres from Lakeside Retreat. The Cromwell to Clyde section is roughly 15km, flat, and suitable for all fitness levels." },
+          { question: "What's the best time of year to visit Cromwell?", answer: "Summer (Dec-Feb) for lake swimming and long evenings; autumn (Mar-May) for golden vineyard colours and harvest events; winter (Jun-Aug) for nearby ski fields and cosy cellar doors; spring (Sep-Nov) for blossoms and shoulder-season pricing." },
         ]),
       ]} />
       {/* Hero */}
