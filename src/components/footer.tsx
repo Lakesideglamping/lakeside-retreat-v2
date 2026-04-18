@@ -82,7 +82,7 @@ export function Footer() {
         </div>
 
         {/* Contact info */}
-        <div className="text-center text-white/70 text-sm leading-7 mb-4">
+        <div className="text-center text-white/90 text-sm leading-7 mb-4">
           <p>info@lakesideretreat.co.nz</p>
           <p>96 Smiths Way, Mount Pisa, Cromwell 9383, New Zealand</p>
         </div>
@@ -129,7 +129,7 @@ function FooterSection({
         <Link
           key={link.href}
           href={link.href}
-          className="block text-white/70 no-underline text-sm mb-2 transition-colors hover:text-white"
+          className="block text-white/90 no-underline text-sm mb-2 transition-colors hover:text-white"
         >
           {link.label}
         </Link>

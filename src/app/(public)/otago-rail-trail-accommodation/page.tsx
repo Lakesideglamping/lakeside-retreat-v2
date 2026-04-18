@@ -146,7 +146,7 @@ export default function OtagoRailTrailAccommodationPage() {
                   </h3>
                   <div className="flex gap-3 text-sm">
                     <span className={`font-semibold ${i === 0 ? "text-white/90" : "text-burgundy"}`}>{section.duration}</span>
-                    <span className={`${i === 0 ? "text-white/70" : "text-muted"}`}>{section.difficulty}</span>
+                    <span className={`${i === 0 ? "text-white/90" : "text-muted"}`}>{section.difficulty}</span>
                   </div>
                 </div>
                 <p className={`text-sm leading-6 ${i === 0 ? "text-white/85" : "text-muted"}`}>{section.description}</p>

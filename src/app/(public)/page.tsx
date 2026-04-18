@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createLodgingBusinessSchema, createOrganizationSchema, createWebSiteSchema, createFaqSchema, createBreadcrumbSchema } from "@/lib/structured-data";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (
@@ -46,7 +51,7 @@ export default function HomePage() {
           <div className="flex items-center justify-center gap-2 mb-5">
             <span className="text-yellow-400 text-lg" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
             <span className="text-white font-semibold text-sm">4.9/5</span>
-            <span className="text-white/70 text-sm">&bull; 416 verified reviews</span>
+            <span className="text-white/90 text-sm">&bull; 416 verified reviews</span>
           </div>
           <p className="text-xl mb-8 opacity-95">
             Luxury glamping domes and lakefront cottage in the heart of Central

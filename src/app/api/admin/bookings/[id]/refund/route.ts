@@ -51,9 +51,13 @@ export async function POST(request: Request, { params }: RouteParams) {
     }
 
     try {
-      const refund = await stripe.refunds.create({
-        payment_intent: booking.stripe_payment_id,
-      });
+      // Idempotency key prevents double refunds if the admin double-clicks
+      // or the request is retried. Keyed by booking + PI so a single booking
+      // can never be refunded twice against the same payment intent.
+      const refund = await stripe.refunds.create(
+        { payment_intent: booking.stripe_payment_id },
+        { idempotencyKey: `refund_${id}_${booking.stripe_payment_id}` }
+      );
 
       const updated = await prisma.bookings.update({
         where: { id },

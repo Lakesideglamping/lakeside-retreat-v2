@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const categories = ["all", "domes", "cottage", "views", "amenities"] as const;
 type Category = (typeof categories)[number];
@@ -38,15 +38,37 @@ export function GalleryContent() {
 
   const filtered = filter === "all" ? galleryItems : galleryItems.filter((i) => i.category === filter);
 
+  // Close lightbox on Escape and lock body scroll while open.
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightbox]);
+
   return (
     <>
       {/* Filters */}
-      <div className="flex justify-center gap-3 mb-8 flex-wrap">
+      <div
+        className="flex justify-center gap-3 mb-8 flex-wrap"
+        role="group"
+        aria-label="Filter photos by category"
+      >
         {categories.map((cat) => (
           <button
             key={cat}
+            type="button"
             onClick={() => setFilter(cat)}
-            className={`px-6 py-3 rounded-full border-2 border-teal font-medium transition-all cursor-pointer ${
+            aria-pressed={filter === cat}
+            aria-label={`Filter by ${categoryLabels[cat]}`}
+            className={`px-6 py-3 rounded-full border-2 border-teal font-medium transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal ${
               filter === cat
                 ? "bg-teal text-white"
                 : "bg-transparent text-teal hover:bg-teal hover:text-white"
@@ -62,8 +84,10 @@ export function GalleryContent() {
         {filtered.map((item) => (
           <button
             key={item.src}
+            type="button"
             onClick={() => setLightbox({ src: item.src, alt: item.alt })}
-            className="group relative rounded-xl overflow-hidden aspect-[4/3] cursor-pointer border-0 p-0 bg-transparent"
+            aria-label={`View photo: ${item.title}`}
+            className="group relative rounded-xl overflow-hidden aspect-[4/3] cursor-pointer border-0 p-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
           >
             <Image
               src={item.src}
@@ -84,12 +108,16 @@ export function GalleryContent() {
       {lightbox && (
         <div
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Photo viewer"
           onClick={() => setLightbox(null)}
         >
           <button
+            type="button"
             onClick={() => setLightbox(null)}
-            className="absolute top-5 right-8 text-white text-4xl cursor-pointer bg-transparent border-0"
-            aria-label="Close lightbox"
+            className="absolute top-5 right-8 text-white text-4xl cursor-pointer bg-transparent border-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            aria-label="Close photo viewer"
           >
             &times;
           </button>

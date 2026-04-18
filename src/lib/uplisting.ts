@@ -182,11 +182,21 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
   const firstName = nameParts[0] || data.guestName;
   const lastName = nameParts.slice(1).join(" ") || "-";
 
+  // Deterministic idempotency key — retries of the same booking won't create
+  // duplicate reservations in Uplisting.
+  const idempotencyKey = crypto
+    .createHash("sha256")
+    .update(
+      `${propertyId}|${data.checkIn}|${data.checkOut}|${data.guestEmail}`
+    )
+    .digest("hex");
+
   const res = await fetchWithRetry(`${API_BASE}/reservations`, {
     method: "POST",
     headers: {
       Authorization: authHeader(),
       "Content-Type": "application/json",
+      "Idempotency-Key": idempotencyKey,
     },
     body: JSON.stringify({
       reservation: {

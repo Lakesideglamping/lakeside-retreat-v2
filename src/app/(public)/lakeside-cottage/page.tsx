@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Lakeside Cottage | Pet Friendly Accommodation Cromwell | $295/night",
   description:
     "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. 2 bedrooms, full kitchen, direct lake access. Family accommodation in Central Otago from $295/night.",
+  alternates: { canonical: '/lakeside-cottage' },
   openGraph: {
     title: "Lakeside Cottage | Pet-Friendly Family Accommodation on Lake Dunstan",
     description:

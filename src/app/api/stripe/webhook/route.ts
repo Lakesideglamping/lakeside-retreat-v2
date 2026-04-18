@@ -1,10 +1,25 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
-import { constructWebhookEvent, stripe, isDevMode } from "@/lib/stripe";
+import {
+  constructWebhookEvent,
+  stripe,
+  isDevMode,
+  calculateLineItems,
+} from "@/lib/stripe";
+import { getById } from "@/lib/accommodations";
 import { sendBookingConfirmation, sendSystemAlert } from "@/lib/email";
 import { syncBooking } from "@/lib/uplisting";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 import { randomUUID } from "crypto";
+
+// Mask an email as "j***@example.com" so production logs don't carry full PII.
+function maskEmail(email?: string | null): string {
+  if (!email) return "";
+  const [user, domain] = email.split("@");
+  if (!user || !domain) return "***";
+  return `${user[0] ?? ""}***@${domain}`;
+}
 
 /**
  * Safely extract a PaymentIntent ID, handling both string and expanded-object forms.
@@ -43,7 +58,9 @@ export async function POST(request: Request) {
     try {
       event = constructWebhookEvent(body, signature);
     } catch (sigErr) {
-      console.error("[stripe webhook] Signature verification failed:", sigErr);
+      logger.error("stripe webhook signature verification failed", {
+        error: sigErr instanceof Error ? sigErr.message : String(sigErr),
+      });
       return NextResponse.json(
         { error: "Invalid signature" },
         { status: 400 }
@@ -55,7 +72,9 @@ export async function POST(request: Request) {
       where: { event_id: event.id },
     });
     if (existing) {
-      console.log(`[stripe webhook] Duplicate event skipped: ${event.id}`);
+      logger.info("stripe webhook duplicate event skipped", {
+        eventId: event.id,
+      });
       return NextResponse.json({ received: true, duplicate: true });
     }
 
@@ -65,13 +84,62 @@ export async function POST(request: Request) {
         const metadata = session.metadata || {};
         const paymentIntentId = extractPaymentIntentId(session.payment_intent);
 
-        console.log(
-          "[stripe webhook] checkout.session.completed:",
-          metadata.accommodation,
-          metadata.checkIn,
-          "to",
-          metadata.checkOut
-        );
+        logger.info("checkout.session.completed", {
+          accommodation: metadata.accommodation,
+          checkIn: metadata.checkIn,
+          checkOut: metadata.checkOut,
+          sessionId: session.id,
+        });
+
+        // Currency guard: if Stripe ever returns a non-NZD currency we'd be
+        // persisting an amount in the wrong denomination.
+        if ((session.currency || "").toLowerCase() !== "nzd") {
+          logger.error("stripe webhook currency mismatch", {
+            expected: "nzd",
+            received: session.currency,
+            sessionId: session.id,
+          });
+          sendSystemAlert(
+            "STRIPE_CURRENCY_MISMATCH",
+            `Unexpected currency on checkout session ${session.id}`,
+            `Expected: nzd\nReceived: ${session.currency}\nAmount: ${session.amount_total}`
+          ).catch(() => {});
+          return NextResponse.json(
+            { error: "Unexpected currency" },
+            { status: 400 }
+          );
+        }
+
+        // Re-verify the charged amount against a server-side calculation.
+        // This catches cases where the session metadata was tampered with or
+        // the price logic drifts between session creation and capture.
+        const acc = getById(metadata.accommodation || "");
+        if (acc && metadata.checkIn && metadata.checkOut) {
+          const { totalAmount: expectedTotal } = calculateLineItems(
+            acc,
+            metadata.checkIn,
+            metadata.checkOut,
+            Number(metadata.guests) || 1,
+            Number(metadata.pets) || 0
+          );
+          if (session.amount_total !== expectedTotal) {
+            logger.error("stripe webhook amount mismatch", {
+              sessionTotal: session.amount_total,
+              expected: expectedTotal,
+              sessionId: session.id,
+              accommodation: metadata.accommodation,
+            });
+            sendSystemAlert(
+              "STRIPE_AMOUNT_MISMATCH",
+              `Session total does not match server calculation for ${session.id}`,
+              `Session total: ${session.amount_total}\nExpected: ${expectedTotal}\nAccommodation: ${metadata.accommodation}\nGuest: ${metadata.guestName}`
+            ).catch(() => {});
+            return NextResponse.json(
+              { error: "Amount verification failed" },
+              { status: 400 }
+            );
+          }
+        }
 
         // 1) Save booking as "authorized" first — capture happens next.
         //    This avoids marking the booking "paid" before Stripe actually captures.
@@ -108,11 +176,15 @@ export async function POST(request: Request) {
             },
           });
           bookingSaved = true;
-          console.log(
-            `[stripe webhook] Booking saved (authorized): ${bookingId}`
-          );
+          logger.info("booking saved (authorized)", {
+            bookingId,
+            guestEmailMasked: maskEmail(metadata.guestEmail),
+          });
         } catch (dbErr) {
-          console.error("[stripe webhook] DB save error:", dbErr);
+          logger.error("stripe webhook DB save error", {
+            bookingId,
+            error: dbErr instanceof Error ? dbErr.message : String(dbErr),
+          });
           await prisma.failed_webhook_events
             .create({
               data: {
@@ -138,7 +210,9 @@ export async function POST(request: Request) {
               ).catch(() => {});
             })
             .catch((e) =>
-              console.error("[stripe webhook] Failed to log error:", e)
+              logger.error("stripe webhook failed to log error", {
+                error: e instanceof Error ? e.message : String(e),
+              })
             );
         }
 
@@ -156,9 +230,11 @@ export async function POST(request: Request) {
               await stripe.paymentIntents.capture(paymentIntentId, {
                 amount_to_capture: captureAmount,
               });
-              console.log(
-                `[stripe webhook] Captured $${captureAmount / 100}, deposit hold: $${depositAmount / 100}`
-              );
+              logger.info("stripe capture succeeded", {
+                bookingId,
+                captured: captureAmount / 100,
+                depositHeld: depositAmount / 100,
+              });
             }
             captureSucceeded = true;
 
@@ -170,7 +246,13 @@ export async function POST(request: Request) {
               },
             });
           } catch (captureErr) {
-            console.error("[stripe webhook] Capture error:", captureErr);
+            logger.error("stripe capture failed", {
+              bookingId,
+              error:
+                captureErr instanceof Error
+                  ? captureErr.message
+                  : String(captureErr),
+            });
             const errMsg =
               captureErr instanceof Error
                 ? captureErr.message
@@ -214,10 +296,10 @@ export async function POST(request: Request) {
                 .catch(() => {});
             })
             .catch((err) => {
-              console.error(
-                "[stripe webhook] Uplisting sync error:",
-                err
-              );
+              logger.error("uplisting sync failed", {
+                bookingId,
+                error: err instanceof Error ? err.message : String(err),
+              });
               prisma.bookings
                 .update({
                   where: { id: bookingId },
@@ -245,7 +327,10 @@ export async function POST(request: Request) {
             guests: Number(metadata.guests) || 1,
             totalAmount: (session.amount_total || 0) / 100,
           }).catch((err) =>
-            console.error("[stripe webhook] Email error:", err)
+            logger.error("booking confirmation email failed", {
+              bookingId,
+              error: err instanceof Error ? err.message : String(err),
+            })
           );
         }
 
@@ -256,12 +341,10 @@ export async function POST(request: Request) {
         const charge = event.data.object;
         const paymentIntentId = extractPaymentIntentId(charge.payment_intent);
 
-        console.log(
-          "[stripe webhook] charge.refunded:",
+        logger.info("charge.refunded", {
           paymentIntentId,
-          "amount refunded:",
-          charge.amount_refunded
-        );
+          amountRefunded: charge.amount_refunded,
+        });
 
         if (paymentIntentId) {
           try {
@@ -273,14 +356,12 @@ export async function POST(request: Request) {
                 updated_at: new Date(),
               },
             });
-            console.log(
-              `[stripe webhook] Booking marked as refunded for PI: ${paymentIntentId}`
-            );
+            logger.info("booking marked refunded", { paymentIntentId });
           } catch (dbErr) {
-            console.error(
-              "[stripe webhook] Refund DB update error:",
-              dbErr
-            );
+            logger.error("refund DB update failed", {
+              paymentIntentId,
+              error: dbErr instanceof Error ? dbErr.message : String(dbErr),
+            });
           }
         }
         break;
@@ -288,11 +369,9 @@ export async function POST(request: Request) {
 
       case "payment_intent.canceled": {
         const pi = event.data.object;
-        console.log(
-          "[stripe webhook] payment_intent.canceled:",
-          pi.id,
-          "— deposit hold released by Stripe"
-        );
+        logger.info("payment_intent.canceled — deposit hold released", {
+          paymentIntentId: pi.id,
+        });
 
         try {
           await prisma.bookings.updateMany({
@@ -307,28 +386,25 @@ export async function POST(request: Request) {
             },
           });
         } catch (dbErr) {
-          console.error(
-            "[stripe webhook] Deposit release DB error:",
-            dbErr
-          );
+          logger.error("deposit release DB update failed", {
+            paymentIntentId: pi.id,
+            error: dbErr instanceof Error ? dbErr.message : String(dbErr),
+          });
         }
         break;
       }
 
       case "payment_intent.payment_failed": {
         const paymentIntent = event.data.object;
-        console.error(
-          "[stripe webhook] Payment failed:",
-          paymentIntent.id,
-          paymentIntent.last_payment_error?.message
-        );
+        logger.warn("payment_intent.payment_failed", {
+          paymentIntentId: paymentIntent.id,
+          error: paymentIntent.last_payment_error?.message,
+        });
         break;
       }
 
       default:
-        console.log(
-          `[stripe webhook] Unhandled event: ${event.type}`
-        );
+        logger.debug("unhandled stripe event", { type: event.type });
     }
 
     // Mark event as processed (deduplication)
@@ -340,7 +416,9 @@ export async function POST(request: Request) {
   } catch (err) {
     // Non-signature errors (DB, Stripe API, etc.) are treated as transient —
     // return 500 so Stripe retries. Returning 400 tells Stripe to give up.
-    console.error("[api/stripe/webhook] Error:", err);
+    logger.error("stripe webhook handler failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
     return NextResponse.json(
       { error: "Webhook handler failed" },
       { status: 500 }

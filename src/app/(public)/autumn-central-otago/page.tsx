@@ -226,7 +226,7 @@ export default function AutumnCentralOtagoPage() {
                   </h3>
                   <span className={`text-sm font-semibold ${s.label === "Autumn" ? "text-white/80" : "text-burgundy"}`}>{s.temp}</span>
                 </div>
-                <p className={`text-xs font-semibold mb-2 ${s.label === "Autumn" ? "text-white/70" : "text-muted"}`}>{s.season}</p>
+                <p className={`text-xs font-semibold mb-2 ${s.label === "Autumn" ? "text-white/90" : "text-muted"}`}>{s.season}</p>
                 <p className={`text-sm leading-6 ${s.label === "Autumn" ? "text-white/90" : "text-muted"}`}>{s.conditions}</p>
                 {s.label === "Winter" && (
                   <Link href="/winter-glamping-central-otago" className="text-xs text-teal no-underline hover:underline mt-2 block">

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Dome Ros\u00e9 | Romantic Getaway Central Otago | $510/night",
   description:
     "Dome Ros\u00e9 — intimate 40sqm glamping dome perfect for couples in Cromwell, Central Otago. Outdoor spa, mountain views, vineyard setting on Lake Dunstan. Book direct from $510/night.",
+  alternates: { canonical: '/dome-rose' },
   openGraph: {
     title: "Dome Rosé | Romantic Glamping Dome — Vineyard Views, Central Otago",
     description:

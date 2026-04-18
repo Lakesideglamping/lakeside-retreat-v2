@@ -224,7 +224,7 @@ export default function WinterGlampingPage() {
                   </h3>
                   <span className={`text-sm font-semibold ${s.label === "Winter" ? "text-white/80" : "text-burgundy"}`}>{s.temp}</span>
                 </div>
-                <p className={`text-xs font-semibold mb-2 ${s.label === "Winter" ? "text-white/70" : "text-muted"}`}>{s.season}</p>
+                <p className={`text-xs font-semibold mb-2 ${s.label === "Winter" ? "text-white/90" : "text-muted"}`}>{s.season}</p>
                 <p className={`text-sm leading-6 ${s.label === "Winter" ? "text-white/90" : "text-muted"}`}>{s.conditions}</p>
               </div>
             ))}

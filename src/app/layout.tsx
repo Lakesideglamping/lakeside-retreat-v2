@@ -7,6 +7,7 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
+  preload: true,
 });
 
 const roboto = Roboto({
@@ -14,7 +15,15 @@ const roboto = Roboto({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
+  preload: true,
 });
+
+const OG_IMAGE = {
+  url: "/images/lake-mountains-perfect.jpg",
+  width: 1200,
+  height: 630,
+  alt: "Lakeside Retreat glamping domes overlooking Lake Dunstan",
+};
 
 export const metadata: Metadata = {
   title: {
@@ -34,16 +43,16 @@ export const metadata: Metadata = {
       "Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell. Private spas, stargazing skylights, vineyard views.",
     url: "https://lakesideretreat.co.nz",
     siteName: "Lakeside Retreat",
-    images: [
-      {
-        url: "/images/lake-mountains-perfect.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Lakeside Retreat glamping domes overlooking Lake Dunstan",
-      },
-    ],
+    images: [OG_IMAGE],
     locale: "en_NZ",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lakeside Retreat | Luxury Glamping Central Otago",
+    description:
+      "Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell.",
+    images: [OG_IMAGE.url],
   },
 };
 

@@ -3,11 +3,13 @@ services:
     name: lakeside-retreat
     runtime: node
     plan: starter
-    buildCommand: npx prisma generate && npm run build
+    buildCommand: npx prisma generate && npx prisma migrate deploy && npm run build
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
+      - key: NODE_VERSION
+        value: "20"
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL

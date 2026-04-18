@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Dome Pinot | Geodesic Dome Accommodation NZ | $530/night",
   description:
     "Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct from $530/night.",
+  alternates: { canonical: '/dome-pinot' },
   openGraph: {
     title: "Dome Pinot | Luxury Geodesic Dome — Lake Dunstan, Central Otago",
     description:

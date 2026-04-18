@@ -19,7 +19,7 @@ export function StickyBookBar() {
       <div className="max-w-[1200px] mx-auto flex items-center justify-between">
         <p className="text-white text-sm">
           <span className="font-display text-lg">From $295</span>
-          <span className="text-white/70">/night</span>
+          <span className="text-white/90">/night</span>
         </p>
         <Link
           href="/book"
