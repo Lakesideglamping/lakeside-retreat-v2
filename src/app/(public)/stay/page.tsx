@@ -57,7 +57,7 @@ const accommodations = [
       "Pet friendly ($50 flat fee)",
       "Kitchenette (hotplate, fridge, microwave, dishwasher)",
       "Gas BBQ on the deck",
-      "Underfloor heating",
+      "Heat pump (heating &amp; AC)",
     ],
   },
 ];

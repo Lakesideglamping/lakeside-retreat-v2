@@ -38,7 +38,7 @@ const features = [
 const amenities = [
   { title: "Sleeping", desc: "Queen bed + sofa bed" },
   { title: "BBQ Facilities", desc: "Gas BBQ on the deck for family cookouts" },
-  { title: "Climate Control", desc: "Underfloor heating and air conditioning" },
+  { title: "Climate Control", desc: "Heat pump for heating and air conditioning" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
   { title: "Free Parking", desc: "Space for multiple vehicles" },
   { title: "Cycle Trail Access", desc: "300m to Otago Rail Trail" },

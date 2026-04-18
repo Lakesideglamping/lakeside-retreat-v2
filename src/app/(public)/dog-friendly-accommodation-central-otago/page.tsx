@@ -110,7 +110,7 @@ export default function DogFriendlyAccommodationPage() {
                 <li>&#10003; Dogs welcome (prior approval, $50 flat fee)</li>
                 <li>&#10003; Wood-fired cedar hot tub (no chemicals)</li>
                 <li>&#10003; Kitchenette &amp; outdoor BBQ</li>
-                <li>&#10003; Underfloor heating</li>
+                <li>&#10003; Heat pump (heating &amp; AC)</li>
                 <li>&#10003; From $295/night</li>
               </ul>
             </div>
