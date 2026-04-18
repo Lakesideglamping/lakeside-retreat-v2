@@ -19,7 +19,7 @@ const winterHighlights = [
   },
   {
     title: "Cosy Dome Interiors",
-    desc: "Our geodesic domes are engineered for exceptional insulation. Underfloor heating, double-glazed panoramic windows, and a warm interior make them a perfect winter cocoon.",
+    desc: "Our geodesic domes are engineered for exceptional insulation. Underfloor heating, insulated twin-wall panels, and a warm interior make them a perfect winter cocoon.",
     image: "/images/windowview.jpeg",
     alt: "Warm cosy interior of Dome Pinot with views over winter Lake Dunstan",
   },
@@ -90,7 +90,7 @@ export default function WinterGlampingPage() {
         ]),
         createFaqSchema([
           { question: "Is glamping in winter Central Otago worth it?", answer: "Absolutely. Winter is arguably the best time to glamp at Lakeside Retreat. The private outdoor spas feel incredible in the cold, the mountain views are dramatic with snow on the Pisa Range, and the night skies are at their clearest. Cardrona ski field is 55 minutes away, and Central Otago's 30+ wineries are open year-round." },
-          { question: "Are the glamping domes warm enough in winter?", answer: "Yes — both domes are engineered for exceptional insulation. They feature underfloor heating, air conditioning, double-glazed panoramic windows, and a fully heated bathroom. Guests frequently stay in winter and comment on how cosy the domes are." },
+          { question: "Are the glamping domes warm enough in winter?", answer: "Yes — both domes are engineered for exceptional insulation. They feature underfloor heating, air conditioning, insulated twin-wall panels, and a fully heated bathroom. Guests frequently stay in winter and comment on how cosy the domes are." },
           { question: "How cold does it get in Central Otago in winter?", answer: "Central Otago has a continental climate — cold, clear winters. Temperatures typically range from around -2°C overnight to 12°C during the day. Snow falls on surrounding mountains (including the Pisa Range directly behind Lakeside Retreat) and occasionally at property level, though this is less common." },
           { question: "Can I ski and glamp in Central Otago?", answer: "Yes — Cardrona Ski Resort is 55 minutes from Lakeside Retreat and Treble Cone is 75 minutes. Many guests ski during the day and return to their private spa and warm dome in the evening. It's one of the most popular winter itineraries at the retreat." },
           { question: "What is the best time to visit Central Otago?", answer: "Central Otago is spectacular year-round. Winter (June–August) offers snow views, ski access, and cosy spa evenings. Autumn (March–May) brings golden vineyards and harvest season. Summer (December–February) has long sunny days and lake swimming. Spring (September–November) has orchard blossoms and emerging greenery." },

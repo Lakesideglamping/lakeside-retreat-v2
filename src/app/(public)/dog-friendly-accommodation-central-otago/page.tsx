@@ -15,6 +15,7 @@ const features = [
   { title: "Secure Outdoor Area", desc: "Fenced outdoor space so your dog can roam safely while you relax on the deck." },
   { title: "Flat Pet Fee", desc: "A single flat $50 pet fee per stay — not per night. No hidden charges." },
   { title: "Deck by the Water", desc: "Your own deck overlooking the lake — a safe spot to sit with your dog as the sun sets." },
+  { title: "Wood-Fired Hot Tub", desc: "Chemical-free cedar tub by the lake — no chlorine, no fumes. Safe to have the dog nearby while you soak." },
   { title: "Kitchenette & BBQ", desc: "Cook at home with a hotplate, microwave, dishwasher, and a gas BBQ on the deck. No worries about restaurants." },
   { title: "Dog-Friendly Trails", desc: "The Otago Rail Trail is 300m away and dog-friendly. Lake Dunstan Cycle Trail too." },
 ];
@@ -107,6 +108,7 @@ export default function DogFriendlyAccommodationPage() {
                 <li>&#10003; Queen bed + sofa pullout, sleeps 3</li>
                 <li>&#10003; Direct Lake Dunstan access</li>
                 <li>&#10003; Dogs welcome (prior approval, $50 flat fee)</li>
+                <li>&#10003; Wood-fired cedar hot tub (no chemicals)</li>
                 <li>&#10003; Kitchenette &amp; outdoor BBQ</li>
                 <li>&#10003; Underfloor heating</li>
                 <li>&#10003; From $295/night</li>

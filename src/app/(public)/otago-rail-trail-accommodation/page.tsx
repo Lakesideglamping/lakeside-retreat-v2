@@ -43,7 +43,7 @@ const whyStayHere = [
   { title: "Early Breakfast", desc: "Continental breakfast included with dome bookings, stocked ready for an early start. Pack what you need for the trail." },
   { title: "Laundry Facilities", desc: "Wash and dry your cycling gear overnight. Arrive fresh for each day on the trail." },
   { title: "Shuttles & Hire", desc: "We can help organise bike hire, shuttle pickups, and luggage transfers for multi-day trail itineraries." },
-  { title: "Recovery Spa", desc: "There is nothing better after a long day in the saddle than soaking in a private outdoor spa with mountain views." },
+  { title: "Recovery Spa or Hot Tub", desc: "Private saltwater spa in the domes, or a wood-fired cedar hot tub at the cottage. Nothing better after a long day in the saddle." },
 ];
 
 export default function OtagoRailTrailAccommodationPage() {
@@ -85,7 +85,7 @@ export default function OtagoRailTrailAccommodationPage() {
           </h1>
           <p className="text-xl mb-8 opacity-95">
             Luxury stay just 300 metres from the trail at Cromwell.
-            Private spas for post-ride recovery. Domes &amp; cottage.
+            Saltwater spas in the domes, wood-fired hot tub at the cottage.
           </p>
           <Button href="/book">Book Your Trail Stay</Button>
         </div>
@@ -201,7 +201,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 title: "Lakeside Cottage",
                 badge: "Pet & Family Friendly",
                 price: "From $295/night",
-                notes: "Queen + sofa bed, sleeps 3, direct lake access",
+                notes: "Queen + sofa bed, sleeps 3, wood-fired hot tub, direct lake access",
               },
             ].map((acc) => (
               <Link
@@ -250,7 +250,7 @@ export default function OtagoRailTrailAccommodationPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Rail Trail Base</h2>
           <p className="text-lg text-muted mb-8">
-            300m to the trailhead. Private spa for post-ride recovery.
+            300m to the trailhead. Spa or hot tub for post-ride recovery.
             Luxury domes and lakeside cottage available.
           </p>
           <Button href="/book">Check Availability & Book</Button>

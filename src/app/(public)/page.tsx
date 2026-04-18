@@ -283,7 +283,7 @@ export default async function HomePage() {
           <div>
             <h2 className="font-display text-4xl mb-4">From Wrong Turn to Dream Come True</h2>
             <p className="text-lg leading-8 text-muted mb-4">
-              In April 2019, a wrong turn down a dusty Central Otago road led us to a piece of paradise on Lake Dunstan. Four years later, we&apos;ve welcomed guests from 20+ countries to share the magic of this place.
+              In 2021, a wrong turn down a dusty Central Otago road led us to a piece of paradise on Lake Dunstan. Since then, we&apos;ve welcomed guests from 20+ countries to share the magic of this place.
             </p>
             <p className="text-lg leading-8 text-muted mb-8">
               We&apos;re Stephen &amp; Sandy — your hosts, neighbours, and local guides. Come and be part of our story.

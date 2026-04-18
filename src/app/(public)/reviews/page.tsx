@@ -101,11 +101,11 @@ export default async function ReviewsPage() {
       <section className="py-20 px-5 bg-white text-center">
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">
-            Ready to Create Your Own Memories?
+            Be the next story.
           </h2>
           <p className="text-lg text-muted mb-8">
-            Join our community of happy guests and experience Central Otago&apos;s finest
-            accommodation.
+            Four hundred guests have come home with one. Book direct &mdash; lower rates,
+            personal service, and the whole lake right there.
           </p>
           <Button href="/book">Book Your Stay</Button>
         </div>

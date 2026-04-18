@@ -246,7 +246,7 @@ export default function WineTrailPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Wine Country Escape</h2>
           <p className="text-lg text-muted mb-8">
-            30+ cellar doors within 15 minutes. Private spa to return to each evening.
+            30+ cellar doors within 15 minutes. Spa or hot tub to return to each evening.
             Domes from $510 &bull; Cottage from $295/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>

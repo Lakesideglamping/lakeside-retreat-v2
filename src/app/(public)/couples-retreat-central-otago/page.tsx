@@ -32,9 +32,9 @@ const experiences = [
   { title: "Wine Tasting for Two", desc: "30+ wineries within 15 min, with intimate private tastings available" },
   { title: "Couples Cycling", desc: "Otago Rail Trail and Lake Dunstan Trail with tunnels and suspension bridges" },
   { title: "Lakeside Picnics", desc: "Hamper with local produce at secluded spots along Lake Dunstan" },
-  { title: "Hot Tub Under the Stars", desc: "Private outdoor spas with dark skies and minimal light pollution" },
+  { title: "Spa Under the Stars", desc: "Private outdoor saltwater spas with dark skies and minimal light pollution" },
   { title: "Local Dining", desc: "Vineyard restaurants, degustation menus, and heritage precinct cafes" },
-  { title: "Stargazing", desc: "Darkest skies in NZ — Dome Pinot's skylight lets you view southern constellations from bed" },
+  { title: "Stargazing", desc: "Among NZ's darkest skies — Dome Pinot's skylight lets you view southern constellations from bed" },
 ];
 
 export default function CouplesRetreatPage() {

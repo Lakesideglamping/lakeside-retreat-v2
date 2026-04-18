@@ -49,10 +49,11 @@ const accommodations = [
     title: "Lakeside Cottage",
     adultsOnly: false,
     price: "$295",
-    tagline: "Self-contained lakefront cottage with direct Lake Dunstan access, BBQ, and dogs welcome.",
+    tagline: "Right on the water. Wood-fired tub steaming under the stars. BBQ on the deck, dog at your feet.",
     features: [
       "Queen bed + sofa pullout, sleeps 3",
       "Direct lake access",
+      "Wood-fired cedar hot tub (no chemicals)",
       "Pet friendly ($50 flat fee)",
       "Kitchenette (hotplate, fridge, microwave, dishwasher)",
       "Gas BBQ on the deck",

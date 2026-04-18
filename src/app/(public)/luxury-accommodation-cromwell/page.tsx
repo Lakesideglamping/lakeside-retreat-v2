@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 const luxuryAmenities = [
   { category: "Sleep", items: ["Super king bed with premium hotel-quality linens", "Blackout curtains and temperature control", "Heated bathroom floors", "Plush bathrobes and premium toiletries"] },
-  { category: "Spa & Relaxation", items: ["Private saltwater outdoor spa (domes)", "Panoramic stargazing skylight (Dome Pinot)", "Outdoor lounging deck", "Complimentary bathrobes"] },
-  { category: "Dining & Kitchen", items: ["Continental breakfast stocked and included", "Self-catering kitchenette in every property", "Outdoor BBQ and dining area", "Locally sourced welcome provisions"] },
+  { category: "Spa & Relaxation", items: ["Private saltwater outdoor spa (domes)", "Wood-fired cedar hot tub, no chemicals (cottage)", "Panoramic stargazing skylight (Dome Pinot)", "Outdoor lounging deck"] },
+  { category: "Dining & Kitchen", items: ["Continental breakfast stocked and included (domes)", "Self-catering kitchenette in every property", "Gas BBQ on the deck (cottage)", "Locally sourced welcome provisions"] },
   { category: "Location & Views", items: ["Panoramic Lake Dunstan and Pisa Range views", "300m from Otago Rail Trail", "15 min to 30+ Central Otago wineries", "45 min to Queenstown"] },
 ];
 
@@ -187,7 +187,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 badge: "Family & Pet Friendly",
                 price: "From $295/night",
                 size: "Sleeps 3",
-                desc: "Self-contained cottage with direct lake access, kitchenette, BBQ, and dog-friendly.",
+                desc: "Self-contained cottage with direct lake access, wood-fired hot tub, BBQ, kitchenette, and dog-friendly.",
               },
             ].map((acc) => (
               <div key={acc.href} className="bg-white rounded-2xl overflow-hidden shadow-lg">

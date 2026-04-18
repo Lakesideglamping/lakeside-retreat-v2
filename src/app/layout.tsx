@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | Lakeside Retreat",
   },
   description:
-    "Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell. Private spas, stargazing skylights, vineyard views. Book direct from $295/night.",
+    "Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell. Saltwater spas in the domes, wood-fired hot tub at the cottage, stargazing skylights, vineyard views. Book direct from $295/night.",
   metadataBase: new URL("https://lakesideretreat.co.nz"),
   icons: {
     icon: "/images/favicon-16x16.png",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Lakeside Retreat | Luxury Glamping Central Otago",
     description:
-      "Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell. Private spas, stargazing skylights, vineyard views.",
+      "Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell. Saltwater spas in the domes, wood-fired hot tub at the cottage, stargazing skylights, vineyard views.",
     url: "https://lakesideretreat.co.nz",
     siteName: "Lakeside Retreat",
     images: [OG_IMAGE],

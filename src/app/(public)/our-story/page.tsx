@@ -134,11 +134,10 @@ export default function OurStoryPage() {
       <section className="py-20 px-5 text-center">
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">
-            Come and Experience It Yourself
+            Come find it for yourself.
           </h2>
           <p className="text-lg text-muted mb-8">
-            We&apos;d love to welcome you to Lakeside Retreat and share our corner of Central Otago
-            with you.
+            The wrong turn that changed everything &mdash; take it.
           </p>
           <Button href="/book">Book Your Stay</Button>
         </div>

@@ -191,9 +191,11 @@ export default function ExplorePage() {
       {/* CTA */}
       <section className="py-20 px-5 bg-white text-center">
         <div className="max-w-[600px] mx-auto">
-          <h2 className="font-display text-4xl mb-4">Ready to Explore?</h2>
+          <h2 className="font-display text-4xl mb-4">
+            The wineries, the trail, the lake. All out your front door.
+          </h2>
           <p className="text-lg text-muted mb-8">
-            Book your stay at Lakeside Retreat and discover everything Central Otago has to offer.
+            Pick your nights. The rest takes care of itself.
           </p>
           <Button href="/book">Book Your Stay</Button>
         </div>
