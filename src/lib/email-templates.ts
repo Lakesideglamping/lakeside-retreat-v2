@@ -205,7 +205,7 @@ export function duringStayHtml(data: BookingEmailData): string {
 
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">A Few Reminders</h3>
-      <p style="margin:4px 0;"><strong>Spa &amp; Hot Tub:</strong> Feel free to enjoy the spa/hot tub during your stay &mdash; a wonderful way to unwind after a day exploring Central Otago.</p>
+      <p style="margin:4px 0;"><strong>Your Spa or Hot Tub:</strong> Make the most of it &mdash; the saltwater spa (domes) or wood-fired cedar tub (cottage) is a wonderful way to unwind after a day exploring Central Otago.</p>
       <p style="margin:4px 0;"><strong>WiFi:</strong> Connect to <code>Lakeside_Guest</code> &mdash; the password is in your welcome guide.</p>
       <p style="margin:4px 0;"><strong>Emergency Contact:</strong> <a href="tel:+6421368682" style="color:#2d5a5a;">+64 21 368 682</a></p>
     </div>

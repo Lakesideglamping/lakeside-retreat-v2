@@ -30,7 +30,7 @@ const galleryItems = [
   { src: "/images/pinotinternal.jpeg", alt: "Dome Pinot interior luxury living space with vineyard views", title: "Dome Interior", category: "domes" as Category },
   { src: "/images/dome-rose-interior.jpeg", alt: "Dome Rosé interior with panoramic windows overlooking the lake", title: "Dome Rosé Interior", category: "domes" as Category },
   { src: "/images/gallerydecksitting.jpeg", alt: "Dome deck overlooking the golden autumn vineyard and Lake Dunstan", title: "Deck Views", category: "amenities" as Category },
-  { src: "/images/pinotspa.jpeg", alt: "Private hot tub with lake and mountain views", title: "Private Hot Tub", category: "amenities" as Category },
+  { src: "/images/pinotspa.jpeg", alt: "Dome Pinot private saltwater spa with lake and mountain views", title: "Dome Spa", category: "amenities" as Category },
   { src: "/images/gallerydeck.jpeg", alt: "Relaxing on the deck with vineyard views", title: "Your Private Retreat", category: "amenities" as Category },
 ];
 
