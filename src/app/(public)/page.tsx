@@ -98,7 +98,7 @@ export default async function HomePage() {
       <section className="py-20 px-5">
         <div className="max-w-[800px] mx-auto text-center">
           <h2 className="font-display text-4xl mb-4">
-            Welcome to Lakeside Retreat!
+            Welcome to Lakeside Retreat
           </h2>
           <p className="text-lg leading-8 text-muted">
             Experience pure luxury on the shores of Lake Dunstan, surrounded by
