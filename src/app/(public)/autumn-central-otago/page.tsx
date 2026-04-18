@@ -299,7 +299,7 @@ export default function AutumnCentralOtagoPage() {
           <div className="mt-8 bg-cream rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="font-display text-xl text-burgundy mb-1">Lakeside Cottage</h3>
-              <p className="text-muted text-sm">From $295/night &bull; Sleeps 3 &bull; Dog-friendly &bull; Direct lake access</p>
+              <p className="text-muted text-sm">From $295/night &bull; Sleeps 3 &bull; Wood-fired hot tub &bull; Dog-friendly &bull; Direct lake access</p>
             </div>
             <Button href="/book?a=lakeside-cottage">Book Cottage &rarr;</Button>
           </div>
