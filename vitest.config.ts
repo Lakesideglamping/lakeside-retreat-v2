@@ -4,6 +4,8 @@ import path from "path";
 export default defineConfig({
   test: {
     environment: "node",
+    include: ["src/**/*.test.ts"],
+    exclude: ["node_modules", "e2e", ".next"],
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
