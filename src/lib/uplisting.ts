@@ -20,6 +20,11 @@ export function isConfigured(): boolean {
   return !!process.env.UPLISTING_API_KEY;
 }
 
+// In non-production environments (local `next dev`), treat writes to Uplisting
+// as a no-op so test bookings can't create real reservations in the live PMS.
+// Reads stay enabled so the booking UI behaves realistically in dev.
+const isLocalEnv = process.env.NODE_ENV !== "production";
+
 /**
  * Format a Date as YYYY-MM-DD in the Pacific/Auckland timezone.
  * Using `toISOString().split("T")[0]` converts to UTC first — for a NZ-based
@@ -167,6 +172,10 @@ interface SyncBookingData {
  * dates as "unavailable" but no actual guest record existed in Uplisting.
  */
 export async function syncBooking(data: SyncBookingData): Promise<void> {
+  if (isLocalEnv) {
+    console.log("[uplisting] Local/dev env — skipping booking sync.", data);
+    return;
+  }
   if (!isConfigured()) {
     console.log("[uplisting] Not configured — skipping booking sync.", data);
     return;
