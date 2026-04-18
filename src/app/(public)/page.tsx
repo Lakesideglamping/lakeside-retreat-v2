@@ -44,7 +44,7 @@ export default async function HomePage() {
           className="object-cover object-center"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/25 to-black/55" />
         <div className="relative max-w-[700px] px-5 pt-20">
           <h1 className="font-display text-5xl md:text-6xl text-white mb-4 drop-shadow-lg">
             Luxury Glamping on Lake Dunstan, Central Otago
