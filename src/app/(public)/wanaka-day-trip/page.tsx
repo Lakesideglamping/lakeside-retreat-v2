@@ -286,8 +286,9 @@ export default function WanakaDayTripPage() {
           <p className="text-muted text-lg leading-8">
             After a day out, the drive back through the high country feels
             effortless. Pull in to Lakeside Retreat, pour a glass of Central Otago
-            Pinot Noir, and ease into the private outdoor spa as the stars emerge
-            over the Pisa Range. There&apos;s no better way to end a Wanaka day.
+            Pinot Noir, and ease into your spa or the wood-fired cedar tub as the
+            stars emerge over the Pisa Range. There&apos;s no better way to end a
+            Wanaka day.
           </p>
         </div>
       </section>
@@ -300,7 +301,7 @@ export default function WanakaDayTripPage() {
             {[
               { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night", note: "Private spa, skylight, breakfast included" },
               { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night", note: "Private spa, vineyard views, kitchenette" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "Sleeps 3, lake access, dogs welcome" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "Sleeps 3, wood-fired hot tub, lake access, dogs welcome" },
             ].map((acc) => (
               <Link
                 key={acc.href}

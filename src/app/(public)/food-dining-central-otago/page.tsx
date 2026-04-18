@@ -191,7 +191,7 @@ export default function FoodDiningPage() {
             {[
               { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night", note: "Private spa, vineyard views, breakfast included" },
               { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Rosé", badge: "Adults Only", price: "From $510/night", note: "Private spa, mountain views, kitchenette" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "From $295/night", note: "Sleeps 3, direct lake access" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "From $295/night", note: "Sleeps 3, wood-fired hot tub, direct lake access" },
             ].map((acc) => (
               <Link
                 key={acc.href}

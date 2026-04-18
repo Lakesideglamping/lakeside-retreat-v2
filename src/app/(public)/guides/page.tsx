@@ -56,7 +56,7 @@ const guides = [
     category: "Day Trips",
     title: "Queenstown Day Trip: Adventure Awaits",
     image: "/images/lake-mountains-perfect.jpg",
-    excerpt: "Bungy, gondola, jet boat, Arrowtown — then back to your private spa. Queenstown is just 45 minutes away.",
+    excerpt: "Bungy, gondola, jet boat, Arrowtown — then back to your spa or wood-fired hot tub. Queenstown is just 45 minutes away.",
     href: "/weekend-getaway-queenstown",
   },
   {

@@ -7,7 +7,7 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Queenstown Day Trip from Cromwell | Adventure Guide from Lakeside Retreat",
   description:
-    "Queenstown is just 45 minutes from Lakeside Retreat. Day trip guide: bungee jumping, Skyline Gondola, Shotover Jet, Arrowtown, and more — then return to your private spa.",
+    "Queenstown is just 45 minutes from Lakeside Retreat. Day trip guide: bungee jumping, Skyline Gondola, Shotover Jet, Arrowtown, and more — then return to your spa or wood-fired hot tub.",
 };
 
 const activities = [
@@ -273,13 +273,13 @@ export default function WeekendGetawayPage() {
       <section className="py-16 px-5 bg-cream">
         <div className="max-w-[700px] mx-auto text-center">
           <p className="font-display text-3xl mb-3">
-            Then Return to Your Private Spa 🛁
+            Then Return to the Lake
           </p>
           <p className="text-muted text-lg leading-8">
             After a full day of adventure, the 45-minute drive back to Lakeside
             Retreat feels like the best part. Change into your robe, sink into
-            the private outdoor spa, and watch the stars appear over the Pisa
-            Range. That&apos;s the Central Otago way.
+            your saltwater spa or the wood-fired cedar tub, and watch the stars
+            appear over the Pisa Range. That&apos;s the Central Otago way.
           </p>
         </div>
       </section>
@@ -292,7 +292,7 @@ export default function WeekendGetawayPage() {
             {[
               { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "From $530/night", note: "Private spa, skylight, breakfast" },
               { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "From $510/night", note: "Private spa, vineyard views" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "Sleeps 3, lake access, dogs welcome" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet & Family Friendly", price: "From $295/night", note: "Sleeps 3, wood-fired hot tub, lake access, dogs welcome" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -342,7 +342,7 @@ export default function WeekendGetawayPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Central Otago Base</h2>
           <p className="text-lg text-muted mb-8">
-            45 minutes to Queenstown. Private spa to return to. Wine country on your doorstep.
+            45 minutes to Queenstown. Spa or hot tub to return to. Wine country on your doorstep.
             Luxury domes from $510 &bull; Cottage from $295/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
