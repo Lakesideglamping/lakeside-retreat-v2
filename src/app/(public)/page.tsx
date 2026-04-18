@@ -287,20 +287,19 @@ export default async function HomePage() {
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-12">
             <h2 className="font-display text-4xl mb-4">Beautiful in Every Season</h2>
-            <p className="text-lg text-muted">Central Otago delivers year-round magic</p>
+            <p className="text-lg text-muted">One place. Four different stays.</p>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { season: "Summer", months: "Dec \u2013 Feb", icon: "\u2600\uFE0F", description: "Swim in Lake Dunstan, cycle the trail, and enjoy long evenings on the deck.", highlight: "Peak season \u2014 book early" },
-              { season: "Autumn", months: "Mar \u2013 May", icon: "\uD83C\uDF42", description: "Our favourite season. Vineyards turn gold, harvest brings winery events and festivals.", highlight: "Best for wine lovers" },
-              { season: "Winter", months: "Jun \u2013 Aug", icon: "\u2744\uFE0F", description: "Five ski fields within reach. Hot tub under the stars with snow-capped mountain views.", highlight: "Ski & spa season" },
-              { season: "Spring", months: "Sep \u2013 Nov", icon: "\uD83C\uDF38", description: "Fewer crowds, wildflowers everywhere, and the best weather for hiking and cycling.", highlight: "Best value season" },
+              { season: "Summer", months: "Dec \u2013 Feb", description: "Lake swims, long rides, and sunsets that don't end until 10pm.", highlight: "Peak season \u2014 book early" },
+              { season: "Autumn", months: "Mar \u2013 May", description: "Our favourite. The vines turn gold and harvest brings winery festivals.", highlight: "Best for wine lovers" },
+              { season: "Winter", months: "Jun \u2013 Aug", description: "Five ski fields within reach. The hot tub steams under snow-capped peaks.", highlight: "Ski & spa season" },
+              { season: "Spring", months: "Sep \u2013 Nov", description: "Wildflowers, empty trails, and the year's best weather for cycling.", highlight: "Best value season" },
             ].map((s) => (
               <div key={s.season} className="bg-cream rounded-2xl p-6 text-center">
-                <p className="text-3xl mb-2">{s.icon}</p>
-                <h3 className="font-display text-xl text-burgundy mb-1">{s.season}</h3>
-                <p className="text-xs text-muted mb-3">{s.months}</p>
+                <h3 className="font-display text-2xl text-burgundy mb-1">{s.season}</h3>
+                <p className="text-xs text-muted mb-4 uppercase tracking-wider">{s.months}</p>
                 <p className="text-sm text-body leading-relaxed mb-3">{s.description}</p>
                 <p className="text-xs text-burgundy font-semibold">{s.highlight}</p>
               </div>
