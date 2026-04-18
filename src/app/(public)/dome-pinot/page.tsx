@@ -38,7 +38,7 @@ const features = [
 const amenities = [
   { title: "Kitchenette", desc: "Induction cooktop, fridge, microwave, coffee machine" },
   { title: "Ensuite Bathroom", desc: "Rainfall shower with premium toiletries" },
-  { title: "Climate Control", desc: "Underfloor heating and air conditioning" },
+  { title: "Climate Control", desc: "Underfloor heating plus heat pump for year-round comfort" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
   { title: "Free Parking", desc: "Private parking right at your dome" },
   { title: "Cycle Trail Access", desc: "300m to Otago Rail Trail" },
@@ -79,7 +79,7 @@ export default function DomePinotPage() {
           maxOccupancy: 2,
           bedType: "Super King",
           images: ["Pinotfront.jpeg", "gallerydecksitting.jpeg", "pinotinternal.jpeg"],
-          amenities: ["Private Outdoor Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Underfloor Heating", "Air Conditioning", "Kitchenette", "Free WiFi", "Free Parking"],
+          amenities: ["Private Outdoor Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Underfloor Heating", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
           reviewCount: "127",
         }),
         createBreadcrumbSchema([
