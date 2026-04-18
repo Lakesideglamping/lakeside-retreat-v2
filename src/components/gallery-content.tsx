@@ -15,10 +15,7 @@ const categoryLabels: Record<Category, string> = {
 };
 
 const galleryItems = [
-  { src: "/images/aerial-property.jpg", alt: "Aerial view of Lakeside Retreat showing vineyards, domes, cottage, and Lake Dunstan", title: "The Property from Above", category: "views" as Category },
-  { src: "/images/domes-drone-wide.jpg", alt: "Drone view of both domes with Lake Dunstan, vineyards, and mountains", title: "Domes, Lake & Mountains", category: "domes" as Category },
   { src: "/images/domes-portrait-lake.jpg", alt: "Both geodesic domes with vineyard rows leading to Lake Dunstan", title: "Vineyard & Lake", category: "domes" as Category },
-  { src: "/images/domes-overhead.jpg", alt: "Overhead view of the glamping domes and main house", title: "Above the Domes", category: "domes" as Category },
   { src: "/images/hottub-lakeview.jpg", alt: "Wood-fired cedar hot tub with Lake Dunstan and mountain backdrop", title: "Cedar Hot Tub", category: "amenities" as Category },
   { src: "/images/domes-vineyard-sunset.jpg", alt: "Both glamping domes at Lakeside Retreat with Lake Dunstan and sunset sky", title: "Domes at Sunset", category: "domes" as Category },
   { src: "/images/Pinotfront.jpeg", alt: "Dome Pinot exterior with snow-capped mountain views", title: "Dome Pinot Exterior", category: "domes" as Category },
