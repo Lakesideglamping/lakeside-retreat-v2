@@ -165,11 +165,17 @@ interface SyncBookingData {
 }
 
 /**
- * Create a reservation in Uplisting when a direct website booking is made.
- * Throws on failure — the caller is responsible for handling (alerting,
- * marking sync_status=failed, etc). The previous silent calendar-block
- * fallback was removed because it masked real failures: OTAs could still see
- * dates as "unavailable" but no actual guest record existed in Uplisting.
+ * Block the booked dates in Uplisting so OTAs see them as unavailable.
+ *
+ * Uplisting's Connect API is read-only for reservations (POST /reservations
+ * returns 404; /properties/{id}/reservations only allows GET,HEAD), so we
+ * can't create a real guest record from here. Instead we POST to the
+ * calendar endpoint with `available: false` — the same path admin unblock
+ * uses in reverse. Guest details are encoded in `reason` so staff can still
+ * see who the booking is for when they look at the calendar in Uplisting.
+ * The authoritative guest record lives in our own DB and admin UI.
+ *
+ * Throws on failure so the webhook can alert and mark sync_status=failed.
  */
 export async function syncBooking(data: SyncBookingData): Promise<void> {
   if (isLocalEnv) {
@@ -186,42 +192,24 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
     throw new Error(`No Uplisting property ID for ${data.accommodation}`);
   }
 
-  // Split full name into first/last for the API
-  const nameParts = data.guestName.trim().split(" ");
-  const firstName = nameParts[0] || data.guestName;
-  const lastName = nameParts.slice(1).join(" ") || "-";
+  // Guest leaves on check-out morning, so the last blocked night is
+  // check_out - 1. Matches the checkout-exclusive convention used by
+  // checkAvailability / fetchBlockedDates elsewhere in this file.
+  const lastNight = new Date(data.checkOut);
+  lastNight.setDate(lastNight.getDate() - 1);
+  const toDate = nzDateString(lastNight);
 
-  // Deterministic idempotency key — retries of the same booking won't create
-  // duplicate reservations in Uplisting.
-  const idempotencyKey = crypto
-    .createHash("sha256")
-    .update(
-      `${propertyId}|${data.checkIn}|${data.checkOut}|${data.guestEmail}`
-    )
-    .digest("hex");
+  const reason = `Direct booking — ${data.guestName} (${data.guestEmail})`;
 
-  const res = await fetchWithRetry(`${API_BASE}/reservations`, {
+  const res = await fetchWithRetry(`${API_BASE}/calendar/${propertyId}`, {
     method: "POST",
     headers: {
       Authorization: authHeader(),
       "Content-Type": "application/json",
-      "Idempotency-Key": idempotencyKey,
     },
     body: JSON.stringify({
-      reservation: {
-        property_id: propertyId,
-        check_in: data.checkIn,
-        check_out: data.checkOut,
-        adults: data.guests,
-        children: 0,
-        source: "direct",
-        guest_first_name: firstName,
-        guest_last_name: lastName,
-        guest_email: data.guestEmail,
-        guest_phone: data.guestPhone || "",
-        total_price: data.totalPrice ?? 0,
-        currency: "NZD",
-        notes: "Booked via Lakeside Retreat website",
+      calendar: {
+        days: [{ available: false, from: data.checkIn, to: toDate, reason }],
       },
     }),
   });
@@ -229,16 +217,13 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
   if (!res.ok) {
     const errBody = await res.text().catch(() => "");
     throw new Error(
-      `Uplisting reservation creation failed (${res.status}): ${errBody.slice(0, 500)}`
+      `Uplisting calendar block failed (${res.status}): ${errBody.slice(0, 500)}`
     );
   }
 
-  const body = await res.json().catch(() => ({}));
   console.log(
-    `[uplisting] Reservation created for ${data.guestName} (${data.checkIn} → ${data.checkOut})`,
-    body
+    `[uplisting] Calendar blocked for ${data.guestName} (${data.checkIn} → ${data.checkOut}, last night ${toDate})`
   );
-  // Invalidate blocked-dates cache so the new reservation appears immediately.
   setCache(`blocked-dates-${data.accommodation}`, null);
 }
 
