@@ -123,9 +123,9 @@ export default function WinterGlampingPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li><Link href="/guides" className="text-teal no-underline hover:underline">Guides</Link></li>
+          <li><Link href="/guides" className="text-burgundy no-underline hover:underline">Guides</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Winter Glamping</li>
         </ol>
@@ -175,7 +175,7 @@ export default function WinterGlampingPage() {
       </section>
 
       {/* Ski callout */}
-      <section className="py-16 px-5 bg-teal text-white text-center">
+      <section className="py-16 px-5 bg-burgundy text-white text-center">
         <div className="max-w-[800px] mx-auto">
           <p className="font-display text-3xl mb-3">
             &#9969; Ski by Day. Soak by Night.
@@ -196,7 +196,7 @@ export default function WinterGlampingPage() {
             {winterActivities.map((a) => (
               <div key={a.title} className="bg-white rounded-2xl p-6 shadow-md">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3 className="font-display text-xl text-teal">{a.title}</h3>
+                  <h3 className="font-display text-xl text-burgundy">{a.title}</h3>
                   <span className="text-burgundy font-semibold text-sm whitespace-nowrap">{a.distance}</span>
                 </div>
                 <p className="text-muted text-sm leading-6">{a.desc}</p>
@@ -216,10 +216,10 @@ export default function WinterGlampingPage() {
             {seasons.map((s) => (
               <div
                 key={s.season}
-                className={`rounded-2xl p-6 ${s.label === "Winter" ? "bg-teal text-white ring-2 ring-teal" : "bg-cream"}`}
+                className={`rounded-2xl p-6 ${s.label === "Winter" ? "bg-burgundy text-white ring-2 ring-teal" : "bg-cream"}`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className={`font-display text-xl ${s.label === "Winter" ? "text-white" : "text-teal"}`}>
+                  <h3 className={`font-display text-xl ${s.label === "Winter" ? "text-white" : "text-burgundy"}`}>
                     {s.label} {s.label === "Winter" && "★"}
                   </h3>
                   <span className={`text-sm font-semibold ${s.label === "Winter" ? "text-white/80" : "text-burgundy"}`}>{s.temp}</span>
@@ -236,7 +236,7 @@ export default function WinterGlampingPage() {
       <section className="py-20 px-5">
         <div className="max-w-[700px] mx-auto text-center">
           <div className="text-yellow-500 text-3xl mb-4" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <blockquote className="font-display text-2xl text-teal italic mb-4">
+          <blockquote className="font-display text-2xl text-burgundy italic mb-4">
             &ldquo;Came in July. Snow on the mountains, spa was incredible, the stars through the skylight
             were unforgettable. We&apos;re coming back every winter.&rdquo;
           </blockquote>
@@ -272,12 +272,12 @@ export default function WinterGlampingPage() {
                   <Image src={dome.image} alt={`${dome.title} winter glamping dome`} fill className="object-cover" sizes="50vw" />
                 </Link>
                 <div className="p-6">
-                  <h3 className="font-display text-2xl text-teal mb-1">{dome.title}</h3>
+                  <h3 className="font-display text-2xl text-burgundy mb-1">{dome.title}</h3>
                   <p className="text-burgundy font-semibold mb-4">{dome.price}</p>
                   <ul className="space-y-2 mb-5">
                     {dome.winter.map((w) => (
                       <li key={w} className="flex items-center gap-2 text-sm text-body">
-                        <span className="text-teal font-bold">&#10003;</span>
+                        <span className="text-burgundy font-bold">&#10003;</span>
                         {w}
                       </li>
                     ))}
@@ -291,7 +291,7 @@ export default function WinterGlampingPage() {
           </div>
           <p className="text-center text-muted text-sm mt-6">
             Strictly adults only &bull; Continental breakfast included &bull;{" "}
-            <Link href="/contact" className="text-teal no-underline hover:underline">Questions? Contact us</Link>
+            <Link href="/contact" className="text-burgundy no-underline hover:underline">Questions? Contact us</Link>
           </p>
         </div>
       </section>
@@ -307,7 +307,7 @@ export default function WinterGlampingPage() {
               { href: "/luxury-accommodation-cromwell", title: "Luxury Accommodation Cromwell", desc: "All three of our properties — domes & cottage" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
-                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="font-semibold text-burgundy mb-1">{link.title}</p>
                 <p className="text-muted text-sm">{link.desc}</p>
               </Link>
             ))}

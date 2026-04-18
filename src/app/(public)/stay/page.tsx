@@ -84,7 +84,7 @@ export default function StayPage() {
             Our Accommodations
           </h1>
           <p className="text-xl opacity-95">
-            Three unique stays on the shores of Lake Dunstan
+            Two domes, one cottage, one extraordinary place.
           </p>
         </div>
       </section>
@@ -117,7 +117,7 @@ export default function StayPage() {
                   />
                 </Link>
                 <div className="p-6">
-                  <h3 className="font-display text-2xl text-teal mb-1">
+                  <h3 className="font-display text-2xl text-burgundy mb-1">
                     {acc.title}
                   </h3>
                   <p className="text-burgundy font-semibold text-xl mb-3">

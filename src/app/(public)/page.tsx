@@ -271,7 +271,7 @@ export default async function HomePage() {
                 </div>
                 <p className="text-yellow-500 mb-3">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
                 <p className="text-sm text-muted italic leading-relaxed">&ldquo;{review.text}&rdquo;</p>
-                <p className="text-xs text-teal mt-4 bg-cream inline-block px-3 py-1 rounded-full">{review.accommodation}</p>
+                <p className="text-xs text-burgundy mt-4 bg-cream inline-block px-3 py-1 rounded-full">{review.accommodation}</p>
               </div>
             ))}
           </div>
@@ -322,7 +322,7 @@ export default async function HomePage() {
             ].map((s) => (
               <div key={s.season} className="bg-cream rounded-2xl p-6 text-center">
                 <p className="text-3xl mb-2">{s.icon}</p>
-                <h3 className="font-display text-xl text-teal mb-1">{s.season}</h3>
+                <h3 className="font-display text-xl text-burgundy mb-1">{s.season}</h3>
                 <p className="text-xs text-muted mb-3">{s.months}</p>
                 <p className="text-sm text-body leading-relaxed mb-3">{s.description}</p>
                 <p className="text-xs text-burgundy font-semibold">{s.highlight}</p>
@@ -394,7 +394,7 @@ function AccommodationCard({
         />
       </div>
       <div className="p-6">
-        <h3 className="font-display text-xl text-teal mb-1">
+        <h3 className="font-display text-xl text-burgundy mb-1">
           {title}{" "}
           {badge && (
             <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-body font-semibold">

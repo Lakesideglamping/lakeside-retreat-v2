@@ -73,10 +73,10 @@ export function GalleryContent() {
             onClick={() => setFilter(cat)}
             aria-pressed={filter === cat}
             aria-label={`Filter by ${categoryLabels[cat]}`}
-            className={`px-6 py-3 rounded-full border-2 border-teal font-medium transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal ${
+            className={`px-6 py-3 rounded-full border-2 border-burgundy font-medium transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-burgundy ${
               filter === cat
-                ? "bg-teal text-white"
-                : "bg-transparent text-teal hover:bg-teal hover:text-white"
+                ? "bg-burgundy text-white"
+                : "bg-transparent text-burgundy hover:bg-burgundy hover:text-white"
             }`}
           >
             {categoryLabels[cat]}
@@ -92,7 +92,7 @@ export function GalleryContent() {
             type="button"
             onClick={() => setLightbox({ src: item.src, alt: item.alt })}
             aria-label={`View photo: ${item.title}`}
-            className="group relative rounded-xl overflow-hidden aspect-[4/3] cursor-pointer border-0 p-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+            className="group relative rounded-xl overflow-hidden aspect-[4/3] cursor-pointer border-0 p-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-burgundy"
           >
             <Image
               src={item.src}

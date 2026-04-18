@@ -46,7 +46,7 @@ export default function OurStoryPage() {
         <div className="pt-20 px-5">
           <h1 className="font-display text-5xl text-white mb-4">Our Story</h1>
           <p className="text-xl opacity-95">
-            The journey behind Central Otago&apos;s premier sustainable luxury retreat
+            How two people, a lake, and a lot of solar panels became Lakeside Retreat.
           </p>
         </div>
       </section>

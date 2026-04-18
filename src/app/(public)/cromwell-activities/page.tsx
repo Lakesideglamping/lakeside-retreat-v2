@@ -140,7 +140,7 @@ export default function CromwellActivitiesPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {seasons.map((s) => (
               <div key={s.name} className="bg-cream rounded-2xl p-6">
-                <h3 className="font-display text-xl text-teal mb-1">{s.name}</h3>
+                <h3 className="font-display text-xl text-burgundy mb-1">{s.name}</h3>
                 <p className="text-burgundy text-xs font-semibold mb-3">{s.months}</p>
                 <p className="text-muted text-sm">{s.highlights}</p>
               </div>
@@ -185,7 +185,7 @@ export default function CromwellActivitiesPage() {
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-display text-lg text-teal">{acc.title}</h3>
+                    <h3 className="font-display text-lg text-burgundy">{acc.title}</h3>
                     <span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-semibold">
                       {acc.badge}
                     </span>

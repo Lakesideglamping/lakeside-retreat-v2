@@ -126,9 +126,9 @@ export default function WineTrailPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li><Link href="/guides" className="text-teal no-underline hover:underline">Guides</Link></li>
+          <li><Link href="/guides" className="text-burgundy no-underline hover:underline">Guides</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Central Otago Wine Trail</li>
         </ol>
@@ -163,7 +163,7 @@ export default function WineTrailPage() {
                 <div key={w.name} className="bg-cream rounded-xl p-5 flex items-start gap-3">
                   <span className="text-burgundy font-bold mt-0.5">&#10003;</span>
                   <div>
-                    <span className="font-semibold text-teal">{w.name}</span>
+                    <span className="font-semibold text-burgundy">{w.name}</span>
                     <span className="text-muted text-sm"> &mdash; {w.note}</span>
                   </div>
                 </div>
@@ -213,7 +213,7 @@ export default function WineTrailPage() {
                   <Image src={acc.image} alt={acc.title} fill className="object-cover" sizes="33vw" />
                 </div>
                 <div className="p-5 text-center">
-                  <h3 className="font-display text-lg text-teal mb-1">{acc.title}</h3>
+                  <h3 className="font-display text-lg text-burgundy mb-1">{acc.title}</h3>
                   <p className="text-burgundy font-semibold text-sm">{acc.price} &rarr;</p>
                 </div>
               </Link>
@@ -233,7 +233,7 @@ export default function WineTrailPage() {
               { href: "/cromwell-activities", title: "Cromwell Activities", desc: "Lake Dunstan, cycling trails, and more right from your door" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
-                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="font-semibold text-burgundy mb-1">{link.title}</p>
                 <p className="text-muted text-sm">{link.desc}</p>
               </Link>
             ))}

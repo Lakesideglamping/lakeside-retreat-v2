@@ -67,7 +67,7 @@ export default async function BookingSuccessPage({
   return (
     <section className="min-h-[70vh] flex items-center justify-center px-5 pt-24 pb-20">
       <div className="max-w-[600px] mx-auto text-center">
-        <div className="text-5xl mb-6 text-teal">&#10003;</div>
+        <div className="text-5xl mb-6 text-burgundy">&#10003;</div>
         <h1 className="font-display text-4xl mb-4">Booking Confirmed!</h1>
 
         {verified && guestName && (
@@ -124,7 +124,7 @@ export default async function BookingSuccessPage({
           <Button href="/">Back to Homepage</Button>
           <Link
             href="/explore"
-            className="inline-block px-6 py-3 rounded-full border-2 border-teal text-teal font-semibold hover:-translate-y-0.5 transition-transform no-underline"
+            className="inline-block px-6 py-3 rounded-full border-2 border-burgundy text-burgundy font-semibold hover:-translate-y-0.5 transition-transform no-underline"
           >
             Plan Your Trip
           </Link>

@@ -123,9 +123,9 @@ export default function AutumnCentralOtagoPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li><Link href="/guides" className="text-teal no-underline hover:underline">Guides</Link></li>
+          <li><Link href="/guides" className="text-burgundy no-underline hover:underline">Guides</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Autumn in Central Otago</li>
         </ol>
@@ -146,7 +146,7 @@ export default function AutumnCentralOtagoPage() {
           <p className="text-lg leading-8 text-muted">
             Lakeside Retreat sits in the heart of it all — surrounded by 30+ wineries,
             300 metres from the{" "}
-            <Link href="/otago-rail-trail-accommodation" className="text-teal no-underline hover:underline">Otago Rail Trail</Link>
+            <Link href="/otago-rail-trail-accommodation" className="text-burgundy no-underline hover:underline">Otago Rail Trail</Link>
             , and on the shores of Lake Dunstan. The outdoor spas feel perfect in the
             crisp autumn air, and the night skies become increasingly spectacular as
             the evenings cool.
@@ -177,7 +177,7 @@ export default function AutumnCentralOtagoPage() {
       </section>
 
       {/* Harvest callout */}
-      <section className="py-16 px-5 bg-teal text-white text-center">
+      <section className="py-16 px-5 bg-burgundy text-white text-center">
         <div className="max-w-[800px] mx-auto">
           <p className="font-display text-3xl mb-3">
             &#127815; Harvest Season. Golden Vines. Crisp Spa Evenings.
@@ -198,7 +198,7 @@ export default function AutumnCentralOtagoPage() {
             {autumnActivities.map((a) => (
               <div key={a.title} className="bg-white rounded-2xl p-6 shadow-md">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3 className="font-display text-xl text-teal">{a.title}</h3>
+                  <h3 className="font-display text-xl text-burgundy">{a.title}</h3>
                   <span className="text-burgundy font-semibold text-sm whitespace-nowrap">{a.distance}</span>
                 </div>
                 <p className="text-muted text-sm leading-6">{a.desc}</p>
@@ -218,10 +218,10 @@ export default function AutumnCentralOtagoPage() {
             {seasons.map((s) => (
               <div
                 key={s.season}
-                className={`rounded-2xl p-6 ${s.label === "Autumn" ? "bg-teal text-white ring-2 ring-teal" : "bg-cream"}`}
+                className={`rounded-2xl p-6 ${s.label === "Autumn" ? "bg-burgundy text-white ring-2 ring-teal" : "bg-cream"}`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className={`font-display text-xl ${s.label === "Autumn" ? "text-white" : "text-teal"}`}>
+                  <h3 className={`font-display text-xl ${s.label === "Autumn" ? "text-white" : "text-burgundy"}`}>
                     {s.label} {s.label === "Autumn" && "★"}
                   </h3>
                   <span className={`text-sm font-semibold ${s.label === "Autumn" ? "text-white/80" : "text-burgundy"}`}>{s.temp}</span>
@@ -229,7 +229,7 @@ export default function AutumnCentralOtagoPage() {
                 <p className={`text-xs font-semibold mb-2 ${s.label === "Autumn" ? "text-white/90" : "text-muted"}`}>{s.season}</p>
                 <p className={`text-sm leading-6 ${s.label === "Autumn" ? "text-white/90" : "text-muted"}`}>{s.conditions}</p>
                 {s.label === "Winter" && (
-                  <Link href="/winter-glamping-central-otago" className="text-xs text-teal no-underline hover:underline mt-2 block">
+                  <Link href="/winter-glamping-central-otago" className="text-xs text-burgundy no-underline hover:underline mt-2 block">
                     See our winter glamping guide &rarr;
                   </Link>
                 )}
@@ -243,7 +243,7 @@ export default function AutumnCentralOtagoPage() {
       <section className="py-20 px-5">
         <div className="max-w-[700px] mx-auto text-center">
           <div className="text-yellow-500 text-3xl mb-4" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <blockquote className="font-display text-2xl text-teal italic mb-4">
+          <blockquote className="font-display text-2xl text-burgundy italic mb-4">
             &ldquo;Came in April for harvest season. The vines were extraordinary — gold and red as far
             as you could see. Soaking in the spa at sunset was one of the best moments of our trip.&rdquo;
           </blockquote>
@@ -279,12 +279,12 @@ export default function AutumnCentralOtagoPage() {
                   <Image src={dome.image} alt={`${dome.title} autumn glamping dome`} fill className="object-cover" sizes="50vw" />
                 </Link>
                 <div className="p-6">
-                  <h3 className="font-display text-2xl text-teal mb-1">{dome.title}</h3>
+                  <h3 className="font-display text-2xl text-burgundy mb-1">{dome.title}</h3>
                   <p className="text-burgundy font-semibold mb-4">{dome.price}</p>
                   <ul className="space-y-2 mb-5">
                     {dome.autumn.map((w) => (
                       <li key={w} className="flex items-center gap-2 text-sm text-body">
-                        <span className="text-teal font-bold">&#10003;</span>
+                        <span className="text-burgundy font-bold">&#10003;</span>
                         {w}
                       </li>
                     ))}
@@ -298,14 +298,14 @@ export default function AutumnCentralOtagoPage() {
           </div>
           <div className="mt-8 bg-cream rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <h3 className="font-display text-xl text-teal mb-1">Lakeside Cottage</h3>
+              <h3 className="font-display text-xl text-burgundy mb-1">Lakeside Cottage</h3>
               <p className="text-muted text-sm">From $295/night &bull; 2 bedrooms &bull; Dog-friendly &bull; Direct lake access</p>
             </div>
             <Button href="/book?a=lakeside-cottage">Book Cottage &rarr;</Button>
           </div>
           <p className="text-center text-muted text-sm mt-6">
             Strictly adults only (domes) &bull; Continental breakfast included &bull;{" "}
-            <Link href="/contact" className="text-teal no-underline hover:underline">Questions? Contact us</Link>
+            <Link href="/contact" className="text-burgundy no-underline hover:underline">Questions? Contact us</Link>
           </p>
         </div>
       </section>
@@ -321,7 +321,7 @@ export default function AutumnCentralOtagoPage() {
               { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail Stays", desc: "300m from the Cromwell trailhead" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
-                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="font-semibold text-burgundy mb-1">{link.title}</p>
                 <p className="text-muted text-sm">{link.desc}</p>
               </Link>
             ))}

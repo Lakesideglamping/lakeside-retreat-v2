@@ -109,7 +109,7 @@ export default function GlampingCentralOtagoPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Glamping Central Otago</li>
         </ol>
@@ -129,7 +129,7 @@ export default function GlampingCentralOtagoPage() {
           <p className="text-lg leading-8 text-muted">
             Located at 96 Smiths Way, Mount Pisa — in the heart of Central Otago wine country,
             300 metres from the{" "}
-            <Link href="/otago-rail-trail-accommodation" className="text-teal no-underline hover:underline">Otago Rail Trail</Link>
+            <Link href="/otago-rail-trail-accommodation" className="text-burgundy no-underline hover:underline">Otago Rail Trail</Link>
             , and 45 minutes from Queenstown. Rated
             4.9/5 by 416 guests across Airbnb and Booking.com.
           </p>
@@ -152,7 +152,7 @@ export default function GlampingCentralOtagoPage() {
                   <Image src={f.image} alt={f.title} fill className="object-cover" sizes="33vw" />
                 </div>
                 <div className="p-6">
-                  <h3 className="font-display text-xl text-teal mb-3">{f.title}</h3>
+                  <h3 className="font-display text-xl text-burgundy mb-3">{f.title}</h3>
                   <p className="text-muted text-sm leading-6">{f.desc}</p>
                 </div>
               </div>
@@ -186,7 +186,7 @@ export default function GlampingCentralOtagoPage() {
                 </Link>
                 <div className="p-8">
                   <div className="flex items-baseline justify-between mb-1">
-                    <h3 className="font-display text-2xl text-teal">{dome.name}</h3>
+                    <h3 className="font-display text-2xl text-burgundy">{dome.name}</h3>
                     <span className="text-sm text-muted">{dome.size}</span>
                   </div>
                   <p className="text-burgundy font-semibold text-lg mb-4">{dome.price}</p>
@@ -219,7 +219,7 @@ export default function GlampingCentralOtagoPage() {
             Lakeside Retreat glamping means all the nature, none of the roughing it
           </p>
           <div className="bg-cream rounded-2xl overflow-hidden">
-            <div className="grid grid-cols-3 bg-teal text-white text-sm font-semibold px-4 py-3">
+            <div className="grid grid-cols-3 bg-burgundy text-white text-sm font-semibold px-4 py-3">
               <span>Feature</span>
               <span className="text-center">Basic Glamping</span>
               <span className="text-center">Lakeside Retreat</span>
@@ -230,8 +230,8 @@ export default function GlampingCentralOtagoPage() {
                 className={`grid grid-cols-3 px-4 py-3 text-sm ${i % 2 === 0 ? "bg-white" : "bg-cream"}`}
               >
                 <span className="text-body">{row.feature}</span>
-                <span className="text-center">{row.basic ? <span className="text-teal">&#10003;</span> : <span className="text-red-400">&#215;</span>}</span>
-                <span className="text-center"><span className="text-teal font-bold">&#10003;</span></span>
+                <span className="text-center">{row.basic ? <span className="text-burgundy">&#10003;</span> : <span className="text-red-400">&#215;</span>}</span>
+                <span className="text-center"><span className="text-burgundy font-bold">&#10003;</span></span>
               </div>
             ))}
           </div>
@@ -257,7 +257,7 @@ export default function GlampingCentralOtagoPage() {
               { label: "Otago Rail Trail", time: "300m walk" },
             ].map((item) => (
               <div key={item.label} className="bg-white rounded-xl p-5 text-center shadow-sm">
-                <div className="font-bold text-teal text-xl">{item.time}</div>
+                <div className="font-bold text-burgundy text-xl">{item.time}</div>
                 <div className="text-sm text-muted">{item.label}</div>
               </div>
             ))}
@@ -291,7 +291,7 @@ export default function GlampingCentralOtagoPage() {
       <section className="py-20 px-5">
         <div className="max-w-[800px] mx-auto text-center">
           <div className="text-yellow-500 text-3xl mb-4" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <blockquote className="font-display text-2xl text-teal italic mb-4">
+          <blockquote className="font-display text-2xl text-burgundy italic mb-4">
             &ldquo;The most magical place we&apos;ve ever stayed. Woke up to the Milky Way through the skylight, soaked in the spa with vineyard views. Nothing compares.&rdquo;
           </blockquote>
           <p className="text-muted text-sm">Sarah &amp; James — Auckland &bull; Dome Pinot</p>
@@ -309,7 +309,7 @@ export default function GlampingCentralOtagoPage() {
               { href: "/luxury-accommodation-cromwell", title: "Luxury Accommodation Cromwell", desc: "Compare all three of our Central Otago properties" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
-                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="font-semibold text-burgundy mb-1">{link.title}</p>
                 <p className="text-muted text-sm">{link.desc}</p>
               </Link>
             ))}
@@ -329,7 +329,7 @@ export default function GlampingCentralOtagoPage() {
             <Button href="/book?a=dome-rose">Book Dome Ros&eacute;</Button>
           </div>
           <p className="text-sm text-muted mt-6">
-            Questions? <Link href="/contact" className="text-teal no-underline hover:underline">Contact Stephen &amp; Sandy</Link>
+            Questions? <Link href="/contact" className="text-burgundy no-underline hover:underline">Contact Stephen &amp; Sandy</Link>
           </p>
         </div>
       </section>

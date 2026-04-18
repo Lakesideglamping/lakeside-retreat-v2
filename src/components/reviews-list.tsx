@@ -72,8 +72,8 @@ export function ReviewsList({ reviews }: { reviews: Review[] }) {
             onClick={() => handleFilterChange(f.value)}
             className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
               filter === f.value
-                ? "bg-teal text-white"
-                : "bg-cream text-body hover:bg-teal/10"
+                ? "bg-burgundy text-white"
+                : "bg-cream text-body hover:bg-burgundy/10"
             }`}
           >
             {f.label}
@@ -108,7 +108,7 @@ export function ReviewsList({ reviews }: { reviews: Review[] }) {
               &ldquo;{r.review_text}&rdquo;
             </p>
             <div className="flex items-center justify-between text-xs">
-              <span className="bg-cream px-3 py-1 rounded-full text-teal font-medium">
+              <span className="bg-cream px-3 py-1 rounded-full text-burgundy font-medium">
                 {PROPERTY_DISPLAY[r.property ?? ""] ?? r.property ?? "Lakeside Retreat"}
               </span>
               <span className="text-muted">
@@ -124,7 +124,7 @@ export function ReviewsList({ reviews }: { reviews: Review[] }) {
         {hasMore ? (
           <button
             onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-            className="inline-block px-8 py-3 bg-teal text-white rounded-full font-medium hover:bg-teal-dark transition-colors"
+            className="inline-block px-8 py-3 bg-burgundy text-white rounded-full font-medium hover:bg-burgundy-dark transition-colors"
           >
             Show More Reviews ({filtered.length - visibleCount} remaining)
           </button>

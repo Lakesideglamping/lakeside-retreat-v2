@@ -25,7 +25,7 @@ interface FormFields {
 type Status = "idle" | "submitting" | "error";
 
 const inputClass =
-  "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-teal focus:ring-1 focus:ring-teal outline-none transition-colors";
+  "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-burgundy focus:ring-1 focus:ring-burgundy outline-none transition-colors";
 const errorClass = "text-red-600 text-sm mt-1";
 
 export function BookingForm({
@@ -158,7 +158,7 @@ export function BookingForm({
       {/* Booking summary */}
       <div className="bg-cream rounded-2xl p-6 mb-8">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-display text-lg text-teal">Booking Summary</h3>
+          <h3 className="font-display text-lg text-burgundy">Booking Summary</h3>
           <button
             type="button"
             onClick={onBack}
@@ -195,14 +195,14 @@ export function BookingForm({
           </div>
           <div>
             <p className="text-muted">Total</p>
-            <p className="font-semibold text-teal">{formatNZD(totalAmount)}</p>
+            <p className="font-semibold text-burgundy">{formatNZD(totalAmount)}</p>
           </div>
         </div>
       </div>
 
       {/* Guest details form */}
       <form onSubmit={handleSubmit} className="space-y-5">
-        <h3 className="font-display text-xl text-teal">Your Details</h3>
+        <h3 className="font-display text-xl text-burgundy">Your Details</h3>
 
         {status === "error" && errorMessage && (
           <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 text-sm">

@@ -74,7 +74,7 @@ export default function DogFriendlyAccommodationPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Dog-Friendly Accommodation Central Otago</li>
         </ol>
@@ -84,7 +84,7 @@ export default function DogFriendlyAccommodationPage() {
       <section className="py-20 px-5">
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="bg-teal text-white px-4 py-2 rounded-full text-sm font-semibold inline-block mb-4">
+            <span className="bg-burgundy text-white px-4 py-2 rounded-full text-sm font-semibold inline-block mb-4">
               Pet Friendly &#128054;
             </span>
             <h2 className="font-display text-4xl mb-6">
@@ -98,7 +98,7 @@ export default function DogFriendlyAccommodationPage() {
             <p className="text-lg leading-8 text-muted mb-6">
               Direct lake access means your dog can swim to their heart&apos;s content. A secure
               outdoor area gives them space to explore safely. And the{" "}
-              <Link href="/otago-rail-trail-accommodation" className="text-teal no-underline hover:underline">Otago Rail Trail</Link>
+              <Link href="/otago-rail-trail-accommodation" className="text-burgundy no-underline hover:underline">Otago Rail Trail</Link>
               {" "}is just 300 metres away for epic walks.
             </p>
             <div className="bg-cream rounded-xl p-5">
@@ -134,7 +134,7 @@ export default function DogFriendlyAccommodationPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f) => (
               <div key={f.title} className="bg-cream rounded-2xl p-6">
-                <h3 className="font-display text-xl text-teal mb-2">{f.title}</h3>
+                <h3 className="font-display text-xl text-burgundy mb-2">{f.title}</h3>
                 <p className="text-muted text-sm leading-6">{f.desc}</p>
               </div>
             ))}
@@ -169,23 +169,23 @@ export default function DogFriendlyAccommodationPage() {
           <div className="bg-cream rounded-2xl p-8">
             <ul className="space-y-4 text-body">
               <li className="flex items-start gap-3">
-                <span className="text-teal font-bold mt-1">&#10003;</span>
+                <span className="text-burgundy font-bold mt-1">&#10003;</span>
                 <span>Well-behaved dogs welcome with prior approval — please let us know when booking</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-teal font-bold mt-1">&#10003;</span>
+                <span className="text-burgundy font-bold mt-1">&#10003;</span>
                 <span>Flat $50 pet fee per stay (not per night)</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-teal font-bold mt-1">&#10003;</span>
+                <span className="text-burgundy font-bold mt-1">&#10003;</span>
                 <span>Dogs must not be left unattended inside the cottage</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-teal font-bold mt-1">&#10003;</span>
+                <span className="text-burgundy font-bold mt-1">&#10003;</span>
                 <span>Dogs must be kept on lead around the lake edge and on all walking trails</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-teal font-bold mt-1">&#10003;</span>
+                <span className="text-burgundy font-bold mt-1">&#10003;</span>
                 <span>Maximum 2 dogs per booking</span>
               </li>
             </ul>
@@ -204,7 +204,7 @@ export default function DogFriendlyAccommodationPage() {
               { href: "/luxury-accommodation-cromwell", title: "All Our Accommodation", desc: "Compare all three properties at Lakeside Retreat" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
-                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="font-semibold text-burgundy mb-1">{link.title}</p>
                 <p className="text-muted text-sm">{link.desc}</p>
               </Link>
             ))}
@@ -222,7 +222,7 @@ export default function DogFriendlyAccommodationPage() {
           </p>
           <Button href="/book?a=lakeside-cottage">Check Availability</Button>
           <p className="text-sm text-muted mt-6">
-            Have questions about bringing your pet? <Link href="/contact" className="text-teal no-underline hover:underline">Contact us</Link> and we&apos;ll help.
+            Have questions about bringing your pet? <Link href="/contact" className="text-burgundy no-underline hover:underline">Contact us</Link> and we&apos;ll help.
           </p>
         </div>
       </section>

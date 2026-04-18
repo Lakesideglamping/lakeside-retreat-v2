@@ -14,7 +14,7 @@ const variants: Record<ButtonVariant, string> = {
   primary:
     "bg-gradient-to-br from-burgundy to-teal-dark text-white hover:opacity-90 hover:-translate-y-0.5",
   outline:
-    "bg-transparent border-2 border-white text-white hover:bg-white hover:text-teal",
+    "bg-transparent border-2 border-white text-white hover:bg-white hover:text-burgundy",
   "outline-dark":
     "bg-transparent border-2 border-burgundy text-burgundy hover:bg-burgundy hover:text-white",
 };

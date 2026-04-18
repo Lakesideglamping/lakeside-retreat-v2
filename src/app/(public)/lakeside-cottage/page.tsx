@@ -112,7 +112,7 @@ export default function LakesideCottagePage() {
             Lakeside Cottage
           </h1>
           <p className="text-xl mb-8 opacity-95">
-            Spacious family accommodation with direct Lake Dunstan access
+            Step off the deck, into the lake. Dogs welcome too.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button href="/book?a=lakeside-cottage" ariaLabel="Book Lakeside Cottage now from $295 per night">
@@ -128,9 +128,9 @@ export default function LakesideCottagePage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li><Link href="/stay" className="text-teal no-underline hover:underline">Stay</Link></li>
+          <li><Link href="/stay" className="text-burgundy no-underline hover:underline">Stay</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Lakeside Cottage</li>
         </ol>
@@ -213,7 +213,7 @@ export default function LakesideCottagePage() {
         <div className="max-w-[500px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">Pricing</h2>
           <div className="bg-cream rounded-3xl p-10 text-center shadow-xl">
-            <div className="text-5xl font-bold text-teal mb-1">From $295</div>
+            <div className="text-5xl font-bold text-burgundy mb-1">From $295</div>
             <p className="text-muted mb-6">per night (2 guests base)</p>
             <ul className="text-left space-y-3 mb-6">
               {pricingFeatures.map((f) => (
@@ -255,7 +255,7 @@ export default function LakesideCottagePage() {
                 />
               </div>
               <div className="p-6">
-                <h3 className="font-display text-xl text-teal mb-2">Dome Pinot</h3>
+                <h3 className="font-display text-xl text-burgundy mb-2">Dome Pinot</h3>
                 <p className="text-muted text-sm mb-3">
                   Our flagship 50sqm luxury dome with panoramic Lake Dunstan views and private spa.
                 </p>
@@ -276,7 +276,7 @@ export default function LakesideCottagePage() {
                 />
               </div>
               <div className="p-6">
-                <h3 className="font-display text-xl text-teal mb-2">Dome Rosé</h3>
+                <h3 className="font-display text-xl text-burgundy mb-2">Dome Rosé</h3>
                 <p className="text-muted text-sm mb-3">
                   40sqm romantic dome with outdoor spa and vineyard views. Perfect for couples.
                 </p>
@@ -300,7 +300,7 @@ export default function LakesideCottagePage() {
                 href={g.href}
                 className="block bg-white rounded-xl p-6 no-underline shadow-md hover:-translate-y-1 transition-transform"
               >
-                <h3 className="text-teal font-semibold mb-2">{g.title}</h3>
+                <h3 className="text-burgundy font-semibold mb-2">{g.title}</h3>
                 <p className="text-muted text-sm m-0">{g.desc}</p>
               </Link>
             ))}

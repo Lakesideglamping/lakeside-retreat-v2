@@ -94,9 +94,9 @@ export default function FoodDiningPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li><Link href="/guides" className="text-teal no-underline hover:underline">Guides</Link></li>
+          <li><Link href="/guides" className="text-burgundy no-underline hover:underline">Guides</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Food &amp; Dining</li>
         </ol>
@@ -127,7 +127,7 @@ export default function FoodDiningPage() {
               {cat.places.map((place) => (
                 <div key={place.name} className="bg-cream rounded-2xl p-6">
                   <div className="flex items-start justify-between gap-3 mb-2">
-                    <h3 className="font-display text-lg text-teal">{place.name}</h3>
+                    <h3 className="font-display text-lg text-burgundy">{place.name}</h3>
                     <span className="text-xs bg-white text-burgundy px-2 py-1 rounded-full font-semibold shrink-0 whitespace-nowrap">
                       {place.distance}
                     </span>
@@ -151,7 +151,7 @@ export default function FoodDiningPage() {
             {localProduce.map((p) => (
               <div key={p.item} className="bg-cream rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-display text-lg text-teal">{p.item}</h3>
+                  <h3 className="font-display text-lg text-burgundy">{p.item}</h3>
                   <span className="text-xs bg-white text-burgundy px-2 py-1 rounded-full font-semibold">
                     {p.season}
                   </span>
@@ -164,7 +164,7 @@ export default function FoodDiningPage() {
       </section>
 
       {/* Tips callout */}
-      <section className="py-16 px-5 bg-teal text-white">
+      <section className="py-16 px-5 bg-burgundy text-white">
         <div className="max-w-[800px] mx-auto text-center">
           <h2 className="font-display text-3xl mb-6">Stephen &amp; Sandy&apos;s Tips</h2>
           <div className="grid sm:grid-cols-2 gap-4 text-left">
@@ -203,7 +203,7 @@ export default function FoodDiningPage() {
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-display text-lg text-teal">{acc.title}</h3>
+                    <h3 className="font-display text-lg text-burgundy">{acc.title}</h3>
                     <span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-semibold shrink-0">
                       {acc.badge}
                     </span>
@@ -228,7 +228,7 @@ export default function FoodDiningPage() {
               { href: "/cromwell-activities", title: "Cromwell Activities", desc: "Lake Dunstan, cycling trails, and the Heritage Precinct" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
-                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="font-semibold text-burgundy mb-1">{link.title}</p>
                 <p className="text-muted text-sm">{link.desc}</p>
               </Link>
             ))}

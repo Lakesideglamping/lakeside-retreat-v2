@@ -78,7 +78,7 @@ export default async function ReviewsPage() {
         <div className="max-w-[1000px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {stats.map((s) => (
             <div key={s.label}>
-              <div className="text-4xl font-bold text-teal mb-1">{s.value}</div>
+              <div className="text-4xl font-bold text-burgundy mb-1">{s.value}</div>
               <div className="font-semibold text-body text-sm">{s.label}</div>
               <div className="text-muted text-xs">{s.sub}</div>
             </div>

@@ -63,7 +63,7 @@ export default function TermsConditionsPage() {
               <tbody>
                 <tr className="border-b border-gray-200">
                   <td className="p-3">7+ days before check-in</td>
-                  <td className="p-3 text-teal font-semibold">100% refund</td>
+                  <td className="p-3 text-burgundy font-semibold">100% refund</td>
                 </tr>
                 <tr className="border-b border-gray-200">
                   <td className="p-3">3&ndash;6 days before check-in</td>
@@ -203,7 +203,7 @@ export default function TermsConditionsPage() {
           <h2 className="font-display text-2xl mt-10 mb-4">10. Privacy</h2>
           <p>
             Your personal information is handled in accordance with our{" "}
-            <Link href="/privacy-policy" className="text-teal">
+            <Link href="/privacy-policy" className="text-burgundy">
               Privacy Policy
             </Link>{" "}
             and the New Zealand Privacy Act 2020.
@@ -227,7 +227,7 @@ export default function TermsConditionsPage() {
           <h2 className="font-display text-2xl mt-10 mb-4">13. Contact Us</h2>
           <p>
             For questions about these terms, contact us at{" "}
-            <Link href="mailto:info@lakesideretreat.co.nz" className="text-teal">
+            <Link href="mailto:info@lakesideretreat.co.nz" className="text-burgundy">
               info@lakesideretreat.co.nz
             </Link>{" "}
             or write to 96 Smiths Way, Mount Pisa, Cromwell 9383, New Zealand.

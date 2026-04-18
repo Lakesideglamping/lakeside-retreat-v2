@@ -209,7 +209,7 @@ export function BookingWidget() {
         <div className="space-y-8">
           {/* Accommodation selector */}
           <div>
-            <h3 className="font-display text-xl text-teal mb-4">
+            <h3 className="font-display text-xl text-burgundy mb-4">
               Choose Your Accommodation
             </h3>
             <div className="grid sm:grid-cols-3 gap-4">
@@ -227,7 +227,7 @@ export function BookingWidget() {
           {/* Calendar */}
           {accommodation && (
             <div>
-              <h3 className="font-display text-xl text-teal mb-4">
+              <h3 className="font-display text-xl text-burgundy mb-4">
                 Select Your Dates
               </h3>
               <BookingCalendar
@@ -257,7 +257,7 @@ export function BookingWidget() {
                   <button
                     type="button"
                     onClick={() => setGuests(Math.max(1, guests - 1))}
-                    className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
+                    className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-burgundy transition-colors"
                     disabled={guests <= 1}
                   >
                     &minus;
@@ -270,7 +270,7 @@ export function BookingWidget() {
                     onClick={() =>
                       setGuests(Math.min(acc.maxGuests, guests + 1))
                     }
-                    className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
+                    className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-burgundy transition-colors"
                     disabled={guests >= acc.maxGuests}
                   >
                     +
@@ -295,7 +295,7 @@ export function BookingWidget() {
                     <button
                       type="button"
                       onClick={() => setPets(Math.max(0, pets - 1))}
-                      className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
+                      className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-burgundy transition-colors"
                       disabled={pets <= 0}
                     >
                       &minus;
@@ -306,7 +306,7 @@ export function BookingWidget() {
                     <button
                       type="button"
                       onClick={() => setPets(Math.min(2, pets + 1))}
-                      className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-teal transition-colors"
+                      className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-burgundy transition-colors"
                       disabled={pets >= 2}
                     >
                       +
@@ -378,7 +378,7 @@ function StepIndicator({
       <div
         className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
           active
-            ? "bg-teal text-white"
+            ? "bg-burgundy text-white"
             : "bg-gray-200 text-muted"
         }`}
       >
@@ -386,7 +386,7 @@ function StepIndicator({
       </div>
       <span
         className={`text-sm hidden sm:inline ${
-          active ? "text-teal font-semibold" : "text-muted"
+          active ? "text-burgundy font-semibold" : "text-muted"
         }`}
       >
         {label}
@@ -410,8 +410,8 @@ function AccommodationOption({
       onClick={onSelect}
       className={`text-left rounded-2xl p-4 transition-all border-2 ${
         selected
-          ? "border-teal bg-teal/5 shadow-md"
-          : "border-gray-200 bg-white hover:border-teal/50"
+          ? "border-burgundy bg-burgundy/5 shadow-md"
+          : "border-gray-200 bg-white hover:border-burgundy/50"
       }`}
     >
       <div className="relative h-28 rounded-xl overflow-hidden mb-3">
@@ -423,7 +423,7 @@ function AccommodationOption({
           sizes="(max-width: 640px) 100vw, 33vw"
         />
       </div>
-      <h4 className="font-display text-base text-teal">{accommodation.name}</h4>
+      <h4 className="font-display text-base text-burgundy">{accommodation.name}</h4>
       <p className="text-sm text-muted mt-0.5">{accommodation.description}</p>
       <div className="flex items-center justify-between mt-2">
         <span className="text-burgundy font-semibold text-sm">

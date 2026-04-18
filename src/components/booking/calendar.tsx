@@ -130,12 +130,12 @@ function MonthGrid({
             cellClass += "text-gray-300 ";
           } else if (isCheckIn) {
             cellClass +=
-              "bg-teal text-white font-semibold rounded-l-full z-10 ";
+              "bg-burgundy text-white font-semibold rounded-l-full z-10 ";
           } else if (isCheckOut) {
             cellClass +=
-              "bg-teal text-white font-semibold rounded-r-full z-10 ";
+              "bg-burgundy text-white font-semibold rounded-r-full z-10 ";
           } else if (isInRange) {
-            cellClass += "bg-teal/10 text-body ";
+            cellClass += "bg-burgundy/10 text-body ";
           } else if (isBlocked) {
             cellClass +=
               "text-gray-300 line-through cursor-not-allowed ";
@@ -143,7 +143,7 @@ function MonthGrid({
             cellClass += "text-gray-300 cursor-not-allowed ";
           } else {
             cellClass +=
-              "text-body hover:bg-teal/10 cursor-pointer ";
+              "text-body hover:bg-burgundy/10 cursor-pointer ";
           }
 
           if (isToday && !isCheckIn && !isCheckOut) {
@@ -204,7 +204,7 @@ export function BookingCalendar({
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-teal border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-burgundy border-t-transparent" />
         <span className="ml-3 text-muted text-sm">
           Loading availability...
         </span>
@@ -281,10 +281,10 @@ export function BookingCalendar({
       {/* Legend */}
       <div className="flex flex-wrap gap-4 mt-4 text-xs text-muted justify-center">
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-teal" /> Selected
+          <span className="w-3 h-3 rounded-sm bg-burgundy" /> Selected
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-teal/10 border border-teal/20" />{" "}
+          <span className="w-3 h-3 rounded-sm bg-burgundy/10 border border-burgundy/20" />{" "}
           Your stay
         </span>
         <span className="flex items-center gap-1.5">

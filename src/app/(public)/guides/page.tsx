@@ -169,7 +169,7 @@ export default function GuidesPage() {
                 </div>
                 <div className="p-6">
                   <span className="text-burgundy text-xs font-semibold">{g.category}</span>
-                  <h3 className="font-display text-lg text-teal mb-2 mt-1">{g.title}</h3>
+                  <h3 className="font-display text-lg text-burgundy mb-2 mt-1">{g.title}</h3>
                   <p className="text-muted text-sm mb-3">{g.excerpt}</p>
                   <span className="text-burgundy font-semibold text-sm group-hover:underline">
                     Read More &rarr;

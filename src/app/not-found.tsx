@@ -17,13 +17,13 @@ export default function NotFound() {
             <Button href="/">Back to Homepage</Button>
             <Link
               href="/stay"
-              className="inline-block px-6 py-3 rounded-full border-2 border-teal text-teal font-semibold hover:-translate-y-0.5 transition-transform no-underline"
+              className="inline-block px-6 py-3 rounded-full border-2 border-burgundy text-burgundy font-semibold hover:-translate-y-0.5 transition-transform no-underline"
             >
               View Accommodation
             </Link>
             <Link
               href="/contact"
-              className="inline-block px-6 py-3 rounded-full border-2 border-teal text-teal font-semibold hover:-translate-y-0.5 transition-transform no-underline"
+              className="inline-block px-6 py-3 rounded-full border-2 border-burgundy text-burgundy font-semibold hover:-translate-y-0.5 transition-transform no-underline"
             >
               Contact Us
             </Link>

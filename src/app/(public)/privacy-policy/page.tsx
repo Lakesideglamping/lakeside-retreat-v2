@@ -63,7 +63,7 @@ export default function PrivacyPolicyPage() {
               href="https://tools.google.com/dlpage/gaoptout"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-teal"
+              className="text-burgundy"
             >
               Google Analytics Opt-out Browser Add-on
             </a>
@@ -115,7 +115,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="font-display text-2xl mt-10 mb-4">10. Contact Us</h2>
           <p>
             For privacy enquiries, contact us at{" "}
-            <Link href="mailto:info@lakesideretreat.co.nz" className="text-teal">
+            <Link href="mailto:info@lakesideretreat.co.nz" className="text-burgundy">
               info@lakesideretreat.co.nz
             </Link>{" "}
             or write to 96 Smiths Way, Mount Pisa, Cromwell 9383, New Zealand.
@@ -126,7 +126,7 @@ export default function PrivacyPolicyPage() {
               href="https://www.privacy.org.nz"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-teal"
+              className="text-burgundy"
             >
               www.privacy.org.nz
             </a>

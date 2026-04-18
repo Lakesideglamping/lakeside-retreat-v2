@@ -67,7 +67,7 @@ export default function ExplorePage() {
         <div className="pt-20 px-5">
           <h1 className="font-display text-5xl text-white mb-4">Explore Central Otago</h1>
           <p className="text-xl opacity-95 max-w-[700px] mx-auto">
-            World-class wineries, stunning landscapes, and endless adventures await at your doorstep
+            Thirty wineries, one great ride, and a lake — all out your front door.
           </p>
         </div>
       </section>
@@ -84,7 +84,7 @@ export default function ExplorePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {distances.map((d) => (
               <div key={d.place} className="bg-cream rounded-xl p-5 text-center">
-                <div className="font-bold text-teal text-lg">{d.time}</div>
+                <div className="font-bold text-burgundy text-lg">{d.time}</div>
                 <div className="text-sm text-muted">{d.place}</div>
               </div>
             ))}
@@ -107,7 +107,7 @@ export default function ExplorePage() {
                 className="bg-white rounded-xl p-6 shadow-sm flex items-center justify-between gap-4"
               >
                 <div>
-                  <h3 className="font-semibold text-teal">{w.name}</h3>
+                  <h3 className="font-semibold text-burgundy">{w.name}</h3>
                   <p className="text-muted text-sm m-0">{w.specialty}</p>
                 </div>
                 <span className="text-burgundy font-semibold text-sm whitespace-nowrap">

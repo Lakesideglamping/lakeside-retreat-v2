@@ -42,7 +42,7 @@ export function PriceSummary({
 
   return (
     <div className="bg-cream rounded-2xl p-6 shadow-md">
-      <h3 className="font-display text-lg text-teal mb-4">Price Summary</h3>
+      <h3 className="font-display text-lg text-burgundy mb-4">Price Summary</h3>
       <div className="space-y-2 text-sm">
         {bookingItems.map((item, i) => (
           <div key={i} className="flex justify-between">
@@ -71,8 +71,8 @@ export function PriceSummary({
           </div>
         )}
 
-        <div className="border-t-2 border-teal pt-3 mt-3">
-          <div className="flex justify-between text-base font-semibold text-teal">
+        <div className="border-t-2 border-burgundy pt-3 mt-3">
+          <div className="flex justify-between text-base font-semibold text-burgundy">
             <span>Total authorised</span>
             <span>{formatNZD(totalAmount)}</span>
           </div>

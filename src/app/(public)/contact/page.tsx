@@ -37,7 +37,7 @@ export default function ContactPage() {
         <div className="pt-20 px-5">
           <h1 className="font-display text-5xl text-white mb-4">Contact Us</h1>
           <p className="text-xl opacity-95">
-            We&apos;d love to hear from you. Get in touch for bookings, enquiries, or just to say hello.
+            Questions about your stay? Stephen and Sandy reply personally.
           </p>
         </div>
       </section>
@@ -51,7 +51,7 @@ export default function ContactPage() {
             <div className="space-y-6 mb-8">
               {contactInfo.map((item) => (
                 <div key={item.label}>
-                  <h3 className="font-semibold text-teal mb-1">{item.label}</h3>
+                  <h3 className="font-semibold text-burgundy mb-1">{item.label}</h3>
                   {item.href ? (
                     <Link href={item.href} className="text-burgundy no-underline hover:underline">
                       {item.value}

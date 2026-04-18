@@ -135,9 +135,9 @@ export default function WanakaDayTripPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li><Link href="/guides" className="text-teal no-underline hover:underline">Guides</Link></li>
+          <li><Link href="/guides" className="text-burgundy no-underline hover:underline">Guides</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Wanaka Day Trip</li>
         </ol>
@@ -158,19 +158,19 @@ export default function WanakaDayTripPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <div className="bg-cream rounded-xl px-6 py-3">
-              <span className="font-bold text-teal block">~45 min</span>
+              <span className="font-bold text-burgundy block">~45 min</span>
               <span className="text-muted">Drive from Lakeside Retreat</span>
             </div>
             <div className="bg-cream rounded-xl px-6 py-3">
-              <span className="font-bold text-teal block">Via SH8</span>
+              <span className="font-bold text-burgundy block">Via SH8</span>
               <span className="text-muted">Tarras & Luggate route</span>
             </div>
             <div className="bg-cream rounded-xl px-6 py-3">
-              <span className="font-bold text-teal block">That Tree</span>
+              <span className="font-bold text-burgundy block">That Tree</span>
               <span className="text-muted">NZ&apos;s most photographed</span>
             </div>
             <div className="bg-cream rounded-xl px-6 py-3">
-              <span className="font-bold text-teal block">Roy&apos;s Peak</span>
+              <span className="font-bold text-burgundy block">Roy&apos;s Peak</span>
               <span className="text-muted">Best views in NZ</span>
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function WanakaDayTripPage() {
       </section>
 
       {/* Drive callout */}
-      <section className="py-16 px-5 bg-teal text-white">
+      <section className="py-16 px-5 bg-burgundy text-white">
         <div className="max-w-[800px] mx-auto text-center">
           <h2 className="font-display text-3xl mb-4">
             The Drive: High Country & Blue Water
@@ -206,7 +206,7 @@ export default function WanakaDayTripPage() {
             {activities.map((a) => (
               <div key={a.title} className="bg-white rounded-2xl p-6 shadow-md">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3 className="font-display text-lg text-teal">{a.title}</h3>
+                  <h3 className="font-display text-lg text-burgundy">{a.title}</h3>
                 </div>
                 <span className="text-xs bg-cream text-burgundy px-2 py-1 rounded-full font-semibold inline-block mb-3">
                   {a.time}
@@ -233,7 +233,7 @@ export default function WanakaDayTripPage() {
                 key={step.time}
                 className={`rounded-xl p-5 flex gap-5 items-start ${
                   i === 0 || i === itinerary.length - 1
-                    ? "bg-teal text-white"
+                    ? "bg-burgundy text-white"
                     : "bg-cream"
                 }`}
               >
@@ -269,7 +269,7 @@ export default function WanakaDayTripPage() {
               { title: "Cardrona Valley Return", desc: "On the way back, take the Cardrona Valley Road to see the historic Cardrona Hotel (1863), alpine scenery, and the ski field turn-off. Rejoins SH6 near Queenstown or loops back to Cromwell." },
             ].map((tip) => (
               <div key={tip.title} className="bg-white rounded-2xl p-6 shadow-sm">
-                <h3 className="font-display text-xl text-teal mb-2">{tip.title}</h3>
+                <h3 className="font-display text-xl text-burgundy mb-2">{tip.title}</h3>
                 <p className="text-muted text-sm leading-6">{tip.desc}</p>
               </div>
             ))}
@@ -312,7 +312,7 @@ export default function WanakaDayTripPage() {
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-display text-lg text-teal">{acc.title}</h3>
+                    <h3 className="font-display text-lg text-burgundy">{acc.title}</h3>
                     <span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-semibold shrink-0">
                       {acc.badge}
                     </span>
@@ -337,7 +337,7 @@ export default function WanakaDayTripPage() {
               { href: "/central-otago-wine-trail", title: "Central Otago Wine Trail", desc: "30+ cellar doors within 15 minutes of the retreat" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
-                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="font-semibold text-burgundy mb-1">{link.title}</p>
                 <p className="text-muted text-sm">{link.desc}</p>
               </Link>
             ))}

@@ -42,8 +42,7 @@ export default function BookPage() {
             Book Your Stay
           </h1>
           <p className="text-lg opacity-95">
-            Luxury glamping on Lake Dunstan &mdash; save 12&ndash;18% booking
-            direct
+            The full experience. None of the middleman fees.
           </p>
         </div>
       </section>
@@ -53,7 +52,7 @@ export default function BookPage() {
         <Suspense
           fallback={
             <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-8 w-8 border-2 border-teal border-t-transparent" />
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-burgundy border-t-transparent" />
             </div>
           }
         >

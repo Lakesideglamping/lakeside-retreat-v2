@@ -94,14 +94,14 @@ export default function OtagoRailTrailAccommodationPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Otago Rail Trail Accommodation</li>
         </ol>
       </nav>
 
       {/* Distance callout */}
-      <section className="py-16 px-5 bg-teal text-white text-center">
+      <section className="py-16 px-5 bg-burgundy text-white text-center">
         <div className="max-w-[800px] mx-auto">
           <p className="font-display text-3xl mb-2">
             &#128690; Just 300 Metres from the Otago Rail Trail Trailhead
@@ -138,7 +138,7 @@ export default function OtagoRailTrailAccommodationPage() {
           <h2 className="font-display text-4xl text-center mb-12">Trail Sections at a Glance</h2>
           <div className="space-y-4">
             {trailSections.map((section, i) => (
-              <div key={section.name} className={`rounded-xl p-6 ${i === 0 ? "bg-teal text-white" : "bg-cream"}`}>
+              <div key={section.name} className={`rounded-xl p-6 ${i === 0 ? "bg-burgundy text-white" : "bg-cream"}`}>
                 <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
                   <h3 className={`font-semibold ${i === 0 ? "text-white" : "text-body"}`}>
                     {i === 0 && "★ "}{section.name}
@@ -165,7 +165,7 @@ export default function OtagoRailTrailAccommodationPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {whyStayHere.map((item) => (
               <div key={item.title} className="bg-white rounded-2xl p-6 shadow-md">
-                <h3 className="font-display text-xl text-teal mb-2">{item.title}</h3>
+                <h3 className="font-display text-xl text-burgundy mb-2">{item.title}</h3>
                 <p className="text-muted text-sm leading-6">{item.desc}</p>
               </div>
             ))}
@@ -214,7 +214,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 </div>
                 <div className="p-5">
                   <div className="flex items-start gap-2 mb-1">
-                    <h3 className="font-display text-lg text-teal">{acc.title}</h3>
+                    <h3 className="font-display text-lg text-burgundy">{acc.title}</h3>
                     <span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-semibold shrink-0">{acc.badge}</span>
                   </div>
                   <p className="text-burgundy font-semibold text-sm mb-1">{acc.price}</p>
@@ -237,7 +237,7 @@ export default function OtagoRailTrailAccommodationPage() {
               { href: "/dog-friendly-accommodation-central-otago", title: "Dog-Friendly Accommodation", desc: "Bring your dog on the trail — cottage welcomes pets" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
-                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="font-semibold text-burgundy mb-1">{link.title}</p>
                 <p className="text-muted text-sm">{link.desc}</p>
               </Link>
             ))}

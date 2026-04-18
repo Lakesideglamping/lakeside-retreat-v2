@@ -74,7 +74,7 @@ export default function LuxuryAccommodationCromwellPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Luxury Accommodation Cromwell</li>
         </ol>
@@ -86,7 +86,7 @@ export default function LuxuryAccommodationCromwellPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {awards.map((a) => (
               <div key={a.label} className="text-center">
-                <div className="font-display text-4xl text-teal mb-1">{a.stat}</div>
+                <div className="font-display text-4xl text-burgundy mb-1">{a.stat}</div>
                 <div className="text-muted text-sm">{a.label}</div>
               </div>
             ))}
@@ -138,7 +138,7 @@ export default function LuxuryAccommodationCromwellPage() {
           <div className="grid sm:grid-cols-2 gap-8">
             {luxuryAmenities.map((cat) => (
               <div key={cat.category} className="bg-cream rounded-2xl p-6">
-                <h3 className="font-display text-xl text-teal mb-4">{cat.category}</h3>
+                <h3 className="font-display text-xl text-burgundy mb-4">{cat.category}</h3>
                 <ul className="space-y-2">
                   {cat.items.map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-body">
@@ -196,7 +196,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 </Link>
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-display text-xl text-teal">{acc.title}</h3>
+                    <h3 className="font-display text-xl text-burgundy">{acc.title}</h3>
                     <span className="text-xs text-muted">({acc.size})</span>
                   </div>
                   <span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-semibold">{acc.badge}</span>
@@ -223,7 +223,7 @@ export default function LuxuryAccommodationCromwellPage() {
               { href: "/otago-rail-trail-accommodation", title: "Rail Trail Accommodation", desc: "300m from the Cromwell trailhead" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
-                <p className="font-semibold text-teal mb-1">{link.title}</p>
+                <p className="font-semibold text-burgundy mb-1">{link.title}</p>
                 <p className="text-muted text-sm">{link.desc}</p>
               </Link>
             ))}
@@ -241,7 +241,7 @@ export default function LuxuryAccommodationCromwellPage() {
           </p>
           <Button href="/book">Book Direct — Best Rate Guaranteed</Button>
           <p className="text-sm text-muted mt-6">
-            <Link href="/contact" className="text-teal no-underline hover:underline">Contact Stephen &amp; Sandy</Link> with any questions
+            <Link href="/contact" className="text-burgundy no-underline hover:underline">Contact Stephen &amp; Sandy</Link> with any questions
           </p>
         </div>
       </section>

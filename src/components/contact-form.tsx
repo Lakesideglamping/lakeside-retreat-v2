@@ -81,7 +81,7 @@ export function ContactForm() {
   }
 
   const inputClass =
-    "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-teal focus:ring-1 focus:ring-teal outline-none transition-colors";
+    "w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-burgundy focus:ring-1 focus:ring-burgundy outline-none transition-colors";
   const errorClass = "text-red-600 text-sm mt-1";
 
   return (

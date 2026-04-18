@@ -75,9 +75,9 @@ export default function CouplesRetreatPage() {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
-          <li><Link href="/" className="text-teal no-underline hover:underline">Home</Link></li>
+          <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li><Link href="/guides" className="text-teal no-underline hover:underline">Guides</Link></li>
+          <li><Link href="/guides" className="text-burgundy no-underline hover:underline">Guides</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
           <li className="text-muted">Couples Retreat</li>
         </ol>
@@ -115,7 +115,7 @@ export default function CouplesRetreatPage() {
                 <Image src="/images/Pinotfront.jpeg" alt="Dome Pinot luxury geodesic dome with Lake Dunstan views" fill className="object-cover" sizes="50vw" />
               </div>
               <div className="p-6">
-                <h3 className="font-display text-xl text-teal mb-1">Dome Pinot</h3>
+                <h3 className="font-display text-xl text-burgundy mb-1">Dome Pinot</h3>
                 <p className="text-burgundy font-semibold text-sm mb-3">From $530/night &middot; 50sqm</p>
                 <ul className="text-sm text-muted space-y-1">
                   <li>&bull; Private outdoor spa with lake views</li>
@@ -130,7 +130,7 @@ export default function CouplesRetreatPage() {
                 <Image src="/images/dome-rose-spa1.jpeg" alt="Dome Rosé" fill className="object-cover" sizes="50vw" />
               </div>
               <div className="p-6">
-                <h3 className="font-display text-xl text-teal mb-1">Dome Rosé</h3>
+                <h3 className="font-display text-xl text-burgundy mb-1">Dome Rosé</h3>
                 <p className="text-burgundy font-semibold text-sm mb-3">From $510/night &middot; 40sqm</p>
                 <ul className="text-sm text-muted space-y-1">
                   <li>&bull; Private outdoor spa</li>
@@ -173,7 +173,7 @@ export default function CouplesRetreatPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {experiences.map((e) => (
               <div key={e.title} className="bg-cream rounded-2xl p-6">
-                <h3 className="font-display text-lg text-teal mb-2">{e.title}</h3>
+                <h3 className="font-display text-lg text-burgundy mb-2">{e.title}</h3>
                 <p className="text-muted text-sm">{e.desc}</p>
               </div>
             ))}
