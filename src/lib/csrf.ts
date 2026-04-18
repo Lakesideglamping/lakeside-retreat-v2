@@ -2,6 +2,14 @@ import { createHmac, timingSafeEqual, randomBytes } from "crypto";
 
 const CSRF_SECRET = process.env.CSRF_SECRET ?? process.env.JWT_SECRET ?? "";
 
+// Fail loudly in production if neither secret is set, otherwise every
+// mutation silently fails CSRF validation and the site looks broken.
+if (!CSRF_SECRET && process.env.NODE_ENV === "production") {
+  throw new Error(
+    "CSRF_SECRET (or JWT_SECRET fallback) must be set in production"
+  );
+}
+
 export function generateCsrfToken(): string {
   const nonce = randomBytes(32).toString("hex");
   const timestamp = Date.now().toString();
