@@ -55,7 +55,7 @@ const pricingFeatures = [
   "Nightly rate: $615/night (GST incl.)",
   "Cleaning fee: included in your nightly rate",
   "Continental breakfast: included",
-  "Minimum 2 nights (3 nights peak season)",
+  "No minimum stay — 1 night bookings welcome",
   "Strictly 18+ — adults only",
   "Security Bond: $300 (refundable, released 48 hours after checkout)",
 ];
@@ -207,7 +207,7 @@ export default function DomeRosePage() {
           <p className="text-center text-muted mb-8">
             Two months at a glance &mdash; straight from our booking system.
           </p>
-          <PropertyAvailability accommodationId="dome-rose" minStay={2} />
+          <PropertyAvailability accommodationId="dome-rose" minStay={1} />
         </div>
       </section>
 
