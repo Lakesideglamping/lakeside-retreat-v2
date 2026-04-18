@@ -40,7 +40,7 @@ export default function OurStoryPage() {
         className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/ViewfromVineyard.jpeg')",
+            "linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/aerial-property.jpg')",
         }}
       >
         <div className="pt-20 px-5">
