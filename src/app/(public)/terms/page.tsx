@@ -153,8 +153,10 @@ export default function TermsConditionsPage() {
               only as directed. Fire bans must be observed.
             </li>
             <li>
-              <strong>Spa pools:</strong> Use at your own risk. Follow hygiene and
-              safety guidelines provided. No glass near spa areas.
+              <strong>Spa pools &amp; hot tub:</strong> Use at your own risk. Follow
+              hygiene and safety guidelines provided. No glass near spa or hot tub
+              areas. The cottage wood-fired hot tub must be operated per the
+              instructions supplied.
             </li>
             <li>
               <strong>Lake access:</strong> Swimming and water activities are at
