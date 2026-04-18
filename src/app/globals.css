@@ -31,6 +31,18 @@ body {
   line-height: 1.6;
 }
 
+/* WhatsApp float — subtle pulse, not stock Tailwind ping (too fast/harsh) */
+@keyframes whatsapp-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.25); opacity: 0; }
+}
+.animate-ping-slow {
+  animation: whatsapp-pulse 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-ping-slow { animation: none; }
+}
+
 /* Admin sidebar — plain CSS to avoid Tailwind v4 cascade issues */
 @media (max-width: 1023px) {
   .admin-sidebar-aside {
