@@ -234,7 +234,7 @@ export default async function HomePage() {
               { author: "Sarah", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "January 2026", text: "Outstanding experience. The continental breakfast, vineyard walks, and lake swimming made this the perfect Central Otago getaway. The stargazing skylight was magical." },
               { author: "Ryan", accommodation: "Lakeside Cottage", image: "/images/lakeside-cottage-exterior.jpeg", date: "February 2026", text: "Such a lovely place. Morning swims off the deck, the dog welcomed like one of the family, and hosts who think of everything. Unforgettable family holiday." },
               { author: "Emma", accommodation: "Dome Ros\u00e9", image: "/images/dome-rose-spa1.jpeg", date: "December 2025", text: "A hidden gem in wine country. The private spa overlooking the vineyards was heavenly. Stephen and Sandy are wonderful hosts who think of everything." },
-              { author: "James", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "November 2025", text: "Booked for one night, stayed for three. Watched the sun rise over the lake from the hot tub. We\u2019ll be back every anniversary now." },
+              { author: "James", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "November 2025", text: "Booked for one night, stayed for three. Watched the sun rise over the lake from the spa. We\u2019ll be back every anniversary now." },
             ].map((review) => (
               <div key={review.author} className="bg-white rounded-2xl overflow-hidden shadow-md flex flex-col sm:flex-row">
                 <div className="relative sm:w-48 h-48 sm:h-auto shrink-0">
@@ -305,7 +305,7 @@ export default async function HomePage() {
             {[
               { season: "Summer", months: "Dec \u2013 Feb", description: "Lake swims, long rides, and sunsets that don't end until 10pm.", highlight: "Peak season \u2014 book early" },
               { season: "Autumn", months: "Mar \u2013 May", description: "Our favourite. The vines turn gold and harvest brings winery festivals.", highlight: "Best for wine lovers" },
-              { season: "Winter", months: "Jun \u2013 Aug", description: "Five ski fields within reach. The hot tub steams under snow-capped peaks.", highlight: "Ski & spa season" },
+              { season: "Winter", months: "Jun \u2013 Aug", description: "Five ski fields within reach. The spa steams under snow-capped peaks.", highlight: "Ski & spa season" },
               { season: "Spring", months: "Sep \u2013 Nov", description: "Wildflowers, empty trails, and the year's best weather for cycling.", highlight: "Best value season" },
             ].map((s) => (
               <div key={s.season} className="bg-cream rounded-2xl p-6 text-center">
