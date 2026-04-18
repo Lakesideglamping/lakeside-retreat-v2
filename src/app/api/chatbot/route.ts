@@ -1,9 +1,22 @@
 import { NextResponse } from "next/server";
 import { processMessage } from "@/lib/chatbot";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
   try {
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "unknown";
+
+    const { success } = await checkRateLimit(`chatbot:${ip}`, 60 * 1000, 20);
+    if (!success) {
+      return NextResponse.json(
+        { error: "Too many messages. Please wait a moment." },
+        { status: 429 },
+      );
+    }
+
     const body = await request.json();
     const { sessionId: incomingSessionId, message } = body;
 
