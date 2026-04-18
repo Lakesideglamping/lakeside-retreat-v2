@@ -61,44 +61,21 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Welcome */}
+      {/* A place apart */}
       <section className="py-20 px-5">
-        <div className="max-w-[800px] mx-auto text-center">
-          <h2 className="font-display text-4xl mb-4">
-            Welcome to Lakeside Retreat
-          </h2>
-          <p className="text-lg leading-8 text-muted">
-            Experience pure luxury on the shores of Lake Dunstan, surrounded by
-            vineyards and mountain views. Soak in your private salt water spa,
-            explore world-class wineries, or simply unwind in Central Otago&apos;s
-            most stunning setting.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 mt-8">
-            <Button href="/our-story">About Us</Button>
-            <Button href="/gallery" variant="outline-dark">
-              View Gallery
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* About with image */}
-      <section className="py-20 px-5 bg-white">
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="font-display text-4xl mb-4">About Lakeside Retreat</h2>
+            <h2 className="font-display text-4xl mb-6">A place that feels like a secret.</h2>
             <p className="text-lg leading-8 text-muted mb-4">
-              Discover luxury at Lakeside Retreat, where vineyard living meets the
-              timeless beauty of Lake Dunstan. Our three unique accommodations —
-              two geodesic domes and one lakeside cottage — offer an unparalleled
-              escape in the heart of Central Otago&apos;s renowned wine region.
+              Two domes and a cottage, set among the vines above Lake Dunstan.
+              No crowds. No traffic. Just the wind through the poplars and a
+              horizon full of mountains.
             </p>
             <p className="text-lg leading-8 text-muted mb-8">
-              We&apos;re proudly sustainable too — our renewable energy system
-              generates more power than we use, so you can enjoy five-star comfort
-              knowing your stay gives back to the environment.
+              Run entirely on sunlight — we make more power than we use, so
+              every stay gives a little back.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               <Button href="/stay">View Accommodations</Button>
               <Button href="/our-story" variant="outline-dark">
                 Meet Your Hosts
@@ -106,8 +83,8 @@ export default async function HomePage() {
             </div>
           </div>
           <Image
-            src="/images/ViewfromVineyard.jpeg"
-            alt="Vineyard views at Lakeside Retreat Central Otago"
+            src="/images/gallerydecksitting.jpeg"
+            alt="View from the dome deck across the golden vineyard and Lake Dunstan"
             width={1000}
             height={750}
             className="rounded-2xl w-full h-auto object-cover"
@@ -286,8 +263,8 @@ export default async function HomePage() {
       <section className="py-20 px-5 bg-white">
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-12 items-center">
           <Image
-            src="/images/vineyarddomes.jpeg"
-            alt="Lakeside Retreat domes nestled among Central Otago vineyards"
+            src="/images/galleryrainbow.jpeg"
+            alt="Double rainbow arcing over Lake Dunstan and the vineyards at Lakeside Retreat"
             width={800}
             height={600}
             className="rounded-2xl w-full h-auto object-cover"
