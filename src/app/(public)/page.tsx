@@ -37,8 +37,8 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/home-hero-drone.jpg"
-          alt="Aerial view of Lakeside Retreat glamping domes, vineyards, and Lake Dunstan"
+          src="/images/domes-vineyard-sunset.jpg"
+          alt="Lakeside Retreat glamping domes overlooking Lake Dunstan at sunset"
           fill
           priority
           className="object-cover object-center"
