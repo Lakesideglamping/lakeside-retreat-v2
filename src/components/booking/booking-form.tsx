@@ -116,6 +116,7 @@ export function BookingForm({
           guestEmail: form.guestEmail.trim(),
           guestPhone: form.guestPhone.trim() || undefined,
           specialRequests: form.specialRequests.trim() || undefined,
+          adultsOnlyConfirmed: form.adultsOnlyConfirmed,
           ...(promoCode.trim() ? { promoCode: promoCode.trim().toUpperCase() } : {}),
         }),
       });

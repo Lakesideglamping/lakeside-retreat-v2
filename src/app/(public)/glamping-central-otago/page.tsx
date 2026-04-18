@@ -8,6 +8,22 @@ export const metadata: Metadata = {
   title: "Glamping Central Otago | Luxury Geodesic Domes on Lake Dunstan",
   description:
     "Central Otago's premier glamping experience. Two luxury geodesic domes with private outdoor spas, stargazing skylights, vineyard views, and continental breakfast. $615/night.",
+  alternates: { canonical: "/glamping-central-otago" },
+  openGraph: {
+    title: "Glamping Central Otago | Luxury Geodesic Domes on Lake Dunstan",
+    description:
+      "Luxury geodesic domes with private saltwater spas, stargazing skylights, and vineyard views on Lake Dunstan. Adults-only glamping from $615/night.",
+    url: "https://lakesideretreat.co.nz/glamping-central-otago",
+    images: [
+      {
+        url: "/images/dome-rose-spa1.jpeg",
+        width: 1200,
+        height: 800,
+        alt: "Luxury geodesic glamping dome with outdoor spa on Lake Dunstan, Central Otago",
+      },
+    ],
+    type: "article",
+  },
 };
 
 const features = [

@@ -229,7 +229,7 @@ export function checkoutThankYouHtml(data: BookingEmailData): string {
 
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Security Bond</h3>
-      <p style="margin:0;">Your security bond authorisation hold will be automatically released within <strong>48 hours</strong>. You don't need to do anything &mdash; it will drop off your statement on its own.</p>
+      <p style="margin:0;">Your security bond authorisation hold will be automatically released within <strong>7 days</strong>. You don't need to do anything &mdash; it will drop off your statement on its own.</p>
     </div>
 
     <p>If you enjoyed your stay, we'd love to hear about it! A quick review helps other travellers discover us and means the world to our small family-run retreat.</p>

@@ -58,7 +58,7 @@ const pricingFeatures = [
   "Continental breakfast: included",
   "No minimum stay — 1 night bookings welcome",
   "Strictly 18+ — adults only",
-  "Security Bond: $300 (refundable, released 48 hours after checkout)",
+  "Security Bond: $300 (refundable, released within 7 days of checkout)",
 ];
 
 const guides = [
@@ -282,7 +282,7 @@ export default function DomePinotPage() {
               <div className="relative h-[200px]">
                 <Image
                   src="/images/lakeside-cottage-exterior.jpeg"
-                  alt="Lakeside Cottage family accommodation"
+                  alt="Lakeside Cottage — adults-only pet-friendly lakefront stay"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"

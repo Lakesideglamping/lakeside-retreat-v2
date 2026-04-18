@@ -77,7 +77,7 @@ const pages: PageImages[] = [
       {
         loc: "/images/lakeside-cottage-exterior.jpeg",
         title: "Lakeside Cottage exterior with direct lake access",
-        caption: "Lakeside Cottage — family accommodation on Lake Dunstan",
+        caption: "Lakeside Cottage — adults-only lakefront stay on Lake Dunstan",
       },
       {
         loc: "/images/cottage.jpg",

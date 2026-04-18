@@ -57,7 +57,7 @@ const pricingFeatures = [
   "Continental breakfast: included",
   "No minimum stay — 1 night bookings welcome",
   "Strictly 18+ — adults only",
-  "Security Bond: $300 (refundable, released 48 hours after checkout)",
+  "Security Bond: $300 (refundable, released within 7 days of checkout)",
 ];
 
 const guides = [
@@ -279,7 +279,7 @@ export default function DomeRosePage() {
               <div className="relative h-[200px]">
                 <Image
                   src="/images/lakeside-cottage-exterior.jpeg"
-                  alt="Lakeside Cottage family accommodation"
+                  alt="Lakeside Cottage — adults-only pet-friendly lakefront stay"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -288,7 +288,7 @@ export default function DomeRosePage() {
               <div className="p-6">
                 <h3 className="font-display text-xl text-burgundy mb-2">Lakeside Cottage</h3>
                 <p className="text-muted text-sm mb-3">
-                  Spacious family cottage with direct lake access. Sleeps up to 3 guests.
+                  Adults-only lakefront cottage with wood-fired hot tub. Sleeps up to 3.
                 </p>
                 <p className="text-burgundy font-semibold">$365/night &rarr;</p>
               </div>

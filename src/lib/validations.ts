@@ -36,6 +36,9 @@ export const paymentSessionSchema = z.object({
   specialRequests: z.string().max(500).optional(),
   pets: z.number().int().min(0).max(2).optional(),
   promoCode: z.string().max(50).optional(),
+  adultsOnlyConfirmed: z.literal(true, {
+    message: "You must confirm every guest is 18 years or older",
+  }),
 });
 
 export type PaymentSessionData = z.infer<typeof paymentSessionSchema>;

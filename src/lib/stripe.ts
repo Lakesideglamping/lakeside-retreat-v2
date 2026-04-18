@@ -202,7 +202,7 @@ export async function createCheckoutSession(
     },
     custom_text: {
       submit: {
-        message: `A $${acc.securityDeposit} NZD security bond will be pre-authorised on your card separately after booking and released within 48 hours of checkout.`,
+        message: `A $${acc.securityDeposit} NZD security bond will be pre-authorised on your card separately after booking and released within 7 days of checkout.`,
       },
     },
     ...(stripeCouponId ? { discounts: [{ coupon: stripeCouponId }] } : {}),

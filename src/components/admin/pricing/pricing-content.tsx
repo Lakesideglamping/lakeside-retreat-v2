@@ -71,15 +71,14 @@ export function PricingContent({
 
   // Base pricing form state
   const [basePricing, setBasePricing] = useState<
-    Record<string, { base: string; weekend: string; cleaning: string; minNights: string }>
+    Record<string, { base: string; weekend: string; minNights: string }>
   >(() => {
-    const result: Record<string, { base: string; weekend: string; cleaning: string; minNights: string }> = {};
+    const result: Record<string, { base: string; weekend: string; minNights: string }> = {};
     for (const acc of ACCOMMODATIONS) {
       const key = acc.id.replace(/-/g, "_");
       result[acc.id] = {
         base: settings[`pricing_${key}_base`] ?? "",
         weekend: settings[`pricing_${key}_weekend`] ?? "",
-        cleaning: settings[`pricing_${key}_cleaning`] ?? "",
         minNights: settings[`pricing_${key}_min_nights`] ?? "",
       };
     }
@@ -191,7 +190,6 @@ export function PricingContent({
         accommodation: accId,
         base: parseFloat(data.base) || 0,
         weekend: parseFloat(data.weekend) || 0,
-        cleaning: parseFloat(data.cleaning) || 0,
         minNights: parseInt(data.minNights) || 1,
       });
       setSuccess(`Base pricing updated for ${ACCOMMODATIONS.find((a) => a.id === accId)?.name}`);
@@ -342,14 +340,6 @@ export function PricingContent({
                   type="number"
                   value={basePricing[acc.id]?.weekend ?? ""}
                   onChange={(v) => updateBasePricing(acc.id, "weekend", v)}
-                  placeholder="e.g. 50"
-                />
-                <FormField
-                  label="Cleaning Fee"
-                  name={`${acc.id}-cleaning`}
-                  type="number"
-                  value={basePricing[acc.id]?.cleaning ?? ""}
-                  onChange={(v) => updateBasePricing(acc.id, "cleaning", v)}
                   placeholder="e.g. 50"
                 />
                 <FormField

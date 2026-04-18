@@ -6,14 +6,14 @@ import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema }
 import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
-  title: "Lakeside Cottage | Pet Friendly Accommodation Cromwell | $365/night",
+  title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay | $365/night",
   description:
-    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Family accommodation in Central Otago from $365/night.",
+    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Adults-only lakefront stay in Central Otago from $365/night.",
   alternates: { canonical: '/lakeside-cottage' },
   openGraph: {
-    title: "Lakeside Cottage | Pet-Friendly Family Accommodation on Lake Dunstan",
+    title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay",
     description:
-      "Family-friendly cottage with direct Lake Dunstan access, sleeps 3, kitchenette, BBQ, and pet-friendly. $365/night in Cromwell, Central Otago.",
+      "Adults-only lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, BBQ, wood-fired hot tub, and dog-friendly. $365/night in Cromwell, Central Otago.",
     url: "https://lakesideretreat.co.nz/lakeside-cottage",
     images: [
       {
@@ -31,14 +31,14 @@ const features = [
   { title: "Direct Lake Access", desc: "Step straight from your deck into Lake Dunstan" },
   { title: "Wood-Fired Hot Tub", desc: "Chemical-free cedar tub by the lake — fired by you, steaming under the stars" },
   { title: "Sleeps 3 Guests", desc: "Queen bed plus sofa pullout in the living area" },
-  { title: "Pet Friendly", desc: "Bring your furry family members along" },
+  { title: "Pet Friendly", desc: "Bring your well-behaved dog along — $50 flat fee per stay" },
   { title: "Kitchenette", desc: "Hotplate, fridge, microwave, coffee machine, dishwasher" },
   { title: "BBQ on the Deck", desc: "Gas BBQ and outdoor dining overlooking the lake" },
 ];
 
 const amenities = [
   { title: "Sleeping", desc: "Queen bed + sofa bed" },
-  { title: "BBQ Facilities", desc: "Gas BBQ on the deck for family cookouts" },
+  { title: "BBQ Facilities", desc: "Gas BBQ on the deck for lakeside dinners" },
   { title: "Climate Control", desc: "Heat pump for heating and air conditioning" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
   { title: "Free Parking", desc: "Space for multiple vehicles" },
@@ -62,7 +62,7 @@ const pricingFeatures = [
   "Minimum 2 nights (3 nights peak season)",
   "BBQ and direct lake access included",
   "Strictly 18+ — adults only",
-  "Security Bond: $300 (refundable, released 48 hours after checkout)",
+  "Security Bond: $300 (refundable, released within 7 days of checkout)",
 ];
 
 const guides = [
@@ -79,7 +79,7 @@ export default function LakesideCottagePage() {
         createPropertySchema({
           id: "lakeside-cottage",
           name: "Lakeside Cottage",
-          description: "Family-friendly lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, and pet-friendly accommodation.",
+          description: "Adults-only lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, wood-fired hot tub, and dog-friendly.",
           price: 365,
           floorSize: 65,
           maxOccupancy: 3,
@@ -148,12 +148,12 @@ export default function LakesideCottagePage() {
             </span>
           </div>
           <h2 className="font-display text-4xl text-center mb-8">
-            Your Family Lakeside Escape
+            Your Adults-Only Lakeside Escape
           </h2>
           <p className="max-w-[800px] mx-auto text-center text-lg leading-8 text-muted mb-12">
             Lakeside Cottage is a self-contained holiday home right on Lake Dunstan.
             A queen bed in the bedroom, a sofa pullout in the living area — sleeps three,
-            ideal for a small family or friends. Mornings for a swim off the deck,
+            ideal for couples or close friends (18+ only). Mornings for a swim off the deck,
             evenings for a BBQ with the lake at your feet, nights in the wood-fired
             cedar tub while the sky goes black. Dogs welcome too.
           </p>

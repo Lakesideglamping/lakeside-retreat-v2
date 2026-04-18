@@ -9,6 +9,7 @@ const validPayload = {
   guests: 2,
   guestName: "Jane Smith",
   guestEmail: "jane@example.com",
+  adultsOnlyConfirmed: true as const,
 };
 
 describe("paymentSessionSchema", () => {
@@ -49,6 +50,18 @@ describe("paymentSessionSchema", () => {
       promoCode: "X".repeat(51),
     });
     expect(result.success).toBe(false);
+  });
+
+  it("rejects a payload without adultsOnlyConfirmed", () => {
+    const { adultsOnlyConfirmed: _omit, ...withoutFlag } = validPayload;
+    void _omit;
+    expect(paymentSessionSchema.safeParse(withoutFlag).success).toBe(false);
+  });
+
+  it("rejects adultsOnlyConfirmed: false", () => {
+    expect(
+      paymentSessionSchema.safeParse({ ...validPayload, adultsOnlyConfirmed: false }).success
+    ).toBe(false);
   });
 
   it("accepts all three valid accommodation ids", () => {

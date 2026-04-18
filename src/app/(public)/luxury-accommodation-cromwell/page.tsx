@@ -30,7 +30,7 @@ export default function LuxuryAccommodationCromwellPage() {
       <JsonLd data={[
         createArticleSchema({
           title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
-          description: "Cromwell's most luxurious accommodation on Lake Dunstan — geodesic glamping domes with private spas and a family cottage. 4.9★ rated.",
+          description: "Cromwell's most luxurious accommodation on Lake Dunstan — geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated.",
           path: "/luxury-accommodation-cromwell",
           image: "PinotLakeView.jpeg",
         }),
