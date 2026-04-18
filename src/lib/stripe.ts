@@ -44,7 +44,10 @@ export async function getSeasonalMultiplier(
     });
     if (!rates.length) return 1.0;
     return Math.max(...rates.map((r) => Number(r.multiplier ?? 1)));
-  } catch {
+  } catch (err) {
+    // Fail safe to 1.0, but log so a broken DB connection doesn't silently
+    // strip peak pricing from every booking.
+    console.error("[stripe] getSeasonalMultiplier failed, falling back to 1.0", err);
     return 1.0;
   }
 }

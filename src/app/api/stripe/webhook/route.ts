@@ -252,15 +252,34 @@ export async function POST(request: Request) {
         // Increment promo code usage counter now that payment has confirmed.
         // Uses a raw atomic update so a race between two concurrent webhooks
         // can't push usage_count past usage_limit. Fire-and-forget: a failure
-        // here never blocks the booking.
+        // here never blocks the booking, but we log 0-row results so staff can
+        // see when a promo was honoured at checkout but the limit was already
+        // reached (race lost) or the code was deleted between session creation
+        // and payment.
         if (bookingSaved && metadata.promoCode) {
-          prisma.$executeRaw`
-            UPDATE promo_codes
-            SET usage_count = COALESCE(usage_count, 0) + 1,
-                updated_at = NOW()
-            WHERE code = ${metadata.promoCode}
-              AND (usage_limit IS NULL OR COALESCE(usage_count, 0) < usage_limit)
-          `.catch(() => {});
+          const promoCode = metadata.promoCode;
+          prisma
+            .$executeRaw`
+              UPDATE promo_codes
+              SET usage_count = COALESCE(usage_count, 0) + 1,
+                  updated_at = NOW()
+              WHERE code = ${promoCode}
+                AND (usage_limit IS NULL OR COALESCE(usage_count, 0) < usage_limit)
+            `
+            .then((rows) => {
+              if (rows === 0) {
+                log.warn("stripe webhook promo increment missed", {
+                  promoCode,
+                  note: "row not updated — usage_limit reached or code removed after checkout session was created",
+                });
+              }
+            })
+            .catch((e) =>
+              log.error("stripe webhook promo increment failed", {
+                promoCode,
+                error: e instanceof Error ? e.message : String(e),
+              })
+            );
         }
 
         // 2) Create a separate off-session PaymentIntent for the security deposit
