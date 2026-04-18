@@ -61,6 +61,38 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Trust strip */}
+      <section className="bg-white border-b border-gray-100">
+        <div className="max-w-[1100px] mx-auto px-5 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 text-center">
+          <div className="flex flex-col items-center gap-3">
+            <svg className="w-8 h-8 text-burgundy" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+            </svg>
+            <div>
+              <p className="font-display text-lg text-body">100% Renewable Power</p>
+              <p className="text-sm text-muted mt-1">We generate more than we use</p>
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-3">
+            <svg className="w-8 h-8 text-burgundy" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+            </svg>
+            <div>
+              <p className="font-display text-lg text-body">Direct Lake Access</p>
+              <p className="text-sm text-muted mt-1">300m to Lake Dunstan</p>
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-3">
+            <svg className="w-8 h-8 text-burgundy" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />
+            </svg>
+            <div>
+              <p className="font-display text-lg text-body">Wine Country</p>
+              <p className="text-sm text-muted mt-1">Surrounded by world-class wineries</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Welcome */}
       <section className="py-20 px-5">
