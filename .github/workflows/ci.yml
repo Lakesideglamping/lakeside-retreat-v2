@@ -43,4 +43,5 @@ jobs:
           DATABASE_URL: "postgresql://test:test@localhost:5432/test"
           JWT_SECRET: "ci-test-secret-key-minimum-length-for-jose"
           CSRF_SECRET: "ci-csrf-secret"
+          TOTP_ENCRYPTION_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
           NEXT_PUBLIC_BASE_URL: "http://localhost:3000"
