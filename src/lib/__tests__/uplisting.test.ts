@@ -124,7 +124,7 @@ describe("checkAvailability", () => {
 
   it("fails open in non-production when unconfigured (so dev works)", async () => {
     delete process.env.UPLISTING_API_KEY;
-    // @ts-expect-error
+    // @ts-expect-error NODE_ENV is readonly
     process.env.NODE_ENV = "test";
     const { checkAvailability } = await import("../uplisting");
     expect(

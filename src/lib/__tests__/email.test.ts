@@ -14,7 +14,10 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const sendMail = vi.fn(async () => ({ accepted: ["ok"] }));
+const sendMail = vi.fn(async (options: Record<string, unknown>) => {
+  void options;
+  return { accepted: ["ok"] };
+});
 const createTransport = vi.fn(() => ({ sendMail }));
 
 vi.mock("nodemailer", () => ({
