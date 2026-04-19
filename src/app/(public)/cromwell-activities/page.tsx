@@ -56,6 +56,7 @@ export default function CromwellActivitiesPage() {
           description: "Complete guide to activities in Cromwell: Lake Dunstan water sports, cycling trails, wine tasting, heritage precinct, and day trips.",
           path: "/cromwell-activities",
           image: "lakeview.jpeg",
+          datePublished: "2025-03-15",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

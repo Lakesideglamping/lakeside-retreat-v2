@@ -239,7 +239,9 @@ interface ArticleSchemaParams {
   description: string;
   path: string;
   image?: string;
-  datePublished?: string;
+  /** Required — every article page should declare when it was first published so Google can
+   *  evaluate freshness. New pages must set this. */
+  datePublished: string;
   dateModified?: string;
 }
 
@@ -251,7 +253,7 @@ export function createArticleSchema(params: ArticleSchemaParams) {
     description: params.description,
     url: `${BASE_URL}${params.path}`,
     image: params.image ? `${BASE_URL}/images/${params.image}` : undefined,
-    datePublished: params.datePublished || "2025-01-01",
+    datePublished: params.datePublished,
     dateModified: params.dateModified || new Date().toISOString().split("T")[0],
     author: { "@type": "Organization", name: "Lakeside Retreat Central Otago" },
     publisher: {

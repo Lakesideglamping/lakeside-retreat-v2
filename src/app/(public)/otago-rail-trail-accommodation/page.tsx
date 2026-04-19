@@ -71,6 +71,7 @@ export default function OtagoRailTrailAccommodationPage() {
           description: "Luxury accommodation for Otago Rail Trail cyclists — geodesic domes and lakeside cottage just 300m from the Cromwell trailhead.",
           path: "/otago-rail-trail-accommodation",
           image: "vineyard-path.jpg",
+          datePublished: "2025-05-15",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

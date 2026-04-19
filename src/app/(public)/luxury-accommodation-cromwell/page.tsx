@@ -49,6 +49,7 @@ export default function LuxuryAccommodationCromwellPage() {
           description: "Cromwell's most luxurious accommodation on Lake Dunstan — geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated.",
           path: "/luxury-accommodation-cromwell",
           image: "PinotLakeView.jpeg",
+          datePublished: "2025-05-01",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

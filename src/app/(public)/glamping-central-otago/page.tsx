@@ -86,6 +86,7 @@ export default function GlampingCentralOtagoPage() {
           description: "Central Otago's premier glamping experience — luxury geodesic domes with private outdoor spas, stargazing skylights, and vineyard views.",
           path: "/glamping-central-otago",
           image: "Pinotfront.jpeg",
+          datePublished: "2025-02-01",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

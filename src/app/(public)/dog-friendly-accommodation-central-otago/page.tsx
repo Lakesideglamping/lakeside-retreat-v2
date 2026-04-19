@@ -52,6 +52,7 @@ export default function DogFriendlyAccommodationPage() {
           description: "Pet-friendly lakeside cottage on Lake Dunstan, Central Otago — direct lake access, secure outdoor area, dog-friendly trails.",
           path: "/dog-friendly-accommodation-central-otago",
           image: "lakeside-cottage-exterior.jpeg",
+          datePublished: "2025-04-01",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

@@ -108,6 +108,7 @@ export default function WineTrailPage() {
           description: "Your gateway to New Zealand's premier Pinot Noir region. Explore 30+ cellar doors in Bannockburn, Cromwell Basin, and Pisa.",
           path: "/central-otago-wine-trail",
           image: "vineyard.jpeg",
+          datePublished: "2025-02-15",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

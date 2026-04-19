@@ -106,6 +106,7 @@ export default function WeekendGetawayPage() {
           description: "Make the most of a day trip to Queenstown from your Central Otago base — bungee, gondola, jet boat, Arrowtown, and more, just 45 minutes away.",
           path: "/weekend-getaway-queenstown",
           image: "lake-mountains-perfect.jpg",
+          datePublished: "2025-06-15",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

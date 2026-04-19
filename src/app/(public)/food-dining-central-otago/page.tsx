@@ -75,6 +75,7 @@ export default function FoodDiningPage() {
           description: "Best restaurants, cafés, winery dining, and local produce near Cromwell and Lakeside Retreat.",
           path: "/food-dining-central-otago",
           image: "ViewfromVineyard.jpeg",
+          datePublished: "2025-04-15",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

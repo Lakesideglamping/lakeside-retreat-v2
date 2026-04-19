@@ -62,6 +62,7 @@ export default function CouplesRetreatPage() {
           description: "Adults-only luxury glamping domes with private spas, vineyard views, and wine country at your doorstep.",
           path: "/couples-retreat-central-otago",
           image: "dome-rose-spa1.jpeg",
+          datePublished: "2025-02-14",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

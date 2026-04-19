@@ -116,6 +116,7 @@ export default function WanakaDayTripPage() {
           description: "That Wanaka Tree, Roy's Peak, Rippon Vineyard, Puzzling World — a full Wanaka day trip guide from your Central Otago base.",
           path: "/wanaka-day-trip",
           image: "lakeviewautumn.jpeg",
+          datePublished: "2025-06-01",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },
