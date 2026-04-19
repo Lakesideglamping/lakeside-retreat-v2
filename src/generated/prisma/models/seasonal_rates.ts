@@ -217,7 +217,7 @@ export type Seasonal_ratesGroupByOutputType = {
   _max: Seasonal_ratesMaxAggregateOutputType | null
 }
 
-type GetSeasonal_ratesGroupByPayload<T extends seasonal_ratesGroupByArgs> = Prisma.PrismaPromise<
+export type GetSeasonal_ratesGroupByPayload<T extends seasonal_ratesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Seasonal_ratesGroupByOutputType, T['by']> &
       {
@@ -1085,6 +1085,11 @@ export type seasonal_ratesFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` seasonal_rates.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of seasonal_rates.
+   */
   distinct?: Prisma.Seasonal_ratesScalarFieldEnum | Prisma.Seasonal_ratesScalarFieldEnum[]
 }
 

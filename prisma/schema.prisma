@@ -148,6 +148,15 @@ model reviews {
   response_date  DateTime? @db.Timestamp(6)
   created_at     DateTime? @default(now()) @db.Timestamp(6)
   updated_at     DateTime? @default(now()) @db.Timestamp(6)
+
+  // Hot query paths:
+  //  - public /reviews page: where status='approved' order by stay_date desc
+  //  - admin reviews list: where status=? [platform=?] [property=?] order by created_at desc
+  //  - structured-data fetchReviewStats: where status='approved' and property=?
+  // Column names here follow the snake_case schema (property, created_at).
+  @@index([status, stay_date(sort: Desc)])
+  @@index([status, created_at(sort: Desc)])
+  @@index([status, property])
 }
 
 model schema_migrations {

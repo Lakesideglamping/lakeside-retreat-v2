@@ -202,14 +202,16 @@ function formatComparisonResponse(kb: KnowledgeBase): string {
     response += `**${acc.name}** (${acc.size})\n`;
     response += `- Price: $${acc.price.base} NZD/night\n`;
     response += `- Max guests: ${acc.maxGuests}\n`;
-    response += `- Best for: ${acc.maxGuests <= 2 ? "Couples" : "Families/Groups"}\n`;
+    response += `- Best for: ${acc.maxGuests <= 2 ? "Couples" : "Small adult groups"}\n`;
     response += `- Pet-friendly: ${acc.petFriendly ? "Yes" : "No"}\n\n`;
   }
 
   response +=
-    "The domes are perfect for romantic getaways with spa access and breakfast included. ";
+    "The domes are perfect for romantic getaways with saltwater spa access and breakfast included (adults only, no pets). ";
   response +=
-    "The cottage is ideal for families with a kitchenette, direct lake access, BBQ, and pet-friendly options.\n\n";
+    "The cottage suits couples or small adult groups with a kitchenette, direct lake access, wood-fired hot tub, BBQ, and is dog-friendly.\n\n";
+  response +=
+    "All three properties are strictly adults only (18+).\n\n";
   response += "Which accommodation interests you most?";
   return response;
 }

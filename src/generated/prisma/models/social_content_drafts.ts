@@ -227,7 +227,7 @@ export type Social_content_draftsGroupByOutputType = {
   _max: Social_content_draftsMaxAggregateOutputType | null
 }
 
-type GetSocial_content_draftsGroupByPayload<T extends social_content_draftsGroupByArgs> = Prisma.PrismaPromise<
+export type GetSocial_content_draftsGroupByPayload<T extends social_content_draftsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Social_content_draftsGroupByOutputType, T['by']> &
       {
@@ -1135,6 +1135,11 @@ export type social_content_draftsFindManyArgs<ExtArgs extends runtime.Types.Exte
    * Skip the first `n` social_content_drafts.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of social_content_drafts.
+   */
   distinct?: Prisma.Social_content_draftsScalarFieldEnum | Prisma.Social_content_draftsScalarFieldEnum[]
 }
 

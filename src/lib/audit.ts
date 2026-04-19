@@ -1,4 +1,5 @@
 import { prisma } from "./db";
+import { logger } from "./logger";
 
 export async function auditLog(
   adminUser: string,
@@ -16,6 +17,6 @@ export async function auditLog(
       },
     });
   } catch (error) {
-    console.error("Failed to write audit log:", error);
+    logger.error("Failed to write audit log", { err: error });
   }
 }

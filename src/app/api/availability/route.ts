@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { availabilityCheckSchema } from "@/lib/validations";
 import { checkAvailability } from "@/lib/uplisting";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, available });
   } catch (err) {
-    console.error("[api/availability] Error:", err);
+    logger.error("[api/availability] Error", { err });
     return NextResponse.json(
       { error: "Failed to check availability" },
       { status: 500 }

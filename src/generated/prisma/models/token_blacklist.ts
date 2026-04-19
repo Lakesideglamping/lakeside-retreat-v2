@@ -137,7 +137,7 @@ export type Token_blacklistGroupByOutputType = {
   _max: Token_blacklistMaxAggregateOutputType | null
 }
 
-type GetToken_blacklistGroupByPayload<T extends token_blacklistGroupByArgs> = Prisma.PrismaPromise<
+export type GetToken_blacklistGroupByPayload<T extends token_blacklistGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Token_blacklistGroupByOutputType, T['by']> &
       {
@@ -870,6 +870,11 @@ export type token_blacklistFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` token_blacklists.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of token_blacklists.
+   */
   distinct?: Prisma.Token_blacklistScalarFieldEnum | Prisma.Token_blacklistScalarFieldEnum[]
 }
 

@@ -252,7 +252,7 @@ export type Failed_webhook_eventsGroupByOutputType = {
   _max: Failed_webhook_eventsMaxAggregateOutputType | null
 }
 
-type GetFailed_webhook_eventsGroupByPayload<T extends failed_webhook_eventsGroupByArgs> = Prisma.PrismaPromise<
+export type GetFailed_webhook_eventsGroupByPayload<T extends failed_webhook_eventsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Failed_webhook_eventsGroupByOutputType, T['by']> &
       {
@@ -1229,6 +1229,11 @@ export type failed_webhook_eventsFindManyArgs<ExtArgs extends runtime.Types.Exte
    * Skip the first `n` failed_webhook_events.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of failed_webhook_events.
+   */
   distinct?: Prisma.Failed_webhook_eventsScalarFieldEnum | Prisma.Failed_webhook_eventsScalarFieldEnum[]
 }
 

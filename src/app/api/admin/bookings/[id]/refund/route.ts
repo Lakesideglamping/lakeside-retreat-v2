@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { stripe, isDevMode } from "@/lib/stripe";
 import { auditLog } from "@/lib/audit";
+import { logger } from "@/lib/logger";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -77,7 +78,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 
       return NextResponse.json({ ...updated, refund });
     } catch (error) {
-      console.error("Stripe refund error:", error);
+      logger.error("Stripe refund error", { err: error });
       await auditLog(
         admin.username,
         "booking_refund_failed",

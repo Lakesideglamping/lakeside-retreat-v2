@@ -4,6 +4,7 @@ import { withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { statusUpdateSchema } from "@/lib/admin-validations";
 import { auditLog } from "@/lib/audit";
 import { stripe, isDevMode } from "@/lib/stripe";
+import { logger } from "@/lib/logger";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -71,7 +72,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
           auditDetails.refundStatus = refund.status;
           auditDetails.refundAmount = refund.amount;
         } catch (refundErr) {
-          console.error("[booking status] Refund failed:", refundErr);
+          logger.error("[booking status] Refund failed", { err: refundErr });
           await auditLog(
             admin.username,
             "booking_cancel_refund_failed",

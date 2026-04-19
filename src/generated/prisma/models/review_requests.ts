@@ -238,7 +238,7 @@ export type Review_requestsGroupByOutputType = {
   _max: Review_requestsMaxAggregateOutputType | null
 }
 
-type GetReview_requestsGroupByPayload<T extends review_requestsGroupByArgs> = Prisma.PrismaPromise<
+export type GetReview_requestsGroupByPayload<T extends review_requestsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Review_requestsGroupByOutputType, T['by']> &
       {
@@ -1169,6 +1169,11 @@ export type review_requestsFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` review_requests.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of review_requests.
+   */
   distinct?: Prisma.Review_requestsScalarFieldEnum | Prisma.Review_requestsScalarFieldEnum[]
 }
 

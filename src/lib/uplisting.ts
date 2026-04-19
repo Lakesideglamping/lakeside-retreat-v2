@@ -1,5 +1,6 @@
 import { getCached, setCache } from "./cache";
 import { getDbCached, setDbCache, invalidateDbCache } from "./db-cache";
+import { logger } from "./logger";
 import crypto from "crypto";
 
 const API_BASE = "https://connect.uplisting.io";
@@ -122,7 +123,7 @@ export async function fetchBlockedDates(
     );
 
     if (!res.ok) {
-      console.error(`[uplisting] Failed to fetch calendar: ${res.status}`);
+      logger.error("[uplisting] Failed to fetch calendar", { status: res.status });
       return [];
     }
 
@@ -139,7 +140,7 @@ export async function fetchBlockedDates(
     setDbCache(dbCacheKey, blocked, CACHE_TTL).catch(() => {}); // async, non-blocking
     return blocked;
   } catch (err) {
-    console.error("[uplisting] Error fetching blocked dates:", err);
+    logger.error("[uplisting] Error fetching blocked dates", { err });
     return [];
   }
 }
@@ -196,11 +197,11 @@ interface SyncBookingData {
  */
 export async function syncBooking(data: SyncBookingData): Promise<void> {
   if (isLocalEnv) {
-    console.log("[uplisting] Local/dev env — skipping booking sync.", data);
+    logger.info("[uplisting] Local/dev env — skipping booking sync", { data });
     return;
   }
   if (!isConfigured()) {
-    console.log("[uplisting] Not configured — skipping booking sync.", data);
+    logger.info("[uplisting] Not configured — skipping booking sync", { data });
     return;
   }
 
@@ -238,9 +239,12 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
     );
   }
 
-  console.log(
-    `[uplisting] Calendar blocked for ${data.guestName} (${data.checkIn} → ${data.checkOut}, last night ${toDate})`
-  );
+  logger.info("[uplisting] Calendar blocked", {
+    guestName: data.guestName,
+    checkIn: data.checkIn,
+    checkOut: data.checkOut,
+    lastNight: toDate,
+  });
   setCache(`blocked-dates-${data.accommodation}`, null);
   invalidateDbCache(`cache:blocked-dates:${data.accommodation}`).catch(() => {});
 }

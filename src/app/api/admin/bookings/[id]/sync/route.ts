@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { syncBooking, isConfigured } from "@/lib/uplisting";
 import { auditLog } from "@/lib/audit";
+import { logger } from "@/lib/logger";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -68,7 +69,7 @@ export async function POST(request: Request, { params }: RouteParams) {
 
       return NextResponse.json({ success: true, booking: updated });
     } catch (error) {
-      console.error("Uplisting sync error:", error);
+      logger.error("Uplisting sync error", { err: error });
 
       await prisma.bookings.update({
         where: { id },

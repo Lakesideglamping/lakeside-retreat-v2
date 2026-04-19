@@ -178,7 +178,7 @@ export type Schema_migrationsGroupByOutputType = {
   _max: Schema_migrationsMaxAggregateOutputType | null
 }
 
-type GetSchema_migrationsGroupByPayload<T extends schema_migrationsGroupByArgs> = Prisma.PrismaPromise<
+export type GetSchema_migrationsGroupByPayload<T extends schema_migrationsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Schema_migrationsGroupByOutputType, T['by']> &
       {
@@ -939,6 +939,11 @@ export type schema_migrationsFindManyArgs<ExtArgs extends runtime.Types.Extensio
    * Skip the first `n` schema_migrations.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of schema_migrations.
+   */
   distinct?: Prisma.Schema_migrationsScalarFieldEnum | Prisma.Schema_migrationsScalarFieldEnum[]
 }
 

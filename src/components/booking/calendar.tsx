@@ -1,6 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+
+// How far ahead guests can page. 12 months matches typical short-stay
+// rental booking windows and avoids pagination into indefinite future
+// months where we have no calendar data anyway.
+const MAX_MONTHS_AHEAD = 12;
 
 interface CalendarDay {
   date: string;
@@ -189,17 +194,51 @@ export function BookingCalendar({
   const currentMonth = now.getMonth();
   const todayStr = toLocalDateString(now);
 
+  // Offset in months from the current month. 0 = current+next visible.
+  // Each Prev/Next click shifts by 1 so guests can page forward to find
+  // availability without losing their selection.
+  const [monthOffset, setMonthOffset] = useState(0);
+
   const blockedSet = useMemo(
     () => new Set(blockedDates),
     [blockedDates]
   );
 
-  // Show current month + next month
-  const month1Year = currentYear;
-  const month1Month = currentMonth;
-  const month2Date = new Date(currentYear, currentMonth + 1, 1);
+  const month1Date = new Date(currentYear, currentMonth + monthOffset, 1);
+  const month1Year = month1Date.getFullYear();
+  const month1Month = month1Date.getMonth();
+  const month2Date = new Date(currentYear, currentMonth + monthOffset + 1, 1);
   const month2Year = month2Date.getFullYear();
   const month2Month = month2Date.getMonth();
+
+  const canGoPrev = monthOffset > 0;
+  const canGoNext = monthOffset < MAX_MONTHS_AHEAD - 1;
+
+  const navButtons = (
+    <div className="flex items-center justify-between mb-4">
+      <button
+        type="button"
+        onClick={() => canGoPrev && setMonthOffset((o) => o - 1)}
+        disabled={!canGoPrev}
+        aria-label="Previous months"
+        className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-body hover:border-burgundy hover:text-burgundy transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-300 disabled:hover:text-body"
+      >
+        &lsaquo;
+      </button>
+      <span className="text-xs text-muted">
+        {monthOffset === 0 ? "This month" : `${monthOffset} month${monthOffset > 1 ? "s" : ""} ahead`}
+      </span>
+      <button
+        type="button"
+        onClick={() => canGoNext && setMonthOffset((o) => o + 1)}
+        disabled={!canGoNext}
+        aria-label="Next months"
+        className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-body hover:border-burgundy hover:text-burgundy transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-300 disabled:hover:text-body"
+      >
+        &rsaquo;
+      </button>
+    </div>
+  );
 
   if (loading) {
     return (
@@ -214,6 +253,8 @@ export function BookingCalendar({
 
   return (
     <div>
+      {navButtons}
+
       {/* Desktop: two months side by side */}
       <div className="hidden sm:grid sm:grid-cols-2 gap-8">
         <div>

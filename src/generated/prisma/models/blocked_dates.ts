@@ -206,7 +206,7 @@ export type Blocked_datesGroupByOutputType = {
   _max: Blocked_datesMaxAggregateOutputType | null
 }
 
-type GetBlocked_datesGroupByPayload<T extends blocked_datesGroupByArgs> = Prisma.PrismaPromise<
+export type GetBlocked_datesGroupByPayload<T extends blocked_datesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Blocked_datesGroupByOutputType, T['by']> &
       {
@@ -1051,6 +1051,11 @@ export type blocked_datesFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` blocked_dates.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of blocked_dates.
+   */
   distinct?: Prisma.Blocked_datesScalarFieldEnum | Prisma.Blocked_datesScalarFieldEnum[]
 }
 

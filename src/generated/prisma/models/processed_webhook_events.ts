@@ -137,7 +137,7 @@ export type Processed_webhook_eventsGroupByOutputType = {
   _max: Processed_webhook_eventsMaxAggregateOutputType | null
 }
 
-type GetProcessed_webhook_eventsGroupByPayload<T extends processed_webhook_eventsGroupByArgs> = Prisma.PrismaPromise<
+export type GetProcessed_webhook_eventsGroupByPayload<T extends processed_webhook_eventsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Processed_webhook_eventsGroupByOutputType, T['by']> &
       {
@@ -870,6 +870,11 @@ export type processed_webhook_eventsFindManyArgs<ExtArgs extends runtime.Types.E
    * Skip the first `n` processed_webhook_events.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of processed_webhook_events.
+   */
   distinct?: Prisma.Processed_webhook_eventsScalarFieldEnum | Prisma.Processed_webhook_eventsScalarFieldEnum[]
 }
 

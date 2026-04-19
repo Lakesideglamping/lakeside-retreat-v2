@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { stripe, isDevMode } from "@/lib/stripe";
 import { auditLog } from "@/lib/audit";
+import { logger } from "@/lib/logger";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -26,7 +27,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       try {
         await stripe.paymentIntents.cancel(booking.security_deposit_intent_id);
       } catch (stripeErr) {
-        console.warn("[deposit/release] Stripe cancel (non-fatal):", stripeErr);
+        logger.warn("[deposit/release] Stripe cancel (non-fatal)", { err: stripeErr });
       }
     }
 

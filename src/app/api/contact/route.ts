@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { contactFormSchema } from "@/lib/validations";
 import { sendContactEmail } from "@/lib/email";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
       message: "Thank you for your message. We'll be in touch soon.",
     });
   } catch (err) {
-    console.error("[api/contact] Error:", err);
+    logger.error("[api/contact] Error", { err });
     return NextResponse.json(
       { error: "Something went wrong. Please try again." },
       { status: 500 }

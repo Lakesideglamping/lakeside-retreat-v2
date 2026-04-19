@@ -238,7 +238,7 @@ export type Abandoned_checkout_remindersGroupByOutputType = {
   _max: Abandoned_checkout_remindersMaxAggregateOutputType | null
 }
 
-type GetAbandoned_checkout_remindersGroupByPayload<T extends abandoned_checkout_remindersGroupByArgs> = Prisma.PrismaPromise<
+export type GetAbandoned_checkout_remindersGroupByPayload<T extends abandoned_checkout_remindersGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Abandoned_checkout_remindersGroupByOutputType, T['by']> &
       {
@@ -1193,6 +1193,11 @@ export type abandoned_checkout_remindersFindManyArgs<ExtArgs extends runtime.Typ
    * Skip the first `n` abandoned_checkout_reminders.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of abandoned_checkout_reminders.
+   */
   distinct?: Prisma.Abandoned_checkout_remindersScalarFieldEnum | Prisma.Abandoned_checkout_remindersScalarFieldEnum[]
 }
 

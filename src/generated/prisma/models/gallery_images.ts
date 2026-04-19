@@ -231,7 +231,7 @@ export type Gallery_imagesGroupByOutputType = {
   _max: Gallery_imagesMaxAggregateOutputType | null
 }
 
-type GetGallery_imagesGroupByPayload<T extends gallery_imagesGroupByArgs> = Prisma.PrismaPromise<
+export type GetGallery_imagesGroupByPayload<T extends gallery_imagesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Gallery_imagesGroupByOutputType, T['by']> &
       {
@@ -1141,6 +1141,11 @@ export type gallery_imagesFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` gallery_images.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of gallery_images.
+   */
   distinct?: Prisma.Gallery_imagesScalarFieldEnum | Prisma.Gallery_imagesScalarFieldEnum[]
 }
 

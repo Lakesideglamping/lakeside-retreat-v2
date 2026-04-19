@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { getById, type Accommodation } from "./accommodations";
+import { logger } from "./logger";
 
 export const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -47,7 +48,7 @@ export async function getSeasonalMultiplier(
   } catch (err) {
     // Fail safe to 1.0, but log so a broken DB connection doesn't silently
     // strip peak pricing from every booking.
-    console.error("[stripe] getSeasonalMultiplier failed, falling back to 1.0", err);
+    logger.error("[stripe] getSeasonalMultiplier failed, falling back to 1.0", { err });
     return 1.0;
   }
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { processMessage } from "@/lib/chatbot";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { logger } from "@/lib/logger";
 import { randomUUID } from "crypto";
 
 export async function POST(request: Request) {
@@ -47,7 +48,7 @@ export async function POST(request: Request) {
       intent: result.intent,
     });
   } catch (error) {
-    console.error("[chatbot] Error processing message:", error);
+    logger.error("[chatbot] Error processing message", { err: error });
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

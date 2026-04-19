@@ -178,7 +178,7 @@ export type Rate_limitsGroupByOutputType = {
   _max: Rate_limitsMaxAggregateOutputType | null
 }
 
-type GetRate_limitsGroupByPayload<T extends rate_limitsGroupByArgs> = Prisma.PrismaPromise<
+export type GetRate_limitsGroupByPayload<T extends rate_limitsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Rate_limitsGroupByOutputType, T['by']> &
       {
@@ -942,6 +942,11 @@ export type rate_limitsFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` rate_limits.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of rate_limits.
+   */
   distinct?: Prisma.Rate_limitsScalarFieldEnum | Prisma.Rate_limitsScalarFieldEnum[]
 }
 

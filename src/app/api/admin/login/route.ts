@@ -14,6 +14,7 @@ import {
   recordFailedAttempt,
 } from "@/lib/login-attempts";
 import { getTotpSecret, verifyTotp } from "@/lib/totp";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   const ip =
@@ -112,7 +113,7 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
-    console.error("Login error:", error);
+    logger.error("Login error", { err: error });
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

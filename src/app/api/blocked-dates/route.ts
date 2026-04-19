@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getValidIds } from "@/lib/accommodations";
 import { fetchBlockedDates } from "@/lib/uplisting";
+import { logger } from "@/lib/logger";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -17,7 +18,7 @@ export async function GET(request: Request) {
     const blockedDates = await fetchBlockedDates(accommodation);
     return NextResponse.json({ success: true, blockedDates });
   } catch (err) {
-    console.error("[api/blocked-dates] Error:", err);
+    logger.error("[api/blocked-dates] Error", { err });
     return NextResponse.json(
       { error: "Failed to fetch blocked dates" },
       { status: 500 }

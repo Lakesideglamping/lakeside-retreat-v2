@@ -33,6 +33,11 @@ export function BookingWidget() {
   const [step, setStep] = useState<Step>(1);
   const [blockedDates, setBlockedDates] = useState<string[]>([]);
   const [loadingDates, setLoadingDates] = useState(false);
+  // If we can't reach /api/blocked-dates we used to silently render a fully
+  // green calendar, which could let guests "book" a blocked night and only
+  // hit the error at the availability check. Surface the failure so they
+  // know why dates may look wrong and can retry.
+  const [blockedError, setBlockedError] = useState<string | null>(null);
   const [availability, setAvailability] =
     useState<AvailabilityStatus>("idle");
   const [dateError, setDateError] = useState("");
@@ -43,18 +48,32 @@ export function BookingWidget() {
   // Fetch blocked dates when accommodation changes
   const fetchBlocked = useCallback(async (accId: string) => {
     setLoadingDates(true);
+    setBlockedError(null);
     try {
       const res = await fetch(
         `/api/blocked-dates?accommodation=${encodeURIComponent(accId)}`
       );
+      if (!res.ok) {
+        setBlockedDates([]);
+        setBlockedError(
+          "We couldn't load live availability. Your dates will be verified before payment — please continue or try again."
+        );
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setBlockedDates(data.blockedDates || []);
       } else {
         setBlockedDates([]);
+        setBlockedError(
+          "We couldn't load live availability. Your dates will be verified before payment — please continue or try again."
+        );
       }
     } catch {
       setBlockedDates([]);
+      setBlockedError(
+        "Network error loading availability. Check your connection and retry."
+      );
     } finally {
       setLoadingDates(false);
     }
@@ -230,6 +249,22 @@ export function BookingWidget() {
               <h3 className="font-display text-xl text-burgundy mb-4">
                 Select Your Dates
               </h3>
+              {blockedError && (
+                <div
+                  role="alert"
+                  aria-live="polite"
+                  className="mb-3 flex items-start gap-3 bg-amber-50 border border-amber-300 rounded-lg p-3 text-sm"
+                >
+                  <span className="text-amber-700 flex-1">{blockedError}</span>
+                  <button
+                    type="button"
+                    onClick={() => fetchBlocked(accommodation)}
+                    className="text-amber-800 font-semibold underline hover:no-underline"
+                  >
+                    Retry
+                  </button>
+                </div>
+              )}
               <BookingCalendar
                 blockedDates={blockedDates}
                 checkIn={checkIn}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyToken, COOKIE_NAME, type AdminPayload } from "./auth";
 import { isValidCsrfToken } from "./csrf";
+import { logger } from "./logger";
 
 type RouteHandler = (
   admin: AdminPayload,
@@ -30,7 +31,7 @@ export async function withAdmin(
 
     return handler(admin, request);
   } catch (error) {
-    console.error("Admin route error:", error);
+    logger.error("Admin route error", { err: error });
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

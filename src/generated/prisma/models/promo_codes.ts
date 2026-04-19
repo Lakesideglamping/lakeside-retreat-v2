@@ -285,7 +285,7 @@ export type Promo_codesGroupByOutputType = {
   _max: Promo_codesMaxAggregateOutputType | null
 }
 
-type GetPromo_codesGroupByPayload<T extends promo_codesGroupByArgs> = Prisma.PrismaPromise<
+export type GetPromo_codesGroupByPayload<T extends promo_codesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Promo_codesGroupByOutputType, T['by']> &
       {
@@ -1335,6 +1335,11 @@ export type promo_codesFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` promo_codes.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of promo_codes.
+   */
   distinct?: Prisma.Promo_codesScalarFieldEnum | Prisma.Promo_codesScalarFieldEnum[]
 }
 

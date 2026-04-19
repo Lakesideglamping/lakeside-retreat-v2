@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { verifyWebhookSignature, isConfigured } from "@/lib/uplisting";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 import { randomUUID } from "crypto";
 
 // Map Uplisting property IDs back to our accommodation slugs.
@@ -40,6 +41,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ received: true, devMode: true });
   }
 
+  const log = logger.withRequestId();
+
   try {
     const body = await request.text();
     const signature = request.headers.get("x-uplisting-signature") || "";
@@ -48,7 +51,7 @@ export async function POST(request: Request) {
     // This prevents an attacker from POSTing fake bookings when the secret
     // is accidentally removed or never configured.
     if (!process.env.UPLISTING_WEBHOOK_SECRET) {
-      console.error(
+      log.error(
         "[uplisting webhook] UPLISTING_WEBHOOK_SECRET is not set — rejecting request"
       );
       return NextResponse.json(
@@ -72,7 +75,7 @@ export async function POST(request: Request) {
     const data = JSON.parse(body);
     const uplistingId = String(data.id || "");
 
-    console.log("[uplisting webhook] Event:", eventType, "ID:", uplistingId);
+    log.info("[uplisting webhook] Event received", { eventType, uplistingId });
 
     switch (eventType) {
       case "booking_created": {
@@ -88,9 +91,7 @@ export async function POST(request: Request) {
             where: { uplisting_id: uplistingId },
           });
           if (existing) {
-            console.log(
-              `[uplisting webhook] Booking ${uplistingId} already exists, skipping`
-            );
+            log.info("[uplisting webhook] Booking already exists, skipping", { uplistingId });
             break;
           }
         }
@@ -119,9 +120,10 @@ export async function POST(request: Request) {
                 updated_at: new Date(),
               },
             });
-            console.log(
-              `[uplisting webhook] Linked direct booking ${matchingBooking.id} to Uplisting ${uplistingId}`
-            );
+            log.info("[uplisting webhook] Linked direct booking to Uplisting", {
+              bookingId: matchingBooking.id,
+              uplistingId,
+            });
             break;
           }
         }
@@ -130,10 +132,11 @@ export async function POST(request: Request) {
         const guestName = data.guest_name || "Channel Guest";
 
         if (!checkIn || !checkOut) {
-          console.error(
-            `[uplisting webhook] Missing/invalid dates for booking ${uplistingId}`,
-            { check_in: data.check_in, check_out: data.check_out }
-          );
+          log.error("[uplisting webhook] Missing/invalid dates for booking", {
+            uplistingId,
+            check_in: data.check_in,
+            check_out: data.check_out,
+          });
           return NextResponse.json(
             { error: "Invalid check_in/check_out" },
             { status: 400 }
@@ -169,11 +172,13 @@ export async function POST(request: Request) {
             },
           });
           // Log without guest name (PII). The uplisting_id is enough to trace.
-          console.log(
-            `[uplisting webhook] Created channel booking ${uplistingId} at ${accommodation} (${source})`
-          );
+          log.info("[uplisting webhook] Created channel booking", {
+            uplistingId,
+            accommodation,
+            source,
+          });
         } catch (dbErr) {
-          console.error("[uplisting webhook] DB create error:", dbErr);
+          log.error("[uplisting webhook] DB create error", { err: dbErr });
           throw dbErr; // let outer catch return 500 so Uplisting retries
         }
         break;
@@ -207,11 +212,12 @@ export async function POST(request: Request) {
             data: updateData,
           });
 
-          console.log(
-            `[uplisting webhook] Updated booking ${uplistingId}: ${result.count} row(s)`
-          );
+          log.info("[uplisting webhook] Updated booking", {
+            uplistingId,
+            rowCount: result.count,
+          });
         } catch (dbErr) {
-          console.error("[uplisting webhook] DB update error:", dbErr);
+          log.error("[uplisting webhook] DB update error", { err: dbErr });
           throw dbErr;
         }
         break;
@@ -229,29 +235,25 @@ export async function POST(request: Request) {
             },
           });
 
-          console.log(
-            `[uplisting webhook] Cancelled booking ${uplistingId}: ${result.count} row(s)`
-          );
+          log.info("[uplisting webhook] Cancelled booking", {
+            uplistingId,
+            rowCount: result.count,
+          });
         } catch (dbErr) {
-          console.error(
-            "[uplisting webhook] DB cancel error:",
-            dbErr
-          );
+          log.error("[uplisting webhook] DB cancel error", { err: dbErr });
           throw dbErr;
         }
         break;
       }
 
       default:
-        console.log(
-          `[uplisting webhook] Unhandled event: ${eventType}`
-        );
+        log.info("[uplisting webhook] Unhandled event", { eventType });
     }
 
     return NextResponse.json({ received: true });
   } catch (err) {
     // Return 500 so Uplisting retries transient failures (DB outage etc).
-    console.error("[api/uplisting/webhook] Error:", err);
+    log.error("[api/uplisting/webhook] Error", { err });
     return NextResponse.json(
       { error: "Webhook handler failed" },
       { status: 500 }

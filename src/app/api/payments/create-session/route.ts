@@ -5,6 +5,7 @@ import { createCheckoutSession, calculateLineItems, getSeasonalMultiplier } from
 import { checkAvailability } from "@/lib/uplisting";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -197,7 +198,7 @@ export async function POST(request: Request) {
       totalAmount: (totalAmount - discountAmountCents) / 100,
     });
   } catch (err) {
-    console.error("[api/payments/create-session] Error:", err);
+    logger.error("[api/payments/create-session] Error", { err });
     return NextResponse.json(
       { error: "Failed to create payment session" },
       { status: 500 }

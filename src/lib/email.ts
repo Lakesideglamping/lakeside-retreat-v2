@@ -52,7 +52,7 @@ const subjectLabels: Record<string, string> = {
 export async function sendContactEmail(data: ContactEmailData): Promise<void> {
   const transporter = createTransporter();
   if (!transporter) {
-    console.log("[email] Not configured — skipping send. Data:", data);
+    logger.info("[email] Not configured — skipping send", { data });
     return;
   }
 
@@ -97,7 +97,7 @@ export async function sendBookingConfirmation(
 ): Promise<void> {
   const transporter = createTransporter();
   if (!transporter) {
-    console.log("[email] Not configured — skipping booking confirmation.", data);
+    logger.info("[email] Not configured — skipping booking confirmation", { data });
     return;
   }
 

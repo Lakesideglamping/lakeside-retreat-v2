@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { auditLog } from "@/lib/audit";
+import { logger } from "@/lib/logger";
 
 const API_BASE = "https://connect.uplisting.io";
 
@@ -69,10 +70,13 @@ export async function POST(request: Request) {
 
     const responseText = await res.text();
     if (!res.ok) {
-      console.error(
-        `[uplisting-unblock] Failed (${res.status}) for ${accommodation} ${from}→${to}:`,
-        responseText
-      );
+      logger.error("[uplisting-unblock] Failed", {
+        status: res.status,
+        accommodation,
+        from,
+        to,
+        responseText,
+      });
       return NextResponse.json(
         { error: "Uplisting request failed" },
         { status: 502 }

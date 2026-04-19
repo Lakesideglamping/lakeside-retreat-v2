@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { randomUUID } from "crypto";
 import { withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { auditLog } from "@/lib/audit";
+import { logger } from "@/lib/logger";
 
 const API_BASE = "https://connect.uplisting.io";
 
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
         });
 
         if (!res.ok) {
-          console.error(`[import] Failed to fetch bookings for ${prop.slug}: ${res.status}`);
+          logger.error("[import] Failed to fetch bookings", { slug: prop.slug, status: res.status });
           results.push({ property: prop.slug, imported: 0, skipped: 0, errors: 1 });
           continue;
         }
@@ -110,12 +111,12 @@ export async function POST(request: Request) {
               imported++;
             }
           } catch (dbErr) {
-            console.error(`[import] DB error for booking ${uplistingId}:`, dbErr);
+            logger.error("[import] DB error for booking", { uplistingId, err: dbErr });
             errors++;
           }
         }
       } catch (err) {
-        console.error(`[import] Error fetching ${prop.slug}:`, err);
+        logger.error("[import] Error fetching property", { slug: prop.slug, err });
         errors++;
       }
 
