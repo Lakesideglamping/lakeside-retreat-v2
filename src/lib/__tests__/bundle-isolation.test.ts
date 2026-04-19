@@ -42,14 +42,25 @@ describe("bundle isolation", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("admin/analytics page dynamic-imports AnalyticsContent", () => {
+  it("admin/analytics page defers recharts via client-side dynamic import", () => {
+    // Page is a Server Component that delegates to AnalyticsLoader.
     const page = readFileSync(
       join(SRC, "app", "admin", "analytics", "page.tsx"),
       "utf8"
     );
-    expect(page).toMatch(/dynamic\(/);
-    expect(page).toMatch(/analytics-content/);
-    // Should not be a direct import
-    expect(page).not.toMatch(/^import \{ AnalyticsContent \}/m);
+    expect(page).toMatch(/AnalyticsLoader/);
+    // Must not IMPORT AnalyticsContent directly (pulls recharts into server chunk).
+    expect(page).not.toMatch(/import\s*\{[^}]*AnalyticsContent[^}]*\}/);
+
+    // The loader is a client component that does the dynamic() with
+    // ssr:false — this is where recharts actually gets split out.
+    const loader = readFileSync(
+      join(SRC, "components", "admin", "analytics", "analytics-loader.tsx"),
+      "utf8"
+    );
+    expect(loader).toMatch(/^"use client"/);
+    expect(loader).toMatch(/dynamic\(/);
+    expect(loader).toMatch(/ssr:\s*false/);
+    expect(loader).toMatch(/analytics-content/);
   });
 });

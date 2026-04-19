@@ -1,22 +1,9 @@
-import dynamic from "next/dynamic";
+import { AnalyticsLoader } from "@/components/admin/analytics/analytics-loader";
 
-// Dynamic-import AnalyticsContent so the ~400KB recharts dependency it
-// pulls in stays out of the initial page chunk. The page shell renders
-// instantly; the chart code loads after. ssr:false because recharts needs
-// window + canvas/svg measurement at mount time.
-const AnalyticsContent = dynamic(
-  () =>
-    import("@/components/admin/analytics/analytics-content").then((m) => ({
-      default: m.AnalyticsContent,
-    })),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="p-8 text-center text-muted">Loading analytics…</div>
-    ),
-  }
-);
-
+// The loader is a client component that dynamic-imports AnalyticsContent
+// with ssr:false. That split keeps recharts (~400KB) out of the initial
+// chunk and complies with Next 15+'s rule that `ssr:false` only works
+// inside client components.
 export default function AnalyticsPage() {
-  return <AnalyticsContent />;
+  return <AnalyticsLoader />;
 }
