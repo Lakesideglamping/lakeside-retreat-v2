@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GalleryContent } from "@/components/gallery-content";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -27,20 +28,16 @@ export default function GalleryPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[50vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/domes-vineyard-sunset.jpg')",
-        }}
+      <HeroBackground
+        src="/images/domes-vineyard-sunset.jpg"
+        alt="Glamping domes at sunset over Lake Dunstan vineyards"
+        minHeight="50vh"
       >
-        <div className="pt-20">
-          <h1 className="font-display text-5xl text-white mb-4">Photo Gallery</h1>
-          <p className="text-xl opacity-95 max-w-[600px] mx-auto px-5">
-            Explore our luxury accommodations, stunning lake views, and the beauty of Central Otago
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">Photo Gallery</h1>
+        <p className="text-xl opacity-95 max-w-[600px] mx-auto">
+          Explore our luxury accommodations, stunning lake views, and the beauty of Central Otago
+        </p>
+      </HeroBackground>
 
       {/* Gallery */}
       <section className="py-20 px-5">

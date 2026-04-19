@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -123,22 +124,19 @@ export default function WineTrailPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/vineyard.jpeg')",
-        }}
+      <HeroBackground
+        src="/images/vineyard.jpeg"
+        alt="Central Otago vineyard in Pinot Noir country"
+        minHeight="60vh"
+        overlayOpacity={0.4}
       >
-        <div className="pt-20 px-5">
-          <h1 className="font-display text-5xl text-white mb-4">
-            Central Otago Wine Trail Guide
-          </h1>
-          <p className="text-xl opacity-95 max-w-[700px] mx-auto">
-            Your gateway to New Zealand&apos;s premier Pinot Noir region, right from your doorstep
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">
+          Central Otago Wine Trail Guide
+        </h1>
+        <p className="text-xl opacity-95 max-w-[700px] mx-auto">
+          Your gateway to New Zealand&apos;s premier Pinot Noir region, right from your doorstep
+        </p>
+      </HeroBackground>
 
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">

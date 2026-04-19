@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -101,21 +102,17 @@ export default function GuidesPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[50vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/vineyard.jpeg')",
-        }}
+      <HeroBackground
+        src="/images/vineyard.jpeg"
+        alt="Central Otago vineyard near Lakeside Retreat"
+        minHeight="50vh"
       >
-        <div className="pt-20 px-5">
-          <h1 className="font-display text-5xl text-white mb-4">Local Guides &amp; Tips</h1>
-          <p className="text-xl opacity-95 max-w-[700px] mx-auto">
-            Insider knowledge from your hosts to help you make the most of your Central Otago
-            adventure
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">Local Guides &amp; Tips</h1>
+        <p className="text-xl opacity-95 max-w-[700px] mx-auto">
+          Insider knowledge from your hosts to help you make the most of your Central Otago
+          adventure
+        </p>
+      </HeroBackground>
 
       {/* Featured Guide */}
       <section className="py-20 px-5">

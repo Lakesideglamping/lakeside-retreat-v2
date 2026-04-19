@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -71,22 +72,19 @@ export default function CromwellActivitiesPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/lakeview.jpeg')",
-        }}
+      <HeroBackground
+        src="/images/lakeview.jpeg"
+        alt="Lake Dunstan view from Cromwell, Central Otago"
+        minHeight="60vh"
+        overlayOpacity={0.4}
       >
-        <div className="pt-20 px-5">
-          <h1 className="font-display text-5xl text-white mb-4">
-            Things to Do in Cromwell
-          </h1>
-          <p className="text-xl opacity-95 max-w-[700px] mx-auto">
-            Your complete guide to activities, attractions, and experiences in the heart of Central Otago
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">
+          Things to Do in Cromwell
+        </h1>
+        <p className="text-xl opacity-95 max-w-[700px] mx-auto">
+          Your complete guide to activities, attractions, and experiences in the heart of Central Otago
+        </p>
+      </HeroBackground>
 
       {/* Water Activities */}
       <section className="py-20 px-5">

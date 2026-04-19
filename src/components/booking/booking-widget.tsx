@@ -239,7 +239,11 @@ export function BookingWidget() {
                 loading={loadingDates}
               />
               {dateError && (
-                <p className="text-red-600 text-sm text-center mt-3">
+                <p
+                  role="alert"
+                  aria-live="assertive"
+                  className="text-red-600 text-sm text-center mt-3"
+                >
                   {dateError}
                 </p>
               )}
@@ -253,16 +257,25 @@ export function BookingWidget() {
                 <label className="block text-sm font-semibold mb-2">
                   Guests
                 </label>
-                <div className="flex items-center gap-3">
+                <div
+                  className="flex items-center gap-3"
+                  role="group"
+                  aria-label="Guest count"
+                >
                   <button
                     type="button"
                     onClick={() => setGuests(Math.max(1, guests - 1))}
                     className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-burgundy transition-colors"
                     disabled={guests <= 1}
+                    aria-label="Decrease guests"
                   >
                     &minus;
                   </button>
-                  <span className="text-lg font-semibold w-8 text-center">
+                  <span
+                    className="text-lg font-semibold w-8 text-center"
+                    aria-live="polite"
+                    aria-atomic="true"
+                  >
                     {guests}
                   </span>
                   <button
@@ -272,6 +285,7 @@ export function BookingWidget() {
                     }
                     className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-burgundy transition-colors"
                     disabled={guests >= acc.maxGuests}
+                    aria-label="Increase guests"
                   >
                     +
                   </button>
@@ -291,16 +305,25 @@ export function BookingWidget() {
                   <label className="block text-sm font-semibold mb-2">
                     Pets
                   </label>
-                  <div className="flex items-center gap-3">
+                  <div
+                    className="flex items-center gap-3"
+                    role="group"
+                    aria-label="Pet count"
+                  >
                     <button
                       type="button"
                       onClick={() => setPets(Math.max(0, pets - 1))}
                       className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-burgundy transition-colors"
                       disabled={pets <= 0}
+                      aria-label="Decrease pets"
                     >
                       &minus;
                     </button>
-                    <span className="text-lg font-semibold w-8 text-center">
+                    <span
+                      className="text-lg font-semibold w-8 text-center"
+                      aria-live="polite"
+                      aria-atomic="true"
+                    >
                       {pets}
                     </span>
                     <button
@@ -308,6 +331,7 @@ export function BookingWidget() {
                       onClick={() => setPets(Math.min(2, pets + 1))}
                       className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-lg hover:border-burgundy transition-colors"
                       disabled={pets >= 2}
+                      aria-label="Increase pets"
                     >
                       +
                     </button>

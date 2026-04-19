@@ -45,7 +45,7 @@ export async function withAdminMutation(
   return withAdmin(request, async (admin, req) => {
     // Validate CSRF token for mutations
     const csrfToken = req.headers.get("x-csrf-token");
-    if (!csrfToken || !isValidCsrfToken(csrfToken)) {
+    if (!csrfToken || !isValidCsrfToken(csrfToken, admin.username)) {
       return NextResponse.json(
         { error: "Invalid CSRF token" },
         { status: 403 }

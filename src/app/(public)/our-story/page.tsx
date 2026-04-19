@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -45,20 +46,17 @@ export default function OurStoryPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/dome-rose-spa1.jpeg')",
-        }}
+      <HeroBackground
+        src="/images/dome-rose-spa1.jpeg"
+        alt="Dome Rose with private spa at Lakeside Retreat"
+        minHeight="60vh"
+        overlayOpacity={0.35}
       >
-        <div className="pt-20 px-5">
-          <h1 className="font-display text-5xl text-white mb-4">Our Story</h1>
-          <p className="text-xl opacity-95">
-            How two people, a lake, and a lot of solar panels became Lakeside Retreat.
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">Our Story</h1>
+        <p className="text-xl opacity-95">
+          How two people, a lake, and a lot of solar panels became Lakeside Retreat.
+        </p>
+      </HeroBackground>
 
       {/* Welcome */}
       <section className="py-20 px-5">

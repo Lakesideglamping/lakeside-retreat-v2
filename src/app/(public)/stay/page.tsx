@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createLodgingBusinessSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -82,22 +83,19 @@ export default function StayPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/domesmountainview.jpeg')",
-        }}
+      <HeroBackground
+        src="/images/domesmountainview.jpeg"
+        alt="Glamping domes with mountain views at Lakeside Retreat"
+        minHeight="60vh"
+        overlayOpacity={0.4}
       >
-        <div className="pt-20">
-          <h1 className="font-display text-5xl text-white mb-4">
-            Our Accommodations
-          </h1>
-          <p className="text-xl opacity-95">
-            Choose your retreat. The lake takes care of the rest.
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">
+          Our Accommodations
+        </h1>
+        <p className="text-xl opacity-95">
+          Choose your retreat. The lake takes care of the rest.
+        </p>
+      </HeroBackground>
 
       {/* Cards */}
       <section className="py-20 px-5">

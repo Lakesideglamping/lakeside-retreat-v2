@@ -9,21 +9,26 @@ import { auditLog } from "@/lib/audit";
 // valid CSRF token so a malicious site can't force-logout an admin via CSRF.
 export async function POST(request: Request) {
   const csrfToken = request.headers.get("x-csrf-token");
-  if (!csrfToken || !isValidCsrfToken(csrfToken)) {
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get(COOKIE_NAME)?.value;
+
+  // Verify the JWT first so we know whose CSRF token to validate against.
+  // If the cookie is missing/invalid we still clear the cookie below — but
+  // we refuse to act on the blacklist/audit without a valid session, since
+  // CSRF binding requires a known username.
+  const admin = token ? await verifyToken(token).catch(() => null) : null;
+
+  if (!csrfToken || !admin || !isValidCsrfToken(csrfToken, admin.username)) {
     return NextResponse.json(
       { error: "Invalid CSRF token" },
       { status: 403 }
     );
   }
 
-  const cookieStore = await cookies();
-  const token = cookieStore.get(COOKIE_NAME)?.value;
-
   if (token) {
-    // Try to identify who is logging out for the audit log.
-    const admin = await verifyToken(token).catch(() => null);
     await blacklistToken(token);
-    if (admin) {
+    {
       const ip =
         request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
         request.headers.get("x-real-ip") ??

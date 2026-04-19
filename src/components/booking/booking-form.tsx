@@ -212,7 +212,11 @@ export function BookingForm({
         <h3 className="font-display text-xl text-burgundy">Your Details</h3>
 
         {status === "error" && errorMessage && (
-          <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 text-sm">
+          <div
+            role="alert"
+            aria-live="assertive"
+            className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 text-sm"
+          >
             {errorMessage}
           </div>
         )}
@@ -229,9 +233,13 @@ export function BookingForm({
             className={inputClass}
             placeholder="Your full name"
             autoComplete="name"
+            aria-invalid={!!fieldErrors.guestName}
+            aria-describedby={fieldErrors.guestName ? "guestName-error" : undefined}
           />
           {fieldErrors.guestName && (
-            <p className={errorClass}>{fieldErrors.guestName}</p>
+            <p id="guestName-error" role="alert" className={errorClass}>
+              {fieldErrors.guestName}
+            </p>
           )}
         </div>
 
@@ -247,9 +255,13 @@ export function BookingForm({
             className={inputClass}
             placeholder="your@email.com"
             autoComplete="email"
+            aria-invalid={!!fieldErrors.guestEmail}
+            aria-describedby={fieldErrors.guestEmail ? "guestEmail-error" : undefined}
           />
           {fieldErrors.guestEmail && (
-            <p className={errorClass}>{fieldErrors.guestEmail}</p>
+            <p id="guestEmail-error" role="alert" className={errorClass}>
+              {fieldErrors.guestEmail}
+            </p>
           )}
         </div>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -66,20 +67,17 @@ export default function ExplorePage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/images/lake-mountains-perfect.jpg')",
-        }}
+      <HeroBackground
+        src="/images/lake-mountains-perfect.jpg"
+        alt="Lake and mountains of Central Otago near Cromwell"
+        minHeight="60vh"
+        overlayOpacity={0.35}
       >
-        <div className="pt-20 px-5">
-          <h1 className="font-display text-5xl text-white mb-4">Explore Central Otago</h1>
-          <p className="text-xl opacity-95 max-w-[700px] mx-auto">
-            Thirty wineries, one great ride, and a lake — all out your front door.
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">Explore Central Otago</h1>
+        <p className="text-xl opacity-95 max-w-[700px] mx-auto">
+          Thirty wineries, one great ride, and a lake — all out your front door.
+        </p>
+      </HeroBackground>
 
       {/* Distances */}
       <section className="py-16 px-5 bg-white">

@@ -10,7 +10,13 @@ export interface AdminPayload {
   exp: number;
 }
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
+// Fail loudly at boot rather than silently minting/verifying tokens with
+// an empty key. Mirrors the guard in csrf.ts.
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
+  throw new Error("JWT_SECRET must be set in production");
+}
+
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET ?? "");
 const COOKIE_NAME = "auth-token";
 const TOKEN_EXPIRY = "1h";
 

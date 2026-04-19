@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -71,23 +72,20 @@ export default function CouplesRetreatPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/dome-rose-spa1.jpeg')",
-        }}
+      <HeroBackground
+        src="/images/dome-rose-spa1.jpeg"
+        alt="Dome Rose private outdoor spa — romantic couples retreat in Central Otago"
+        minHeight="60vh"
+        overlayOpacity={0.4}
       >
-        <div className="pt-20 px-5">
-          <h1 className="font-display text-5xl text-white mb-4">
-            The Perfect Romantic Getaway
-          </h1>
-          <p className="text-xl opacity-95 max-w-[700px] mx-auto">
-            Adults-only luxury glamping domes with private spas, vineyard views, and wine country
-            at your doorstep
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">
+          The Perfect Romantic Getaway
+        </h1>
+        <p className="text-xl opacity-95 max-w-[700px] mx-auto">
+          Adults-only luxury glamping domes with private spas, vineyard views, and wine country
+          at your doorstep
+        </p>
+      </HeroBackground>
 
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">

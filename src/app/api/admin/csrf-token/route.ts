@@ -4,7 +4,7 @@ import { withAdmin, getClientIp } from "@/lib/admin-route";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function GET(request: Request) {
-  return withAdmin(request, async (_admin, req) => {
+  return withAdmin(request, async (admin, req) => {
     // Rate-limit token issuance so a compromised session can't farm tokens.
     const rate = await checkRateLimit(
       `csrf-token:${getClientIp(req)}`,
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
         { status: 429 }
       );
     }
-    const token = generateCsrfToken();
+    const token = generateCsrfToken(admin.username);
     return NextResponse.json({ token });
   });
 }

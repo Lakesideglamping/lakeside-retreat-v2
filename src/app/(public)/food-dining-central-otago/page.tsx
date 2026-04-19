@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -91,22 +92,19 @@ export default function FoodDiningPage() {
       ]} />
 
       {/* Hero */}
-      <section
-        className="relative min-h-[60vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/images/ViewfromVineyard.jpeg')",
-        }}
+      <HeroBackground
+        src="/images/ViewfromVineyard.jpeg"
+        alt="View from a Central Otago vineyard near Cromwell"
+        minHeight="60vh"
+        overlayOpacity={0.45}
       >
-        <div className="pt-20 px-5">
-          <h1 className="font-display text-5xl text-white mb-4">
-            Food &amp; Dining in Central Otago
-          </h1>
-          <p className="text-xl opacity-95 max-w-[700px] mx-auto">
-            Winery restaurants, heritage cafés, stone fruit stalls, and world-class Pinot Noir — all within minutes of Lakeside Retreat
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">
+          Food &amp; Dining in Central Otago
+        </h1>
+        <p className="text-xl opacity-95 max-w-[700px] mx-auto">
+          Winery restaurants, heritage cafés, stone fruit stalls, and world-class Pinot Noir — all within minutes of Lakeside Retreat
+        </p>
+      </HeroBackground>
 
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-200">

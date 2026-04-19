@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createContactPageSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -36,20 +37,16 @@ export default function ContactPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[50vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/domesmountainview.jpeg')",
-        }}
+      <HeroBackground
+        src="/images/domesmountainview.jpeg"
+        alt="Glamping domes with mountain views at Lakeside Retreat"
+        minHeight="50vh"
       >
-        <div className="pt-20 px-5">
-          <h1 className="font-display text-5xl text-white mb-4">Contact Us</h1>
-          <p className="text-xl opacity-95">
-            Ask us anything. Stephen and Sandy reply personally.
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">Contact Us</h1>
+        <p className="text-xl opacity-95">
+          Ask us anything. Stephen and Sandy reply personally.
+        </p>
+      </HeroBackground>
 
       {/* Content */}
       <section className="py-20 px-5">

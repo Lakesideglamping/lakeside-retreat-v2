@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
+import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 import { ReviewsList } from "@/components/reviews-list";
 
-export const dynamic = "force-dynamic";
+// Revalidate hourly instead of rendering on every request. Reviews change
+// rarely (moderator approval), so hourly freshness is plenty and keeps the
+// page on the CDN. Drop-in replacement for the previous `force-dynamic`.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Guest Reviews | 4.9★ Rated Accommodation, Central Otago",
@@ -67,20 +71,16 @@ export default async function ReviewsPage() {
         ]),
       ]} />
       {/* Hero */}
-      <section
-        className="relative min-h-[50vh] flex items-center justify-center text-center text-white bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/domesmountainview.jpeg')",
-        }}
+      <HeroBackground
+        src="/images/domesmountainview.jpeg"
+        alt="Glamping domes with mountain views at Lakeside Retreat"
+        minHeight="50vh"
       >
-        <div className="pt-20 px-5">
-          <h1 className="font-display text-5xl text-white mb-4">Guest Reviews</h1>
-          <p className="text-xl opacity-95">
-            See what our guests say about their Lakeside Retreat experience
-          </p>
-        </div>
-      </section>
+        <h1 className="font-display text-5xl text-white mb-4">Guest Reviews</h1>
+        <p className="text-xl opacity-95">
+          See what our guests say about their Lakeside Retreat experience
+        </p>
+      </HeroBackground>
 
       {/* Stats */}
       <section className="py-16 px-5 bg-white">

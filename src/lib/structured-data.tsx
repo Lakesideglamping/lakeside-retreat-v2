@@ -1,5 +1,20 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://lakesideretreat.co.nz";
 
+/**
+ * Inside a <script> tag, a raw "</script>" in the JSON body would close
+ * the tag and let an attacker break out. JSON.stringify doesn't escape
+ * it by default — we have to. Also escape U+2028/U+2029 for JS parser
+ * safety. Guarded by structured-data.test.ts.
+ */
+function safeJsonForScript(value: unknown): string {
+  return JSON.stringify(value)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
+}
+
 export function JsonLd({ data }: { data: Record<string, unknown> | Record<string, unknown>[] }) {
   const items = Array.isArray(data) ? data : [data];
   return (
@@ -8,12 +23,15 @@ export function JsonLd({ data }: { data: Record<string, unknown> | Record<string
         <script
           key={i}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(item) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonForScript(item) }}
         />
       ))}
     </>
   );
 }
+
+// Exported for testing only
+export const __test__ = { safeJsonForScript };
 
 const address = {
   "@type": "PostalAddress",
