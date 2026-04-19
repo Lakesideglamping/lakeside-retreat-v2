@@ -2,29 +2,21 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
-  // Skip Next's built-in TypeScript check during `next build`. It OOMs on
-  // Render Starter's 460MB cap (compile itself passes, the separate tsc
-  // pass is what dies). Type safety is enforced by `npm run typecheck`
-  // (tsc --noEmit) in CI before the build step runs — see ci.yml.
-  // Remove this once the Render plan is upgraded beyond Starter.
+  // Skip Next's built-in TypeScript check during `next build` only when
+  // SKIP_TYPECHECK=true. Render Starter (460MB) OOMs on the tsc pass;
+  // set that env var on the Render service. Elsewhere (local, CI) the
+  // typecheck runs, so `next build` now fails on type errors in dev,
+  // matching what `npm run typecheck` reports.
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: process.env.SKIP_TYPECHECK === "true",
   },
 
   async headers() {
-    // 'unsafe-eval' is only required in development for React Fast Refresh
-    // and Next's dev overlay. Strip it in production so XSS payloads can't
-    // use eval/new Function. 'unsafe-inline' on scripts is still needed
-    // for Next's inline bootstrap until we wire per-request nonces via
-    // middleware — tracked separately.
-    const isDev = process.env.NODE_ENV !== "production";
-    const scriptSrc = isDev
-      ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com"
-      : "script-src 'self' 'unsafe-inline' https://js.stripe.com";
-
+    // Content-Security-Policy is set per-request by middleware.ts so each
+    // response gets a fresh script nonce + strict-dynamic. Keep other
+    // static security headers here.
     return [
       {
-        // Security headers for all routes
         source: "/(.*)",
         headers: [
           {
@@ -47,26 +39,6 @@ const nextConfig: NextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=(), payment=(self \"https://checkout.stripe.com\")",
-          },
-          {
-            // CSP: allow Stripe (checkout, JS SDK, webhooks) and self. Tailwind
-            // needs 'unsafe-inline' for styles; scripts inherit Next's inline
-            // bootstrap requirement. 'unsafe-eval' is dev-only (see above).
-            key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              scriptSrc,
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "img-src 'self' data: blob: https:",
-              "font-src 'self' data: https://fonts.gstatic.com",
-              "connect-src 'self' https://api.stripe.com https://*.stripe.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://*.ingest.us.sentry.io",
-              "frame-src https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
-              "form-action 'self' https://checkout.stripe.com",
-              "frame-ancestors 'none'",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "upgrade-insecure-requests",
-            ].join("; "),
           },
         ],
       },

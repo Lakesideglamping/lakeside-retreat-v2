@@ -3,6 +3,36 @@ import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
 const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE === "true";
+const IS_PROD = process.env.NODE_ENV === "production";
+
+/**
+ * Build a per-request CSP header with a unique script nonce. Modern
+ * (CSP3) browsers see 'strict-dynamic' and ignore 'unsafe-inline',
+ * so only Next's nonce-tagged bootstrap can run; older browsers fall
+ * back to 'unsafe-inline'. Dev keeps 'unsafe-eval' for React Fast
+ * Refresh. The static CSP in next.config.ts is superseded when this
+ * header is present on the response.
+ */
+function buildCspHeader(nonce: string): string {
+  const scriptSrc = IS_PROD
+    ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' https://js.stripe.com`
+    : `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com`;
+
+  return [
+    "default-src 'self'",
+    scriptSrc,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data: https://fonts.gstatic.com",
+    "connect-src 'self' https://api.stripe.com https://*.stripe.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://*.ingest.us.sentry.io",
+    "frame-src https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
+    "form-action 'self' https://checkout.stripe.com",
+    "frame-ancestors 'none'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "upgrade-insecure-requests",
+  ].join("; ");
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -10,6 +40,12 @@ export async function middleware(request: NextRequest) {
   // Forward pathname to server components via custom header
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-pathname", pathname);
+
+  // Generate a per-request CSP nonce and forward it to layouts/pages via
+  // x-nonce. This lets the root layout apply the nonce to its inline
+  // service-worker registration script.
+  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  requestHeaders.set("x-nonce", nonce);
 
   // Redirect all public routes to maintenance page
   if (
@@ -56,9 +92,11 @@ export async function middleware(request: NextRequest) {
         issuer: "lakeside-retreat",
         audience: "admin-panel",
       });
-      return NextResponse.next({
+      const response = NextResponse.next({
         request: { headers: requestHeaders },
       });
+      response.headers.set("Content-Security-Policy", buildCspHeader(nonce));
+      return response;
     } catch {
       // Invalid or expired token
       const response = NextResponse.redirect(
@@ -69,9 +107,11 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next({
+  const response = NextResponse.next({
     request: { headers: requestHeaders },
   });
+  response.headers.set("Content-Security-Policy", buildCspHeader(nonce));
+  return response;
 }
 
 export const config = {

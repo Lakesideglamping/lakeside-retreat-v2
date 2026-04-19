@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -56,16 +57,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Nonce is set by middleware. Absent on statically-generated responses,
+  // in which case CSP 'unsafe-inline' fallback keeps the SW script working.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <html lang="en-NZ" className={`${fraunces.variable} ${inter.variable}`}>
       <body className="antialiased">
         {children}
         <script
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: `if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js')})}`,
           }}
