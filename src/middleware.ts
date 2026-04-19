@@ -14,13 +14,9 @@ const IS_PROD = process.env.NODE_ENV === "production";
  * header is present on the response.
  */
 function buildCspHeader(nonce: string): string {
-  const scriptSrc = IS_PROD
-    ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' https://js.stripe.com`
-    : `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com`;
-
   return [
     "default-src 'self'",
-    scriptSrc,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' https://js.stripe.com`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data: https://fonts.gstatic.com",
@@ -43,8 +39,11 @@ export async function middleware(request: NextRequest) {
 
   // Generate a per-request CSP nonce and forward it to layouts/pages via
   // x-nonce. This lets the root layout apply the nonce to its inline
-  // service-worker registration script.
-  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  // service-worker registration script. Edge runtime has no Buffer, so
+  // we use a Web API approach (base64 of 16 random bytes).
+  const nonceBytes = new Uint8Array(16);
+  crypto.getRandomValues(nonceBytes);
+  const nonce = btoa(String.fromCharCode(...nonceBytes));
   requestHeaders.set("x-nonce", nonce);
 
   // Redirect all public routes to maintenance page
@@ -95,7 +94,9 @@ export async function middleware(request: NextRequest) {
       const response = NextResponse.next({
         request: { headers: requestHeaders },
       });
-      response.headers.set("Content-Security-Policy", buildCspHeader(nonce));
+      if (IS_PROD) {
+        response.headers.set("Content-Security-Policy", buildCspHeader(nonce));
+      }
       return response;
     } catch {
       // Invalid or expired token
@@ -110,7 +111,9 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next({
     request: { headers: requestHeaders },
   });
-  response.headers.set("Content-Security-Policy", buildCspHeader(nonce));
+  if (IS_PROD) {
+    response.headers.set("Content-Security-Policy", buildCspHeader(nonce));
+  }
   return response;
 }
 
