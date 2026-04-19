@@ -12,6 +12,84 @@ const MIN_LEVEL: number = (() => {
 
 const IS_PROD = process.env.NODE_ENV === "production";
 
+// ---- PII scrubbing ----------------------------------------------------------
+// Centralised here so PII cannot reach stdout/Sentry no matter how a caller
+// structures the context object. If you add a new PII-bearing field name
+// anywhere in the codebase, add it to PII_KEYS (or a pattern below) — the
+// accompanying tests double as the canonical list of what's scrubbed.
+
+const PII_KEYS = new Set([
+  "email",
+  "emailaddress",
+  "phone",
+  "phonenumber",
+  "mobile",
+  "password",
+  "passwordhash",
+  "passwd",
+  "token",
+  "authtoken",
+  "authorization",
+  "cookie",
+  "setcookie",
+  "apikey",
+  "secret",
+  "ssn",
+  "cardnumber",
+  "cvv",
+  "cvc",
+  "dob",
+  "dateofbirth",
+  "ip",
+  "ipaddress",
+  "address",
+  "streetaddress",
+  "guestname",
+  "firstname",
+  "lastname",
+  "fullname",
+]);
+
+const MAX_DEPTH = 6;
+
+function maskValue(value: unknown): string {
+  if (typeof value !== "string") return "[REDACTED]";
+  if (value.length === 0) return "";
+  // Keep last 2 chars of short strings, last 4 of longer — enough to
+  // correlate logs without exposing the value.
+  const visible = value.length > 8 ? value.slice(-4) : value.length > 3 ? value.slice(-2) : "";
+  return `[REDACTED${visible ? `…${visible}` : ""}]`;
+}
+
+/**
+ * Recursively walk a log context and mask any PII fields by name. Safe to
+ * call with any JSON-serialisable value; cycles and non-plain objects are
+ * stringified rather than recursed into.
+ */
+export function scrub(input: unknown, depth = 0): unknown {
+  if (depth > MAX_DEPTH) return "[MAX_DEPTH]";
+  if (input === null || input === undefined) return input;
+  if (Array.isArray(input)) return input.map((v) => scrub(v, depth + 1));
+  if (typeof input !== "object") return input;
+
+  // Only recurse into plain objects — not Error, Date, Buffer, etc.
+  const proto = Object.getPrototypeOf(input);
+  if (proto !== Object.prototype && proto !== null) {
+    return String(input);
+  }
+
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(input as Record<string, unknown>)) {
+    const normalised = key.toLowerCase().replace(/[_-]/g, "");
+    if (PII_KEYS.has(normalised)) {
+      out[key] = maskValue(value);
+    } else {
+      out[key] = scrub(value, depth + 1);
+    }
+  }
+  return out;
+}
+
 function log(
   level: LogLevel,
   message: string,
@@ -20,12 +98,16 @@ function log(
 ) {
   if (LEVELS[level] < MIN_LEVEL) return;
 
+  const scrubbed = context
+    ? (scrub(context) as Record<string, unknown>)
+    : undefined;
+
   const entry = {
     timestamp: new Date().toISOString(),
     level,
     message,
     ...(requestId ? { requestId } : {}),
-    ...context,
+    ...scrubbed,
   };
 
   if (IS_PROD) {
@@ -42,7 +124,7 @@ function log(
     const method = level === "error" ? "error" : level === "warn" ? "warn" : "log";
     console[method](
       `${colors[level]}[${level.toUpperCase()}]${reset} ${message}`,
-      context ?? ""
+      scrubbed ?? ""
     );
   }
 }

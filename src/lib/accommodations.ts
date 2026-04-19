@@ -79,3 +79,14 @@ export function getById(id: string): Accommodation | undefined {
 export function getValidIds(): string[] {
   return accommodations.map((a) => a.id);
 }
+
+/**
+ * Lowest nightly base price across all properties. The public-facing
+ * "from $X/night" messaging (sticky book bar, hero sub-copy, etc.)
+ * MUST derive from this — never hardcode a price in a component, or
+ * it will desync whenever `accommodations` changes. Tested in
+ * accommodations.test.ts to catch any regression.
+ */
+export function getFromPrice(): number {
+  return Math.min(...accommodations.map((a) => a.basePrice));
+}
