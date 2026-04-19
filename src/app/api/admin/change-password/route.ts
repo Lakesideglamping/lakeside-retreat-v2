@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import { withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { auditLog } from "@/lib/audit";
 import { prisma } from "@/lib/db";
-import { verifyPassword, getAdminPasswordHash } from "@/lib/auth";
+import {
+  verifyPassword,
+  getAdminPasswordHash,
+  blacklistToken,
+  COOKIE_NAME,
+} from "@/lib/auth";
 import { passwordChangeSchema } from "@/lib/admin-validations";
 import { checkRateLimit } from "@/lib/rate-limit";
 
@@ -69,6 +75,29 @@ export async function POST(request: Request) {
       },
     });
 
+    // Invalidate the current session so a stolen token can't outlive the
+    // password it was issued against. The client must log in again with
+    // the new password to get a fresh token. If blacklisting fails we
+    // still clear the cookie locally — the password is already changed,
+    // so we can't roll back, but we must flag the partial failure.
+    const cookieStore = await cookies();
+    const currentToken = cookieStore.get(COOKIE_NAME)?.value;
+    if (currentToken) {
+      try {
+        await blacklistToken(currentToken);
+      } catch {
+        const response = NextResponse.json(
+          {
+            error:
+              "Password changed, but failed to invalidate old session. Clear cookies and log in again.",
+          },
+          { status: 500 }
+        );
+        response.cookies.delete(COOKIE_NAME);
+        return response;
+      }
+    }
+
     await auditLog(
       admin.username,
       "password_changed",
@@ -76,6 +105,8 @@ export async function POST(request: Request) {
       getClientIp(request)
     );
 
-    return NextResponse.json({ success: true });
+    const response = NextResponse.json({ success: true });
+    response.cookies.delete(COOKIE_NAME);
+    return response;
   });
 }

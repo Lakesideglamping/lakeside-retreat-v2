@@ -3,7 +3,20 @@ import { prisma } from "@/lib/db";
 import { withAdmin, withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { bookingCreateSchema } from "@/lib/admin-validations";
 import { auditLog } from "@/lib/audit";
+import { getValidIds } from "@/lib/accommodations";
 import type { Prisma } from "@/generated/prisma/client";
+
+// Guard the GET filter against arbitrary status strings. Not a SQL injection
+// (Prisma parameterises), but an unknown value silently returns 0 rows and
+// hides UI bugs. `accommodation` is validated via getValidIds(). `source` is
+// left open-ended because PMS imports bring in external values (airbnb,
+// booking.com, direct, etc.) that we don't own.
+const VALID_BOOKING_STATUSES = new Set([
+  "pending",
+  "confirmed",
+  "cancelled",
+  "completed",
+]);
 
 export async function GET(request: Request) {
   return withAdmin(request, async (admin, req) => {
@@ -21,11 +34,11 @@ export async function GET(request: Request) {
       deleted_at: null,
     };
 
-    if (status) {
+    if (status && VALID_BOOKING_STATUSES.has(status)) {
       where.status = status;
     }
 
-    if (accommodation) {
+    if (accommodation && getValidIds().includes(accommodation)) {
       where.accommodation = accommodation;
     }
 

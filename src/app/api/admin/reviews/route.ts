@@ -3,7 +3,13 @@ import { prisma } from "@/lib/db";
 import { withAdmin, withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { reviewSchema } from "@/lib/admin-validations";
 import { auditLog } from "@/lib/audit";
+import { getValidIds } from "@/lib/accommodations";
 import type { Prisma } from "@/generated/prisma/client";
+
+// See bookings/route.ts for rationale. Reviews currently use a
+// pending/approved workflow; platform comes from Airbnb/Booking/Google/etc.
+// and is open-ended.
+const VALID_REVIEW_STATUSES = new Set(["pending", "approved", "rejected"]);
 
 export async function GET(request: Request) {
   return withAdmin(request, async (_admin, req) => {
@@ -17,7 +23,7 @@ export async function GET(request: Request) {
 
     const where: Prisma.reviewsWhereInput = {};
 
-    if (status) {
+    if (status && VALID_REVIEW_STATUSES.has(status)) {
       where.status = status;
     }
 
@@ -25,7 +31,7 @@ export async function GET(request: Request) {
       where.platform = platform;
     }
 
-    if (property) {
+    if (property && getValidIds().includes(property)) {
       where.property = property;
     }
 

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { withAdmin, withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { bookingUpdateSchema } from "@/lib/admin-validations";
 import { auditLog } from "@/lib/audit";
+import type { Prisma } from "@/generated/prisma/client";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -46,7 +47,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
 
     const data = parsed.data;
 
-    const updateData: Record<string, unknown> = {
+    const updateData: Prisma.bookingsUpdateInput = {
       updated_at: new Date(),
     };
 

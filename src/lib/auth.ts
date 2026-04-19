@@ -2,6 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { createHash } from "crypto";
 import { prisma } from "./db";
+import { logger } from "./logger";
 
 export interface AdminPayload {
   username: string;
@@ -75,17 +76,22 @@ export async function verifyToken(
 }
 
 export async function blacklistToken(token: string): Promise<void> {
+  const hash = hashToken(token);
+  // Token expires in 1 hour, keep blacklist entry for 2 hours
+  const expires_at = new Date(Date.now() + 2 * 60 * 60 * 1000);
   try {
-    const hash = hashToken(token);
-    // Token expires in 1 hour, keep blacklist entry for 2 hours
-    const expires_at = new Date(Date.now() + 2 * 60 * 60 * 1000);
     await prisma.token_blacklist.upsert({
       where: { token_hash: hash },
       update: { expires_at },
       create: { token_hash: hash, expires_at },
     });
-  } catch {
-    // Silently fail — worst case token remains valid until expiry
+  } catch (err) {
+    // A silent DB failure here means a logged-out (or password-reset) token
+    // stays valid until its natural expiry — a real security gap. Surface it
+    // so ops can see it and so the caller can react (return 500 instead of
+    // a false-success 200).
+    logger.error("Failed to blacklist token", { err });
+    throw err;
   }
 }
 
@@ -99,7 +105,9 @@ export async function cleanExpiredTokens(): Promise<void> {
     await prisma.token_blacklist.deleteMany({
       where: { expires_at: { lt: new Date() } },
     });
-  } catch {
-    // Ignore cleanup errors
+  } catch (err) {
+    // Not security-critical (expired rows are harmless), but log so a
+    // persistent DB issue doesn't hide behind a sweep job that never runs.
+    logger.warn("Failed to clean expired blacklist entries", { err });
   }
 }

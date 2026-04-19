@@ -78,10 +78,16 @@ export function SecurityContent() {
     setPasswordLoading(true);
     try {
       await adminPost("/api/admin/change-password", { currentPassword, newPassword });
-      setPasswordSuccess("Password changed successfully");
+      setPasswordSuccess("Password changed successfully. Redirecting to login...");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      // Server invalidates the current session on password change, so we
+      // must re-authenticate. window.location.href (not router.push) to
+      // force a full reload past the cached admin layout.
+      setTimeout(() => {
+        window.location.href = "/admin/login";
+      }, 1200);
     } catch (err) {
       setPasswordError(err instanceof Error ? err.message : "Failed to change password");
     } finally {

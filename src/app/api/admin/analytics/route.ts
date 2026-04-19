@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { withAdmin } from "@/lib/admin-route";
 import { prisma } from "@/lib/db";
+import { getValidIds } from "@/lib/accommodations";
 
 type DateRange = "week" | "month" | "quarter" | "year";
 
@@ -54,42 +55,33 @@ export async function GET(request: Request) {
       created_at: { gte: startDate, lte: endDate },
     };
 
-    // Summary stats
-    const [aggregateResult, bookingCount, allAccommodationBookings] =
-      await Promise.all([
-        prisma.bookings.aggregate({
-          _sum: { total_price: true },
-          _avg: { total_price: true },
-          where: whereClause,
-        }),
-        prisma.bookings.count({ where: whereClause }),
-        prisma.bookings.findMany({
-          where: whereClause,
-          select: {
-            total_price: true,
-            check_in: true,
-            check_out: true,
-          },
-        }),
-      ]);
+    // Summary stats. Occupancy is computed in SQL — previously we pulled
+    // every booking row into Node and summed nights in JS, which was O(rows)
+    // memory for a figure that's one scalar.
+    const [aggregateResult, bookingCount, nightsResult] = await Promise.all([
+      prisma.bookings.aggregate({
+        _sum: { total_price: true },
+        _avg: { total_price: true },
+        where: whereClause,
+      }),
+      prisma.bookings.count({ where: whereClause }),
+      prisma.$queryRaw<Array<{ total_nights: bigint | null }>>`
+        SELECT COALESCE(SUM(GREATEST(check_out - check_in, 0)), 0)::bigint AS total_nights
+        FROM bookings
+        WHERE deleted_at IS NULL
+          AND status IN ('confirmed', 'completed')
+          AND created_at >= ${startDate}
+          AND created_at <= ${endDate}
+      `,
+    ]);
 
     // Calculate occupancy rate (based on total possible nights in range)
     const totalDaysInRange = Math.ceil(
       (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
     );
-    const accommodationCount = 3; // Dome Pinot, Dome Rose, Lakeside Cottage
+    const accommodationCount = getValidIds().length;
     const totalPossibleNights = totalDaysInRange * accommodationCount;
-    const totalBookedNights = allAccommodationBookings.reduce(
-      (acc: number, b: { check_in: Date; check_out: Date }) => {
-        const checkIn = new Date(b.check_in);
-        const checkOut = new Date(b.check_out);
-        const nights = Math.ceil(
-          (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)
-        );
-        return acc + Math.max(0, nights);
-      },
-      0
-    );
+    const totalBookedNights = Number(nightsResult[0]?.total_nights ?? 0);
     const occupancyRate =
       totalPossibleNights > 0
         ? Math.round((totalBookedNights / totalPossibleNights) * 100)

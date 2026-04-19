@@ -4,6 +4,35 @@ import { withAdmin, withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { contentUpdateSchema } from "@/lib/admin-validations";
 import { auditLog } from "@/lib/audit";
 
+// Explicit whitelist of editable content keys. Mirrors the SECTIONS list in
+// components/admin/content/content-editor.tsx. Keep in sync when adding new
+// editable fields. Anything outside this set is silently ignored on write,
+// which prevents the "any content_* key accepted" footgun and removes the
+// stored-XSS surface if content is ever rendered unescaped.
+const ALLOWED_CONTENT_KEYS = new Set<string>([
+  "content_hero_title",
+  "content_hero_subtitle",
+  "content_hero_cta_text",
+  "content_hero_cta_link",
+  "content_about_title",
+  "content_about_description",
+  "content_about_highlight_1",
+  "content_about_highlight_2",
+  "content_about_highlight_3",
+  "content_accommodations_title",
+  "content_accommodations_description",
+  "content_contact_title",
+  "content_contact_description",
+  "content_contact_email",
+  "content_contact_phone",
+  "content_contact_address",
+  "content_seo_title",
+  "content_seo_description",
+  "content_seo_keywords",
+  "content_seo_og_title",
+  "content_seo_og_description",
+]);
+
 export async function GET(request: Request) {
   return withAdmin(request, async () => {
     const settings = await prisma.system_settings.findMany({
@@ -38,8 +67,7 @@ export async function PUT(request: Request) {
     const updatedKeys: string[] = [];
 
     for (const [key, value] of Object.entries(sections)) {
-      // Only allow content_ prefixed keys
-      if (!key.startsWith("content_")) continue;
+      if (!ALLOWED_CONTENT_KEYS.has(key)) continue;
 
       await prisma.system_settings.upsert({
         where: { setting_key: key },

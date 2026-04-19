@@ -27,14 +27,24 @@ export async function POST(request: Request) {
   }
 
   if (token) {
-    await blacklistToken(token);
-    {
-      const ip =
-        request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-        request.headers.get("x-real-ip") ??
-        "unknown";
-      await auditLog(admin.username, "logout", {}, ip);
+    try {
+      await blacklistToken(token);
+    } catch {
+      // blacklistToken logs the underlying error. Surface a 500 so the
+      // client knows the token may still be valid server-side — but still
+      // clear the local cookie so the browser session is ended.
+      const response = NextResponse.json(
+        { error: "Logout partially failed. Please clear your cookies." },
+        { status: 500 }
+      );
+      response.cookies.delete(COOKIE_NAME);
+      return response;
     }
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      request.headers.get("x-real-ip") ??
+      "unknown";
+    await auditLog(admin.username, "logout", {}, ip);
   }
 
   const response = NextResponse.json({ success: true });
