@@ -35,6 +35,8 @@ interface PromosResponse {
   total: number;
   page: number;
   totalPages: number;
+  activeCount: number;
+  totalUsage: number;
 }
 
 const statusVariant: Record<string, "success" | "warning" | "error" | "default"> = {
@@ -68,6 +70,8 @@ export function PromotionsContent() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [activeCount, setActiveCount] = useState(0);
+  const [totalUsage, setTotalUsage] = useState(0);
   const [search, setSearch] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -91,6 +95,8 @@ export function PromotionsContent() {
       setPromos(data.promoCodes);
       setTotalPages(data.totalPages);
       setTotal(data.total);
+      setActiveCount(data.activeCount);
+      setTotalUsage(data.totalUsage);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load promotions");
     } finally {
@@ -101,9 +107,6 @@ export function PromotionsContent() {
   useEffect(() => {
     fetchPromos();
   }, [fetchPromos]);
-
-  const activeCount = promos.filter((p) => p.status === "active").length;
-  const totalUsage = promos.reduce((sum, p) => sum + (p.usage_count ?? 0), 0);
 
   // Both handlers re-throw so PromoForm surfaces the error inline in the modal.
   // Side-effects (success alert, close, refetch) run outside the try so they

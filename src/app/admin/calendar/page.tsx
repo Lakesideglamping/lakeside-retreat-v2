@@ -71,9 +71,22 @@ export default async function CalendarPage() {
     }),
   ]);
 
-  const uplistingBlockedArrays = await Promise.all(
-    PROPERTIES.map((p) => fetchBlockedDates(p).catch(() => [] as string[]))
+  // If Uplisting is down or misconfigured we still render the page, but we
+  // capture per-property failure so the UI can surface a banner — silently
+  // swallowing here made operators think the PMS calendar was empty when it
+  // wasn't.
+  const uplistingResults = await Promise.all(
+    PROPERTIES.map(async (p) => {
+      try {
+        return { ok: true as const, dates: await fetchBlockedDates(p) };
+      } catch (err) {
+        console.error(`[calendar] fetchBlockedDates(${p}) failed`, err);
+        return { ok: false as const, dates: [] as string[] };
+      }
+    })
   );
+  const uplistingBlockedArrays = uplistingResults.map((r) => r.dates);
+  const uplistingFetchFailed = uplistingResults.some((r) => !r.ok);
 
   const serializedBlocked = blockedDates.map((b) => ({
     id: b.id,
@@ -106,6 +119,7 @@ export default async function CalendarPage() {
       initialYear={nzYear}
       initialMonth={nzMonth}
       initialUplistingBlocked={initialUplistingBlocked}
+      uplistingFetchFailed={uplistingFetchFailed}
     />
   );
 }

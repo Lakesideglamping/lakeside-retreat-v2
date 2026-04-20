@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import { withAdmin } from "@/lib/admin-route";
-import { prisma } from "@/lib/db";
+import { getTotpSecret } from "@/lib/totp";
 
 export async function GET(request: Request) {
   return withAdmin(request, async () => {
-    const setting = await prisma.system_settings.findUnique({
-      where: { setting_key: "admin_2fa_enabled" },
-    });
-
-    const enabled = setting?.setting_value === "true";
-
-    return NextResponse.json({ enabled });
+    // Ground truth for "is 2FA on" is the presence of a stored TOTP secret —
+    // that's what the login gate checks (see login/route.ts). A prior version
+    // read an `admin_2fa_enabled` flag that was never written, so the UI
+    // always reported "Disabled" and admins could re-enroll over an existing
+    // secret, breaking paired authenticator apps.
+    const secret = await getTotpSecret();
+    return NextResponse.json({ enabled: !!secret });
   });
 }

@@ -21,7 +21,10 @@ export async function GET(request: Request) {
     const property = url.searchParams.get("property");
     const search = url.searchParams.get("search");
 
-    const where: Prisma.reviewsWhereInput = {};
+    const where: Prisma.reviewsWhereInput = {
+      // Hide soft-deleted rows by default from every admin view.
+      NOT: { status: "deleted" },
+    };
 
     if (status && VALID_REVIEW_STATUSES.has(status)) {
       where.status = status;
@@ -88,7 +91,6 @@ export async function POST(request: Request) {
         status: data.status ?? "approved",
         is_featured: data.is_featured ?? false,
         admin_notes: data.admin_notes ?? null,
-        admin_response: data.admin_response ?? null,
       },
     });
 

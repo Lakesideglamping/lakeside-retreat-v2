@@ -41,10 +41,6 @@ export async function PUT(request: Request, { params }: RouteParams) {
     if (data.status !== undefined) updateData.status = data.status;
     if (data.is_featured !== undefined) updateData.is_featured = data.is_featured;
     if (data.admin_notes !== undefined) updateData.admin_notes = data.admin_notes;
-    if (data.admin_response !== undefined) {
-      updateData.admin_response = data.admin_response;
-      updateData.response_date = new Date();
-    }
 
     const updated = await prisma.reviews.update({
       where: { id: reviewId },
@@ -78,8 +74,13 @@ export async function DELETE(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Review not found" }, { status: 404 });
     }
 
-    await prisma.reviews.delete({
+    // Soft-delete: mark as "deleted" so the record survives for audit/recovery.
+    // The public page filters on status="approved" and the admin list
+    // whitelists pending/approved/rejected, so deleted rows disappear from
+    // both surfaces without data loss.
+    await prisma.reviews.update({
       where: { id: reviewId },
+      data: { status: "deleted", updated_at: new Date() },
     });
 
     const ip = getClientIp(req);

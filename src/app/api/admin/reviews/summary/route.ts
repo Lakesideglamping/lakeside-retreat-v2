@@ -4,6 +4,8 @@ import { withAdmin } from "@/lib/admin-route";
 
 export async function GET(request: Request) {
   return withAdmin(request, async () => {
+    // Exclude soft-deleted rows from all counts.
+    const notDeleted = { NOT: { status: "deleted" } };
     const [
       total,
       pendingCount,
@@ -11,12 +13,13 @@ export async function GET(request: Request) {
       averageResult,
       byPlatform,
     ] = await Promise.all([
-      prisma.reviews.count(),
+      prisma.reviews.count({ where: notDeleted }),
       prisma.reviews.count({ where: { status: "pending" } }),
-      prisma.reviews.count({ where: { is_featured: true } }),
-      prisma.reviews.aggregate({ _avg: { rating: true } }),
+      prisma.reviews.count({ where: { is_featured: true, ...notDeleted } }),
+      prisma.reviews.aggregate({ where: notDeleted, _avg: { rating: true } }),
       prisma.reviews.groupBy({
         by: ["platform"],
+        where: notDeleted,
         _count: { id: true },
       }),
     ]);

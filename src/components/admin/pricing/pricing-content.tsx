@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { adminGet, adminPost, adminPut, adminDelete } from "@/lib/admin-api";
-import { Tabs } from "@/components/admin/ui/tabs";
 import { DataTable } from "@/components/admin/ui/data-table";
 import { Badge } from "@/components/admin/ui/badge";
 import { Modal } from "@/components/admin/ui/modal";
@@ -22,19 +21,7 @@ interface SeasonalRate {
 
 interface PricingContentProps {
   initialRates: SeasonalRate[];
-  initialSettings: Record<string, string>;
 }
-
-const TABS = [
-  { key: "seasonal", label: "Seasonal Rates" },
-  { key: "base", label: "Base Pricing" },
-];
-
-const ACCOMMODATIONS = [
-  { id: "dome-pinot", name: "Dome Pinot" },
-  { id: "dome-rose", name: "Dome Rosé" },
-  { id: "lakeside-cottage", name: "Lakeside Cottage" },
-];
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr + "T00:00:00").toLocaleDateString("en-US", {
@@ -44,18 +31,12 @@ function formatDate(dateStr: string): string {
   });
 }
 
-export function PricingContent({
-  initialRates,
-  initialSettings,
-}: PricingContentProps) {
-  const [activeTab, setActiveTab] = useState("seasonal");
+export function PricingContent({ initialRates }: PricingContentProps) {
   const [rates, setRates] = useState<SeasonalRate[]>(initialRates);
-  const [settings] = useState<Record<string, string>>(initialSettings);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Rate form state
   const [showRateForm, setShowRateForm] = useState(false);
   const [editingRate, setEditingRate] = useState<SeasonalRate | null>(null);
   const [rateName, setRateName] = useState("");
@@ -65,26 +46,8 @@ export function PricingContent({
   const [rateActive, setRateActive] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Delete confirmation
   const [deleteTarget, setDeleteTarget] = useState<SeasonalRate | null>(null);
   const [deleting, setDeleting] = useState(false);
-
-  // Base pricing form state
-  const [basePricing, setBasePricing] = useState<
-    Record<string, { base: string; weekend: string; minNights: string }>
-  >(() => {
-    const result: Record<string, { base: string; weekend: string; minNights: string }> = {};
-    for (const acc of ACCOMMODATIONS) {
-      const key = acc.id.replace(/-/g, "_");
-      result[acc.id] = {
-        base: settings[`pricing_${key}_base`] ?? "",
-        weekend: settings[`pricing_${key}_weekend`] ?? "",
-        minNights: settings[`pricing_${key}_min_nights`] ?? "",
-      };
-    }
-    return result;
-  });
-  const [savingPricing, setSavingPricing] = useState<string | null>(null);
 
   const fetchRates = useCallback(async () => {
     setLoading(true);
@@ -181,32 +144,6 @@ export function PricingContent({
     }
   };
 
-  const handleSaveBasePricing = async (accId: string) => {
-    setSavingPricing(accId);
-    setError(null);
-    try {
-      const data = basePricing[accId];
-      await adminPost("/api/admin/pricing-config", {
-        accommodation: accId,
-        base: parseFloat(data.base) || 0,
-        weekend: parseFloat(data.weekend) || 0,
-        minNights: parseInt(data.minNights) || 1,
-      });
-      setSuccess(`Base pricing updated for ${ACCOMMODATIONS.find((a) => a.id === accId)?.name}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save pricing");
-    } finally {
-      setSavingPricing(null);
-    }
-  };
-
-  const updateBasePricing = (accId: string, field: string, value: string) => {
-    setBasePricing((prev) => ({
-      ...prev,
-      [accId]: { ...prev[accId], [field]: value },
-    }));
-  };
-
   const rateColumns = [
     { key: "name", header: "Name", sortable: true },
     {
@@ -266,9 +203,9 @@ export function PricingContent({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Pricing</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Seasonal Rates</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Manage seasonal rates and base pricing
+          Manage seasonal pricing multipliers applied on top of base rates
         </p>
       </div>
 
@@ -283,80 +220,24 @@ export function PricingContent({
         </Alert>
       )}
 
-      <Tabs tabs={TABS} activeTab={activeTab} onChange={setActiveTab} />
-
-      {activeTab === "seasonal" && (
-        <div className="space-y-4">
-          <div className="flex justify-end">
-            <button
-              onClick={openCreateForm}
-              className="rounded-lg bg-[#2d5a5a] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#234848]"
-            >
-              Add Seasonal Rate
-            </button>
-          </div>
-
-          <DataTable<SeasonalRate & Record<string, unknown>>
-            columns={rateColumns}
-            data={rates as (SeasonalRate & Record<string, unknown>)[]}
-            loading={loading}
-            emptyMessage="No seasonal rates configured"
-          />
+      <div className="space-y-4">
+        <div className="flex justify-end">
+          <button
+            onClick={openCreateForm}
+            className="rounded-lg bg-[#2d5a5a] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#234848]"
+          >
+            Add Seasonal Rate
+          </button>
         </div>
-      )}
 
-      {activeTab === "base" && (
-        <div className="space-y-6">
-          {ACCOMMODATIONS.map((acc) => (
-            <div
-              key={acc.id}
-              className="rounded-xl bg-white p-6 shadow-sm border border-gray-100"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">{acc.name}</h3>
-                <button
-                  onClick={() => handleSaveBasePricing(acc.id)}
-                  disabled={savingPricing === acc.id}
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#2d5a5a] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#234848] disabled:bg-[#2d5a5a]/60"
-                >
-                  {savingPricing === acc.id && (
-                    <LoadingSpinner size="sm" className="text-white" />
-                  )}
-                  Save
-                </button>
-              </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <FormField
-                  label="Base Price (per night)"
-                  name={`${acc.id}-base`}
-                  type="number"
-                  value={basePricing[acc.id]?.base ?? ""}
-                  onChange={(v) => updateBasePricing(acc.id, "base", v)}
-                  placeholder="e.g. 365"
-                />
-                <FormField
-                  label="Weekend Surcharge"
-                  name={`${acc.id}-weekend`}
-                  type="number"
-                  value={basePricing[acc.id]?.weekend ?? ""}
-                  onChange={(v) => updateBasePricing(acc.id, "weekend", v)}
-                  placeholder="e.g. 50"
-                />
-                <FormField
-                  label="Min Nights"
-                  name={`${acc.id}-minNights`}
-                  type="number"
-                  value={basePricing[acc.id]?.minNights ?? ""}
-                  onChange={(v) => updateBasePricing(acc.id, "minNights", v)}
-                  placeholder="e.g. 1"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+        <DataTable<SeasonalRate & Record<string, unknown>>
+          columns={rateColumns}
+          data={rates as (SeasonalRate & Record<string, unknown>)[]}
+          loading={loading}
+          emptyMessage="No seasonal rates configured"
+        />
+      </div>
 
-      {/* Rate create/edit modal */}
       <Modal
         open={showRateForm}
         onClose={() => setShowRateForm(false)}
@@ -431,7 +312,6 @@ export function PricingContent({
         </form>
       </Modal>
 
-      {/* Delete confirmation */}
       <ConfirmDialog
         open={!!deleteTarget}
         title="Delete Seasonal Rate"

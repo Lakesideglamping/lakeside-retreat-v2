@@ -29,7 +29,7 @@ export default async function ReviewsPage() {
   const [reviews, summary] = await Promise.all([
     prisma.reviews.findMany({
       where: { status: "approved" },
-      orderBy: { stay_date: "desc" },
+      orderBy: [{ is_featured: "desc" }, { stay_date: "desc" }],
     }),
     prisma.reviews.aggregate({
       where: { status: "approved" },

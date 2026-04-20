@@ -36,6 +36,7 @@ interface CalendarViewProps {
   initialYear: number;
   initialMonth: number;
   initialUplistingBlocked: Record<string, UplistingRange[]>;
+  uplistingFetchFailed?: boolean;
 }
 
 const DAYS_VISIBLE = 28;
@@ -77,6 +78,7 @@ export function CalendarView({
   initialBlockedDates,
   initialBookings,
   initialUplistingBlocked,
+  uplistingFetchFailed = false,
 }: CalendarViewProps) {
   const today = todayNZ();
 
@@ -166,6 +168,14 @@ export function CalendarView({
       {error && (
         <Alert variant="error" title="Error" dismissible onDismiss={() => setError(null)}>
           {error}
+        </Alert>
+      )}
+
+      {uplistingFetchFailed && (
+        <Alert variant="warning" title="Uplisting calendar unavailable">
+          One or more properties failed to load from Uplisting. Cross-platform
+          bookings (Airbnb / Booking.com) may be missing below. Check
+          UPLISTING_API_KEY and the Uplisting status page.
         </Alert>
       )}
 

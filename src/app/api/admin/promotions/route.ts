@@ -33,7 +33,9 @@ export async function GET(request: Request) {
 
     const skip = (page - 1) * limit;
 
-    const [promoCodes, total] = await Promise.all([
+    // Totals span all rows (ignoring filters/pagination) so the stat cards
+     // reflect the whole dataset, not just the current page.
+    const [promoCodes, total, activeCount, usageAgg] = await Promise.all([
       prisma.promo_codes.findMany({
         where,
         orderBy: { created_at: "desc" },
@@ -41,6 +43,8 @@ export async function GET(request: Request) {
         take: limit,
       }),
       prisma.promo_codes.count({ where }),
+      prisma.promo_codes.count({ where: { status: "active" } }),
+      prisma.promo_codes.aggregate({ _sum: { usage_count: true } }),
     ]);
 
     return NextResponse.json({
@@ -48,6 +52,8 @@ export async function GET(request: Request) {
       total,
       page,
       totalPages: Math.ceil(total / limit),
+      activeCount,
+      totalUsage: usageAgg._sum.usage_count ?? 0,
     });
   });
 }

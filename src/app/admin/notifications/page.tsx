@@ -1,13 +1,11 @@
 import { prisma } from "@/lib/db";
+import { nzTodayRangeUtc } from "@/lib/uplisting";
 import { NotificationsContent } from "@/components/admin/notifications/notifications-content";
 
 export default async function NotificationsPage() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  const twentyFourHoursAgo = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+  // "Today" here is the NZ business day. On a UTC server, a naive
+  // new Date() + setHours(0) would slip "today's check-ins" by ~12h.
+  const { start: today, end: tomorrow } = nzTodayRangeUtc();
 
   const [
     failedPayments,
@@ -16,7 +14,6 @@ export default async function NotificationsPage() {
     pendingReviews,
     todayCheckIns,
     todayCheckOuts,
-    recentMessages,
   ] = await Promise.all([
     prisma.bookings.count({
       where: { deleted_at: null, payment_status: "failed" },
@@ -40,9 +37,6 @@ export default async function NotificationsPage() {
         check_out: { gte: today, lt: tomorrow },
       },
     }),
-    prisma.contact_messages.count({
-      where: { created_at: { gte: twentyFourHoursAgo } },
-    }),
   ]);
 
   const notifications = {
@@ -52,7 +46,6 @@ export default async function NotificationsPage() {
     pendingReviews,
     todayCheckIns,
     todayCheckOuts,
-    recentMessages,
   };
 
   return <NotificationsContent initialData={notifications} />;

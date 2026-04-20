@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { adminGet, adminPost, adminPut } from "@/lib/admin-api";
+import { adminGet } from "@/lib/admin-api";
 import { Card } from "@/components/admin/ui/card";
 import { Tabs } from "@/components/admin/ui/tabs";
 import { DataTable } from "@/components/admin/ui/data-table";
@@ -90,9 +90,7 @@ export function MarketingContent() {
   const [reviewRequests, setReviewRequests] = useState<ReviewRequest[]>([]);
   const [socialDrafts, setSocialDrafts] = useState<SocialDraft[]>([]);
   const [loading, setLoading] = useState(true);
-  const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   const fetchStats = useCallback(async () => {
     try {
@@ -145,65 +143,6 @@ export function MarketingContent() {
     loadAll();
   }, [loadAll]);
 
-  const handleSendReminder = async (bookingId: string) => {
-    setActionLoading(bookingId);
-    setError(null);
-    setSuccess(null);
-    try {
-      await adminPost(
-        `/api/admin/marketing/abandoned-checkouts/${bookingId}/remind`
-      );
-      setSuccess("Reminder sent successfully");
-      await fetchCheckouts();
-      await fetchStats();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to send reminder");
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  const handleSendReviewRequest = async (bookingId: string) => {
-    setActionLoading(bookingId);
-    setError(null);
-    setSuccess(null);
-    try {
-      await adminPost(
-        `/api/admin/marketing/review-requests/${bookingId}/send`
-      );
-      setSuccess("Review request sent successfully");
-      await fetchReviewRequests();
-      await fetchStats();
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to send review request"
-      );
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  const handleUpdateSocialStatus = async (
-    id: number,
-    status: string
-  ) => {
-    setActionLoading(`social-${id}`);
-    setError(null);
-    setSuccess(null);
-    try {
-      await adminPut(`/api/admin/marketing/social/${id}`, { status });
-      setSuccess(`Draft ${status} successfully`);
-      await fetchSocialDrafts();
-      await fetchStats();
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to update draft"
-      );
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -236,28 +175,6 @@ export function MarketingContent() {
       render: (v: unknown) => formatDate(v as string | null),
       sortable: true,
     },
-    {
-      key: "booking_id",
-      header: "Action",
-      render: (_: unknown, row: Record<string, unknown>) => {
-        const r = row as unknown as AbandonedCheckout;
-        return (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSendReminder(r.booking_id);
-            }}
-            disabled={actionLoading === r.booking_id}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#2d5a5a] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#234848] disabled:opacity-50"
-          >
-            {actionLoading === r.booking_id ? (
-              <LoadingSpinner size="sm" className="text-white" />
-            ) : null}
-            Send Reminder
-          </button>
-        );
-      },
-    },
   ];
 
   const reviewColumns = [
@@ -287,28 +204,6 @@ export function MarketingContent() {
           <Badge variant={reviewStatusVariant[status] ?? "default"}>
             {status}
           </Badge>
-        );
-      },
-    },
-    {
-      key: "booking_id",
-      header: "Action",
-      render: (_: unknown, row: Record<string, unknown>) => {
-        const r = row as unknown as ReviewRequest;
-        return (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSendReviewRequest(r.booking_id);
-            }}
-            disabled={actionLoading === r.booking_id}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#2d5a5a] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#234848] disabled:opacity-50"
-          >
-            {actionLoading === r.booking_id ? (
-              <LoadingSpinner size="sm" className="text-white" />
-            ) : null}
-            Send Request
-          </button>
         );
       },
     },
@@ -348,55 +243,6 @@ export function MarketingContent() {
       render: (v: unknown) => formatDate(v as string | null),
       sortable: true,
     },
-    {
-      key: "id",
-      header: "Actions",
-      render: (_: unknown, row: Record<string, unknown>) => {
-        const r = row as unknown as SocialDraft;
-        const currentStatus = r.status ?? "draft";
-        const loadingKey = `social-${r.id}`;
-        return (
-          <div className="flex gap-2">
-            {currentStatus === "draft" && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleUpdateSocialStatus(r.id, "published");
-                }}
-                disabled={actionLoading === loadingKey}
-                className="rounded-lg bg-green-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-green-700 disabled:opacity-50"
-              >
-                Publish
-              </button>
-            )}
-            {currentStatus === "published" && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleUpdateSocialStatus(r.id, "archived");
-                }}
-                disabled={actionLoading === loadingKey}
-                className="rounded-lg bg-gray-500 px-2.5 py-1 text-xs font-medium text-white hover:bg-gray-600 disabled:opacity-50"
-              >
-                Archive
-              </button>
-            )}
-            {currentStatus === "archived" && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleUpdateSocialStatus(r.id, "draft");
-                }}
-                disabled={actionLoading === loadingKey}
-                className="rounded-lg border border-gray-300 px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-              >
-                Revert to Draft
-              </button>
-            )}
-          </div>
-        );
-      },
-    },
   ];
 
   return (
@@ -404,7 +250,7 @@ export function MarketingContent() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Marketing</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Manage checkout reminders, review requests, and social content
+          Read-only dashboard of checkout reminders, review requests, and social drafts tracked by automated jobs
         </p>
       </div>
 
@@ -413,13 +259,7 @@ export function MarketingContent() {
           {error}
         </Alert>
       )}
-      {success && (
-        <Alert variant="success" title="Success" dismissible onDismiss={() => setSuccess(null)}>
-          {success}
-        </Alert>
-      )}
 
-      {/* Stats row */}
       {stats && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Card
@@ -452,10 +292,8 @@ export function MarketingContent() {
         </div>
       )}
 
-      {/* Tabs */}
       <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
-      {/* Tab content */}
       {activeTab === "abandoned" && (
         <DataTable
           columns={abandonedColumns}

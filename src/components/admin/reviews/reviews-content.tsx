@@ -24,8 +24,6 @@ interface Review {
   status: string | null;
   is_featured: boolean | null;
   admin_notes: string | null;
-  admin_response: string | null;
-  response_date: string | null;
   created_at: string | null;
   updated_at: string | null;
 }
@@ -115,9 +113,6 @@ export function ReviewsContent() {
   const [success, setSuccess] = useState<string | null>(null);
 
   // Modal states
-  const [responseModal, setResponseModal] = useState<Review | null>(null);
-  const [responseText, setResponseText] = useState("");
-  const [responseLoading, setResponseLoading] = useState(false);
 
   const [createModal, setCreateModal] = useState(false);
   const [createForm, setCreateForm] = useState(emptyReviewForm);
@@ -189,29 +184,6 @@ export function ReviewsContent() {
       fetchSummary();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update review");
-    }
-  };
-
-  const handleOpenResponse = (review: Review) => {
-    setResponseModal(review);
-    setResponseText(review.admin_response ?? "");
-  };
-
-  const handleSubmitResponse = async () => {
-    if (!responseModal) return;
-    setResponseLoading(true);
-    try {
-      await adminPut(`/api/admin/reviews/${responseModal.id}`, {
-        admin_response: responseText,
-      });
-      setSuccess("Response saved");
-      setResponseModal(null);
-      setResponseText("");
-      fetchReviews();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save response");
-    } finally {
-      setResponseLoading(false);
     }
   };
 
@@ -348,13 +320,6 @@ export function ReviewsContent() {
               {r.is_featured ? "Unfeature" : "Feature"}
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); handleOpenResponse(r); }}
-              className="rounded px-2 py-1 text-xs font-medium text-blue-700 hover:bg-blue-50"
-              title="Respond"
-            >
-              Respond
-            </button>
-            <button
               onClick={(e) => { e.stopPropagation(); setDeleteTarget(r); }}
               className="rounded px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50"
               title="Delete"
@@ -374,7 +339,7 @@ export function ReviewsContent() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Reviews</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Manage guest reviews and responses
+            Moderate, feature, and curate guest reviews
           </p>
         </div>
         <button
@@ -466,50 +431,6 @@ export function ReviewsContent() {
         }}
       />
 
-      {/* Response Modal */}
-      <Modal
-        open={!!responseModal}
-        onClose={() => { setResponseModal(null); setResponseText(""); }}
-        title="Admin Response"
-      >
-        {responseModal && (
-          <div className="space-y-4">
-            <div className="rounded-lg bg-gray-50 p-3">
-              <p className="text-sm font-medium text-gray-700">
-                {responseModal.guest_name} - {renderStars(responseModal.rating)}
-              </p>
-              {responseModal.review_text && (
-                <p className="mt-1 text-sm text-gray-600">{responseModal.review_text}</p>
-              )}
-            </div>
-            <FormField
-              label="Response"
-              name="admin_response"
-              type="textarea"
-              value={responseText}
-              onChange={setResponseText}
-              placeholder="Write your response to this review..."
-            />
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => { setResponseModal(null); setResponseText(""); }}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmitResponse}
-                disabled={responseLoading}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#2d5a5a] px-4 py-2 text-sm font-medium text-white hover:bg-[#234848] disabled:opacity-50"
-              >
-                {responseLoading && <LoadingSpinner size="sm" className="text-white" />}
-                Save Response
-              </button>
-            </div>
-          </div>
-        )}
-      </Modal>
-
       {/* Create Review Modal */}
       <Modal
         open={createModal}
@@ -544,17 +465,30 @@ export function ReviewsContent() {
             <FormField
               label="Rating"
               name="rating"
-              type="number"
-              value={createForm.rating}
+              type="select"
+              value={String(createForm.rating)}
               onChange={(v) => setCreateForm((f) => ({ ...f, rating: Number(v) }))}
               required
+              options={[
+                { value: "5", label: "5 stars" },
+                { value: "4", label: "4 stars" },
+                { value: "3", label: "3 stars" },
+                { value: "2", label: "2 stars" },
+                { value: "1", label: "1 star" },
+              ]}
             />
             <FormField
               label="Property"
               name="property"
+              type="select"
               value={createForm.property}
               onChange={(v) => setCreateForm((f) => ({ ...f, property: v }))}
-              placeholder="e.g. Dome Pinot, Dome Rose, Lakeside Cottage"
+              placeholder="Select property..."
+              options={[
+                { value: "dome-pinot", label: "Dome Pinot" },
+                { value: "dome-rose", label: "Dome Rose" },
+                { value: "lakeside-cottage", label: "Lakeside Cottage" },
+              ]}
             />
           </div>
           <FormField

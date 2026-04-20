@@ -42,6 +42,56 @@ export function nzDateString(date: Date = new Date()): string {
   }).format(date);
 }
 
+/**
+ * Returns the UTC `Date` instants for [start, nextDayStart) of the NZ day
+ * containing `now`. Use for Prisma range filters on timestamp columns so
+ * "today" means the NZ business day, not UTC.
+ *
+ * Handles NZST/NZDT by probing both offsets and picking the one that
+ * renders back to NZ midnight.
+ */
+export function nzTodayRangeUtc(now: Date = new Date()): { start: Date; end: Date } {
+  const todayStr = nzDateString(now);
+  const [y, m, d] = todayStr.split("-").map(Number);
+  const start = resolveNzMidnightUtc(y, m, d);
+  const end = resolveNzMidnightUtc(y, m, d + 1);
+  return { start, end };
+}
+
+function resolveNzMidnightUtc(year: number, month: number, day: number): Date {
+  // NZ is +12 (NZST) or +13 (NZDT). Try both; keep the one that renders as
+  // 00:00 on the target NZ date.
+  for (const offset of [12, 13]) {
+    const candidate = new Date(Date.UTC(year, month - 1, day, -offset, 0, 0));
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Pacific/Auckland",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).formatToParts(candidate);
+    const lookup: Record<string, string> = {};
+    for (const p of parts) lookup[p.type] = p.value;
+    // Normalise the target date through Date.UTC so month rollover works.
+    const normalised = new Date(Date.UTC(year, month - 1, day));
+    const ny = normalised.getUTCFullYear();
+    const nm = String(normalised.getUTCMonth() + 1).padStart(2, "0");
+    const nd = String(normalised.getUTCDate()).padStart(2, "0");
+    if (
+      lookup.year === String(ny) &&
+      lookup.month === nm &&
+      lookup.day === nd &&
+      (lookup.hour === "00" || lookup.hour === "24")
+    ) {
+      return candidate;
+    }
+  }
+  // Fallback: treat as UTC midnight. Better stale-by-12h than crashing.
+  return new Date(Date.UTC(year, month - 1, day));
+}
+
 async function fetchWithRetry(
   url: string,
   options: RequestInit,

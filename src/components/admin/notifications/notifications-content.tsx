@@ -12,7 +12,6 @@ interface NotificationData {
   pendingReviews: number;
   todayCheckIns: number;
   todayCheckOuts: number;
-  recentMessages: number;
 }
 
 interface NotificationItem {
@@ -117,17 +116,6 @@ function buildNotifications(data: NotificationData): NotificationItem[] {
       message: `${data.todayCheckOuts} guest(s) checking out today.`,
       href: "/admin/bookings",
       count: data.todayCheckOuts,
-    });
-  }
-
-  if (data.recentMessages > 0) {
-    items.push({
-      id: "recent-messages",
-      category: "info",
-      title: "New Contact Messages",
-      message: `${data.recentMessages} new contact message(s) in the last 24 hours.`,
-      href: "/admin/contact-messages",
-      count: data.recentMessages,
     });
   }
 

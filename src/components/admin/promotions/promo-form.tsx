@@ -59,6 +59,21 @@ export function PromoForm({
       setError("Please fill in all required fields");
       return;
     }
+    if (
+      form.valid_from &&
+      form.valid_until &&
+      form.valid_until < form.valid_from
+    ) {
+      setError("Valid Until must be the same day as or after Valid From");
+      return;
+    }
+    if (
+      form.discount_type === "percentage" &&
+      Number(form.discount_value) > 100
+    ) {
+      setError("Percentage discount cannot exceed 100%");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {

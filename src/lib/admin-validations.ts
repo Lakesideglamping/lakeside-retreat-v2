@@ -12,33 +12,44 @@ export const loginSchema = z.object({
   totpCode: z.string().length(6).regex(/^\d{6}$/).optional(),
 });
 
-export const bookingCreateSchema = z.object({
-  guest_name: z.string().min(2).max(100),
-  guest_email: z.string().email(),
-  guest_phone: z.string().optional(),
-  accommodation: accommodationField(),
-  check_in: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  check_out: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  guests: z.number().int().min(1).max(10),
-  total_price: z.number().min(0).optional(),
-  status: z.string().optional(),
-  notes: z.string().max(1000).optional(),
-  booking_source: z.string().optional(),
-});
+export const bookingCreateSchema = z
+  .object({
+    guest_name: z.string().min(2).max(100),
+    guest_email: z.string().email(),
+    guest_phone: z.string().optional(),
+    accommodation: accommodationField(),
+    check_in: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    check_out: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    guests: z.number().int().min(1).max(10),
+    total_price: z.number().min(0).optional(),
+    status: z.string().optional(),
+    notes: z.string().max(1000).optional(),
+    booking_source: z.string().optional(),
+  })
+  .refine((d) => new Date(d.check_out) > new Date(d.check_in), {
+    message: "Check-out must be after check-in",
+    path: ["check_out"],
+  });
 
-export const bookingUpdateSchema = z.object({
-  guest_name: z.string().min(2).max(100).optional(),
-  guest_email: z.string().email().optional(),
-  guest_phone: z.string().optional(),
-  accommodation: accommodationField().optional(),
-  check_in: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  check_out: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  guests: z.number().int().min(1).max(10).optional(),
-  total_price: z.number().min(0).optional(),
-  status: z.enum(["pending", "confirmed", "cancelled", "completed"]).optional(),
-  payment_status: z.enum(["pending", "paid", "refunded", "failed", "paid_external"]).optional(),
-  notes: z.string().max(1000).optional(),
-});
+export const bookingUpdateSchema = z
+  .object({
+    guest_name: z.string().min(2).max(100).optional(),
+    guest_email: z.string().email().optional(),
+    guest_phone: z.string().optional(),
+    accommodation: accommodationField().optional(),
+    check_in: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    check_out: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    guests: z.number().int().min(1).max(10).optional(),
+    total_price: z.number().min(0).optional(),
+    status: z.enum(["pending", "confirmed", "cancelled", "completed"]).optional(),
+    payment_status: z.enum(["pending", "paid", "refunded", "failed", "paid_external"]).optional(),
+    notes: z.string().max(1000).optional(),
+  })
+  .refine(
+    (d) =>
+      !d.check_in || !d.check_out || new Date(d.check_out) > new Date(d.check_in),
+    { message: "Check-out must be after check-in", path: ["check_out"] }
+  );
 
 export const statusUpdateSchema = z.object({
   status: z.enum(["pending", "confirmed", "cancelled", "completed"]),
@@ -62,33 +73,47 @@ export const reviewSchema = z.object({
   status: z.string().optional(),
   is_featured: z.boolean().optional(),
   admin_notes: z.string().max(500).optional(),
-  admin_response: z.string().max(1000).optional(),
 });
 
 export const reviewUpdateSchema = z.object({
-  status: z.string().optional(),
+  status: z.enum(["pending", "approved", "rejected", "deleted"]).optional(),
   is_featured: z.boolean().optional(),
   admin_notes: z.string().max(500).optional(),
-  admin_response: z.string().max(1000).optional(),
 });
 
-export const promoCodeSchema = z.object({
-  name: z.string().min(1).max(100),
-  code: z.string().min(3).max(50),
-  type: z.enum(["seasonal", "partner", "general"]).optional(),
-  description: z.string().max(500).optional(),
-  discount_type: z.enum(["percentage", "fixed"]),
-  discount_value: z.number().min(0),
-  valid_from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  valid_until: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  min_stay: z.number().int().min(1).optional(),
-  usage_limit: z.number().int().min(1).optional(),
-  status: z.string().optional(),
-  partner_info: z.string().max(500).optional(),
-});
+export const promoCodeSchema = z
+  .object({
+    name: z.string().min(1).max(100),
+    code: z.string().min(3).max(50),
+    type: z.enum(["seasonal", "partner", "general"]).optional(),
+    description: z.string().max(500).optional(),
+    discount_type: z.enum(["percentage", "fixed"]),
+    discount_value: z.number().min(0),
+    valid_from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    valid_until: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    min_stay: z.number().int().min(1).optional(),
+    usage_limit: z.number().int().min(1).optional(),
+    status: z.enum(["active", "paused", "expired"]).optional(),
+    partner_info: z.string().max(500).optional(),
+  })
+  .refine(
+    (d) =>
+      !d.valid_from ||
+      !d.valid_until ||
+      new Date(d.valid_until) >= new Date(d.valid_from),
+    { message: "Valid-until must be on or after valid-from", path: ["valid_until"] }
+  )
+  .refine(
+    (d) => d.discount_type !== "percentage" || d.discount_value <= 100,
+    { message: "Percentage discount cannot exceed 100", path: ["discount_value"] }
+  )
+  .refine(
+    (d) => d.discount_type !== "fixed" || d.discount_value <= 100000,
+    { message: "Fixed discount cannot exceed $100,000", path: ["discount_value"] }
+  );
 
 export const blockedDateSchema = z.object({
-  property: z.string().min(1),
+  property: accommodationField(),
   start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   end_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   reason: z.enum(["maintenance", "personal", "cleaning", "other"]).optional(),
