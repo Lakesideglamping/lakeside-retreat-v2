@@ -19,6 +19,7 @@ interface Booking {
   payment_status: string | null;
   total_price: number | null;
   booking_source: string | null;
+  uplisting_sync_status: string | null;
 }
 
 interface BookingsResponse {
@@ -102,13 +103,26 @@ export function BookingList() {
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
 
-  // Filters
+  // Filters. Accommodation persists across sessions — an owner typically
+  // lives in a single property's view and expects it to stick on reload.
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
-  const [accommodation, setAccommodation] = useState("");
+  const [accommodation, setAccommodation] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return window.localStorage.getItem("admin.bookings.accommodation") ?? "";
+  });
   const [source, setSource] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (accommodation) {
+      window.localStorage.setItem("admin.bookings.accommodation", accommodation);
+    } else {
+      window.localStorage.removeItem("admin.bookings.accommodation");
+    }
+  }, [accommodation]);
 
   const fetchBookings = useCallback(async () => {
     setLoading(true);
@@ -166,6 +180,9 @@ export function BookingList() {
 
   const [syncing, setSyncing] = useState(false);
   const [syncResult, setSyncResult] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const activeFilterCount = [search, status, accommodation, source, dateFrom, dateTo]
+    .filter(Boolean).length;
 
   const handleSync = async () => {
     setSyncing(true);
@@ -259,6 +276,19 @@ export function BookingList() {
       },
     },
     {
+      key: "uplisting_sync_status",
+      header: "Sync",
+      render: (val: unknown) => {
+        const s = String(val ?? "");
+        if (!s) return <span className="text-xs text-gray-400">—</span>;
+        const variant =
+          s === "synced" ? "success" :
+          s === "failed" ? "error" :
+          s === "pending" ? "warning" : "default";
+        return <Badge variant={variant}>{s}</Badge>;
+      },
+    },
+    {
       key: "total_price",
       header: "Amount",
       className: "text-right",
@@ -317,6 +347,18 @@ export function BookingList() {
 
       {/* Filters */}
       <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
+        <button
+          type="button"
+          onClick={() => setFiltersOpen((o) => !o)}
+          className="md:hidden mb-3 flex w-full items-center justify-between rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700"
+          aria-expanded={filtersOpen}
+        >
+          <span>
+            Filters{activeFilterCount > 0 ? " (" + activeFilterCount + ")" : ""}
+          </span>
+          <span className="text-gray-400">{filtersOpen ? "Hide" : "Show"}</span>
+        </button>
+        <div className={`${filtersOpen ? "" : "hidden"} md:block`}>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <SearchInput
             value={search}
@@ -365,6 +407,7 @@ export function BookingList() {
               value={dateFrom}
               onChange={(e) => updateFilter(setDateFrom, e.target.value)}
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-1 focus:ring-[#2d5a5a]"
+              title="NZ time"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -374,8 +417,10 @@ export function BookingList() {
               value={dateTo}
               onChange={(e) => updateFilter(setDateTo, e.target.value)}
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-1 focus:ring-[#2d5a5a]"
+              title="NZ time"
             />
           </div>
+          <p className="col-span-full text-xs text-gray-400">Dates shown in NZ time (Pacific/Auckland).</p>
           {(search || status || accommodation || source || dateFrom || dateTo) && (
             <button
               onClick={() => {
@@ -392,6 +437,7 @@ export function BookingList() {
               Clear Filters
             </button>
           )}
+        </div>
         </div>
       </div>
 

@@ -34,10 +34,19 @@ interface Notifications {
   recentMessages: number;
 }
 
+interface PropertyRevenue {
+  id: string;
+  label: string;
+  current: number;
+  previous: number;
+  deltaPct: number | null;
+}
+
 interface DashboardContentProps {
   stats: Stats;
   recentBookings: RecentBooking[];
   notifications: Notifications;
+  propertyRevenue: PropertyRevenue[];
 }
 
 const statusVariant: Record<string, "success" | "warning" | "error" | "info" | "default"> = {
@@ -84,6 +93,7 @@ export function DashboardContent({
   stats,
   recentBookings,
   notifications,
+  propertyRevenue,
 }: DashboardContentProps) {
   const hasNotifications =
     notifications.failedPayments > 0 ||
@@ -164,6 +174,40 @@ export function DashboardContent({
             </svg>
           }
         />
+      </div>
+
+      {/* Per-property month-over-month revenue */}
+      <div className="rounded-xl bg-white shadow-sm border border-gray-100">
+        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+          <h2 className="text-lg font-semibold text-gray-900">Revenue by Property</h2>
+          <span className="text-xs text-gray-400">vs previous month</span>
+        </div>
+        <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-3">
+          {propertyRevenue.map((p) => {
+            const up = p.deltaPct !== null && p.deltaPct >= 0;
+            const deltaColor =
+              p.deltaPct === null
+                ? "text-gray-400"
+                : up
+                ? "text-green-600"
+                : "text-red-600";
+            return (
+              <div key={p.id} className="rounded-lg border border-gray-100 p-4">
+                <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                  {p.label}
+                </p>
+                <p className="mt-2 text-xl font-bold text-gray-900">
+                  {formatCurrency(p.current)}
+                </p>
+                <p className={`mt-1 text-xs ${deltaColor}`}>
+                  {p.deltaPct === null
+                    ? "No prior month data"
+                    : `${up ? "▲" : "▼"} ${Math.abs(p.deltaPct).toFixed(1)}% from ${formatCurrency(p.previous)}`}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Recent bookings table */}

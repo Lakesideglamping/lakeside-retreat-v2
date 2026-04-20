@@ -62,6 +62,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     if (data.status !== undefined) updateData.status = data.status;
     if (data.payment_status !== undefined) updateData.payment_status = data.payment_status;
     if (data.notes !== undefined) updateData.notes = data.notes;
+    if (data.booking_source !== undefined) updateData.booking_source = data.booking_source;
 
     const updated = await prisma.bookings.update({
       where: { id },

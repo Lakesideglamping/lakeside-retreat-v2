@@ -44,6 +44,7 @@ export const bookingUpdateSchema = z
     status: z.enum(["pending", "confirmed", "cancelled", "completed"]).optional(),
     payment_status: z.enum(["pending", "paid", "refunded", "failed", "paid_external"]).optional(),
     notes: z.string().max(1000).optional(),
+    booking_source: z.string().max(50).optional(),
   })
   .refine(
     (d) =>

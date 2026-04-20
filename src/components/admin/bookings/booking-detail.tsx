@@ -102,6 +102,18 @@ function formatAccommodation(value: string): string {
     .join(" ");
 }
 
+// Days between today (NZ) and check-in. Negative = past, 0 = today, positive = upcoming.
+function daysUntilCheckIn(checkIn: string): number {
+  const todayStr = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Pacific/Auckland",
+    year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date());
+  const msPerDay = 86400000;
+  return Math.round(
+    (new Date(checkIn).getTime() - new Date(todayStr).getTime()) / msPerDay
+  );
+}
+
 export function BookingDetail({ bookingId }: BookingDetailProps) {
   const router = useRouter();
   const [booking, setBooking] = useState<Booking | null>(null);
@@ -118,6 +130,8 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showRefundDialog, setShowRefundDialog] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showClaimDialog, setShowClaimDialog] = useState(false);
+  const [claimReason, setClaimReason] = useState("");
 
   const fetchBooking = useCallback(async () => {
     setLoading(true);
@@ -201,11 +215,19 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
   };
 
   const handleDepositClaim = async () => {
+    if (!claimReason.trim()) {
+      setError("Please enter a reason for the claim");
+      return;
+    }
+    setShowClaimDialog(false);
     setActionLoading("deposit-claim");
     setError(null);
     try {
-      await adminPost(`/api/admin/bookings/${bookingId}/deposit/claim`);
+      await adminPost(`/api/admin/bookings/${bookingId}/deposit/claim`, {
+        reason: claimReason.trim(),
+      });
       setSuccess("Security deposit claimed");
+      setClaimReason("");
       await fetchBooking();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to claim deposit");
@@ -306,6 +328,27 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
           </Badge>
         </div>
       </div>
+
+      {(() => {
+        if (booking.status === "cancelled" || booking.status === "completed") return null;
+        const days = daysUntilCheckIn(booking.check_in);
+        if (days < 0 || days > 3) return null;
+        const label =
+          days === 0 ? "Check-in is today" :
+          days === 1 ? "Check-in is tomorrow" :
+          `Check-in in ${days} days`;
+        const unpaid = booking.payment_status !== "paid" && booking.payment_status !== "completed";
+        const notConfirmed = booking.status !== "confirmed";
+        const suffix = [
+          unpaid ? "payment not settled" : null,
+          notConfirmed ? "not yet confirmed" : null,
+        ].filter(Boolean).join(" · ");
+        return (
+          <Alert variant={unpaid || notConfirmed ? "warning" : "info"}>
+            {label}{suffix ? ` — ${suffix}` : ""}
+          </Alert>
+        );
+      })()}
 
       {error && (
         <Alert variant="error" dismissible onDismiss={() => setError(null)}>
@@ -501,7 +544,7 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
                 Release
               </button>
               <button
-                onClick={handleDepositClaim}
+                onClick={() => setShowClaimDialog(true)}
                 disabled={!!actionLoading}
                 className="inline-flex items-center gap-2 rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-50 disabled:opacity-50"
               >
@@ -642,6 +685,41 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
         onCancel={() => setShowCancelDialog(false)}
         loading={actionLoading === "status"}
       />
+
+      {showClaimDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900">Claim Security Deposit</h3>
+            <p className="mt-2 text-sm text-gray-600">
+              Claiming captures the deposit hold. This is recorded in the audit log —
+              please enter a reason.
+            </p>
+            <textarea
+              value={claimReason}
+              onChange={(e) => setClaimReason(e.target.value)}
+              rows={3}
+              placeholder="e.g. damage to pinot dome — see photos in notes"
+              className="mt-3 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2d5a5a] focus:outline-none focus:ring-1 focus:ring-[#2d5a5a]"
+              autoFocus
+            />
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                onClick={() => { setShowClaimDialog(false); setClaimReason(""); }}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDepositClaim}
+                disabled={!claimReason.trim()}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+              >
+                Claim Deposit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

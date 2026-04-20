@@ -18,12 +18,32 @@ export async function POST(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
     }
 
+    // A claim is only valid when a hold still exists. If the deposit was
+    // already released or already claimed, trying again either no-ops on
+    // Stripe or fails — either way we should refuse at the application layer.
+    const currentStatus = booking.security_deposit_status;
+    if (currentStatus !== "pending" && currentStatus !== "held") {
+      return NextResponse.json(
+        { error: `Cannot claim deposit in status "${currentStatus ?? "unknown"}"` },
+        { status: 409 }
+      );
+    }
+
     const body = await req.json().catch(() => ({}));
     const claimAmount = body.amount ?? booking.security_deposit_amount;
+    const reason: string | null =
+      typeof body.reason === "string" && body.reason.trim() ? body.reason.trim() : null;
 
     if (claimAmount === null || claimAmount === undefined) {
       return NextResponse.json(
         { error: "No deposit amount available to claim" },
+        { status: 400 }
+      );
+    }
+
+    if (!reason) {
+      return NextResponse.json(
+        { error: "A reason is required when claiming a deposit" },
         { status: 400 }
       );
     }
@@ -73,6 +93,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       claimedAmount: claimAmount,
       totalDeposit: booking.security_deposit_amount?.toString() ?? null,
       guestName: booking.guest_name,
+      reason,
       stripeCapture: !isDevMode && stripe ? "attempted" : "skipped",
     }, ip);
 

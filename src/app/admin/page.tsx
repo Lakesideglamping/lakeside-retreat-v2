@@ -18,8 +18,17 @@ export default async function AdminDashboardPage() {
 
   const monthStart = new Date(Date.UTC(nzYear, nzMonth, 1));
   const monthEnd = new Date(Date.UTC(nzYear, nzMonth + 1, 1));
+  const prevMonthStart = new Date(Date.UTC(nzYear, nzMonth - 1, 1));
 
   const twentyFourHoursAgo = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+
+  // Revenue queries exclude refunded bookings — a refund reverses the
+  // transaction in Stripe, so counting it as revenue overstates earnings.
+  const revenueWhere = {
+    deleted_at: null,
+    status: { in: ["confirmed", "completed"] },
+    payment_status: { not: "refunded" as const },
+  };
 
   const [
     totalBookings,
@@ -33,6 +42,8 @@ export default async function AdminDashboardPage() {
     failedPayments,
     syncFailures,
     recentMessages,
+    propertyRevenueThisMonth,
+    propertyRevenuePrevMonth,
   ] = await Promise.all([
     prisma.bookings.count({
       where: { deleted_at: null },
@@ -45,16 +56,12 @@ export default async function AdminDashboardPage() {
     }),
     prisma.bookings.aggregate({
       _sum: { total_price: true },
-      where: {
-        deleted_at: null,
-        status: { in: ["confirmed", "completed"] },
-      },
+      where: revenueWhere,
     }),
     prisma.bookings.aggregate({
       _sum: { total_price: true },
       where: {
-        deleted_at: null,
-        status: { in: ["confirmed", "completed"] },
+        ...revenueWhere,
         created_at: { gte: monthStart, lt: monthEnd },
       },
     }),
@@ -96,7 +103,40 @@ export default async function AdminDashboardPage() {
     prisma.contact_messages.count({
       where: { created_at: { gte: twentyFourHoursAgo } },
     }),
+    prisma.bookings.groupBy({
+      by: ["accommodation"],
+      _sum: { total_price: true },
+      where: {
+        ...revenueWhere,
+        created_at: { gte: monthStart, lt: monthEnd },
+      },
+    }),
+    prisma.bookings.groupBy({
+      by: ["accommodation"],
+      _sum: { total_price: true },
+      where: {
+        ...revenueWhere,
+        created_at: { gte: prevMonthStart, lt: monthStart },
+      },
+    }),
   ]);
+
+  const PROPERTIES = [
+    { id: "dome-pinot", label: "Dome Pinot" },
+    { id: "dome-rose", label: "Dome Rosé" },
+    { id: "lakeside-cottage", label: "Lakeside Cottage" },
+  ];
+
+  const propertyRevenue = PROPERTIES.map((p) => {
+    const curr = Number(
+      propertyRevenueThisMonth.find((r) => r.accommodation === p.id)?._sum.total_price ?? 0
+    );
+    const prev = Number(
+      propertyRevenuePrevMonth.find((r) => r.accommodation === p.id)?._sum.total_price ?? 0
+    );
+    const delta = prev === 0 ? null : ((curr - prev) / prev) * 100;
+    return { id: p.id, label: p.label, current: curr, previous: prev, deltaPct: delta };
+  });
 
   const stats = {
     totalBookings,
@@ -132,6 +172,7 @@ export default async function AdminDashboardPage() {
       stats={stats}
       recentBookings={serializedBookings}
       notifications={notifications}
+      propertyRevenue={propertyRevenue}
     />
   );
 }

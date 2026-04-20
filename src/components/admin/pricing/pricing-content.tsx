@@ -31,6 +31,23 @@ function formatDate(dateStr: string): string {
   });
 }
 
+// Two active rates with overlapping date ranges produce ambiguous pricing —
+// whichever matches first wins. Surface the conflict so the owner can fix it.
+function findRateOverlaps(rates: SeasonalRate[]): Array<[SeasonalRate, SeasonalRate]> {
+  const active = rates.filter((r) => r.is_active);
+  const overlaps: Array<[SeasonalRate, SeasonalRate]> = [];
+  for (let i = 0; i < active.length; i++) {
+    for (let j = i + 1; j < active.length; j++) {
+      const a = active[i];
+      const b = active[j];
+      if (a.start_date <= b.end_date && b.start_date <= a.end_date) {
+        overlaps.push([a, b]);
+      }
+    }
+  }
+  return overlaps;
+}
+
 export function PricingContent({ initialRates }: PricingContentProps) {
   const [rates, setRates] = useState<SeasonalRate[]>(initialRates);
   const [loading, setLoading] = useState(false);
@@ -219,6 +236,24 @@ export function PricingContent({ initialRates }: PricingContentProps) {
           {success}
         </Alert>
       )}
+
+      {(() => {
+        const overlaps = findRateOverlaps(rates);
+        if (overlaps.length === 0) return null;
+        return (
+          <Alert variant="warning" title="Overlapping active rates">
+            <ul className="list-disc pl-5 space-y-1">
+              {overlaps.map(([a, b]) => (
+                <li key={`${a.id}-${b.id}`}>
+                  <strong>{a.name}</strong> ({formatDate(a.start_date)}–{formatDate(a.end_date)}) overlaps{" "}
+                  <strong>{b.name}</strong> ({formatDate(b.start_date)}–{formatDate(b.end_date)}). Only one
+                  will apply on shared dates.
+                </li>
+              ))}
+            </ul>
+          </Alert>
+        );
+      })()}
 
       <div className="space-y-4">
         <div className="flex justify-end">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { adminGet, adminDelete } from "@/lib/admin-api";
 import { BlockDatesForm } from "./block-dates-form";
 import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
@@ -40,8 +40,26 @@ interface CalendarViewProps {
 }
 
 const DAYS_VISIBLE = 28;
-const DAY_WIDTH = 50;
-const LEFT_COL = 210;
+const DAY_WIDTH_DESKTOP = 50;
+const DAY_WIDTH_MOBILE = 34;
+const LEFT_COL_DESKTOP = 210;
+const LEFT_COL_MOBILE = 110;
+const MOBILE_BREAKPOINT = 768;
+
+function useCalendarSizing() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const check = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return {
+    DAY_WIDTH: isMobile ? DAY_WIDTH_MOBILE : DAY_WIDTH_DESKTOP,
+    LEFT_COL: isMobile ? LEFT_COL_MOBILE : LEFT_COL_DESKTOP,
+  };
+}
 
 const PROPERTIES = [
   { id: "lakeside-cottage", label: "Lakeside Retreat in a Vineyard By Lake Dunstan" },
@@ -81,6 +99,7 @@ export function CalendarView({
   uplistingFetchFailed = false,
 }: CalendarViewProps) {
   const today = todayNZ();
+  const { DAY_WIDTH, LEFT_COL } = useCalendarSizing();
 
   const [startDate, setStartDate] = useState(() => addDays(today, -3));
   const [blockedDates, setBlockedDates] = useState<BlockedDate[]>(initialBlockedDates);
@@ -143,6 +162,26 @@ export function CalendarView({
     }
   };
 
+  // Occupancy % across the visible window (28 days). Counts any night in the
+  // window that is covered by a DB booking or an Uplisting OTA range.
+  const occupancyByProperty = PROPERTIES.map((property) => {
+    const propBookings = bookings.filter((b) => b.accommodation === property.id);
+    const propUplisting = initialUplistingBlocked[property.id] ?? [];
+    const occupied = new Set<string>();
+    for (let i = 0; i < DAYS_VISIBLE; i++) {
+      const night = addDays(startDate, i);
+      const inBooking = propBookings.some(
+        (b) => b.check_in <= night && night < b.check_out
+      );
+      const inUplisting = propUplisting.some(
+        (r) => r.from <= night && night <= r.to
+      );
+      if (inBooking || inUplisting) occupied.add(night);
+    }
+    const pct = Math.round((occupied.size / DAYS_VISIBLE) * 100);
+    return { id: property.id, label: property.label, pct, nights: occupied.size };
+  });
+
   // Format date range label
   const rangeLabel = `${new Date(startDate).toLocaleDateString("en-NZ", { day: "numeric", month: "short", year: "numeric" })} — ${new Date(endDate).toLocaleDateString("en-NZ", { day: "numeric", month: "short", year: "numeric" })}`;
 
@@ -204,6 +243,20 @@ export function CalendarView({
           Today
         </button>
         <span className="text-sm text-gray-500">{rangeLabel}</span>
+        <span className="ml-auto text-xs text-gray-400">NZ time</span>
+      </div>
+
+      {/* Occupancy summary — visible window */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        {occupancyByProperty.map((o) => (
+          <div key={o.id} className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+            <p className="text-xs font-medium text-gray-500 truncate">{o.label}</p>
+            <p className="mt-1 text-2xl font-bold text-gray-900">{o.pct}%</p>
+            <p className="mt-0.5 text-xs text-gray-400">
+              {o.nights} of {DAYS_VISIBLE} nights booked
+            </p>
+          </div>
+        ))}
       </div>
 
       {/* Timeline */}

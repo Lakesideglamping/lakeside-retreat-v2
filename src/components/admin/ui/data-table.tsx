@@ -122,7 +122,38 @@ export function DataTable<T extends Record<string, unknown>>({
 
   return (
     <div className="w-full overflow-hidden rounded-xl border border-gray-200 bg-white">
-      <div className="overflow-x-auto">
+      {/* Mobile: stacked cards. On phone, a horizontally-scrolling table is
+          unusable — each row becomes a label:value card instead. */}
+      <div className="md:hidden divide-y divide-gray-100">
+        {sortedData.map((row, i) => (
+          <div
+            key={`m-${i}`}
+            className={`p-4 ${onRowClick ? "cursor-pointer active:bg-gray-50" : ""}`}
+            onClick={onRowClick ? () => onRowClick(row) : undefined}
+          >
+            <dl className="space-y-2">
+              {columns.map((col) => {
+                const cellValue = getNestedValue(row, col.key);
+                const rendered = col.render
+                  ? col.render(cellValue, row)
+                  : String(cellValue ?? "");
+                return (
+                  <div key={col.key} className="flex items-start justify-between gap-3">
+                    <dt className="shrink-0 text-xs font-medium uppercase tracking-wide text-gray-400">
+                      {col.header}
+                    </dt>
+                    <dd className="text-right text-sm text-gray-800 break-words">
+                      {rendered}
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50">

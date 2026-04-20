@@ -19,6 +19,16 @@ export async function POST(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
     }
 
+    // Only release when a hold is outstanding. Re-releasing or releasing
+    // after a claim is a no-op at best and confusing at worst.
+    const currentStatus = booking.security_deposit_status;
+    if (currentStatus !== "pending" && currentStatus !== "held") {
+      return NextResponse.json(
+        { error: `Cannot release deposit in status "${currentStatus ?? "unknown"}"` },
+        { status: 409 }
+      );
+    }
+
     // Cancel the deposit hold on Stripe. The deposit is a dedicated off-session
     // PaymentIntent (capture_method: manual) — canceling it releases the auth
     // immediately. Non-fatal on error: if it's already released/expired we still
