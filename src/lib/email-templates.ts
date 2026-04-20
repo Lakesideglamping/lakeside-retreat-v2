@@ -248,6 +248,53 @@ export function checkoutThankYouHtml(data: BookingEmailData): string {
   `);
 }
 
+export function abandonedCheckoutHtml(
+  data: BookingEmailData & { reminderNumber?: number }
+): string {
+  const name = formatAccommodationName(data.accommodation);
+  const reminderNumber = data.reminderNumber ?? 1;
+
+  const headline =
+    reminderNumber === 1
+      ? "Still thinking it over?"
+      : reminderNumber === 2
+        ? "Your dates are still available"
+        : "One last chance before your dates open up";
+
+  const opener =
+    reminderNumber === 1
+      ? `You started booking ${name} with us and we saved your dates. Life gets busy &mdash; we wanted to let you know your spot is still here when you're ready.`
+      : reminderNumber === 2
+        ? `Just a gentle note that ${name} is still available for ${formatDateLong(data.check_in)}. Central Otago fills up fast this time of year, so we wanted to make sure you didn't miss out.`
+        : `This is the last reminder we'll send. ${name} is still held for ${formatDateLong(data.check_in)} &mdash; after today we'll release your dates so other guests can book them.`;
+
+  return layout("Your Lakeside Retreat Stay", `
+    <p>Hi ${data.guest_name},</p>
+    <p style="font-size:17px;color:#2d5a5a;margin:16px 0 8px;"><strong>${headline}</strong></p>
+    <p>${opener}</p>
+
+    <div ${detailsBox}>
+      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Your Stay</h3>
+      <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
+      <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateLong(data.check_in)}</p>
+      <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateLong(data.check_out)}</p>
+      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${data.num_guests}</p>` : ""}
+      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${data.total_price} NZD</p>` : ""}
+    </div>
+
+    <div style="text-align:center;margin:28px 0;">
+      <a href="https://lakesideretreat.co.nz/stay" ${ctaButton("#2d5a5a")}>Finish Your Booking</a>
+    </div>
+
+    <div ${alertBox("#2d5a5a")}>
+      <p style="margin:0;">Booking direct saves you 18% versus Airbnb or Booking.com &mdash; and you deal with us personally, not a platform.</p>
+    </div>
+
+    <p>If something held you up or you have a question before booking, just reply to this email. We're a small owner-run retreat and we'd love to help.</p>
+    ${signOff}
+  `);
+}
+
 export function paymentFailureHtml(data: BookingEmailData): string {
   const name = formatAccommodationName(data.accommodation);
   const idSlice = data.booking_id ? data.booking_id.slice(0, 8) : "";

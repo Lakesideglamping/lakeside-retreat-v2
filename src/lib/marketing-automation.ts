@@ -1,5 +1,6 @@
 import { prisma } from "./db";
 import { logger } from "./logger";
+import { sendAbandonedCheckoutReminder } from "./email";
 
 type Booking = {
   id: string;
@@ -141,10 +142,21 @@ export async function processAbandonedCheckout(booking: Booking): Promise<void> 
     const newCount = currentCount + 1;
     const now = new Date().toISOString();
 
-    // Send the reminder email (placeholder — integrate with email service)
     logger.info("Sending abandoned checkout reminder", {
       bookingId: booking.id,
       guestEmail: booking.guest_email,
+      reminderNumber: newCount,
+    });
+
+    await sendAbandonedCheckoutReminder({
+      guest_name: booking.guest_name,
+      guest_email: booking.guest_email,
+      accommodation: booking.accommodation,
+      check_in: booking.check_in.toISOString(),
+      check_out: booking.check_out.toISOString(),
+      num_guests: booking.guests,
+      total_price: booking.total_price ? String(booking.total_price) : undefined,
+      booking_id: booking.id,
       reminderNumber: newCount,
     });
 

@@ -6,6 +6,7 @@ import {
   preArrivalHtml,
   duringStayHtml,
   checkoutThankYouHtml,
+  abandonedCheckoutHtml,
   paymentFailureHtml,
   cancellationHtml,
   paymentNotificationHtml,
@@ -205,6 +206,30 @@ export async function sendCheckoutThankYou(
     html: checkoutThankYouHtml(booking),
   });
   logger.info(`Checkout thank-you email sent to ${booking.guest_email}`);
+}
+
+export async function sendAbandonedCheckoutReminder(
+  booking: TemplateBookingData & { reminderNumber?: number }
+): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("Email not configured - abandoned checkout reminder skipped");
+    return;
+  }
+
+  const name = formatAccommodationName(booking.accommodation);
+  const subject =
+    booking.reminderNumber && booking.reminderNumber > 1
+      ? `Your ${name} stay is still available`
+      : `Your ${name} booking is waiting`;
+
+  await transporter.sendMail({
+    from: fromAddress(),
+    to: booking.guest_email,
+    subject,
+    html: abandonedCheckoutHtml(booking),
+  });
+  logger.info(`Abandoned checkout reminder sent to ${booking.guest_email}`);
 }
 
 export async function sendPaymentFailureNotification(
