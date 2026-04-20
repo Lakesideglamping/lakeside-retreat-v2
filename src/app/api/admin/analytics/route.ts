@@ -49,9 +49,12 @@ export async function GET(request: Request) {
     const startDate = getStartDate(dateRange);
     const endDate = new Date();
 
+    // Exclude refunded bookings from revenue aggregates — a refund reverses
+    // the transaction on Stripe, so it shouldn't count toward earnings.
     const whereClause = {
       deleted_at: null,
       status: { in: ["confirmed", "completed"] },
+      payment_status: { not: "refunded" as const },
       created_at: { gte: startDate, lte: endDate },
     };
 

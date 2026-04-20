@@ -1,6 +1,16 @@
-import { randomUUID } from "crypto";
-
 type LogLevel = "debug" | "info" | "warn" | "error";
+
+// Edge Runtime has no `node:crypto`, so use the Web Crypto API which is
+// available in Node 19+, Edge, and browsers. Fall back to a simple v4-shaped
+// string for environments where it's somehow missing.
+function randomUUID(): string {
+  const c = (globalThis as { crypto?: { randomUUID?: () => string } }).crypto;
+  if (c?.randomUUID) return c.randomUUID();
+  const hex = [...Array(16)].map(() => Math.floor(Math.random() * 256).toString(16).padStart(2, "0"));
+  hex[6] = ((parseInt(hex[6], 16) & 0x0f) | 0x40).toString(16).padStart(2, "0");
+  hex[8] = ((parseInt(hex[8], 16) & 0x3f) | 0x80).toString(16).padStart(2, "0");
+  return `${hex.slice(0, 4).join("")}-${hex.slice(4, 6).join("")}-${hex.slice(6, 8).join("")}-${hex.slice(8, 10).join("")}-${hex.slice(10, 16).join("")}`;
+}
 
 const LEVELS: Record<LogLevel, number> = { debug: 0, info: 1, warn: 2, error: 3 };
 
