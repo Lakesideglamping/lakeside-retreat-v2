@@ -49,13 +49,16 @@ export async function GET(request: Request) {
     const startDate = getStartDate(dateRange);
     const endDate = new Date();
 
-    // Exclude refunded bookings from revenue aggregates — a refund reverses
-    // the transaction on Stripe, so it shouldn't count toward earnings.
+    // Keyed on check_in (stay date), not created_at (booking date). For a
+    // small retreat the useful question is "what's July looking like?", not
+    // "how many bookings landed this week?". Occupancy uses stay dates too,
+    // so this keeps revenue and occupancy on the same time axis.
+    // Refunded bookings are excluded — a refund reverses the Stripe charge.
     const whereClause = {
       deleted_at: null,
       status: { in: ["confirmed", "completed"] },
       payment_status: { not: "refunded" as const },
-      created_at: { gte: startDate, lte: endDate },
+      check_in: { gte: startDate, lte: endDate },
     };
 
     // Summary stats. Occupancy is computed in SQL — previously we pulled
@@ -73,8 +76,8 @@ export async function GET(request: Request) {
         FROM bookings
         WHERE deleted_at IS NULL
           AND status IN ('confirmed', 'completed')
-          AND created_at >= ${startDate}
-          AND created_at <= ${endDate}
+          AND check_in >= ${startDate}
+          AND check_in <= ${endDate}
       `,
     ]);
 
@@ -97,20 +100,21 @@ export async function GET(request: Request) {
       occupancyRate,
     };
 
-    // Revenue time series - query bookings and group in JS for date formatting
+    // Revenue time series - bucket by check_in so the chart shows revenue
+    // aligned with the stays happening in the selected period.
     const timeSeriesBookings = await prisma.bookings.findMany({
       where: whereClause,
       select: {
-        created_at: true,
+        check_in: true,
         total_price: true,
       },
-      orderBy: { created_at: "asc" },
+      orderBy: { check_in: "asc" },
     });
 
     const revenueMap = new Map<string, number>();
     for (const b of timeSeriesBookings) {
-      if (!b.created_at) continue;
-      const key = formatDateKey(new Date(b.created_at), dateRange);
+      if (!b.check_in) continue;
+      const key = formatDateKey(new Date(b.check_in), dateRange);
       revenueMap.set(key, (revenueMap.get(key) ?? 0) + Number(b.total_price ?? 0));
     }
     const revenueTimeSeries = Array.from(revenueMap.entries()).map(
