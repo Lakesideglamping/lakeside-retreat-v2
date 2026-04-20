@@ -11,13 +11,14 @@
  * at runtime — the module caches CSRF_SECRET at import, so we set the
  * env var once before importing.
  */
-import { describe, it, expect, beforeAll, vi } from "vitest";
+// Set the env var before any import of ../csrf is queued. `beforeAll` runs
+// AFTER module-scope code, so setting it there raced the dynamic import
+// below — Node 20 resolved the import microtask before beforeAll, leaving
+// CSRF_SECRET undefined at module init and breaking token signing.
+process.env.CSRF_SECRET = "test-secret-for-csrf-unit-tests";
 
-beforeAll(() => {
-  process.env.CSRF_SECRET = "test-secret-for-csrf-unit-tests";
-});
+import { describe, it, expect, vi } from "vitest";
 
-// Import AFTER env is set so the module-level CSRF_SECRET reads our value.
 const csrfModulePromise = import("../csrf");
 
 describe("csrf", () => {
