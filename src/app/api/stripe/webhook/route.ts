@@ -7,7 +7,11 @@ import {
   calculateLineItems,
 } from "@/lib/stripe";
 import { getById } from "@/lib/accommodations";
-import { sendBookingConfirmation, sendSystemAlert } from "@/lib/email";
+import {
+  sendBookingConfirmation,
+  sendCancellationConfirmation,
+  sendSystemAlert,
+} from "@/lib/email";
 import { syncBooking } from "@/lib/uplisting";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
@@ -449,6 +453,13 @@ export async function POST(request: Request) {
 
         if (paymentIntentId && isFullRefund) {
           try {
+            // Find the booking first so we only email if we're actually moving
+            // it from a non-cancelled state — prevents duplicate emails when
+            // Stripe replays the event.
+            const existing = await prisma.bookings.findFirst({
+              where: { stripe_payment_id: paymentIntentId, deleted_at: null },
+            });
+
             await prisma.bookings.updateMany({
               where: { stripe_payment_id: paymentIntentId },
               data: {
@@ -458,6 +469,24 @@ export async function POST(request: Request) {
               },
             });
             log.info("booking marked refunded (full refund)", { paymentIntentId });
+
+            if (existing && existing.status !== "cancelled" && existing.guest_email) {
+              sendCancellationConfirmation({
+                guest_name: existing.guest_name ?? "Guest",
+                guest_email: existing.guest_email,
+                accommodation: existing.accommodation ?? "",
+                check_in: existing.check_in.toISOString(),
+                check_out: existing.check_out.toISOString(),
+                total_price: existing.total_price ? String(existing.total_price) : undefined,
+                booking_id: existing.id,
+                refundEligible: true,
+              }).catch((err) =>
+                log.error("cancellation email failed", {
+                  bookingId: existing.id,
+                  error: err instanceof Error ? err.message : String(err),
+                })
+              );
+            }
           } catch (dbErr) {
             log.error("refund DB update failed", {
               paymentIntentId,

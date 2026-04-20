@@ -1,6 +1,6 @@
 import { prisma } from "./db";
 import { logger } from "./logger";
-import { sendAbandonedCheckoutReminder } from "./email";
+import { sendAbandonedCheckoutReminder, sendCheckoutThankYou } from "./email";
 
 type Booking = {
   id: string;
@@ -229,10 +229,20 @@ export async function processReviewRequest(booking: Booking): Promise<void> {
       return;
     }
 
-    // Send the review request email (placeholder — integrate with email service)
     logger.info("Sending review request email", {
       bookingId: booking.id,
       guestEmail: booking.guest_email,
+    });
+
+    await sendCheckoutThankYou({
+      guest_name: booking.guest_name,
+      guest_email: booking.guest_email,
+      accommodation: booking.accommodation,
+      check_in: booking.check_in.toISOString(),
+      check_out: booking.check_out.toISOString(),
+      num_guests: booking.guests,
+      total_price: booking.total_price ? String(booking.total_price) : undefined,
+      booking_id: booking.id,
     });
 
     const now = new Date().toISOString();

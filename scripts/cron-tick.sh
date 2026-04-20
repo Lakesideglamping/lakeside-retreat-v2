@@ -5,6 +5,7 @@
 # NZ Standard Time is UTC+12 (NZDT is UTC+13). We pick UTC slots that land at
 # reasonable NZ hours year-round:
 #   21:00 UTC  -> 09:00 NZST / 10:00 NZDT  -> pre-arrival
+#   22:00 UTC  -> 10:00 NZST / 11:00 NZDT  -> review-request (+ thank-you)
 #   00:00 UTC  -> 12:00 NZST / 13:00 NZDT  -> during-stay
 # abandoned-checkout runs every tick (idempotent via reminder_count).
 
@@ -35,6 +36,7 @@ call /api/cron/abandoned-checkout
 
 case "$hour" in
   21) call /api/cron/pre-arrival ;;
+  22) call /api/cron/review-request ;;
   00) call /api/cron/during-stay ;;
 esac
 
