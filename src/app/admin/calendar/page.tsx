@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { CalendarView } from "@/components/admin/calendar/calendar-view";
 import { fetchBlockedDates } from "@/lib/uplisting";
+import { logger } from "@/lib/logger";
 
 const PROPERTIES = ["dome-pinot", "dome-rose", "lakeside-cottage"] as const;
 
@@ -80,7 +81,7 @@ export default async function CalendarPage() {
       try {
         return { ok: true as const, dates: await fetchBlockedDates(p) };
       } catch (err) {
-        console.error(`[calendar] fetchBlockedDates(${p}) failed`, err);
+        logger.error("[calendar] fetchBlockedDates failed", { property: p, error: err instanceof Error ? err.message : String(err) });
         return { ok: false as const, dates: [] as string[] };
       }
     })

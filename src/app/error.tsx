@@ -1,7 +1,13 @@
 "use client";
 
+import type { Metadata } from "next";
 import { useEffect } from "react";
 import Link from "next/link";
+import { logger } from "@/lib/logger";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function RootError({
   error,
@@ -11,7 +17,7 @@ export default function RootError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Root error:", error);
+    logger.error("root page error", { digest: error.digest, message: error.message });
   }, [error]);
 
   return (

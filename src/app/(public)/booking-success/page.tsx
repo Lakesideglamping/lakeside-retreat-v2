@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import Stripe from "stripe";
+import { retrieveCheckoutSession } from "@/lib/stripe";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -43,11 +43,10 @@ export default async function BookingSuccessPage({
   let verified = false;
 
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2026-02-25.clover" });
-    const session = await stripe.checkout.sessions.retrieve(session_id);
+    const session = await retrieveCheckoutSession(session_id);
 
     // Only show confirmed page if payment went through
-    if (session.payment_status === "paid" || session.status === "complete") {
+    if (session && (session.payment_status === "paid" || session.status === "complete")) {
       verified = true;
       const meta = session.metadata ?? {};
       guestName     = meta.guestName      ?? session.customer_details?.name ?? "";

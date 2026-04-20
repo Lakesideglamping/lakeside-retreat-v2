@@ -10,7 +10,12 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Global error:", error);
+    // global-error renders outside the Next.js app shell — only log in dev
+    // to avoid leaking stack traces. Sentry captures this automatically via
+    // its Next.js integration when NEXT_PUBLIC_SENTRY_DSN is configured.
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Global error:", error.digest ?? error.message);
+    }
   }, [error]);
 
   return (

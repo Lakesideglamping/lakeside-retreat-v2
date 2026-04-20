@@ -5,17 +5,11 @@ const nextConfig: NextConfig = {
   // Hide "X-Powered-By: Next.js" — no reason to advertise framework + version.
   poweredByHeader: false,
 
-  // Skip Next's built-in TypeScript check during `next build` only when
-  // SKIP_TYPECHECK=true. Render Starter (460MB) OOMs on the tsc pass;
-  // set that env var on the Render service. Elsewhere (local, CI) the
-  // typecheck runs, so `next build` now fails on type errors in dev,
-  // matching what `npm run typecheck` reports.
-  //
-  // IMPORTANT: When SKIP_TYPECHECK=true, ensure `npm run typecheck` has
-  // been run locally (or in a pre-push hook) before deploying, otherwise
-  // type errors will ship to production silently.
+  // TypeScript errors always fail the build. If the Render Starter plan
+  // OOMs during `next build`, upgrade to Standard — do not re-add
+  // ignoreBuildErrors. Run `npm run typecheck` locally before pushing.
   typescript: {
-    ignoreBuildErrors: process.env.SKIP_TYPECHECK === "true",
+    ignoreBuildErrors: false,
   },
 
   async headers() {

@@ -1,4 +1,7 @@
-const PHONE = "6421368682";
+// Fall back to the known number so the button still works if the env var
+// is not set. Configure NEXT_PUBLIC_WHATSAPP_PHONE in your environment
+// (e.g. "6421368682" — country code, no +, no spaces).
+const PHONE = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "6421368682";
 const MESSAGE = "Hi! I'm interested in booking at Lakeside Retreat and had a quick question.";
 
 export function WhatsAppFloat() {

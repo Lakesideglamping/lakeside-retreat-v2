@@ -33,6 +33,7 @@ hour="$(date -u +%H)"
 echo "Cron tick at UTC hour ${hour}"
 
 call /api/cron/abandoned-checkout
+call /api/cron/retry-uplisting-sync
 
 case "$hour" in
   21) call /api/cron/pre-arrival ;;

@@ -32,7 +32,7 @@ export function StickyBookBar() {
         </p>
         <Link
           href="/book"
-          className="bg-burgundy text-white no-underline px-5 py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity min-h-[44px] flex items-center whitespace-nowrap"
+          className="bg-burgundy text-white no-underline px-5 py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity min-h-[44px] flex items-center whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           Check Availability
         </Link>

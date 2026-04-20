@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema, fetchReviewStats } from "@/lib/structured-data";
 import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
       {
         url: "/images/lakeside-cottage-exterior.jpeg",
         width: 1200,
-        height: 800,
+        height: 630,
         alt: "Lakeside Cottage with direct Lake Dunstan access, Cromwell Central Otago",
       },
     ],
@@ -72,7 +72,8 @@ const guides = [
   { href: "/weekend-getaway-queenstown", title: "Weekend from Queenstown", desc: "45 minutes away — a peaceful lakeside alternative to Queenstown." },
 ];
 
-export default function LakesideCottagePage() {
+export default async function LakesideCottagePage() {
+  const reviewStats = await fetchReviewStats("lakeside-cottage");
   return (
     <>
       <JsonLd data={[
@@ -86,7 +87,8 @@ export default function LakesideCottagePage() {
           bedType: "Queen",
           images: ["lakeside-cottage-exterior.jpeg", "cottagebedroom.jpeg"],
           amenities: ["Direct Lake Access", "Pet Friendly", "Kitchenette", "Sleeps 3", "Free WiFi", "Free Parking", "BBQ"],
-          reviewCount: "191",
+          ratingValue: reviewStats.ratingValue,
+          reviewCount: reviewStats.reviewCount,
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

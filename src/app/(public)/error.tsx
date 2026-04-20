@@ -1,7 +1,13 @@
 "use client";
 
+import type { Metadata } from "next";
 import { useEffect } from "react";
 import Link from "next/link";
+import { logger } from "@/lib/logger";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function PublicError({
   error,
@@ -11,7 +17,7 @@ export default function PublicError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Public page error:", error);
+    logger.error("public page error", { digest: error.digest, message: error.message });
   }, [error]);
 
   return (

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema, fetchReviewStats } from "@/lib/structured-data";
 import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
       {
         url: "/images/Pinotfront.jpeg",
         width: 1200,
-        height: 800,
+        height: 630,
         alt: "Dome Pinot luxury geodesic dome with panoramic Lake Dunstan views",
       },
     ],
@@ -68,7 +68,8 @@ const guides = [
   { href: "/weekend-getaway-queenstown", title: "Weekend from Queenstown", desc: "45 minutes away — a peaceful lakeside alternative to Queenstown." },
 ];
 
-export default function DomePinotPage() {
+export default async function DomePinotPage() {
+  const reviewStats = await fetchReviewStats("dome-pinot");
   return (
     <>
       <JsonLd data={[
@@ -82,7 +83,8 @@ export default function DomePinotPage() {
           bedType: "Super King",
           images: ["Pinotfront.jpeg", "gallerydecksitting.jpeg", "pinotinternal.jpeg"],
           amenities: ["Private Outdoor Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
-          reviewCount: "127",
+          ratingValue: reviewStats.ratingValue,
+          reviewCount: reviewStats.reviewCount,
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

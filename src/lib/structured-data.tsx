@@ -171,6 +171,7 @@ interface PropertySchemaParams {
   bedType: string;
   images: string[];
   amenities: string[];
+  ratingValue: string;
   reviewCount: string;
 }
 
@@ -203,7 +204,7 @@ export function createPropertySchema(params: PropertySchemaParams) {
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: "4.9",
+      ratingValue: params.ratingValue,
       reviewCount: params.reviewCount,
       bestRating: "5",
     },

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema, fetchReviewStats } from "@/lib/structured-data";
 import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
       {
         url: "/images/dome-rose-spa1.jpeg",
         width: 1200,
-        height: 800,
+        height: 630,
         alt: "Dome Rosé private outdoor spa overlooking Central Otago vineyard at dusk",
       },
     ],
@@ -67,13 +67,14 @@ const guides = [
   { href: "/weekend-getaway-queenstown", title: "Weekend from Queenstown", desc: "45 minutes away — a peaceful lakeside alternative to Queenstown." },
 ];
 
-export default function DomeRosePage() {
+export default async function DomeRosePage() {
+  const reviewStats = await fetchReviewStats("dome-rose");
   return (
     <>
       <JsonLd data={[
         createPropertySchema({
           id: "dome-rose",
-          name: "Dome Ros\u00e9",
+          name: "Dome Rosé",
           description: "Romantic 40sqm luxury geodesic dome with vineyard views, private outdoor spa, and intimate wine country setting.",
           price: 615,
           floorSize: 40,
@@ -81,7 +82,8 @@ export default function DomeRosePage() {
           bedType: "Super King",
           images: ["dome-rose-spa1.jpeg", "dome-rose-interior.jpeg"],
           amenities: ["Private Outdoor Spa", "Mountain Views", "Super King Bed", "Vineyard Setting", "Sustainably Powered", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
-          reviewCount: "98",
+          ratingValue: reviewStats.ratingValue,
+          reviewCount: reviewStats.reviewCount,
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },

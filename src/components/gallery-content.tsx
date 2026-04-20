@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const categories = ["all", "domes", "cottage", "views", "amenities"] as const;
 type Category = (typeof categories)[number];
@@ -38,22 +38,57 @@ export function GalleryContent() {
   const [filter, setFilter] = useState<Category>("all");
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
 
+  // Refs for WCAG focus management:
+  //  - closeBtnRef: receives focus when the lightbox opens
+  //  - triggerRef:  holds the element that opened the lightbox so we can
+  //                 restore focus when it closes
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+
+  const openLightbox = useCallback((item: { src: string; alt: string }) => {
+    triggerRef.current = document.activeElement as HTMLElement;
+    setLightbox(item);
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setLightbox(null);
+    // Restore focus to the element that opened the lightbox (WCAG 2.1 §3.2.2)
+    triggerRef.current?.focus();
+    triggerRef.current = null;
+  }, []);
+
   const filtered = filter === "all" ? galleryItems : galleryItems.filter((i) => i.category === filter);
 
-  // Close lightbox on Escape and lock body scroll while open.
+  // When the lightbox opens: move focus to the close button and lock scroll.
+  // When it closes: scroll is restored; focus is restored by closeLightbox().
   useEffect(() => {
     if (!lightbox) return;
+
+    // Defer focus until the close button is in the DOM.
+    const frame = requestAnimationFrame(() => closeBtnRef.current?.focus());
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "Escape") {
+        closeLightbox();
+      }
+      // Trap Tab within the modal. Since the only interactive element is the
+      // close button, any Tab press (forward or backward) stays on it.
+      if (e.key === "Tab") {
+        e.preventDefault();
+        closeBtnRef.current?.focus();
+      }
     };
+
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
     return () => {
+      cancelAnimationFrame(frame);
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [lightbox]);
+  }, [lightbox, closeLightbox]);
 
   return (
     <>
@@ -87,7 +122,7 @@ export function GalleryContent() {
           <button
             key={item.src}
             type="button"
-            onClick={() => setLightbox({ src: item.src, alt: item.alt })}
+            onClick={() => openLightbox({ src: item.src, alt: item.alt })}
             aria-label={`View photo: ${item.title}`}
             className="group relative rounded-xl overflow-hidden aspect-[4/3] cursor-pointer border-0 p-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-burgundy"
           >
@@ -113,11 +148,12 @@ export function GalleryContent() {
           role="dialog"
           aria-modal="true"
           aria-label="Photo viewer"
-          onClick={() => setLightbox(null)}
+          onClick={closeLightbox}
         >
           <button
+            ref={closeBtnRef}
             type="button"
-            onClick={() => setLightbox(null)}
+            onClick={closeLightbox}
             className="absolute top-5 right-8 text-white text-4xl cursor-pointer bg-transparent border-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             aria-label="Close photo viewer"
           >
