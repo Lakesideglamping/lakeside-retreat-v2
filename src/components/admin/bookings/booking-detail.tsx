@@ -48,6 +48,30 @@ interface AuditLogEntry {
   created_at: string | null;
 }
 
+interface EmailSendEntry {
+  id: number;
+  template: string;
+  recipient: string;
+  subject: string;
+  status: string;
+  error: string | null;
+  sent_at: string;
+}
+
+const emailTemplateLabels: Record<string, string> = {
+  booking_confirmation_guest: "Booking confirmation (guest)",
+  booking_confirmation_host: "Booking notification (host)",
+  pre_arrival: "Pre-arrival instructions",
+  during_stay: "Mid-stay check-in",
+  checkout_thank_you: "Checkout thank-you",
+  abandoned_checkout: "Abandoned checkout reminder",
+  payment_failure: "Payment failure notice",
+  cancellation: "Cancellation confirmation",
+  payment_notification: "Payment notification (host)",
+  contact_enquiry: "Contact form enquiry",
+  system_alert: "System alert",
+};
+
 const statusVariant: Record<string, "success" | "warning" | "error" | "info" | "default"> = {
   confirmed: "success",
   completed: "success",
@@ -147,6 +171,11 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
   const [auditLoading, setAuditLoading] = useState(false);
   const [auditOpen, setAuditOpen] = useState(false);
 
+  // Per-booking email send log
+  const [emails, setEmails] = useState<EmailSendEntry[]>([]);
+  const [emailsLoading, setEmailsLoading] = useState(false);
+  const [emailsOpen, setEmailsOpen] = useState(false);
+
   const fetchBooking = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -196,6 +225,26 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
       loadAuditLogs();
     }
   }, [auditOpen, auditLogs.length, auditLoading, loadAuditLogs]);
+
+  const loadEmails = useCallback(async () => {
+    setEmailsLoading(true);
+    try {
+      const res = await adminGet<{ emails: EmailSendEntry[] }>(
+        `/api/admin/bookings/${encodeURIComponent(bookingId)}/emails`
+      );
+      setEmails(res.emails ?? []);
+    } catch {
+      setEmails([]);
+    } finally {
+      setEmailsLoading(false);
+    }
+  }, [bookingId]);
+
+  useEffect(() => {
+    if (emailsOpen && emails.length === 0 && !emailsLoading) {
+      loadEmails();
+    }
+  }, [emailsOpen, emails.length, emailsLoading, loadEmails]);
 
   const updateStatus = async (newStatus: string) => {
     setActionLoading("status");
@@ -705,6 +754,54 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
                     {entry.details != null && (
                       <pre className="mt-1 max-h-40 overflow-auto rounded bg-gray-50 p-2 text-xs text-gray-700">
                         {JSON.stringify(entry.details, null, 2)}
+                      </pre>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Communications — emails sent about this booking */}
+      <div className="rounded-xl border border-gray-200 bg-white p-6">
+        <button
+          onClick={() => setEmailsOpen((v) => !v)}
+          className="flex w-full items-center justify-between text-left"
+        >
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Communications</h2>
+            <p className="text-sm text-gray-600">Every email sent for this booking.</p>
+          </div>
+          <span className="text-sm text-gray-500">{emailsOpen ? "Hide" : "Show"}</span>
+        </button>
+        {emailsOpen && (
+          <div className="mt-4">
+            {emailsLoading && <LoadingSpinner size="sm" />}
+            {!emailsLoading && emails.length === 0 && (
+              <p className="text-sm text-gray-500">No emails have been sent for this booking yet.</p>
+            )}
+            {!emailsLoading && emails.length > 0 && (
+              <ul className="divide-y divide-gray-100">
+                {emails.map((entry) => (
+                  <li key={entry.id} className="py-3 text-sm">
+                    <div className="flex flex-wrap items-center gap-x-2">
+                      <span className="font-medium text-gray-900">
+                        {emailTemplateLabels[entry.template] ?? entry.template}
+                      </span>
+                      <Badge variant={entry.status === "sent" ? "success" : "error"}>
+                        {entry.status}
+                      </Badge>
+                      <span className="text-gray-500">→ {entry.recipient}</span>
+                      <span className="ml-auto text-xs text-gray-500">
+                        {formatDateTime(entry.sent_at)}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-gray-600">{entry.subject}</p>
+                    {entry.error && (
+                      <pre className="mt-1 max-h-40 overflow-auto rounded bg-red-50 p-2 text-xs text-red-700">
+                        {entry.error}
                       </pre>
                     )}
                   </li>

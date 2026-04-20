@@ -164,16 +164,16 @@ export default async function AdminDashboardPage() {
     prisma.$queryRaw<Array<{ nights: bigint | null }>>`
       SELECT COALESCE(SUM(
         GREATEST(
-          LEAST(check_out, ${sevenDaysOut}::timestamp) -
-          GREATEST(check_in, ${today}::timestamp),
+          LEAST(check_out, ${sevenDaysOut}::date) -
+          GREATEST(check_in, ${today}::date),
           0
         )
       ), 0)::bigint AS nights
       FROM bookings
       WHERE deleted_at IS NULL
         AND status IN ('confirmed', 'completed')
-        AND check_in < ${sevenDaysOut}
-        AND check_out > ${today}
+        AND check_in < ${sevenDaysOut}::date
+        AND check_out > ${today}::date
     `,
   ]);
 

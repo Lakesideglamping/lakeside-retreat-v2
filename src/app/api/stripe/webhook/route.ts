@@ -426,6 +426,7 @@ export async function POST(request: Request) {
             checkOut: metadata.checkOut || "",
             guests: Number(metadata.guests) || 1,
             totalAmount: (session.amount_total || 0) / 100,
+            bookingId,
           }).catch((err) =>
             log.error("booking confirmation email failed", {
               bookingId,

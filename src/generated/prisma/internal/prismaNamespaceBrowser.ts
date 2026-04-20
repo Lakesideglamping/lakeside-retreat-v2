@@ -55,6 +55,7 @@ export const ModelName = {
   audit_logs: 'audit_logs',
   bookings: 'bookings',
   contact_messages: 'contact_messages',
+  email_sends: 'email_sends',
   failed_webhook_events: 'failed_webhook_events',
   gallery_images: 'gallery_images',
   processed_webhook_events: 'processed_webhook_events',
@@ -157,6 +158,20 @@ export const Contact_messagesScalarFieldEnum = {
 } as const
 
 export type Contact_messagesScalarFieldEnum = (typeof Contact_messagesScalarFieldEnum)[keyof typeof Contact_messagesScalarFieldEnum]
+
+
+export const Email_sendsScalarFieldEnum = {
+  id: 'id',
+  booking_id: 'booking_id',
+  template: 'template',
+  recipient: 'recipient',
+  subject: 'subject',
+  status: 'status',
+  error: 'error',
+  sent_at: 'sent_at'
+} as const
+
+export type Email_sendsScalarFieldEnum = (typeof Email_sendsScalarFieldEnum)[keyof typeof Email_sendsScalarFieldEnum]
 
 
 export const Failed_webhook_eventsScalarFieldEnum = {

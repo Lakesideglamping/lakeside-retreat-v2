@@ -388,6 +388,7 @@ export const ModelName = {
   audit_logs: 'audit_logs',
   bookings: 'bookings',
   contact_messages: 'contact_messages',
+  email_sends: 'email_sends',
   failed_webhook_events: 'failed_webhook_events',
   gallery_images: 'gallery_images',
   processed_webhook_events: 'processed_webhook_events',
@@ -417,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "abandoned_checkout_reminders" | "audit_logs" | "bookings" | "contact_messages" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "seasonal_rates" | "social_content_drafts" | "system_settings" | "token_blacklist" | "rate_limits" | "login_attempts" | "blocked_dates" | "promo_codes"
+    modelProps: "abandoned_checkout_reminders" | "audit_logs" | "bookings" | "contact_messages" | "email_sends" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "seasonal_rates" | "social_content_drafts" | "system_settings" | "token_blacklist" | "rate_limits" | "login_attempts" | "blocked_dates" | "promo_codes"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -714,6 +715,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.contact_messagesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Contact_messagesCountAggregateOutputType> | number
+        }
+      }
+    }
+    email_sends: {
+      payload: Prisma.$email_sendsPayload<ExtArgs>
+      fields: Prisma.email_sendsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.email_sendsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.email_sendsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload>
+        }
+        findFirst: {
+          args: Prisma.email_sendsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.email_sendsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload>
+        }
+        findMany: {
+          args: Prisma.email_sendsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload>[]
+        }
+        create: {
+          args: Prisma.email_sendsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload>
+        }
+        createMany: {
+          args: Prisma.email_sendsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.email_sendsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload>[]
+        }
+        delete: {
+          args: Prisma.email_sendsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload>
+        }
+        update: {
+          args: Prisma.email_sendsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload>
+        }
+        deleteMany: {
+          args: Prisma.email_sendsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.email_sendsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.email_sendsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload>[]
+        }
+        upsert: {
+          args: Prisma.email_sendsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$email_sendsPayload>
+        }
+        aggregate: {
+          args: Prisma.Email_sendsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmail_sends>
+        }
+        groupBy: {
+          args: Prisma.email_sendsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Email_sendsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.email_sendsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Email_sendsCountAggregateOutputType> | number
         }
       }
     }
@@ -1864,6 +1939,20 @@ export const Contact_messagesScalarFieldEnum = {
 export type Contact_messagesScalarFieldEnum = (typeof Contact_messagesScalarFieldEnum)[keyof typeof Contact_messagesScalarFieldEnum]
 
 
+export const Email_sendsScalarFieldEnum = {
+  id: 'id',
+  booking_id: 'booking_id',
+  template: 'template',
+  recipient: 'recipient',
+  subject: 'subject',
+  status: 'status',
+  error: 'error',
+  sent_at: 'sent_at'
+} as const
+
+export type Email_sendsScalarFieldEnum = (typeof Email_sendsScalarFieldEnum)[keyof typeof Email_sendsScalarFieldEnum]
+
+
 export const Failed_webhook_eventsScalarFieldEnum = {
   id: 'id',
   event_id: 'event_id',
@@ -2261,6 +2350,7 @@ export type GlobalOmitConfig = {
   audit_logs?: Prisma.audit_logsOmit
   bookings?: Prisma.bookingsOmit
   contact_messages?: Prisma.contact_messagesOmit
+  email_sends?: Prisma.email_sendsOmit
   failed_webhook_events?: Prisma.failed_webhook_eventsOmit
   gallery_images?: Prisma.gallery_imagesOmit
   processed_webhook_events?: Prisma.processed_webhook_eventsOmit

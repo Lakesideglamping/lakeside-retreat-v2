@@ -38,6 +38,11 @@ export type bookings = Prisma.bookingsModel
  */
 export type contact_messages = Prisma.contact_messagesModel
 /**
+ * Model email_sends
+ * 
+ */
+export type email_sends = Prisma.email_sendsModel
+/**
  * Model failed_webhook_events
  * 
  */
