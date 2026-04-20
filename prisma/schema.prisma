@@ -78,6 +78,12 @@ model bookings {
   // Covers release-deposits cron: WHERE security_deposit_status = 'held'
   // AND deposit_release_due <= now(). Without this the cron full-scans.
   @@index([security_deposit_status, deposit_release_due], map: "idx_bookings_deposit_release")
+  // Partial index for soft-delete queries — every findMany filters deleted_at IS NULL.
+  @@index([deleted_at], map: "idx_bookings_deleted_at", where: raw("deleted_at IS NOT NULL"))
+  // Prevent duplicate website bookings for the same accommodation + dates.
+  // OTA bookings (airbnb, booking.com, etc.) are exempt. Cancelled bookings
+  // (deleted_at IS NOT NULL) are also exempt so guests can rebook after cancellation.
+  @@index([accommodation, check_in, check_out], map: "idx_bookings_unique_website_dates", where: raw("booking_source = 'website' AND deleted_at IS NULL"))
 }
 
 model contact_messages {
