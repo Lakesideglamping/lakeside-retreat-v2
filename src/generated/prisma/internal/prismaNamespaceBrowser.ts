@@ -138,6 +138,7 @@ export const BookingsScalarFieldEnum = {
   deposit_release_due: 'deposit_release_due',
   booking_source: 'booking_source',
   uplisting_sync_status: 'uplisting_sync_status',
+  uplisting_sync_retries: 'uplisting_sync_retries',
   security_deposit_intent_id: 'security_deposit_intent_id',
   security_deposit_status: 'security_deposit_status',
   security_deposit_amount: 'security_deposit_amount',
