@@ -243,7 +243,7 @@ export async function POST(request: Request) {
               sendSystemAlert(
                 "WEBHOOK_DB_FAILURE",
                 `Booking DB save failed for Stripe event ${event.id}`,
-                `Guest: ${metadata.guestName} (${metadata.guestEmail})\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nSession: ${session.id}\nError: ${errMsg}`
+                `Guest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\nBooking ID: ${bookingId}\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nSession: ${session.id}\nError: ${errMsg}`
               ).catch(() => {});
             })
             .catch((e) =>
@@ -368,7 +368,7 @@ export async function POST(request: Request) {
             sendSystemAlert(
               "DEPOSIT_HOLD_FAILURE",
               `Security deposit hold failed for booking ${bookingId}`,
-              `Guest: ${metadata.guestName} (${metadata.guestEmail})\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nAccommodation already paid; deposit NOT held — contact guest to arrange manually.\nError: ${errMsg}`
+              `Guest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\nBooking ID: ${bookingId}\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nAccommodation already paid; deposit NOT held — look up booking for full contact details.\nError: ${errMsg}`
             ).catch(() => {});
           }
         }
@@ -411,7 +411,7 @@ export async function POST(request: Request) {
               sendSystemAlert(
                 "UPLISTING_SYNC_FAILURE",
                 `Uplisting sync failed for booking ${bookingId}`,
-                `Guest: ${metadata.guestName} (${metadata.guestEmail})\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nDouble-booking risk — block dates manually until this is resolved.\nError: ${errMsg}`
+                `Guest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\nBooking ID: ${bookingId}\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nDouble-booking risk — block dates manually until this is resolved.\nError: ${errMsg}`
               ).catch(() => {});
             });
 

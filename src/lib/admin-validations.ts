@@ -23,9 +23,8 @@ export const bookingCreateSchema = z
     check_out: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     guests: z.number().int().min(1).max(10),
     total_price: z.number().min(0).optional(),
-    status: z.string().optional(),
+    status: z.enum(["pending", "confirmed", "cancelled", "completed"]).optional(),
     notes: z.string().max(1000).optional(),
-    booking_source: z.string().optional(),
   })
   .refine((d) => new Date(d.check_out) > new Date(d.check_in), {
     message: "Check-out must be after check-in",

@@ -14,6 +14,20 @@ export interface BookingEmailData {
  * Helpers
  * ------------------------------------------------------------------------- */
 
+// Every outbound template interpolates guest-controlled strings. Without
+// escaping, a name like `"><a href="phishing"> breaks out of surrounding
+// markup — not classic XSS (mail clients strip <script>) but trivially
+// exploitable for phishing-inside-your-brand and admin-inbox tampering.
+export function escapeHtml(value: unknown): string {
+  if (value === null || value === undefined) return "";
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export function formatAccommodationName(slug: string): string {
   const names: Record<string, string> = {
     "dome-pinot": "Dome Pinot",
@@ -47,12 +61,13 @@ function formatDateLong(dateStr: string): string {
  * ------------------------------------------------------------------------- */
 
 function layout(title: string, body: string): string {
+  const safeTitle = escapeHtml(title);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${title}</title>
+<title>${safeTitle}</title>
 </head>
 <body style="margin:0;padding:0;background-color:#faf8f5;font-family:Georgia,serif;color:#302e41;line-height:1.6;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#faf8f5;">
@@ -61,7 +76,7 @@ function layout(title: string, body: string): string {
 
 <!-- Header -->
 <tr><td style="background-color:#2d5a5a;padding:28px 32px;text-align:center;border-radius:8px 8px 0 0;">
-  <h1 style="margin:0;font-size:24px;color:#ffffff;font-family:Georgia,serif;">${title}</h1>
+  <h1 style="margin:0;font-size:24px;color:#ffffff;font-family:Georgia,serif;">${safeTitle}</h1>
   <p style="margin:6px 0 0;font-size:14px;color:#c8dede;font-family:Georgia,serif;">Lakeside Retreat</p>
 </td></tr>
 
@@ -97,13 +112,18 @@ const signOff = `<p style="margin-top:28px;">Warm regards,<br/>Stephen &amp; San
  * ------------------------------------------------------------------------- */
 
 export function bookingConfirmationHtml(data: BookingEmailData): string {
-  const name = formatAccommodationName(data.accommodation);
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
+  const numGuests = escapeHtml(data.num_guests);
+  const totalPrice = escapeHtml(data.total_price);
+  const bookingId = escapeHtml(data.booking_id);
+
   const domeNotice = `<div ${alertBox("#ffc107")}>
         <p style="margin:0;"><strong>Please note:</strong> ${name} is strictly 18+ adults only. Guests arriving with anyone under 18 will not be accommodated and no refund will be given.</p>
       </div>`;
 
   return layout("Booking Confirmed", `
-    <p>Hi ${data.guest_name},</p>
+    <p>Hi ${guestName},</p>
     <p>Thank you for booking with us! Your reservation is confirmed.</p>
 
     <div ${detailsBox}>
@@ -111,9 +131,9 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
       <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
       <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateNZ(data.check_in)} (3:00 PM)</p>
       <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateNZ(data.check_out)} (10:00 AM)</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${data.num_guests}</p>` : ""}
-      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${data.total_price} NZD</p>` : ""}
-      ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${data.booking_id}</p>` : ""}
+      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
+      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${totalPrice} NZD</p>` : ""}
+      ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${bookingId}</p>` : ""}
     </div>
 
     <p>A <strong>$300 security bond</strong> has been pre-authorised on your card. This is not a charge &mdash; it is automatically released after your stay provided no damage has occurred.</p>
@@ -133,7 +153,9 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
 }
 
 export function preArrivalHtml(data: BookingEmailData): string {
-  const name = formatAccommodationName(data.accommodation);
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
+  const numGuests = escapeHtml(data.num_guests);
   const isDome = data.accommodation === "dome-pinot" || data.accommodation === "dome-rose";
   const isCottage = data.accommodation === "lakeside-cottage";
 
@@ -152,7 +174,7 @@ export function preArrivalHtml(data: BookingEmailData): string {
   }
 
   return layout("Your Stay Starts Tomorrow!", `
-    <p>Hi ${data.guest_name},</p>
+    <p>Hi ${guestName},</p>
     <p>We're excited to welcome you tomorrow! Here's everything you need for a smooth arrival.</p>
 
     <div ${detailsBox}>
@@ -161,7 +183,7 @@ export function preArrivalHtml(data: BookingEmailData): string {
       <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateLong(data.check_in)} from 3:00 PM</p>
       <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateLong(data.check_out)} by 10:00 AM</p>
       <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${data.num_guests}</p>` : ""}
+      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
     </div>
 
     <div ${detailsBox}>
@@ -194,10 +216,11 @@ export function preArrivalHtml(data: BookingEmailData): string {
 }
 
 export function duringStayHtml(data: BookingEmailData): string {
-  const name = formatAccommodationName(data.accommodation);
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
 
   return layout("Welcome to Lakeside Retreat!", `
-    <p>Hi ${data.guest_name},</p>
+    <p>Hi ${guestName},</p>
     <p>We hope you've settled in and are enjoying your stay at ${name}! We just wanted to check in and make sure everything is perfect.</p>
 
     <div ${detailsBox}>
@@ -219,12 +242,13 @@ export function duringStayHtml(data: BookingEmailData): string {
 }
 
 export function checkoutThankYouHtml(data: BookingEmailData): string {
-  const name = formatAccommodationName(data.accommodation);
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
   const googleReviewUrl = "https://g.page/r/lakeside-retreat-cromwell/review";
   const airbnbUrl = "https://www.airbnb.co.nz/users/show/lakesideretreat";
 
   return layout("Thank You for Your Stay!", `
-    <p>Hi ${data.guest_name},</p>
+    <p>Hi ${guestName},</p>
     <p>Thank you so much for staying with us at ${name}! We truly hope you had a wonderful time and that Lakeside Retreat felt like a home away from home.</p>
 
     <div ${detailsBox}>
@@ -251,7 +275,10 @@ export function checkoutThankYouHtml(data: BookingEmailData): string {
 export function abandonedCheckoutHtml(
   data: BookingEmailData & { reminderNumber?: number }
 ): string {
-  const name = formatAccommodationName(data.accommodation);
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
+  const numGuests = escapeHtml(data.num_guests);
+  const totalPrice = escapeHtml(data.total_price);
   const reminderNumber = data.reminderNumber ?? 1;
 
   const headline =
@@ -269,7 +296,7 @@ export function abandonedCheckoutHtml(
         : `This is the last reminder we'll send. ${name} is still held for ${formatDateLong(data.check_in)} &mdash; after today we'll release your dates so other guests can book them.`;
 
   return layout("Your Lakeside Retreat Stay", `
-    <p>Hi ${data.guest_name},</p>
+    <p>Hi ${guestName},</p>
     <p style="font-size:17px;color:#2d5a5a;margin:16px 0 8px;"><strong>${headline}</strong></p>
     <p>${opener}</p>
 
@@ -278,8 +305,8 @@ export function abandonedCheckoutHtml(
       <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
       <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateLong(data.check_in)}</p>
       <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateLong(data.check_out)}</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${data.num_guests}</p>` : ""}
-      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${data.total_price} NZD</p>` : ""}
+      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
+      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${totalPrice} NZD</p>` : ""}
     </div>
 
     <div style="text-align:center;margin:28px 0;">
@@ -296,11 +323,14 @@ export function abandonedCheckoutHtml(
 }
 
 export function paymentFailureHtml(data: BookingEmailData): string {
-  const name = formatAccommodationName(data.accommodation);
-  const idSlice = data.booking_id ? data.booking_id.slice(0, 8) : "";
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
+  const numGuests = escapeHtml(data.num_guests);
+  const totalPrice = escapeHtml(data.total_price);
+  const idSlice = escapeHtml(data.booking_id ? data.booking_id.slice(0, 8) : "");
 
   return layout("Payment Issue", `
-    <p>Hi ${data.guest_name},</p>
+    <p>Hi ${guestName},</p>
     <p>We noticed that the payment for your booking didn't go through. Don't worry &mdash; these things happen, and your booking details are still saved.</p>
 
     <div ${alertBox("#ffc107")}>
@@ -313,8 +343,8 @@ export function paymentFailureHtml(data: BookingEmailData): string {
       <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
       <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateNZ(data.check_in)}</p>
       <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateNZ(data.check_out)}</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${data.num_guests}</p>` : ""}
-      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${data.total_price} NZD</p>` : ""}
+      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
+      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${totalPrice} NZD</p>` : ""}
       ${idSlice ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${idSlice}</p>` : ""}
     </div>
 
@@ -332,7 +362,11 @@ export function paymentFailureHtml(data: BookingEmailData): string {
 export function cancellationHtml(
   data: BookingEmailData & { refundEligible: boolean }
 ): string {
-  const name = formatAccommodationName(data.accommodation);
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
+  const numGuests = escapeHtml(data.num_guests);
+  const totalPrice = escapeHtml(data.total_price);
+  const bookingId = escapeHtml(data.booking_id);
 
   const refundBlock = data.refundEligible
     ? `<div style="padding:14px 18px;border-radius:6px;margin:20px 0;border-left:4px solid #28a745;background-color:#f0fff0;">
@@ -345,7 +379,7 @@ export function cancellationHtml(
       </div>`;
 
   return layout("Booking Cancelled", `
-    <p>Hi ${data.guest_name},</p>
+    <p>Hi ${guestName},</p>
     <p>This email confirms that your booking has been cancelled. We're sorry to see you go!</p>
 
     <div ${detailsBox}>
@@ -353,9 +387,9 @@ export function cancellationHtml(
       <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
       <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateNZ(data.check_in)}</p>
       <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateNZ(data.check_out)}</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${data.num_guests}</p>` : ""}
-      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${data.total_price} NZD</p>` : ""}
-      ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${data.booking_id}</p>` : ""}
+      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
+      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${totalPrice} NZD</p>` : ""}
+      ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${bookingId}</p>` : ""}
     </div>
 
     <div ${alertBox("#17a2b8")}>
@@ -379,22 +413,27 @@ export function cancellationHtml(
 export function paymentNotificationHtml(
   data: BookingEmailData & { paymentAmount: string; paymentMethod: string }
 ): string {
-  const name = formatAccommodationName(data.accommodation);
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
+  const guestEmail = escapeHtml(data.guest_email);
+  const paymentAmount = escapeHtml(data.paymentAmount);
+  const paymentMethod = escapeHtml(data.paymentMethod);
+  const bookingId = escapeHtml(data.booking_id);
 
   return layout("Payment Confirmed", `
     <div style="background-color:#f0fff0;padding:16px 20px;border-radius:6px;margin:0 0 20px;">
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Payment Details</h3>
-      <p style="margin:4px 0;"><strong>Amount:</strong> $${data.paymentAmount} NZD</p>
-      <p style="margin:4px 0;"><strong>Payment Method:</strong> ${data.paymentMethod}</p>
+      <p style="margin:4px 0;"><strong>Amount:</strong> $${paymentAmount} NZD</p>
+      <p style="margin:4px 0;"><strong>Payment Method:</strong> ${paymentMethod}</p>
       <p style="margin:4px 0;"><strong>Status:</strong> Completed</p>
     </div>
 
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Booking Details</h3>
-      <p style="margin:4px 0;"><strong>Guest:</strong> ${data.guest_name} (${data.guest_email})</p>
+      <p style="margin:4px 0;"><strong>Guest:</strong> ${guestName} (${guestEmail})</p>
       <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
       <p style="margin:4px 0;"><strong>Dates:</strong> ${formatDateNZ(data.check_in)} to ${formatDateNZ(data.check_out)}</p>
-      ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${data.booking_id}</p>` : ""}
+      ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${bookingId}</p>` : ""}
     </div>
 
     <p>Booking is now fully confirmed and paid.</p>
@@ -421,16 +460,19 @@ export function systemAlertHtml(data: {
 
   const borderColor = colorMap[data.alertType] ?? "#6c757d";
   const bgColor = bgMap[data.alertType] ?? "#f8f6f3";
+  const alertTypeUpper = escapeHtml(data.alertType.toUpperCase());
+  const message = escapeHtml(data.message);
+  const details = escapeHtml(data.details);
 
   return layout(`System Alert - ${data.alertType.toUpperCase()}`, `
     <div style="padding:16px 20px;border-radius:6px;margin:0 0 20px;border-left:4px solid ${borderColor};background-color:${bgColor};">
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Alert Details</h3>
-      <p style="margin:4px 0;"><strong>Type:</strong> ${data.alertType.toUpperCase()}</p>
-      <p style="margin:4px 0;"><strong>Time:</strong> ${new Date().toLocaleString("en-NZ")}</p>
-      <p style="margin:4px 0;"><strong>Message:</strong> ${data.message}</p>
+      <p style="margin:4px 0;"><strong>Type:</strong> ${alertTypeUpper}</p>
+      <p style="margin:4px 0;"><strong>Time:</strong> ${escapeHtml(new Date().toLocaleString("en-NZ"))}</p>
+      <p style="margin:4px 0;"><strong>Message:</strong> ${message}</p>
     </div>
 
-    ${data.details ? `<div ${detailsBox}><h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Additional Details</h3><p style="margin:4px 0;">${data.details}</p></div>` : ""}
+    ${data.details ? `<div ${detailsBox}><h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Additional Details</h3><p style="margin:4px 0;white-space:pre-wrap;">${details}</p></div>` : ""}
 
     <p style="color:#8a8694;font-size:13px;">This is an automated alert from the Lakeside Retreat monitoring system.</p>
   `);
@@ -441,13 +483,16 @@ export function contactConfirmationHtml(data: {
   email: string;
   message: string;
 }): string {
+  const guestName = escapeHtml(data.name);
+  const message = escapeHtml(data.message);
+
   return layout("We've Received Your Message", `
-    <p>Hi ${data.name},</p>
+    <p>Hi ${guestName},</p>
     <p>Thank you for getting in touch! We've received your message and will get back to you as soon as possible &mdash; usually within 24 hours.</p>
 
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Your Message</h3>
-      <p style="margin:4px 0;white-space:pre-wrap;">${data.message}</p>
+      <p style="margin:4px 0;white-space:pre-wrap;">${message}</p>
     </div>
 
     <p>If you need an urgent response, you can reach us directly:</p>

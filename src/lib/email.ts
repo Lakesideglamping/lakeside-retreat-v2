@@ -3,6 +3,7 @@ import { logger } from "./logger";
 import { prisma } from "./db";
 import {
   type BookingEmailData as TemplateBookingData,
+  escapeHtml,
   formatAccommodationName,
   preArrivalHtml,
   duringStayHtml,
@@ -108,7 +109,13 @@ export async function sendContactEmail(data: ContactEmailData): Promise<void> {
     return;
   }
 
-  const subjectLine = `Website Enquiry: ${subjectLabels[data.subject] || data.subject} from ${data.name}`;
+  const subjectLabel = subjectLabels[data.subject] || data.subject;
+  const subjectLine = `Website Enquiry: ${subjectLabel} from ${data.name}`;
+
+  const safeName = escapeHtml(data.name);
+  const safeEmail = escapeHtml(data.email);
+  const safeSubjectLabel = escapeHtml(subjectLabel);
+  const safeMessage = escapeHtml(data.message);
 
   await sendAndLog(transporter, {
     from: `"Lakeside Retreat" <${process.env.EMAIL_USER}>`,
@@ -119,12 +126,12 @@ export async function sendContactEmail(data: ContactEmailData): Promise<void> {
       <div style="font-family: Arial, sans-serif; max-width: 600px;">
         <h2 style="color: #2d5a5a;">New Contact Form Submission</h2>
         <table style="width: 100%; border-collapse: collapse;">
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Name</td><td style="padding: 8px;">${data.name}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Email</td><td style="padding: 8px;"><a href="mailto:${data.email}">${data.email}</a></td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Subject</td><td style="padding: 8px;">${subjectLabels[data.subject] || data.subject}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Name</td><td style="padding: 8px;">${safeName}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Email</td><td style="padding: 8px;"><a href="mailto:${safeEmail}">${safeEmail}</a></td></tr>
+          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Subject</td><td style="padding: 8px;">${safeSubjectLabel}</td></tr>
         </table>
         <div style="margin-top: 16px; padding: 16px; background: #FAF4F5; border-radius: 8px;">
-          <p style="margin: 0; white-space: pre-wrap;">${data.message}</p>
+          <p style="margin: 0; white-space: pre-wrap;">${safeMessage}</p>
         </div>
         <p style="margin-top: 16px; color: #64748b; font-size: 12px;">
           Sent from the Lakeside Retreat website contact form.
@@ -154,6 +161,14 @@ export async function sendBookingConfirmation(
     return;
   }
 
+  const safeGuestName = escapeHtml(data.guestName);
+  const safeGuestEmail = escapeHtml(data.guestEmail);
+  const safeAccommodation = escapeHtml(data.accommodation);
+  const safeCheckIn = escapeHtml(data.checkIn);
+  const safeCheckOut = escapeHtml(data.checkOut);
+  const safeGuests = escapeHtml(data.guests);
+  const safeTotal = escapeHtml(data.totalAmount.toFixed(2));
+
   await sendAndLog(transporter, {
     from: `"Lakeside Retreat" <${process.env.EMAIL_USER}>`,
     to: data.guestEmail,
@@ -161,14 +176,14 @@ export async function sendBookingConfirmation(
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px;">
         <h2 style="color: #2d5a5a;">Booking Confirmed!</h2>
-        <p>Hi ${data.guestName},</p>
+        <p>Hi ${safeGuestName},</p>
         <p>Your booking at Lakeside Retreat has been confirmed.</p>
         <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Accommodation</td><td style="padding: 8px;">${data.accommodation}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Check-in</td><td style="padding: 8px;">${data.checkIn} (3:00 PM)</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Check-out</td><td style="padding: 8px;">${data.checkOut} (10:00 AM)</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Guests</td><td style="padding: 8px;">${data.guests}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Total</td><td style="padding: 8px;">$${data.totalAmount.toFixed(2)} NZD</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Accommodation</td><td style="padding: 8px;">${safeAccommodation}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Check-in</td><td style="padding: 8px;">${safeCheckIn} (3:00 PM)</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Check-out</td><td style="padding: 8px;">${safeCheckOut} (10:00 AM)</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Guests</td><td style="padding: 8px;">${safeGuests}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Total</td><td style="padding: 8px;">$${safeTotal} NZD</td></tr>
         </table>
         <p>A $300 security bond has been pre-authorised on your card and will be released within 7 days of checkout.</p>
         <p>Self-check-in instructions will be sent closer to your arrival date.</p>
@@ -188,11 +203,11 @@ export async function sendBookingConfirmation(
       <div style="font-family: Arial, sans-serif; max-width: 600px;">
         <h2 style="color: #2d5a5a;">New Booking Received</h2>
         <table style="width: 100%; border-collapse: collapse;">
-          <tr><td style="padding: 8px; font-weight: bold;">Guest</td><td style="padding: 8px;">${data.guestName} (${data.guestEmail})</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Accommodation</td><td style="padding: 8px;">${data.accommodation}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Dates</td><td style="padding: 8px;">${data.checkIn} to ${data.checkOut}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Guests</td><td style="padding: 8px;">${data.guests}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold;">Total</td><td style="padding: 8px;">$${data.totalAmount.toFixed(2)} NZD</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold;">Guest</td><td style="padding: 8px;">${safeGuestName} (${safeGuestEmail})</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold;">Accommodation</td><td style="padding: 8px;">${safeAccommodation}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold;">Dates</td><td style="padding: 8px;">${safeCheckIn} to ${safeCheckOut}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold;">Guests</td><td style="padding: 8px;">${safeGuests}</td></tr>
+          <tr><td style="padding: 8px; font-weight: bold;">Total</td><td style="padding: 8px;">$${safeTotal} NZD</td></tr>
         </table>
       </div>
     `,

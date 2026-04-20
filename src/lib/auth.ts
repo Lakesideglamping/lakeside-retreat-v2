@@ -12,12 +12,13 @@ export interface AdminPayload {
 }
 
 // Fail loudly at boot rather than silently minting/verifying tokens with
-// an empty key. Mirrors the guard in csrf.ts.
-if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
-  throw new Error("JWT_SECRET must be set in production");
+// an empty key. Required in every environment — without it an unset env
+// var would sign tokens with an empty key and let anyone forge a JWT.
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET must be set");
 }
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET ?? "");
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 const COOKIE_NAME = "auth-token";
 const TOKEN_EXPIRY = "1h";
 

@@ -71,13 +71,21 @@ export async function GET(request: Request) {
         where: whereClause,
       }),
       prisma.bookings.count({ where: whereClause }),
+      // Clip each booking's nights to the overlap with [startDate, endDate]
+      // so the numerator can never exceed totalPossibleNights. Also include
+      // bookings that merely overlap the window, not just ones starting in it.
       prisma.$queryRaw<Array<{ total_nights: bigint | null }>>`
-        SELECT COALESCE(SUM(GREATEST(check_out - check_in, 0)), 0)::bigint AS total_nights
+        SELECT COALESCE(SUM(
+          GREATEST(
+            LEAST(check_out, ${endDate}::date) - GREATEST(check_in, ${startDate}::date),
+            0
+          )
+        ), 0)::bigint AS total_nights
         FROM bookings
         WHERE deleted_at IS NULL
           AND status IN ('confirmed', 'completed')
-          AND check_in >= ${startDate}
-          AND check_in <= ${endDate}
+          AND check_in < ${endDate}::date
+          AND check_out > ${startDate}::date
       `,
     ]);
 

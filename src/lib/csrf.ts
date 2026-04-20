@@ -2,12 +2,10 @@ import { createHmac, timingSafeEqual, randomBytes } from "crypto";
 
 const CSRF_SECRET = process.env.CSRF_SECRET ?? process.env.JWT_SECRET ?? "";
 
-// Fail loudly in production if neither secret is set, otherwise every
-// mutation silently fails CSRF validation and the site looks broken.
-if (!CSRF_SECRET && process.env.NODE_ENV === "production") {
-  throw new Error(
-    "CSRF_SECRET (or JWT_SECRET fallback) must be set in production"
-  );
+// Required in every environment — otherwise every mutation silently fails
+// CSRF validation (or worse, validates against an empty key).
+if (!CSRF_SECRET) {
+  throw new Error("CSRF_SECRET (or JWT_SECRET fallback) must be set");
 }
 
 const TOKEN_TTL_MS = 2 * 60 * 60 * 1000;
