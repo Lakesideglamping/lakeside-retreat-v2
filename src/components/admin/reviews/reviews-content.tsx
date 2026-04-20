@@ -121,6 +121,9 @@ export function ReviewsContent() {
   const [deleteTarget, setDeleteTarget] = useState<Review | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [bulkLoading, setBulkLoading] = useState(false);
+
   const fetchReviews = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -211,6 +214,41 @@ export function ReviewsContent() {
     }
   };
 
+  const toggleSelected = (id: number) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    setSelectedIds((prev) => {
+      if (prev.size === reviews.length) return new Set();
+      return new Set(reviews.map((r) => r.id));
+    });
+  };
+
+  const runBulk = async (action: "approve" | "reject" | "delete" | "feature" | "unfeature") => {
+    if (selectedIds.size === 0) return;
+    setBulkLoading(true);
+    setError(null);
+    try {
+      const res = await adminPost<{ count: number }>("/api/admin/reviews/bulk", {
+        ids: Array.from(selectedIds),
+        action,
+      });
+      setSuccess(`${res.count} review${res.count === 1 ? "" : "s"} ${action}d`);
+      setSelectedIds(new Set());
+      fetchReviews();
+      fetchSummary();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Bulk action failed");
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleteLoading(true);
@@ -227,7 +265,33 @@ export function ReviewsContent() {
     }
   };
 
+  const allSelectedOnPage = reviews.length > 0 && selectedIds.size === reviews.length;
   const columns = [
+    {
+      key: "_select",
+      header: (
+        <input
+          type="checkbox"
+          checked={allSelectedOnPage}
+          onChange={toggleSelectAll}
+          onClick={(e) => e.stopPropagation()}
+          aria-label="Select all"
+        />
+      ) as unknown as string,
+      className: "w-8",
+      render: (_: unknown, row: Record<string, unknown>) => {
+        const r = row as unknown as Review;
+        return (
+          <input
+            type="checkbox"
+            checked={selectedIds.has(r.id)}
+            onChange={() => toggleSelected(r.id)}
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`Select review from ${r.guest_name}`}
+          />
+        );
+      },
+    },
     {
       key: "guest_name",
       header: "Guest",
@@ -417,6 +481,51 @@ export function ReviewsContent() {
         </div>
         <Tabs tabs={TABS} activeTab={activeTab} onChange={handleTabChange} />
       </div>
+
+      {/* Bulk action bar */}
+      {selectedIds.size > 0 && (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-[#2d5a5a]/30 bg-[#2d5a5a]/5 px-4 py-3">
+          <span className="text-sm font-medium text-[#2d5a5a]">
+            {selectedIds.size} selected
+          </span>
+          <div className="ml-auto flex flex-wrap gap-2">
+            <button
+              onClick={() => runBulk("approve")}
+              disabled={bulkLoading}
+              className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700 disabled:opacity-50"
+            >
+              Approve
+            </button>
+            <button
+              onClick={() => runBulk("feature")}
+              disabled={bulkLoading}
+              className="rounded-lg bg-yellow-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-yellow-700 disabled:opacity-50"
+            >
+              Feature
+            </button>
+            <button
+              onClick={() => runBulk("reject")}
+              disabled={bulkLoading}
+              className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            >
+              Reject
+            </button>
+            <button
+              onClick={() => runBulk("delete")}
+              disabled={bulkLoading}
+              className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-50"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => setSelectedIds(new Set())}
+              className="rounded-lg px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Data table */}
       <DataTable

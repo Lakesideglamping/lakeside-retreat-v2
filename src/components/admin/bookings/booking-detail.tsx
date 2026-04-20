@@ -39,6 +39,15 @@ interface BookingDetailProps {
   bookingId: string;
 }
 
+interface AuditLogEntry {
+  id: number;
+  admin_user: string;
+  action: string;
+  details: unknown;
+  ip_address: string | null;
+  created_at: string | null;
+}
+
 const statusVariant: Record<string, "success" | "warning" | "error" | "info" | "default"> = {
   confirmed: "success",
   completed: "success",
@@ -133,6 +142,11 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
   const [showClaimDialog, setShowClaimDialog] = useState(false);
   const [claimReason, setClaimReason] = useState("");
 
+  // Audit log for this booking
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+  const [auditOpen, setAuditOpen] = useState(false);
+
   const fetchBooking = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -162,6 +176,26 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
   useEffect(() => {
     fetchBooking();
   }, [fetchBooking]);
+
+  const loadAuditLogs = useCallback(async () => {
+    setAuditLoading(true);
+    try {
+      const res = await adminGet<{ logs: AuditLogEntry[] }>(
+        `/api/admin/audit-logs?bookingId=${encodeURIComponent(bookingId)}&limit=100`
+      );
+      setAuditLogs(res.logs ?? []);
+    } catch {
+      setAuditLogs([]);
+    } finally {
+      setAuditLoading(false);
+    }
+  }, [bookingId]);
+
+  useEffect(() => {
+    if (auditOpen && auditLogs.length === 0 && !auditLoading) {
+      loadAuditLogs();
+    }
+  }, [auditOpen, auditLogs.length, auditLoading, loadAuditLogs]);
 
   const updateStatus = async (newStatus: string) => {
     setActionLoading("status");
@@ -637,6 +671,50 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
       </div>
 
       {/* Danger zone */}
+      <div className="rounded-xl border border-gray-200 bg-white p-6">
+        <button
+          onClick={() => setAuditOpen((v) => !v)}
+          className="flex w-full items-center justify-between text-left"
+        >
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Audit Log</h2>
+            <p className="text-sm text-gray-600">Every admin action on this booking.</p>
+          </div>
+          <span className="text-sm text-gray-500">{auditOpen ? "Hide" : "Show"}</span>
+        </button>
+        {auditOpen && (
+          <div className="mt-4">
+            {auditLoading && <LoadingSpinner size="sm" />}
+            {!auditLoading && auditLogs.length === 0 && (
+              <p className="text-sm text-gray-500">No audit entries for this booking yet.</p>
+            )}
+            {!auditLoading && auditLogs.length > 0 && (
+              <ul className="divide-y divide-gray-100">
+                {auditLogs.map((entry) => (
+                  <li key={entry.id} className="py-3 text-sm">
+                    <div className="flex flex-wrap items-center gap-x-2">
+                      <span className="font-medium text-gray-900">{entry.action}</span>
+                      <span className="text-gray-500">by {entry.admin_user}</span>
+                      {entry.ip_address && (
+                        <span className="text-xs text-gray-400">({entry.ip_address})</span>
+                      )}
+                      <span className="ml-auto text-xs text-gray-500">
+                        {entry.created_at ? formatDateTime(entry.created_at) : "—"}
+                      </span>
+                    </div>
+                    {entry.details != null && (
+                      <pre className="mt-1 max-h-40 overflow-auto rounded bg-gray-50 p-2 text-xs text-gray-700">
+                        {JSON.stringify(entry.details, null, 2)}
+                      </pre>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+      </div>
+
       <div className="rounded-xl border border-red-200 bg-red-50 p-6">
         <h2 className="text-lg font-semibold text-red-900 mb-2">Danger Zone</h2>
         <p className="text-sm text-red-700 mb-4">

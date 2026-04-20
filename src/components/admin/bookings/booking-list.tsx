@@ -442,9 +442,9 @@ export function BookingList() {
       </div>
 
       {/* Table */}
-      <DataTable<Booking & Record<string, unknown>>
-        columns={columns}
-        data={bookings as (Booking & Record<string, unknown>)[]}
+      <DataTable
+        columns={columns as unknown as Parameters<typeof DataTable>[0]["columns"]}
+        data={bookings as unknown as Record<string, unknown>[]}
         loading={loading}
         pagination={{
           page,

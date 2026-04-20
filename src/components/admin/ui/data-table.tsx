@@ -4,7 +4,7 @@ import { useState } from "react";
 
 interface Column<T> {
   key: string;
-  header: string;
+  header: React.ReactNode;
   render?: (value: unknown, row: T) => React.ReactNode;
   sortable?: boolean;
   className?: string;
