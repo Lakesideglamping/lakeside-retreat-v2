@@ -44,6 +44,7 @@ export default async function AdminDashboardPage() {
     recentMessages,
     propertyRevenueThisMonth,
     propertyRevenuePrevMonth,
+    failedWebhooks,
   ] = await Promise.all([
     prisma.bookings.count({
       where: { deleted_at: null },
@@ -119,6 +120,7 @@ export default async function AdminDashboardPage() {
         created_at: { gte: prevMonthStart, lt: monthStart },
       },
     }),
+    prisma.failed_webhook_events.count({ where: { resolved: false } }),
   ]);
 
   const PROPERTIES = [
@@ -155,6 +157,7 @@ export default async function AdminDashboardPage() {
     todayCheckIns,
     todayCheckOuts,
     recentMessages,
+    failedWebhooks,
   };
 
   const serializedBookings = recentBookings.map((b) => ({

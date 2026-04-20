@@ -32,6 +32,7 @@ interface Notifications {
   todayCheckIns: number;
   todayCheckOuts: number;
   recentMessages: number;
+  failedWebhooks: number;
 }
 
 interface PropertyRevenue {
@@ -99,7 +100,8 @@ export function DashboardContent({
     notifications.failedPayments > 0 ||
     notifications.syncFailures > 0 ||
     notifications.pendingBookings > 0 ||
-    notifications.recentMessages > 0;
+    notifications.recentMessages > 0 ||
+    notifications.failedWebhooks > 0;
 
   return (
     <div className="space-y-6">
@@ -122,6 +124,13 @@ export function DashboardContent({
           {notifications.syncFailures > 0 && (
             <Alert variant="warning" title="Sync Failures">
               {notifications.syncFailures} booking(s) failed to sync with Uplisting.
+            </Alert>
+          )}
+          {notifications.failedWebhooks > 0 && (
+            <Alert variant="error" title="Failed Webhooks">
+              {notifications.failedWebhooks} Stripe webhook event(s) failed to
+              process and have not been resolved. Investigate via the
+              failed_webhook_events table.
             </Alert>
           )}
           {notifications.recentMessages > 0 && (
