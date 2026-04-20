@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
   let synced = 0;
   let failed = 0;
-  let skipped = 0;
+  const skipped = 0;
 
   try {
     // Only retry website-sourced bookings; OTA bookings (imported from

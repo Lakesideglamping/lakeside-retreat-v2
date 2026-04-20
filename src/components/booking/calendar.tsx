@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useRef, useCallback } from "react";
+import { useMemo, useState } from "react";
 
 // How far ahead guests can page. 12 months matches typical short-stay
 // rental booking windows and avoids pagination into indefinite future
