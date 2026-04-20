@@ -28,11 +28,14 @@ const IS_PROD = process.env.NODE_ENV === "production";
 // anywhere in the codebase, add it to PII_KEYS (or a pattern below) — the
 // accompanying tests double as the canonical list of what's scrubbed.
 
+// Exact-match keys (normalised: lowercase, underscores/hyphens stripped).
 const PII_KEYS = new Set([
   "email",
   "emailaddress",
+  "guestemail",   // guest_email
   "phone",
   "phonenumber",
+  "guestphone",   // guest_phone
   "mobile",
   "password",
   "passwordhash",
@@ -59,6 +62,15 @@ const PII_KEYS = new Set([
   "lastname",
   "fullname",
 ]);
+
+// Substring patterns — a normalised key containing any of these is also PII.
+// Catches prefixed variants like guest_email, billing_phone, user_address, etc.
+const PII_SUBSTRINGS = ["email", "phone", "password", "secret", "token", "apikey", "cardnumber"];
+
+function isPiiKey(normalised: string): boolean {
+  if (PII_KEYS.has(normalised)) return true;
+  return PII_SUBSTRINGS.some((s) => normalised.includes(s));
+}
 
 const MAX_DEPTH = 6;
 
@@ -91,7 +103,7 @@ export function scrub(input: unknown, depth = 0): unknown {
   const out: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(input as Record<string, unknown>)) {
     const normalised = key.toLowerCase().replace(/[_-]/g, "");
-    if (PII_KEYS.has(normalised)) {
+    if (isPiiKey(normalised)) {
       out[key] = maskValue(value);
     } else {
       out[key] = scrub(value, depth + 1);

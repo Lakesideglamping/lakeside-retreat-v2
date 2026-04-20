@@ -262,3 +262,21 @@ export function constructWebhookEvent(
     process.env.STRIPE_WEBHOOK_SECRET
   );
 }
+
+/**
+ * Retrieve a Checkout Session by ID.
+ *
+ * Centralises all STRIPE_SECRET_KEY usage in this module so no other file
+ * needs to instantiate Stripe directly. Returns null when Stripe is not
+ * configured (dev mode) or the session_id is invalid.
+ */
+export async function retrieveCheckoutSession(
+  sessionId: string
+): Promise<Stripe.Checkout.Session | null> {
+  if (!stripe) return null;
+  try {
+    return await stripe.checkout.sessions.retrieve(sessionId);
+  } catch {
+    return null;
+  }
+}

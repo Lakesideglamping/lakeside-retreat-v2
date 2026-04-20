@@ -6,16 +6,26 @@ import { auditLog } from "@/lib/audit";
 import { getValidIds } from "@/lib/accommodations";
 import type { Prisma } from "@/generated/prisma/client";
 
-// Guard the GET filter against arbitrary status strings. Not a SQL injection
-// (Prisma parameterises), but an unknown value silently returns 0 rows and
-// hides UI bugs. `accommodation` is validated via getValidIds(). `source` is
-// left open-ended because PMS imports bring in external values (airbnb,
-// booking.com, direct, etc.) that we don't own.
+// Guard GET filters against arbitrary strings. Not SQL injection risk
+// (Prisma parameterises), but unknown values silently return 0 rows and
+// hide UI bugs. `accommodation` is validated via getValidIds().
 const VALID_BOOKING_STATUSES = new Set([
   "pending",
   "confirmed",
   "cancelled",
   "completed",
+]);
+
+// Known booking sources. Extend if new PMS channels are added.
+const VALID_BOOKING_SOURCES = new Set([
+  "website",
+  "airbnb",
+  "booking.com",
+  "vrbo",
+  "direct",
+  "uplisting",
+  "manual",
+  "other",
 ]);
 
 export async function GET(request: Request) {
@@ -42,7 +52,7 @@ export async function GET(request: Request) {
       where.accommodation = accommodation;
     }
 
-    if (source) {
+    if (source && VALID_BOOKING_SOURCES.has(source)) {
       where.booking_source = source;
     }
 

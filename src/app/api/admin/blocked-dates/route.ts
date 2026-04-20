@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { withAdmin, withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { blockedDateSchema } from "@/lib/admin-validations";
 import { auditLog } from "@/lib/audit";
+import { getValidIds } from "@/lib/accommodations";
 
 export async function GET(request: Request) {
   return withAdmin(request, async (_admin, req) => {
@@ -11,7 +12,12 @@ export async function GET(request: Request) {
 
     const where: Record<string, unknown> = {};
 
+    // Validate against known property slugs — unknown values would silently
+    // return 0 rows and mask UI bugs; invalid slugs have no legitimate use.
     if (property) {
+      if (!getValidIds().includes(property)) {
+        return NextResponse.json({ error: "Invalid property" }, { status: 400 });
+      }
       where.property = property;
     }
 

@@ -4,11 +4,18 @@ import { withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { stripe, isDevMode } from "@/lib/stripe";
 import { auditLog } from "@/lib/audit";
 import { logger } from "@/lib/logger";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
 export async function POST(request: Request, { params }: RouteParams) {
   return withAdminMutation(request, async (admin, req) => {
+    // Tight limit: 5 refunds per 15 minutes per admin.
+    const limit = await checkRateLimit(`admin_refund:${admin.username}`, 15 * 60 * 1000, 5);
+    if (!limit.success) {
+      return NextResponse.json({ error: "Too many refund attempts — wait 15 minutes" }, { status: 429 });
+    }
+
     const { id } = await params;
 
     const booking = await prisma.bookings.findFirst({

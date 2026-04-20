@@ -9,17 +9,20 @@ datasource db {
 }
 
 model abandoned_checkout_reminders {
-  id                    Int     @id @default(autoincrement())
-  booking_id            String  @unique
+  id                    Int      @id @default(autoincrement())
+  booking_id            String   @unique
   guest_email           String
   guest_name            String?
   accommodation         String?
   check_in              String?
   check_out             String?
-  reminder_count        Int?    @default(0)
+  reminder_count        Int?     @default(0)
   last_reminder_sent_at String?
   last_error            String?
-  created_at            String? @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_at            String?  @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  // Cron query: WHERE reminder_count < 3 AND last_reminder_sent_at < now()-7d
+  @@index([reminder_count, last_reminder_sent_at])
 }
 
 model audit_logs {
@@ -55,6 +58,7 @@ model bookings {
   deposit_release_due             String?
   booking_source                  String?   @default("unknown")
   uplisting_sync_status           String?   @default("pending")
+  uplisting_sync_retries          Int?      @default(0)
   security_deposit_intent_id      String?
   security_deposit_status         String?   @default("pending")
   security_deposit_amount         Decimal?  @default(300.00) @db.Decimal(10, 2)
@@ -148,6 +152,9 @@ model review_requests {
   last_error           String?
   status               String? @default("pending")
   created_at           String? @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  // Cron query: WHERE status = 'pending' AND last_request_sent_at < now()-7d
+  @@index([status, last_request_sent_at])
 }
 
 model reviews {

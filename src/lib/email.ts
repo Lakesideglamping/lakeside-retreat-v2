@@ -150,6 +150,7 @@ interface LegacyBookingEmailData {
   guests: number;
   totalAmount: number;
   bookingId?: string;
+  depositStatus?: "held" | "failed_to_hold" | "pending";
 }
 
 export async function sendBookingConfirmation(
@@ -185,7 +186,14 @@ export async function sendBookingConfirmation(
           <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Guests</td><td style="padding: 8px;">${safeGuests}</td></tr>
           <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Total</td><td style="padding: 8px;">$${safeTotal} NZD</td></tr>
         </table>
-        <p>A $300 security bond has been pre-authorised on your card and will be released within 7 days of checkout.</p>
+        ${data.depositStatus === "failed_to_hold"
+          ? `<p style="color:#b91c1c;background:#fef2f2;padding:12px;border-radius:6px;border:1px solid #fca5a5;">
+               <strong>Important:</strong> We were unable to pre-authorise the $300 security bond on your card.
+               Our team will be in touch shortly to arrange this before your arrival.
+               Your accommodation booking is confirmed.
+             </p>`
+          : `<p>A $300 security bond has been pre-authorised on your card and will be released within 7 days of checkout.</p>`
+        }
         <p>Self-check-in instructions will be sent closer to your arrival date.</p>
         <p style="margin-top: 24px; color: #64748b; font-size: 12px;">
           Lakeside Retreat &middot; 96 Smiths Way, Mount Pisa, Cromwell 9383, New Zealand

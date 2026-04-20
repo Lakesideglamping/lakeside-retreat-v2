@@ -15,10 +15,10 @@ import {
 } from "@/lib/login-attempts";
 import { getTotpSecret, verifyTotp, consumeRecoveryCode } from "@/lib/totp";
 import { logger } from "@/lib/logger";
+import { getClientIp } from "@/lib/admin-route";
 
 export async function POST(request: Request) {
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = getClientIp(request);
 
   // Check exponential backoff
   const attempt = await getFailedAttempt(ip);

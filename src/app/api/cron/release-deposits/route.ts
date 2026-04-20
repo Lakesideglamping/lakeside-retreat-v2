@@ -94,6 +94,31 @@ export async function POST(request: Request) {
       ).catch(() => {});
     }
 
+    // Prune stale rows from rate_limits and login_attempts so these tables
+    // don't grow unbounded. Both tables were documented as "stale rows sit
+    // until a manual sweep" — this is that sweep, run hourly.
+    try {
+      const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24 hours ago
+      const [rlDeleted, laDeleted] = await Promise.all([
+        prisma.rate_limits.deleteMany({ where: { reset_time: { lt: cutoff } } }),
+        prisma.login_attempts.deleteMany({
+          where: {
+            locked_until: { lt: cutoff },
+            count: { lt: 3 },
+          },
+        }),
+      ]);
+      logger.info("cron: DB housekeeping complete", {
+        rateLimitsDeleted: rlDeleted.count,
+        loginAttemptsDeleted: laDeleted.count,
+      });
+    } catch (cleanupErr) {
+      // Non-fatal — log and move on; deposits are more important.
+      logger.error("cron: DB housekeeping failed", {
+        error: cleanupErr instanceof Error ? cleanupErr.message : String(cleanupErr),
+      });
+    }
+
     return NextResponse.json({ success: true, released, errors });
   } catch (err) {
     logger.error("release-deposits cron failed", {

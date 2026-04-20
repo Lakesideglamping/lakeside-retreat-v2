@@ -158,7 +158,9 @@ export async function POST(request: Request) {
             seasonalMultiplier
           );
           const expectedTotal = baseTotal - discountCents;
-          if (session.amount_total !== expectedTotal) {
+          // Allow ±1 cent tolerance for floating-point rounding differences
+          // between the server calculation and Stripe's stored amount.
+          if (Math.abs((session.amount_total ?? 0) - expectedTotal) > 1) {
             log.error("stripe webhook amount mismatch", {
               sessionTotal: session.amount_total,
               expected: expectedTotal,
@@ -177,10 +179,98 @@ export async function POST(request: Request) {
           }
         }
 
-        // 1) Save booking — accommodation has already been auto-captured by Stripe
-        //    (no more capture_method: manual on the checkout session). The security
-        //    deposit will be a separate off-session PI created in step 2.
         const bookingId = randomUUID();
+
+        // 1) Attempt the deposit hold BEFORE writing the booking record.
+        //
+        //    Old order: save booking → create deposit PI → update booking.
+        //    Problem:   a crash between steps 1 and 3 left a confirmed booking
+        //               with security_deposit_status "pending" and no PI ID —
+        //               unclaimable and unreleasable.
+        //
+        //    New order: create deposit PI → save booking with final deposit state.
+        //    Result:    the booking row is created exactly once with the correct
+        //               status. The idempotency key on the PI creation means safe
+        //               Stripe retries. If the DB write fails after the PI is
+        //               created, an ORPHANED_DEPOSIT_PI alert fires so it can be
+        //               cancelled manually — a much smaller problem than the reverse.
+        let depositStatus: "held" | "failed_to_hold" | "pending" = "pending";
+        let depositIntentId: string | null = null;
+
+        if (stripe && paymentIntentId) {
+          try {
+            const mainPi =
+              await stripe.paymentIntents.retrieve(paymentIntentId);
+            const paymentMethodId =
+              typeof mainPi.payment_method === "string"
+                ? mainPi.payment_method
+                : mainPi.payment_method?.id;
+            const customerId =
+              typeof session.customer === "string"
+                ? session.customer
+                : session.customer?.id;
+
+            if (!paymentMethodId || !customerId) {
+              throw new Error(
+                "Missing customer or payment_method on checkout session"
+              );
+            }
+
+            // Cross-check deposit amount against server-side accommodation
+            // config to prevent metadata tampering inflating/deflating the hold.
+            const configDeposit = acc?.securityDeposit ?? 300;
+            const metadataDeposit = Number(metadata.securityDeposit || configDeposit);
+            if (Math.abs(metadataDeposit - configDeposit) > 1) {
+              log.error("deposit amount mismatch — using config value", {
+                bookingId,
+                metadataDeposit,
+                configDeposit,
+              });
+            }
+            const depositAmount = configDeposit * 100;
+
+            const depositPi = await stripe.paymentIntents.create(
+              {
+                amount: depositAmount,
+                currency: "nzd",
+                customer: customerId,
+                payment_method: paymentMethodId,
+                capture_method: "manual",
+                confirm: true,
+                off_session: true,
+                description: `Security deposit hold — booking ${bookingId}`,
+                metadata: { bookingId, type: "security_deposit" },
+              },
+              { idempotencyKey: `deposit_${bookingId}` }
+            );
+
+            depositStatus = "held";
+            depositIntentId = depositPi.id;
+            log.info("deposit PI created", {
+              bookingId,
+              depositPiId: depositPi.id,
+              amount: depositAmount / 100,
+            });
+          } catch (depErr) {
+            log.error("deposit hold creation failed", {
+              bookingId,
+              error:
+                depErr instanceof Error ? depErr.message : String(depErr),
+            });
+            depositStatus = "failed_to_hold";
+            const errMsg =
+              depErr instanceof Error
+                ? depErr.message
+                : "Unknown deposit-hold error";
+            sendSystemAlert(
+              "DEPOSIT_HOLD_FAILURE",
+              `Security deposit hold failed for booking ${bookingId}`,
+              `Guest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\nBooking ID: ${bookingId}\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nAccommodation already paid; deposit NOT held — look up booking for full contact details.\nError: ${errMsg}`
+            ).catch(() => {});
+          }
+        }
+
+        // 2) Save booking with its final deposit state in one atomic write.
         let bookingSaved = false;
         try {
           await prisma.bookings.create({
@@ -201,11 +291,9 @@ export async function POST(request: Request) {
               stripe_payment_id: paymentIntentId,
               booking_source: "website",
               uplisting_sync_status: "pending",
-              security_deposit_status: "pending",
-              security_deposit_amount: Number(
-                metadata.securityDeposit || 300
-              ),
-              security_deposit_intent_id: null,
+              security_deposit_status: depositStatus,
+              security_deposit_amount: Number(metadata.securityDeposit || 300),
+              security_deposit_intent_id: depositIntentId,
               deposit_release_due: new Date(
                 new Date(metadata.checkOut).getTime() +
                   2 * 24 * 60 * 60 * 1000
@@ -213,15 +301,34 @@ export async function POST(request: Request) {
             },
           });
           bookingSaved = true;
-          log.info("booking saved (authorized)", {
+          log.info("booking saved", {
             bookingId,
+            depositStatus,
             guestEmailMasked: maskEmail(metadata.guestEmail),
           });
         } catch (dbErr) {
           log.error("stripe webhook DB save error", {
             bookingId,
+            depositIntentId,
             error: dbErr instanceof Error ? dbErr.message : String(dbErr),
           });
+          // If a deposit PI was created before the DB write failed, it is now
+          // orphaned — no booking row references it. Alert immediately so it
+          // can be manually cancelled before the 7-day hold expires.
+          if (depositIntentId) {
+            sendSystemAlert(
+              "ORPHANED_DEPOSIT_PI",
+              `Booking DB save failed after deposit PI was created — manual cancellation required`,
+              `Deposit PI: ${depositIntentId}\nBooking ID: ${bookingId}\nGuest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\nAccommodation: ${metadata.accommodation}\nCancel via Stripe dashboard: stripe.com/payments/${depositIntentId}`
+            ).catch(() => {});
+          }
+          // Delete the dedup record so Stripe can retry this event and attempt
+          // the booking save again. Without this, the dedup record written at
+          // the top of the handler would permanently block retries, leaving
+          // the guest with a charge but no booking.
+          await prisma.processed_webhook_events
+            .delete({ where: { event_id: event.id } })
+            .catch(() => {});
           await prisma.failed_webhook_events
             .create({
               data: {
@@ -251,6 +358,12 @@ export async function POST(request: Request) {
                 error: e instanceof Error ? e.message : String(e),
               })
             );
+          // Return 500 so Stripe retries. Returning 200 here would signal
+          // "received OK" and permanently drop the booking.
+          return NextResponse.json(
+            { error: "Booking save failed — will retry" },
+            { status: 500 }
+          );
         }
 
         // Increment promo code usage counter now that payment has confirmed.
@@ -286,96 +399,11 @@ export async function POST(request: Request) {
             );
         }
 
-        // 2) Create a separate off-session PaymentIntent for the security deposit
-        //    (capture_method: manual, auto-confirmed against the saved payment method).
-        //    This replaces the previous partial-capture trick, which locked the deposit
-        //    amount into the same PI as the accommodation and made later capture/release
-        //    mathematically impossible.
-        if (bookingSaved && stripe && paymentIntentId) {
-          try {
-            // Fetch the main PI to get the saved payment_method.
-            const mainPi =
-              await stripe.paymentIntents.retrieve(paymentIntentId);
-            const paymentMethodId =
-              typeof mainPi.payment_method === "string"
-                ? mainPi.payment_method
-                : mainPi.payment_method?.id;
-            const customerId =
-              typeof session.customer === "string"
-                ? session.customer
-                : session.customer?.id;
-
-            if (!paymentMethodId || !customerId) {
-              throw new Error(
-                "Missing customer or payment_method on checkout session"
-              );
-            }
-
-            const depositAmount =
-              Number(metadata.securityDeposit || 300) * 100;
-
-            const depositPi = await stripe.paymentIntents.create(
-              {
-                amount: depositAmount,
-                currency: "nzd",
-                customer: customerId,
-                payment_method: paymentMethodId,
-                capture_method: "manual",
-                confirm: true,
-                off_session: true,
-                description: `Security deposit hold — booking ${bookingId}`,
-                metadata: {
-                  bookingId,
-                  type: "security_deposit",
-                },
-              },
-              { idempotencyKey: `deposit_${bookingId}` }
-            );
-
-            await prisma.bookings.update({
-              where: { id: bookingId },
-              data: {
-                security_deposit_intent_id: depositPi.id,
-                security_deposit_status: "held",
-                updated_at: new Date(),
-              },
-            });
-
-            log.info("deposit hold created", {
-              bookingId,
-              depositPiId: depositPi.id,
-              amount: depositAmount / 100,
-            });
-          } catch (depErr) {
-            log.error("deposit hold creation failed", {
-              bookingId,
-              error:
-                depErr instanceof Error ? depErr.message : String(depErr),
-            });
-            const errMsg =
-              depErr instanceof Error
-                ? depErr.message
-                : "Unknown deposit-hold error";
-            await prisma.bookings
-              .update({
-                where: { id: bookingId },
-                data: {
-                  security_deposit_status: "failed_to_hold",
-                  updated_at: new Date(),
-                },
-              })
-              .catch(() => {});
-            sendSystemAlert(
-              "DEPOSIT_HOLD_FAILURE",
-              `Security deposit hold failed for booking ${bookingId}`,
-              `Guest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\nBooking ID: ${bookingId}\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nAccommodation already paid; deposit NOT held — look up booking for full contact details.\nError: ${errMsg}`
-            ).catch(() => {});
-          }
-        }
-
-        // 3) Sync to Uplisting and send confirmation — run regardless of deposit
-        //    outcome. Accommodation is paid; deposit failure is a separate concern
-        //    handled by the admin alert above.
+        // 3) Sync to Uplisting and send confirmation email.
+        //    Email fires after the booking is saved, so the guest always
+        //    receives a message that reflects the true deposit state.
+        //    Accommodation is paid regardless of deposit outcome; deposit
+        //    failures are handled by the admin alert fired in step 1.
         if (bookingSaved) {
           syncBooking({
             accommodation: metadata.accommodation || "",
@@ -427,6 +455,7 @@ export async function POST(request: Request) {
             guests: Number(metadata.guests) || 1,
             totalAmount: (session.amount_total || 0) / 100,
             bookingId,
+            depositStatus,
           }).catch((err) =>
             log.error("booking confirmation email failed", {
               bookingId,

@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 import { withAdminMutation, getClientIp } from "@/lib/admin-route";
 import { auditLog } from "@/lib/audit";
 import { logger } from "@/lib/logger";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const API_BASE = "https://connect.uplisting.io";
 
@@ -21,6 +22,12 @@ function authHeader(): string {
 
 export async function POST(request: Request) {
   return withAdminMutation(request, async (admin, req) => {
+    // Tight limit: 3 imports per hour per admin (each import hits Uplisting API 3×).
+    const limit = await checkRateLimit(`admin_import:${admin.username}`, 60 * 60 * 1000, 3);
+    if (!limit.success) {
+      return NextResponse.json({ error: "Too many import requests — wait an hour" }, { status: 429 });
+    }
+
     if (!process.env.UPLISTING_API_KEY) {
       return NextResponse.json({ error: "Uplisting not configured" }, { status: 500 });
     }

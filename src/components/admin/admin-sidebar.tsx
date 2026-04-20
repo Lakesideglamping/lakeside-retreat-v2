@@ -170,13 +170,14 @@ export function AdminSidebar() {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto px-3 py-4">
-            <ul className="space-y-1">
+          <nav aria-label="Admin navigation" className="flex-1 overflow-y-auto px-3 py-4">
+            <ul className="space-y-1" role="list">
               {navItems.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
+                    aria-current={isActive(item.href) ? "page" : undefined}
                     className={`
                       flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors
                       ${

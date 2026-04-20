@@ -3,7 +3,7 @@ services:
     name: lakeside-retreat
     runtime: node
     plan: starter
-    buildCommand: npx prisma generate && npx prisma migrate deploy && npm run build
+    buildCommand: npx prisma generate && npm run check:schema && npx prisma migrate deploy && npm run build
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
@@ -52,8 +52,12 @@ services:
         sync: false
       - key: CRON_SECRET
         sync: false
+      - key: TOTP_ENCRYPTION_KEY
+        sync: false
       - key: NEXT_PUBLIC_BASE_URL
         value: https://lakesideretreat.co.nz
+      - key: NEXT_PUBLIC_WHATSAPP_PHONE
+        sync: false
       - key: RESET_TOKEN
         sync: false
       - key: LOG_LEVEL

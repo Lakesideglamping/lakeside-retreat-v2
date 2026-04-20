@@ -92,6 +92,8 @@ function resolveNzMidnightUtc(year: number, month: number, day: number): Date {
   return new Date(Date.UTC(year, month - 1, day));
 }
 
+const UPLISTING_TIMEOUT_MS = 8_000; // safely under Stripe's 10 s webhook budget
+
 async function fetchWithRetry(
   url: string,
   options: RequestInit,
@@ -100,7 +102,11 @@ async function fetchWithRetry(
   let lastError: Error | null = null;
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const res = await fetch(url, options);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), UPLISTING_TIMEOUT_MS);
+      const res = await fetch(url, { ...options, signal: controller.signal }).finally(
+        () => clearTimeout(timeoutId)
+      );
       if (res.ok) return res;
 
       // Retry on 429 (rate limit) and 5xx (server error).
