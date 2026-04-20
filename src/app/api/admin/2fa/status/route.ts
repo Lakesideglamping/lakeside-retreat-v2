@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { withAdmin } from "@/lib/admin-route";
-import { getTotpSecret } from "@/lib/totp";
+import { getTotpSecret, getRecoveryCodeCount } from "@/lib/totp";
 
 export async function GET(request: Request) {
   return withAdmin(request, async () => {
@@ -10,6 +10,7 @@ export async function GET(request: Request) {
     // always reported "Disabled" and admins could re-enroll over an existing
     // secret, breaking paired authenticator apps.
     const secret = await getTotpSecret();
-    return NextResponse.json({ enabled: !!secret });
+    const recoveryCodesRemaining = secret ? await getRecoveryCodeCount() : 0;
+    return NextResponse.json({ enabled: !!secret, recoveryCodesRemaining });
   });
 }

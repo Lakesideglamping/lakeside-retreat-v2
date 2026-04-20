@@ -1,6 +1,6 @@
 import * as OTPAuth from "otpauth";
 import QRCode from "qrcode";
-import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
+import { createCipheriv, createDecipheriv, createHash, randomBytes } from "crypto";
 import { prisma } from "./db";
 
 const ISSUER = "Lakeside Retreat Admin";
@@ -106,4 +106,78 @@ export async function deleteTotpSecret(): Promise<void> {
   await prisma.system_settings.deleteMany({
     where: { setting_key: "admin_totp_secret" },
   });
+  await prisma.system_settings.deleteMany({
+    where: { setting_key: "admin_totp_recovery_codes" },
+  });
+}
+
+// ---- Recovery codes --------------------------------------------------------
+// Ten single-use codes in the form XXXXX-XXXXX (A-Z, 2-9; no 0/1/I/O to avoid
+// transcription errors). Stored as SHA-256 hashes — the plaintext is only
+// shown to the operator once at generation time.
+
+const RECOVERY_SETTING = "admin_totp_recovery_codes";
+const RECOVERY_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+function randomCodeChunk(len: number): string {
+  const bytes = randomBytes(len);
+  let out = "";
+  for (let i = 0; i < len; i++) {
+    out += RECOVERY_ALPHABET[bytes[i] % RECOVERY_ALPHABET.length];
+  }
+  return out;
+}
+
+function hashCode(code: string): string {
+  return createHash("sha256").update(code.toUpperCase()).digest("hex");
+}
+
+export function generateRecoveryCodes(count = 10): string[] {
+  return Array.from({ length: count }, () => `${randomCodeChunk(5)}-${randomCodeChunk(5)}`);
+}
+
+export async function saveRecoveryCodes(codes: string[]): Promise<void> {
+  const hashes = codes.map(hashCode);
+  const payload = JSON.stringify(hashes);
+  await prisma.system_settings.upsert({
+    where: { setting_key: RECOVERY_SETTING },
+    create: { setting_key: RECOVERY_SETTING, setting_value: payload, setting_type: "secret" },
+    update: { setting_value: payload, updated_at: new Date() },
+  });
+}
+
+async function loadRecoveryHashes(): Promise<string[]> {
+  const row = await prisma.system_settings.findUnique({
+    where: { setting_key: RECOVERY_SETTING },
+  });
+  if (!row?.setting_value) return [];
+  try {
+    const parsed = JSON.parse(row.setting_value);
+    return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function getRecoveryCodeCount(): Promise<number> {
+  return (await loadRecoveryHashes()).length;
+}
+
+/**
+ * Verify a recovery code and consume it on success. Returns true iff the code
+ * matched an unused hash; the hash is then removed so the code can't be
+ * replayed. Timing-safe string comparison is not needed because the codes are
+ * hashed — an attacker comparing hashes gains no timing information.
+ */
+export async function consumeRecoveryCode(code: string): Promise<boolean> {
+  const target = hashCode(code);
+  const hashes = await loadRecoveryHashes();
+  const idx = hashes.indexOf(target);
+  if (idx === -1) return false;
+  hashes.splice(idx, 1);
+  await prisma.system_settings.update({
+    where: { setting_key: RECOVERY_SETTING },
+    data: { setting_value: JSON.stringify(hashes), updated_at: new Date() },
+  });
+  return true;
 }

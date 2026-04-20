@@ -41,12 +41,16 @@ export function SecurityContent() {
   const [twoFaToken, setTwoFaToken] = useState("");
   const [twoFaError, setTwoFaError] = useState("");
   const [twoFaActionLoading, setTwoFaActionLoading] = useState(false);
+  const [recoveryRemaining, setRecoveryRemaining] = useState(0);
+  const [recoveryCodes, setRecoveryCodes] = useState<string[] | null>(null);
+  const [regenLoading, setRegenLoading] = useState(false);
 
   const fetch2faStatus = useCallback(async () => {
     setTwoFaLoading(true);
     try {
-      const data = await adminGet<{ enabled: boolean }>("/api/admin/2fa/status");
+      const data = await adminGet<{ enabled: boolean; recoveryCodesRemaining: number }>("/api/admin/2fa/status");
       setTwoFaEnabled(data.enabled);
+      setRecoveryRemaining(data.recoveryCodesRemaining ?? 0);
     } catch {
       // Leave as disabled
     } finally {
@@ -118,7 +122,7 @@ export function SecurityContent() {
     setTwoFaError("");
     setTwoFaActionLoading(true);
     try {
-      await adminPost("/api/admin/2fa/verify", {
+      const res = await adminPost<{ success: boolean; recoveryCodes?: string[] }>("/api/admin/2fa/verify", {
         secret: twoFaSecret,
         token: twoFaToken,
       });
@@ -127,11 +131,30 @@ export function SecurityContent() {
       setTwoFaSecret("");
       setTwoFaQr("");
       setTwoFaToken("");
+      if (res.recoveryCodes) {
+        setRecoveryCodes(res.recoveryCodes);
+        setRecoveryRemaining(res.recoveryCodes.length);
+      }
     } catch (err) {
       setTwoFaError(err instanceof Error ? err.message : "Invalid code. Try again.");
       setTwoFaToken("");
     } finally {
       setTwoFaActionLoading(false);
+    }
+  };
+
+  const handleRegenerateCodes = async () => {
+    if (!confirm("Regenerate recovery codes? The old codes will stop working immediately.")) return;
+    setRegenLoading(true);
+    setTwoFaError("");
+    try {
+      const res = await adminPost<{ recoveryCodes: string[] }>("/api/admin/2fa/recovery", {});
+      setRecoveryCodes(res.recoveryCodes);
+      setRecoveryRemaining(res.recoveryCodes.length);
+    } catch (err) {
+      setTwoFaError(err instanceof Error ? err.message : "Failed to regenerate recovery codes");
+    } finally {
+      setRegenLoading(false);
     }
   };
 
@@ -351,12 +374,72 @@ export function SecurityContent() {
           </div>
         )}
 
+        {/* One-time recovery code display — shown right after setup or regen */}
+        {recoveryCodes && (
+          <div className="mb-4 rounded-lg border border-yellow-300 bg-yellow-50 p-4">
+            <p className="text-sm font-semibold text-yellow-900">
+              Save these recovery codes now
+            </p>
+            <p className="mt-1 text-xs text-yellow-800">
+              Each code works once and lets you sign in without your authenticator
+              app. Store them somewhere safe — this is the only time they'll be
+              shown. If you lose them, regenerate to invalidate the old set.
+            </p>
+            <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-xs sm:grid-cols-5">
+              {recoveryCodes.map((c) => (
+                <code key={c} className="rounded bg-white px-2 py-1 text-gray-900 border border-yellow-200">
+                  {c}
+                </code>
+              ))}
+            </div>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  void navigator.clipboard.writeText(recoveryCodes.join("\n"));
+                }}
+                className="rounded-lg border border-yellow-300 bg-white px-3 py-1.5 text-xs font-medium text-yellow-900 hover:bg-yellow-100"
+              >
+                Copy all
+              </button>
+              <button
+                type="button"
+                onClick={() => setRecoveryCodes(null)}
+                className="rounded-lg px-3 py-1.5 text-xs font-medium text-yellow-800 hover:bg-yellow-100"
+              >
+                I've saved them — hide
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Enabled — show disable form */}
         {!twoFaLoading && twoFaEnabled && twoFaStep === "idle" && (
           <div className="space-y-4">
             <Alert variant="success" title="2FA is Active">
               Your account is protected with two-factor authentication.
             </Alert>
+            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Recovery codes</p>
+                  <p className="text-xs text-gray-600">
+                    {recoveryRemaining} code{recoveryRemaining === 1 ? "" : "s"} remaining.
+                    {recoveryRemaining === 0 && " Generate a set so you can sign in if you lose your authenticator."}
+                    {recoveryRemaining > 0 && recoveryRemaining <= 3 && " Low — regenerate soon."}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleRegenerateCodes}
+                  disabled={regenLoading}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                >
+                  {regenLoading && <LoadingSpinner size="sm" />}
+                  {recoveryRemaining === 0 ? "Generate codes" : "Regenerate"}
+                </button>
+              </div>
+            </div>
             <form onSubmit={handleDisable} className="flex items-end gap-2">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-600">Enter your current code to disable</label>

@@ -10,6 +10,8 @@ export function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [totpCode, setTotpCode] = useState("");
+  const [recoveryCode, setRecoveryCode] = useState("");
+  const [useRecovery, setUseRecovery] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -52,11 +54,14 @@ export function LoginForm() {
     setLoading(true);
 
     try {
+      const body = useRecovery
+        ? { username, password, recoveryCode: recoveryCode.toUpperCase() }
+        : { username, password, totpCode };
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ username, password, totpCode }),
+        body: JSON.stringify(body),
       });
 
       const data = await res.json();
@@ -64,6 +69,7 @@ export function LoginForm() {
       if (!res.ok) {
         setError(data.error ?? "Invalid code");
         setTotpCode("");
+        setRecoveryCode("");
         return;
       }
 
@@ -158,34 +164,64 @@ export function LoginForm() {
                   </svg>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Open your authenticator app and enter the 6-digit code.
+                  {useRecovery
+                    ? "Enter one of your recovery codes (format: XXXXX-XXXXX)."
+                    : "Open your authenticator app and enter the 6-digit code."}
                 </p>
               </div>
 
-              <div>
-                <label htmlFor="totpCode" className="mb-1.5 block text-sm font-medium text-gray-700">
-                  Verification code
-                </label>
-                <input
-                  id="totpCode"
-                  type="text"
-                  inputMode="numeric"
-                  pattern="\d{6}"
-                  maxLength={6}
-                  required
-                  autoFocus
-                  autoComplete="one-time-code"
-                  value={totpCode}
-                  onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                  disabled={loading}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-center text-2xl font-mono tracking-[0.5em] text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/20 disabled:opacity-50"
-                  placeholder="000000"
-                />
-              </div>
+              {!useRecovery ? (
+                <div>
+                  <label htmlFor="totpCode" className="mb-1.5 block text-sm font-medium text-gray-700">
+                    Verification code
+                  </label>
+                  <input
+                    id="totpCode"
+                    type="text"
+                    inputMode="numeric"
+                    pattern="\d{6}"
+                    maxLength={6}
+                    required
+                    autoFocus
+                    autoComplete="one-time-code"
+                    value={totpCode}
+                    onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    disabled={loading}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-center text-2xl font-mono tracking-[0.5em] text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/20 disabled:opacity-50"
+                    placeholder="000000"
+                  />
+                </div>
+              ) : (
+                <div>
+                  <label htmlFor="recoveryCode" className="mb-1.5 block text-sm font-medium text-gray-700">
+                    Recovery code
+                  </label>
+                  <input
+                    id="recoveryCode"
+                    type="text"
+                    required
+                    autoFocus
+                    maxLength={11}
+                    value={recoveryCode}
+                    onChange={(e) => {
+                      const v = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 11);
+                      setRecoveryCode(v);
+                    }}
+                    disabled={loading}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-center text-lg font-mono tracking-[0.2em] text-gray-900 transition-colors focus:border-[#2d5a5a] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/20 disabled:opacity-50"
+                    placeholder="XXXXX-XXXXX"
+                  />
+                </div>
+              )}
 
               <button
                 type="submit"
-                disabled={loading || totpCode.length !== 6}
+                disabled={
+                  loading ||
+                  (useRecovery
+                    ? !/^[A-Z0-9]{5}-[A-Z0-9]{5}$/.test(recoveryCode)
+                    : totpCode.length !== 6)
+                }
                 className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2d5a5a] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#234848] focus:outline-none focus:ring-2 focus:ring-[#2d5a5a]/50 focus:ring-offset-2 disabled:opacity-50"
               >
                 {loading ? (
@@ -200,7 +236,26 @@ export function LoginForm() {
 
               <button
                 type="button"
-                onClick={() => { setStep("credentials"); setError(""); setTotpCode(""); }}
+                onClick={() => {
+                  setUseRecovery((v) => !v);
+                  setError("");
+                  setTotpCode("");
+                  setRecoveryCode("");
+                }}
+                className="w-full text-center text-sm text-[#2d5a5a] hover:underline"
+              >
+                {useRecovery ? "Use authenticator app instead" : "Lost your device? Use a recovery code"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setStep("credentials");
+                  setError("");
+                  setTotpCode("");
+                  setRecoveryCode("");
+                  setUseRecovery(false);
+                }}
                 className="w-full text-center text-sm text-gray-500 hover:text-gray-700"
               >
                 ← Back to login

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { withAdminMutation } from "@/lib/admin-route";
-import { verifyTotp, saveTotpSecret } from "@/lib/totp";
+import { verifyTotp, saveTotpSecret, generateRecoveryCodes, saveRecoveryCodes } from "@/lib/totp";
 import { auditLog } from "@/lib/audit";
 import { getClientIp } from "@/lib/admin-route";
 import { z } from "zod";
@@ -29,8 +29,10 @@ export async function POST(request: Request) {
     }
 
     await saveTotpSecret(secret);
+    const recoveryCodes = generateRecoveryCodes();
+    await saveRecoveryCodes(recoveryCodes);
     await auditLog(admin.username, "2fa_enabled", {}, getClientIp(req));
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, recoveryCodes });
   });
 }
