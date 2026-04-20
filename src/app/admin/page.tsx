@@ -164,8 +164,8 @@ export default async function AdminDashboardPage() {
     prisma.$queryRaw<Array<{ nights: bigint | null }>>`
       SELECT COALESCE(SUM(
         GREATEST(
-          LEAST(check_out, ${sevenDaysOut}::date) -
-          GREATEST(check_in, ${today}::date),
+          LEAST(check_out::date, ${sevenDaysOut}::date) -
+          GREATEST(check_in::date, ${today}::date),
           0
         )
       ), 0)::bigint AS nights

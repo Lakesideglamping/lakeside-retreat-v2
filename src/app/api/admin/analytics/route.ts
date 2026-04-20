@@ -77,7 +77,7 @@ export async function GET(request: Request) {
       prisma.$queryRaw<Array<{ total_nights: bigint | null }>>`
         SELECT COALESCE(SUM(
           GREATEST(
-            LEAST(check_out, ${endDate}::date) - GREATEST(check_in, ${startDate}::date),
+            LEAST(check_out::date, ${endDate}::date) - GREATEST(check_in::date, ${startDate}::date),
             0
           )
         ), 0)::bigint AS total_nights
