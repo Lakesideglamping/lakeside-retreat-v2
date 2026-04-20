@@ -382,7 +382,7 @@ export function SecurityContent() {
             </p>
             <p className="mt-1 text-xs text-yellow-800">
               Each code works once and lets you sign in without your authenticator
-              app. Store them somewhere safe — this is the only time they'll be
+              app. Store them somewhere safe — this is the only time they&apos;ll be
               shown. If you lose them, regenerate to invalidate the old set.
             </p>
             <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-xs sm:grid-cols-5">
@@ -407,7 +407,7 @@ export function SecurityContent() {
                 onClick={() => setRecoveryCodes(null)}
                 className="rounded-lg px-3 py-1.5 text-xs font-medium text-yellow-800 hover:bg-yellow-100"
               >
-                I've saved them — hide
+                I&apos;ve saved them — hide
               </button>
             </div>
           </div>
