@@ -11,11 +11,15 @@ interface Stats {
   pendingBookings: number;
   totalRevenue: number;
   monthRevenue: number;
-  todayCheckIns: number;
-  todayCheckOuts: number;
+  todayArrivalCount: number;
+  todayDepartureCount: number;
+  inHouseNow: number;
+  sevenDayOccupancyPct: number;
+  sevenDayBookedNights: number;
+  sevenDayTotalNights: number;
 }
 
-interface RecentBooking {
+interface UpcomingStay {
   id: string;
   guest_name: string;
   accommodation: string;
@@ -25,12 +29,24 @@ interface RecentBooking {
   total_price: number | null;
 }
 
+interface TodayArrival {
+  id: string;
+  guest_name: string;
+  guest_phone: string | null;
+  accommodation: string;
+  guests: number | null;
+}
+
+interface TodayDeparture {
+  id: string;
+  guest_name: string;
+  accommodation: string;
+}
+
 interface Notifications {
   failedPayments: number;
   syncFailures: number;
   pendingBookings: number;
-  todayCheckIns: number;
-  todayCheckOuts: number;
   recentMessages: number;
   failedWebhooks: number;
 }
@@ -45,7 +61,9 @@ interface PropertyRevenue {
 
 interface DashboardContentProps {
   stats: Stats;
-  recentBookings: RecentBooking[];
+  upcomingStays: UpcomingStay[];
+  todayArrivals: TodayArrival[];
+  todayDepartures: TodayDeparture[];
   notifications: Notifications;
   propertyRevenue: PropertyRevenue[];
 }
@@ -92,7 +110,9 @@ function formatDate(dateStr: string): string {
 
 export function DashboardContent({
   stats,
-  recentBookings,
+  upcomingStays,
+  todayArrivals,
+  todayDepartures,
   notifications,
   propertyRevenue,
 }: DashboardContentProps) {
@@ -141,22 +161,32 @@ export function DashboardContent({
         </div>
       )}
 
-      {/* Stat cards grid */}
+      {/* Stat cards grid — daily-operational focus */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card
-          title="Total Bookings"
-          value={stats.totalBookings}
-          subtitle={`${stats.confirmedBookings} confirmed`}
+          title="In-house Tonight"
+          value={stats.inHouseNow}
+          subtitle={`${stats.todayArrivalCount} arriving · ${stats.todayDepartureCount} departing`}
           icon={
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
             </svg>
           }
         />
         <Card
-          title="Total Revenue"
-          value={formatCurrency(stats.totalRevenue)}
-          subtitle={`${formatCurrency(stats.monthRevenue)} this month`}
+          title="Next 7 Days"
+          value={`${stats.sevenDayOccupancyPct}%`}
+          subtitle={`${stats.sevenDayBookedNights} of ${stats.sevenDayTotalNights} nights booked`}
+          icon={
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+            </svg>
+          }
+        />
+        <Card
+          title="This Month's Revenue"
+          value={formatCurrency(stats.monthRevenue)}
+          subtitle={`${formatCurrency(stats.totalRevenue)} all-time`}
           icon={
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -164,26 +194,108 @@ export function DashboardContent({
           }
         />
         <Card
-          title="Today's Check-ins"
-          value={stats.todayCheckIns}
-          subtitle={`${stats.todayCheckOuts} check-out(s)`}
+          title="Confirmed Bookings"
+          value={stats.confirmedBookings}
+          subtitle={`${stats.totalBookings} total · ${stats.pendingBookings} pending`}
           icon={
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-            </svg>
-          }
-        />
-        <Card
-          title="Pending Bookings"
-          value={stats.pendingBookings}
-          subtitle="Awaiting confirmation"
-          icon={
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
             </svg>
           }
         />
       </div>
+
+      {/* Today's arrivals + departures */}
+      {(todayArrivals.length > 0 || todayDepartures.length > 0) && (
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="rounded-xl bg-white shadow-sm border border-gray-100">
+            <div className="border-b border-gray-100 px-6 py-4">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Arriving Today
+                {todayArrivals.length > 0 && (
+                  <span className="ml-2 text-sm font-normal text-gray-500">
+                    ({todayArrivals.length})
+                  </span>
+                )}
+              </h2>
+            </div>
+            <div className="divide-y divide-gray-50">
+              {todayArrivals.length === 0 ? (
+                <p className="px-6 py-6 text-center text-sm text-gray-400">
+                  No arrivals today
+                </p>
+              ) : (
+                todayArrivals.map((a) => (
+                  <div
+                    key={a.id}
+                    className="flex items-center justify-between px-6 py-3"
+                  >
+                    <div>
+                      <Link
+                        href={`/admin/bookings/${a.id}`}
+                        className="text-sm font-medium text-gray-900 hover:text-[#2d5a5a]"
+                      >
+                        {a.guest_name}
+                      </Link>
+                      <p className="mt-0.5 text-xs text-gray-500">
+                        {formatAccommodation(a.accommodation)}
+                        {a.guests ? ` · ${a.guests} guest${a.guests === 1 ? "" : "s"}` : ""}
+                      </p>
+                    </div>
+                    {a.guest_phone ? (
+                      <a
+                        href={`tel:${a.guest_phone}`}
+                        className="text-sm font-medium text-[#2d5a5a] hover:underline"
+                      >
+                        {a.guest_phone}
+                      </a>
+                    ) : (
+                      <span className="text-xs text-gray-400">No phone</span>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-xl bg-white shadow-sm border border-gray-100">
+            <div className="border-b border-gray-100 px-6 py-4">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Departing Today
+                {todayDepartures.length > 0 && (
+                  <span className="ml-2 text-sm font-normal text-gray-500">
+                    ({todayDepartures.length})
+                  </span>
+                )}
+              </h2>
+            </div>
+            <div className="divide-y divide-gray-50">
+              {todayDepartures.length === 0 ? (
+                <p className="px-6 py-6 text-center text-sm text-gray-400">
+                  No departures today
+                </p>
+              ) : (
+                todayDepartures.map((d) => (
+                  <div
+                    key={d.id}
+                    className="flex items-center justify-between px-6 py-3"
+                  >
+                    <Link
+                      href={`/admin/bookings/${d.id}`}
+                      className="text-sm font-medium text-gray-900 hover:text-[#2d5a5a]"
+                    >
+                      {d.guest_name}
+                    </Link>
+                    <span className="text-xs text-gray-500">
+                      {formatAccommodation(d.accommodation)}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Per-property month-over-month revenue */}
       <div className="rounded-xl bg-white shadow-sm border border-gray-100">
@@ -219,11 +331,11 @@ export function DashboardContent({
         </div>
       </div>
 
-      {/* Recent bookings table */}
+      {/* Upcoming stays table */}
       <div className="rounded-xl bg-white shadow-sm border border-gray-100">
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <h2 className="text-lg font-semibold text-gray-900">
-            Recent Bookings
+            Upcoming Stays
           </h2>
           <Link
             href="/admin/bookings"
@@ -245,17 +357,17 @@ export function DashboardContent({
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {recentBookings.length === 0 ? (
+              {upcomingStays.length === 0 ? (
                 <tr>
                   <td
                     colSpan={6}
                     className="px-6 py-8 text-center text-sm text-gray-400"
                   >
-                    No bookings yet
+                    No upcoming stays
                   </td>
                 </tr>
               ) : (
-                recentBookings.map((booking) => (
+                upcomingStays.map((booking) => (
                   <tr key={booking.id} className="hover:bg-gray-50/50">
                     <td className="whitespace-nowrap px-6 py-3.5 text-sm font-medium text-gray-900">
                       {booking.guest_name}
