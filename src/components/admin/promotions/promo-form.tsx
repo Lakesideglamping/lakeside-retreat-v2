@@ -89,6 +89,22 @@ export function PromoForm({
     setForm((f) => ({ ...f, [field]: value }));
   };
 
+  const previewAt = (subtotal: number): { discount: number; final: number } => {
+    const value = Number(form.discount_value) || 0;
+    const discount =
+      form.discount_type === "percentage"
+        ? Math.min(subtotal, (subtotal * value) / 100)
+        : Math.min(subtotal, value);
+    return { discount, final: Math.max(0, subtotal - discount) };
+  };
+
+  const fmt = (n: number) =>
+    new Intl.NumberFormat("en-NZ", {
+      style: "currency",
+      currency: "NZD",
+      maximumFractionDigits: 2,
+    }).format(n);
+
   return (
     <div className="space-y-4">
       {error && (
@@ -209,6 +225,29 @@ export function PromoForm({
           onChange={(v) => update("partner_info", v)}
           placeholder="Partner details..."
         />
+      )}
+
+      {/* Discount preview — sanity-check the math before saving. */}
+      {Number(form.discount_value) > 0 && (
+        <div className="rounded-lg border border-[#2d5a5a]/20 bg-[#2d5a5a]/5 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2d5a5a]">
+            Preview
+          </p>
+          <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {[500, 1000, 2000].map((base) => {
+              const { discount, final } = previewAt(base);
+              return (
+                <div key={base} className="rounded-md bg-white p-3 text-sm">
+                  <p className="text-xs text-gray-500">On {fmt(base)} subtotal</p>
+                  <p className="font-semibold text-gray-900">
+                    Guest pays {fmt(final)}
+                  </p>
+                  <p className="text-xs text-red-600">−{fmt(discount)} off</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       )}
 
       <FormField
