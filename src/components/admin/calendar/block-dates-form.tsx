@@ -12,6 +12,8 @@ interface BlockDatesFormProps {
   onClose: () => void;
   onSuccess: () => void;
   initialDate: string | null;
+  initialEndDate?: string | null;
+  initialProperty?: string | null;
 }
 
 const PROPERTY_OPTIONS = [
@@ -32,10 +34,12 @@ export function BlockDatesForm({
   onClose,
   onSuccess,
   initialDate,
+  initialEndDate,
+  initialProperty,
 }: BlockDatesFormProps) {
-  const [property, setProperty] = useState("");
+  const [property, setProperty] = useState(initialProperty ?? "");
   const [startDate, setStartDate] = useState(initialDate ?? "");
-  const [endDate, setEndDate] = useState(initialDate ?? "");
+  const [endDate, setEndDate] = useState(initialEndDate ?? initialDate ?? "");
   const [reason, setReason] = useState("maintenance");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -45,8 +49,9 @@ export function BlockDatesForm({
   const handleOpen = () => {
     if (initialDate) {
       setStartDate(initialDate);
-      setEndDate(initialDate);
+      setEndDate(initialEndDate ?? initialDate);
     }
+    if (initialProperty) setProperty(initialProperty);
   };
 
   // Reset form on close

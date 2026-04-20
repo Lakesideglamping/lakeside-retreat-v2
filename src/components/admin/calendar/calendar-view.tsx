@@ -108,6 +108,37 @@ export function CalendarView({
   const [error, setError] = useState<string | null>(null);
   const [showBlockForm, setShowBlockForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedEndDate, setSelectedEndDate] = useState<string | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<string | null>(null);
+
+  // Drag-to-block: track an in-progress selection across cells so an operator
+  // can sweep out a date range for a property and drop straight into the
+  // "Block Dates" form with start/end/property pre-filled.
+  const [drag, setDrag] = useState<
+    | { property: string; anchor: string; current: string }
+    | null
+  >(null);
+
+  useEffect(() => {
+    if (!drag) return;
+    const onUp = () => {
+      setDrag((d) => {
+        if (!d) return null;
+        const [from, to] = d.anchor <= d.current ? [d.anchor, d.current] : [d.current, d.anchor];
+        setSelectedProperty(d.property);
+        setSelectedDate(from);
+        setSelectedEndDate(to);
+        setShowBlockForm(true);
+        return null;
+      });
+    };
+    window.addEventListener("mouseup", onUp);
+    window.addEventListener("touchend", onUp);
+    return () => {
+      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("touchend", onUp);
+    };
+  }, [drag]);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -150,6 +181,8 @@ export function CalendarView({
   const handleBlockCreated = () => {
     setShowBlockForm(false);
     setSelectedDate(null);
+    setSelectedEndDate(null);
+    setSelectedProperty(null);
     fetchData();
   };
 
@@ -327,18 +360,34 @@ export function CalendarView({
                   style={{ width: DAYS_VISIBLE * DAY_WIDTH, minHeight: 80 }}
                 >
                   {/* Day cell backgrounds */}
-                  <div className="absolute inset-0 flex">
+                  <div className="absolute inset-0 flex select-none">
                     {dates.map((date) => {
                       const d = new Date(date + "T12:00:00");
                       const isToday = date === today;
                       const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+                      const inDrag =
+                        drag &&
+                        drag.property === property.id &&
+                        ((drag.anchor <= date && date <= drag.current) ||
+                          (drag.current <= date && date <= drag.anchor));
                       return (
                         <div
                           key={date}
                           style={{ width: DAY_WIDTH }}
-                          onClick={() => { setSelectedDate(date); setShowBlockForm(true); }}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setDrag({ property: property.id, anchor: date, current: date });
+                          }}
+                          onMouseEnter={() => {
+                            setDrag((d) =>
+                              d && d.property === property.id ? { ...d, current: date } : d
+                            );
+                          }}
+                          onTouchStart={() => {
+                            setDrag({ property: property.id, anchor: date, current: date });
+                          }}
                           className={`h-full shrink-0 cursor-pointer border-r border-gray-100 transition-colors hover:bg-blue-50/30 ${
-                            isToday ? "bg-teal-50/40" : isWeekend ? "bg-gray-50/60" : ""
+                            inDrag ? "bg-red-100/60" : isToday ? "bg-teal-50/40" : isWeekend ? "bg-gray-50/60" : ""
                           }`}
                         />
                       );
@@ -465,9 +514,16 @@ export function CalendarView({
       {/* Block dates modal */}
       <BlockDatesForm
         open={showBlockForm}
-        onClose={() => { setShowBlockForm(false); setSelectedDate(null); }}
+        onClose={() => {
+          setShowBlockForm(false);
+          setSelectedDate(null);
+          setSelectedEndDate(null);
+          setSelectedProperty(null);
+        }}
         onSuccess={handleBlockCreated}
         initialDate={selectedDate}
+        initialEndDate={selectedEndDate}
+        initialProperty={selectedProperty}
       />
     </div>
   );
