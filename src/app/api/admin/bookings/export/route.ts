@@ -1,5 +1,19 @@
 import { withAdmin } from "@/lib/admin-route";
 import { prisma } from "@/lib/db";
+import { getValidIds } from "@/lib/accommodations";
+
+// Match the allowlist used by the list endpoint so unknown filter values
+// either return 0 rows (obvious bug) or are ignored, rather than silently
+// querying on arbitrary strings.
+const VALID_BOOKING_STATUSES = new Set([
+  "pending",
+  "confirmed",
+  "cancelled",
+  "completed",
+]);
+// Source is left open-ended — PMS imports bring in values we don't control
+// (airbnb, booking.com, etc.). Shape-match instead of allowlisting.
+const SOURCE_SHAPE = /^[A-Za-z0-9._-]{1,50}$/;
 
 function escapeCsvValue(value: string | number | null | undefined): string {
   if (value === null || value === undefined) return "";
@@ -22,21 +36,26 @@ function buildBookingFilters(url: URL): Record<string, unknown> {
     deleted_at: null,
   };
 
-  if (status) where.status = status;
-  if (accommodation) where.accommodation = accommodation;
-  if (source) where.booking_source = source;
+  if (status && VALID_BOOKING_STATUSES.has(status)) where.status = status;
+  if (accommodation && getValidIds().includes(accommodation)) {
+    where.accommodation = accommodation;
+  }
+  if (source && SOURCE_SHAPE.test(source)) where.booking_source = source;
 
-  if (search) {
+  if (search && search.length <= 100) {
     where.OR = [
       { guest_name: { contains: search, mode: "insensitive" } },
       { guest_email: { contains: search, mode: "insensitive" } },
     ];
   }
 
-  if (dateFrom || dateTo) {
+  // Only accept YYYY-MM-DD date strings; anything else is ignored so a bad
+  // query string can't produce an Invalid Date that Prisma rejects at runtime.
+  const DATE_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
+  if ((dateFrom && DATE_SHAPE.test(dateFrom)) || (dateTo && DATE_SHAPE.test(dateTo))) {
     const checkIn: Record<string, Date> = {};
-    if (dateFrom) checkIn.gte = new Date(dateFrom);
-    if (dateTo) checkIn.lte = new Date(dateTo);
+    if (dateFrom && DATE_SHAPE.test(dateFrom)) checkIn.gte = new Date(dateFrom);
+    if (dateTo && DATE_SHAPE.test(dateTo)) checkIn.lte = new Date(dateTo);
     where.check_in = checkIn;
   }
 

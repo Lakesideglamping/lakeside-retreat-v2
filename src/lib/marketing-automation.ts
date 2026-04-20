@@ -55,7 +55,7 @@ export async function findReviewCandidates(): Promise<Booking[]> {
   const bookings = await prisma.bookings.findMany({
     where: {
       check_out: { gte: startOfDay, lt: endOfDay },
-      payment_status: "completed",
+      payment_status: { in: ["paid", "paid_external"] },
       status: "confirmed",
       deleted_at: null,
     },
@@ -85,7 +85,7 @@ export async function findPreArrivalBookings(): Promise<Booking[]> {
   const bookings = await prisma.bookings.findMany({
     where: {
       check_in: { gte: startOfDay, lt: endOfDay },
-      payment_status: "completed",
+      payment_status: { in: ["paid", "paid_external"] },
       status: "confirmed",
       deleted_at: null,
     },
@@ -106,7 +106,7 @@ export async function findDuringStayBookings(): Promise<Booking[]> {
   const bookings = await prisma.bookings.findMany({
     where: {
       check_in: { gte: startOfDay, lt: endOfDay },
-      payment_status: "completed",
+      payment_status: { in: ["paid", "paid_external"] },
       status: "confirmed",
       deleted_at: null,
     },

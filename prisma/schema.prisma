@@ -71,6 +71,9 @@ model bookings {
   @@index([payment_status], map: "idx_bookings_payment_status")
   @@index([status], map: "idx_bookings_status")
   @@index([stripe_session_id], map: "idx_bookings_stripe_session")
+  // Covers release-deposits cron: WHERE security_deposit_status = 'held'
+  // AND deposit_release_due <= now(). Without this the cron full-scans.
+  @@index([security_deposit_status, deposit_release_due], map: "idx_bookings_deposit_release")
 }
 
 model contact_messages {

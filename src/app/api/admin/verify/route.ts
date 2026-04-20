@@ -16,8 +16,8 @@ export async function GET() {
     return NextResponse.json({ valid: false }, { status: 401 });
   }
 
-  return NextResponse.json({
-    valid: true,
-    user: { username: admin.username, role: admin.role },
-  });
+  // Deliberately return only {valid:true} — no username/role echo. This
+  // endpoint is reachable by any authenticated session, and there's no
+  // reason to expose identity info to code paths that don't already know.
+  return NextResponse.json({ valid: true });
 }
