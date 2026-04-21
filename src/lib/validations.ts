@@ -1,6 +1,19 @@
 import { z } from "zod";
 import { getValidIds } from "./accommodations";
 
+/**
+ * YYYY-MM-DD calendar date. Regex alone accepts impossible dates like
+ * "9999-13-45"; the refine step parses and round-trips through Date so
+ * month/day bounds (and leap years) are actually enforced.
+ */
+export const dateStringSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD")
+  .refine((s) => {
+    const d = new Date(s + "T00:00:00Z");
+    return !isNaN(d.getTime()) && s === d.toISOString().slice(0, 10);
+  }, "Invalid calendar date");
+
 export const contactFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
   email: z.string().email("Please enter a valid email address"),
@@ -19,16 +32,16 @@ export const availabilityCheckSchema = z.object({
   accommodation: z.string().refine((val) => getValidIds().includes(val), {
     message: "Invalid accommodation",
   }),
-  checkIn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
-  checkOut: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
+  checkIn: dateStringSchema,
+  checkOut: dateStringSchema,
 });
 
 export const paymentSessionSchema = z.object({
   accommodation: z.string().refine((val) => getValidIds().includes(val), {
     message: "Invalid accommodation",
   }),
-  checkIn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  checkOut: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  checkIn: dateStringSchema,
+  checkOut: dateStringSchema,
   guests: z.number().int().min(1).max(10),
   guestName: z.string().min(2).max(100),
   guestEmail: z.string().email(),

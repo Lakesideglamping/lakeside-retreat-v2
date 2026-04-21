@@ -158,9 +158,11 @@ export async function POST(request: Request) {
             seasonalMultiplier
           );
           const expectedTotal = baseTotal - discountCents;
-          // Allow ±1 cent tolerance for floating-point rounding differences
-          // between the server calculation and Stripe's stored amount.
-          if (Math.abs((session.amount_total ?? 0) - expectedTotal) > 1) {
+          // Allow up to 10c drift from line-item rounding; anything larger
+          // is tampering/calculation error. Stripe builds totals from
+          // per-line-item cents, so a few cents of drift across multiple
+          // nightly rates + fees + discounts is normal and legitimate.
+          if (Math.abs((session.amount_total ?? 0) - expectedTotal) > 10) {
             log.error("stripe webhook amount mismatch", {
               sessionTotal: session.amount_total,
               expected: expectedTotal,
@@ -404,8 +406,15 @@ export async function POST(request: Request) {
         //    receives a message that reflects the true deposit state.
         //    Accommodation is paid regardless of deposit outcome; deposit
         //    failures are handled by the admin alert fired in step 1.
+        //
+        //    Uplisting sync runs under a 3s race against the Stripe webhook
+        //    budget (10s). Keeping the fast path inline means most bookings
+        //    land in Uplisting before the webhook returns. If Uplisting is
+        //    slow, we mark the booking "failed" with retry_count=0 so the
+        //    retry-uplisting-sync cron picks it up on its next tick.
         if (bookingSaved) {
-          syncBooking({
+          const SYNC_TIMEOUT_MS = 3_000;
+          const syncPromise = syncBooking({
             accommodation: metadata.accommodation || "",
             checkIn: metadata.checkIn || "",
             checkOut: metadata.checkOut || "",
@@ -414,16 +423,63 @@ export async function POST(request: Request) {
             guestPhone: metadata.guestPhone,
             guests: Number(metadata.guests) || 1,
             totalPrice: (session.amount_total || 0) / 100,
-          })
-            .then(() => {
-              prisma.bookings
-                .update({
-                  where: { id: bookingId },
-                  data: { uplisting_sync_status: "synced" },
-                })
-                .catch(() => {});
-            })
-            .catch((err) => {
+          });
+
+          // Race states: "ok" | "err" | "timeout". The race result drives
+          // the sync_status write; inline failure still alerts, timeout hands
+          // off to the retry cron without alerting (cron alerts on exhaustion).
+          const timeoutPromise = new Promise<"timeout">((resolve) =>
+            setTimeout(() => resolve("timeout"), SYNC_TIMEOUT_MS)
+          );
+          const wrappedSync = syncPromise.then(
+            () => "ok" as const,
+            (err: unknown) => ({ kind: "err" as const, err })
+          );
+
+          Promise.race([wrappedSync, timeoutPromise])
+            .then((outcome) => {
+              if (outcome === "timeout") {
+                // Webhook can't wait any longer — hand off to retry cron.
+                // Status "failed" + retries 0 matches what the cron filter
+                // already looks for (uplisting_sync_retries: { lt: MAX_RETRIES }).
+                log.warn("uplisting sync timed out — handing to retry cron", {
+                  bookingId,
+                  timeoutMs: SYNC_TIMEOUT_MS,
+                });
+                prisma.bookings
+                  .update({
+                    where: { id: bookingId },
+                    data: {
+                      uplisting_sync_status: "failed",
+                      uplisting_sync_retries: 0,
+                    },
+                  })
+                  .catch(() => {});
+                // Log late completion for debugging but don't alert — cron owns
+                // this booking now and will alert on retry exhaustion.
+                syncPromise
+                  .then(() =>
+                    log.info("uplisting sync completed after timeout", { bookingId })
+                  )
+                  .catch((err) =>
+                    log.error("uplisting sync failed after timeout", {
+                      bookingId,
+                      error: err instanceof Error ? err.message : String(err),
+                    })
+                  );
+                return;
+              }
+              if (outcome === "ok") {
+                prisma.bookings
+                  .update({
+                    where: { id: bookingId },
+                    data: { uplisting_sync_status: "synced" },
+                  })
+                  .catch(() => {});
+                return;
+              }
+              // Inline error — existing behaviour: mark failed, alert.
+              const err = outcome.err;
               log.error("uplisting sync failed", {
                 bookingId,
                 error: err instanceof Error ? err.message : String(err),
@@ -441,7 +497,8 @@ export async function POST(request: Request) {
                 `Uplisting sync failed for booking ${bookingId}`,
                 `Guest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\nBooking ID: ${bookingId}\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nDouble-booking risk — block dates manually until this is resolved.\nError: ${errMsg}`
               ).catch(() => {});
-            });
+            })
+            .catch(() => {});
 
           sendBookingConfirmation({
             guestName: metadata.guestName || "",
