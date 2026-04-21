@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { getValidIds } from "./accommodations";
+import { dateStringSchema } from "./validations";
 
 const accommodationField = () =>
   z.string().refine((val) => getValidIds().includes(val), {
@@ -19,8 +20,8 @@ export const bookingCreateSchema = z
     guest_email: z.string().email(),
     guest_phone: z.string().optional(),
     accommodation: accommodationField(),
-    check_in: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-    check_out: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    check_in: dateStringSchema,
+    check_out: dateStringSchema,
     guests: z.number().int().min(1).max(10),
     total_price: z.number().min(0).optional(),
     status: z.enum(["pending", "confirmed", "cancelled", "completed"]).optional(),
@@ -37,8 +38,8 @@ export const bookingUpdateSchema = z
     guest_email: z.string().email().optional(),
     guest_phone: z.string().optional(),
     accommodation: accommodationField().optional(),
-    check_in: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    check_out: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    check_in: dateStringSchema.optional(),
+    check_out: dateStringSchema.optional(),
     guests: z.number().int().min(1).max(10).optional(),
     total_price: z.number().min(0).optional(),
     status: z.enum(["pending", "confirmed", "cancelled", "completed"]).optional(),
@@ -64,8 +65,8 @@ export const statusUpdateSchema = z.object({
 
 export const seasonalRateSchema = z.object({
   name: z.string().min(1).max(100),
-  start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  end_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  start_date: dateStringSchema,
+  end_date: dateStringSchema,
   multiplier: z.number().min(0.01).max(9.99),
   is_active: z.boolean().optional(),
 });
@@ -75,7 +76,7 @@ export const reviewSchema = z.object({
   platform: z.string().optional(),
   rating: z.number().int().min(1).max(5),
   review_text: z.string().max(2000).optional(),
-  stay_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  stay_date: dateStringSchema.optional(),
   property: z.string().optional(),
   status: z.string().optional(),
   is_featured: z.boolean().optional(),
@@ -96,8 +97,8 @@ export const promoCodeSchema = z
     description: z.string().max(500).optional(),
     discount_type: z.enum(["percentage", "fixed"]),
     discount_value: z.number().min(0),
-    valid_from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-    valid_until: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    valid_from: dateStringSchema.optional(),
+    valid_until: dateStringSchema.optional(),
     min_stay: z.number().int().min(1).optional(),
     usage_limit: z.number().int().min(1).optional(),
     status: z.enum(["active", "paused", "expired"]).optional(),
@@ -121,8 +122,8 @@ export const promoCodeSchema = z
 
 export const blockedDateSchema = z.object({
   property: accommodationField(),
-  start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  end_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  start_date: dateStringSchema,
+  end_date: dateStringSchema,
   reason: z.enum(["maintenance", "personal", "cleaning", "other"]).optional(),
   notes: z.string().max(500).optional(),
 });
