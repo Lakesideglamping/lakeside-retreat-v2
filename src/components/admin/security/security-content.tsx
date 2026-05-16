@@ -22,7 +22,16 @@ function validatePassword(password: string): string | null {
 
 type TwoFaStep = "idle" | "setup" | "verify";
 
-export function SecurityContent() {
+interface SecurityContentProps {
+  /**
+   * Initial 2FA status — fetched on the server so the page can render the
+   * correct Enabled/Disabled badge in the first paint, no flicker. When
+   * absent (legacy callers), the component falls back to a client fetch.
+   */
+  initialTwoFa?: { enabled: boolean; recoveryCodesRemaining: number };
+}
+
+export function SecurityContent({ initialTwoFa }: SecurityContentProps = {}) {
   // Password change state
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -32,16 +41,19 @@ export function SecurityContent() {
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
-  // 2FA state
-  const [twoFaEnabled, setTwoFaEnabled] = useState(false);
-  const [twoFaLoading, setTwoFaLoading] = useState(true);
+  // 2FA state — seed from server prop when available so the badge shows
+  // the right value on first paint instead of flashing "Disabled".
+  const [twoFaEnabled, setTwoFaEnabled] = useState(initialTwoFa?.enabled ?? false);
+  const [twoFaLoading, setTwoFaLoading] = useState(!initialTwoFa);
   const [twoFaStep, setTwoFaStep] = useState<TwoFaStep>("idle");
   const [twoFaSecret, setTwoFaSecret] = useState("");
   const [twoFaQr, setTwoFaQr] = useState("");
   const [twoFaToken, setTwoFaToken] = useState("");
   const [twoFaError, setTwoFaError] = useState("");
   const [twoFaActionLoading, setTwoFaActionLoading] = useState(false);
-  const [recoveryRemaining, setRecoveryRemaining] = useState(0);
+  const [recoveryRemaining, setRecoveryRemaining] = useState(
+    initialTwoFa?.recoveryCodesRemaining ?? 0
+  );
   const [recoveryCodes, setRecoveryCodes] = useState<string[] | null>(null);
   const [regenLoading, setRegenLoading] = useState(false);
 
@@ -59,8 +71,11 @@ export function SecurityContent() {
   }, []);
 
   useEffect(() => {
-    fetch2faStatus();
-  }, [fetch2faStatus]);
+    // Skip the initial client fetch when the server has already provided
+    // the 2FA status (no flicker path). fetch2faStatus is still used to
+    // refresh after enable/disable actions below.
+    if (!initialTwoFa) fetch2faStatus();
+  }, [fetch2faStatus, initialTwoFa]);
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
