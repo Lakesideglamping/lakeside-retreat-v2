@@ -241,6 +241,35 @@ export function duringStayHtml(data: BookingEmailData): string {
   `);
 }
 
+/**
+ * Gentle reminder sent ~7 days after the initial thank-you when no
+ * review has been left. Shorter than the first email, no security-bond
+ * recap, leads with the Google CTA — Google reviews lift local search
+ * ranking which is the real off-page SEO lever for a small NZ property.
+ */
+export function checkoutReviewReminderHtml(data: BookingEmailData): string {
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
+  const googleReviewUrl = "https://g.page/r/lakeside-retreat-cromwell/review?utm_source=email&utm_medium=review_reminder";
+  const airbnbUrl = "https://www.airbnb.co.nz/users/show/lakesideretreat";
+
+  return layout("How was your stay?", `
+    <p>Hi ${guestName},</p>
+    <p>It's been a week since you stayed with us at ${name} — we hope your trip home was smooth and that you've been telling everyone about the lake views.</p>
+
+    <p>If you haven't already, would you mind taking 60 seconds to leave us a review? Honest feedback helps other travellers find us, and as an owner-run retreat it genuinely makes our week.</p>
+
+    <div style="text-align:center;margin:24px 0;">
+      <a href="${googleReviewUrl}" ${ctaButton("#4285f4")} style="display:inline-block;background-color:#4285f4;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;margin:4px;">Review on Google</a>
+      <a href="${airbnbUrl}" ${ctaButton("#ff5a5f")} style="display:inline-block;background-color:#ff5a5f;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;margin:4px;">Review on Airbnb</a>
+    </div>
+
+    <p>If you've already left one — thank you, truly. Please ignore this!</p>
+    <p>And if anything about your stay wasn't quite right, just hit reply and let us know. We'd much rather hear it directly so we can put it right.</p>
+    ${signOff}
+  `);
+}
+
 export function checkoutThankYouHtml(data: BookingEmailData): string {
   const name = escapeHtml(formatAccommodationName(data.accommodation));
   const guestName = escapeHtml(data.guest_name);
