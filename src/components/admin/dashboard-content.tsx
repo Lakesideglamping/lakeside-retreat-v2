@@ -49,6 +49,8 @@ interface Notifications {
   pendingBookings: number;
   recentMessages: number;
   failedWebhooks: number;
+  abandonedCheckouts: number;
+  pendingReviews: number;
 }
 
 interface PropertyRevenue {
@@ -121,7 +123,9 @@ export function DashboardContent({
     notifications.syncFailures > 0 ||
     notifications.pendingBookings > 0 ||
     notifications.recentMessages > 0 ||
-    notifications.failedWebhooks > 0;
+    notifications.failedWebhooks > 0 ||
+    notifications.abandonedCheckouts > 0 ||
+    notifications.pendingReviews > 0;
 
   return (
     <div className="space-y-6">
@@ -156,6 +160,18 @@ export function DashboardContent({
           {notifications.recentMessages > 0 && (
             <Alert variant="info" title="New Messages">
               {notifications.recentMessages} new contact message(s) in the last 24 hours.
+            </Alert>
+          )}
+          {notifications.abandonedCheckouts > 0 && (
+            <Alert variant="warning" title="Abandoned Checkouts">
+              {notifications.abandonedCheckouts} abandoned checkout(s) may need
+              follow-up reminders.
+            </Alert>
+          )}
+          {notifications.pendingReviews > 0 && (
+            <Alert variant="warning" title="Pending Review Requests">
+              {notifications.pendingReviews} review request(s) are pending and
+              have not been sent yet.
             </Alert>
           )}
         </div>
