@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, released: 0, devMode: true });
   }
 
-  const nowIso = new Date().toISOString();
+  const now = new Date();
   let released = 0;
   let errors = 0;
 
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     const due = await prisma.bookings.findMany({
       where: {
         security_deposit_status: "held",
-        deposit_release_due: { lte: nowIso, not: null },
+        deposit_release_due: { lte: now, not: null },
         deleted_at: null,
       },
       select: {

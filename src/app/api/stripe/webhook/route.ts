@@ -299,10 +299,13 @@ export async function POST(request: Request) {
               // deposit PI above — keeps the DB record honest in mismatch cases.
               security_deposit_amount: acc?.securityDeposit ?? 300,
               security_deposit_intent_id: depositIntentId,
+              // Column is TIMESTAMPTZ — pass a Date, not a string. (Was
+              // previously .toISOString() against a TEXT column; converted
+              // in migration 20260516000000_deposit_release_due_to_timestamp.)
               deposit_release_due: new Date(
                 new Date(metadata.checkOut).getTime() +
                   2 * 24 * 60 * 60 * 1000
-              ).toISOString(),
+              ),
             },
           });
           bookingSaved = true;

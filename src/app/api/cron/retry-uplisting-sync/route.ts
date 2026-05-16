@@ -10,6 +10,16 @@ import { syncBooking } from "@/lib/uplisting";
 // the admin UI (or /api/admin/bookings/:id/sync).
 const MAX_RETRIES = 3;
 
+// Circuit breaker — if the Uplisting API has 5+ failures across all
+// bookings in the last hour, the API itself is probably down. Halt the
+// retry cron for an hour rather than burning through every booking's
+// 3-retry budget against a broken upstream. Resumes automatically when
+// the cooldown expires.
+const FAILURE_THRESHOLD = 5;
+const FAILURE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
+const COOLDOWN_KEY = "uplisting_sync_cooldown_until";
+
 /**
  * Retry all website bookings whose Uplisting calendar sync previously failed.
  *
@@ -36,6 +46,27 @@ export async function POST(request: Request) {
   const skipped = 0;
 
   try {
+    // Circuit breaker check — if we tripped recently, skip this tick.
+    const cooldownRow = await prisma.system_settings.findUnique({
+      where: { setting_key: COOLDOWN_KEY },
+    });
+    if (cooldownRow?.setting_value) {
+      const cooldownUntil = new Date(cooldownRow.setting_value);
+      if (cooldownUntil > new Date()) {
+        logger.warn("retry-uplisting-sync: circuit breaker open, skipping tick", {
+          cooldownUntil: cooldownUntil.toISOString(),
+        });
+        return NextResponse.json({
+          success: true,
+          synced: 0,
+          failed: 0,
+          skipped: 0,
+          circuitOpen: true,
+          cooldownUntil: cooldownUntil.toISOString(),
+        });
+      }
+    }
+
     // Only retry website-sourced bookings; OTA bookings (imported from
     // Uplisting) don't need to be synced back. Also limit to bookings where
     // the check-out is in the future or recent past — no point syncing
@@ -130,6 +161,41 @@ export async function POST(request: Request) {
       }
     }
 
+    // Circuit breaker — count failures across all bookings in the last hour.
+    // If we're seeing the threshold or more, Uplisting itself is probably
+    // broken; halt the cron for an hour rather than burning everyone's
+    // retry budget. Uses updated_at as a proxy for "touched by this cron",
+    // good enough since the only thing that flips uplisting_sync_status to
+    // failed in the recent window is sync activity.
+    const failureWindowStart = new Date(Date.now() - FAILURE_WINDOW_MS);
+    const recentFailures = await prisma.bookings.count({
+      where: {
+        uplisting_sync_status: { in: ["failed", "sync_failed_permanent"] },
+        updated_at: { gte: failureWindowStart },
+      },
+    });
+
+    if (recentFailures >= FAILURE_THRESHOLD) {
+      const cooldownUntil = new Date(Date.now() + COOLDOWN_MS);
+      await prisma.system_settings.upsert({
+        where: { setting_key: COOLDOWN_KEY },
+        create: {
+          setting_key: COOLDOWN_KEY,
+          setting_value: cooldownUntil.toISOString(),
+        },
+        update: { setting_value: cooldownUntil.toISOString() },
+      });
+      logger.error("retry-uplisting-sync: circuit breaker tripped", {
+        recentFailures,
+        cooldownUntil: cooldownUntil.toISOString(),
+      });
+      sendSystemAlert(
+        "UPLISTING_CIRCUIT_OPEN",
+        `Uplisting sync halted — ${recentFailures} failures in last hour`,
+        `The retry cron has been paused until ${cooldownUntil.toISOString()}.\n\nThis means Uplisting itself is probably down or rejecting requests, and continuing to retry would exhaust each booking's 3-retry budget against a broken upstream.\n\nInvestigate Uplisting API health (https://status.uplisting.io if it exists, or hit /api/health on their side). Once resolved, clear the cooldown by deleting the system_settings row with setting_key='${COOLDOWN_KEY}' or wait for the auto-resume.`
+      ).catch(() => {});
+    }
+
     // Alert if there are still persistently failing bookings after retries.
     // These need manual intervention.
     const stillFailing = await prisma.bookings.count({
@@ -141,7 +207,7 @@ export async function POST(request: Request) {
       },
     });
 
-    if (stillFailing > 0) {
+    if (stillFailing > 0 && recentFailures < FAILURE_THRESHOLD) {
       sendSystemAlert(
         "UPLISTING_SYNC_STILL_FAILING",
         `${stillFailing} booking(s) still failing Uplisting sync after retry`,

@@ -60,7 +60,7 @@ export type BookingsMinAggregateOutputType = {
   uplisting_id: string | null
   created_at: Date | null
   updated_at: Date | null
-  deposit_release_due: string | null
+  deposit_release_due: Date | null
   booking_source: string | null
   uplisting_sync_status: string | null
   uplisting_sync_retries: number | null
@@ -90,7 +90,7 @@ export type BookingsMaxAggregateOutputType = {
   uplisting_id: string | null
   created_at: Date | null
   updated_at: Date | null
-  deposit_release_due: string | null
+  deposit_release_due: Date | null
   booking_source: string | null
   uplisting_sync_status: string | null
   uplisting_sync_retries: number | null
@@ -345,7 +345,7 @@ export type BookingsGroupByOutputType = {
   uplisting_id: string | null
   created_at: Date | null
   updated_at: Date | null
-  deposit_release_due: string | null
+  deposit_release_due: Date | null
   booking_source: string | null
   uplisting_sync_status: string | null
   uplisting_sync_retries: number | null
@@ -398,7 +398,7 @@ export type bookingsWhereInput = {
   uplisting_id?: Prisma.StringNullableFilter<"bookings"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
-  deposit_release_due?: Prisma.StringNullableFilter<"bookings"> | string | null
+  deposit_release_due?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
   booking_source?: Prisma.StringNullableFilter<"bookings"> | string | null
   uplisting_sync_status?: Prisma.StringNullableFilter<"bookings"> | string | null
   uplisting_sync_retries?: Prisma.IntNullableFilter<"bookings"> | number | null
@@ -461,7 +461,7 @@ export type bookingsWhereUniqueInput = Prisma.AtLeast<{
   uplisting_id?: Prisma.StringNullableFilter<"bookings"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
-  deposit_release_due?: Prisma.StringNullableFilter<"bookings"> | string | null
+  deposit_release_due?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
   booking_source?: Prisma.StringNullableFilter<"bookings"> | string | null
   uplisting_sync_status?: Prisma.StringNullableFilter<"bookings"> | string | null
   uplisting_sync_retries?: Prisma.IntNullableFilter<"bookings"> | number | null
@@ -529,7 +529,7 @@ export type bookingsScalarWhereWithAggregatesInput = {
   uplisting_id?: Prisma.StringNullableWithAggregatesFilter<"bookings"> | string | null
   created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"bookings"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"bookings"> | Date | string | null
-  deposit_release_due?: Prisma.StringNullableWithAggregatesFilter<"bookings"> | string | null
+  deposit_release_due?: Prisma.DateTimeNullableWithAggregatesFilter<"bookings"> | Date | string | null
   booking_source?: Prisma.StringNullableWithAggregatesFilter<"bookings"> | string | null
   uplisting_sync_status?: Prisma.StringNullableWithAggregatesFilter<"bookings"> | string | null
   uplisting_sync_retries?: Prisma.IntNullableWithAggregatesFilter<"bookings"> | number | null
@@ -559,7 +559,7 @@ export type bookingsCreateInput = {
   uplisting_id?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  deposit_release_due?: string | null
+  deposit_release_due?: Date | string | null
   booking_source?: string | null
   uplisting_sync_status?: string | null
   uplisting_sync_retries?: number | null
@@ -589,7 +589,7 @@ export type bookingsUncheckedCreateInput = {
   uplisting_id?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  deposit_release_due?: string | null
+  deposit_release_due?: Date | string | null
   booking_source?: string | null
   uplisting_sync_status?: string | null
   uplisting_sync_retries?: number | null
@@ -619,7 +619,7 @@ export type bookingsUpdateInput = {
   uplisting_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deposit_release_due?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deposit_release_due?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   booking_source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_retries?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -649,7 +649,7 @@ export type bookingsUncheckedUpdateInput = {
   uplisting_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deposit_release_due?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deposit_release_due?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   booking_source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_retries?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -679,7 +679,7 @@ export type bookingsCreateManyInput = {
   uplisting_id?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  deposit_release_due?: string | null
+  deposit_release_due?: Date | string | null
   booking_source?: string | null
   uplisting_sync_status?: string | null
   uplisting_sync_retries?: number | null
@@ -709,7 +709,7 @@ export type bookingsUpdateManyMutationInput = {
   uplisting_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deposit_release_due?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deposit_release_due?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   booking_source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_retries?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -739,7 +739,7 @@ export type bookingsUncheckedUpdateManyInput = {
   uplisting_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deposit_release_due?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deposit_release_due?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   booking_source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_retries?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1014,7 +1014,7 @@ export type $bookingsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     uplisting_id: string | null
     created_at: Date | null
     updated_at: Date | null
-    deposit_release_due: string | null
+    deposit_release_due: Date | null
     booking_source: string | null
     uplisting_sync_status: string | null
     uplisting_sync_retries: number | null
@@ -1464,7 +1464,7 @@ export interface bookingsFieldRefs {
   readonly uplisting_id: Prisma.FieldRef<"bookings", 'String'>
   readonly created_at: Prisma.FieldRef<"bookings", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"bookings", 'DateTime'>
-  readonly deposit_release_due: Prisma.FieldRef<"bookings", 'String'>
+  readonly deposit_release_due: Prisma.FieldRef<"bookings", 'DateTime'>
   readonly booking_source: Prisma.FieldRef<"bookings", 'String'>
   readonly uplisting_sync_status: Prisma.FieldRef<"bookings", 'String'>
   readonly uplisting_sync_retries: Prisma.FieldRef<"bookings", 'Int'>
