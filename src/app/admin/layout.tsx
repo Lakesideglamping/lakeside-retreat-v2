@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { cookies, headers } from "next/headers";
-import { verifyToken, COOKIE_NAME } from "@/lib/auth";
+import { headers } from "next/headers";
 import { AdminShell } from "@/components/admin/admin-shell";
 
 export const metadata: Metadata = {
@@ -26,23 +25,11 @@ export default async function AdminLayout({
     return <>{children}</>;
   }
 
-  // For all other admin pages, verify the token and render with the shell.
-  // The middleware already enforces auth, so this is a secondary check
-  // that also extracts the username for display.
-  const cookieStore = await cookies();
-  const token = cookieStore.get(COOKIE_NAME)?.value;
-
-  let username = "Admin";
-  if (token) {
-    try {
-      const payload = await verifyToken(token);
-      if (payload?.username) {
-        username = payload.username;
-      }
-    } catch {
-      // Token verification failed — still render shell with default username
-    }
-  }
+  // Username is forwarded by middleware (x-admin-username) after the JWT
+  // signature check there. Avoids a per-page-load DB round trip just to
+  // populate the header greeting — actual auth enforcement happens in
+  // middleware (signature) and withAdmin() on API routes (blacklist).
+  const username = headerStore.get("x-admin-username") || "Admin";
 
   return <AdminShell username={username}>{children}</AdminShell>;
 }

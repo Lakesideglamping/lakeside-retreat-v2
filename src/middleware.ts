@@ -94,10 +94,17 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-      await jwtVerify(token, JWT_SECRET_BYTES, {
+      const { payload } = await jwtVerify(token, JWT_SECRET_BYTES, {
         issuer: "lakeside-retreat",
         audience: "admin-panel",
       });
+      // Forward the verified username to the admin layout so it doesn't
+      // need to re-verify the token (and hit the DB blacklist) just to
+      // display "Hi, admin" in the header. Blacklist enforcement still
+      // happens in withAdmin() on every admin API route.
+      if (typeof payload.username === "string") {
+        requestHeaders.set("x-admin-username", payload.username);
+      }
       const response = NextResponse.next({
         request: { headers: requestHeaders },
       });

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { DashboardContent } from "@/components/admin/dashboard-content";
+import { getAll as getAllAccommodations } from "@/lib/accommodations";
 
 export default async function AdminDashboardPage() {
   // Use NZ timezone for "today" since the server runs in UTC
@@ -177,11 +178,12 @@ export default async function AdminDashboardPage() {
     `,
   ]);
 
-  const PROPERTIES = [
-    { id: "dome-pinot", label: "Dome Pinot" },
-    { id: "dome-rose", label: "Dome Rosé" },
-    { id: "lakeside-cottage", label: "Lakeside Cottage" },
-  ];
+  // Single source of truth — adding a 4th property is one edit in
+  // src/lib/accommodations.ts, no hunting through admin pages.
+  const PROPERTIES = getAllAccommodations().map((a) => ({
+    id: a.id,
+    label: a.name,
+  }));
 
   const propertyRevenue = PROPERTIES.map((p) => {
     const curr = Number(
