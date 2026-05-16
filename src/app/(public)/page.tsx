@@ -148,12 +148,12 @@ export default async function HomePage() {
             </h2>
             <p className="text-lg leading-8 text-muted mb-4">
               Step off the deck and onto the lake trail. Taste your way through
-              thirty cellar doors before lunch. Ski at first light, soak under
+              over 30 cellar doors before lunch. Ski at first light, soak under
               the stars by dinner.
             </p>
             <p className="text-lg leading-8 text-muted mb-8">
-              Queenstown&apos;s forty-five minutes away when you want the
-              bustle. Wanaka, thirty. By sunset, the rest of the world feels
+              Queenstown&apos;s 45 minutes or Wanaka 30 mintes away when you want the
+              bustle. By sunset, the rest of the world feels
               very far away.
             </p>
             <Button href="/explore">Explore Local Area</Button>
@@ -190,9 +190,9 @@ export default async function HomePage() {
               image="/images/Pinotfront.jpeg"
               title="Dome Pinot"
               badge="Adults Only"
-              description="Fifty square metres of calm. Lake from the bed, stars through the roof, spa out the door."
-              features={["Lake Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
-              price="$635/night"
+              description="50sqm of calm. Lake from the bed, stars through the roof, spa out the door."
+              features={["Lake Views", "Vineyard Views","Private Spa", "Breakfast Included", "Super King Bed"]}
+              price="$649/night"
             />
             <AccommodationCard
               href="/dome-rose"
@@ -201,15 +201,15 @@ export default async function HomePage() {
               badge="Adults Only"
               description="40sqm geodesic dome tucked into the vines. Private spa, super-king bed, vineyard at the window."
               features={["Vineyard Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
-              price="$615/night"
+              price="$599/night"
             />
             <AccommodationCard
               href="/lakeside-cottage"
               image="/images/lakeside-cottage-exterior.jpeg"
               title="Lakeside Cottage"
-              description="Self-contained lakefront cottage, sleeps 3. Direct Lake Dunstan access, BBQ, and pet-friendly."
-              features={["Lake Access", "Pet Friendly", "Sleeps 3", "BBQ"]}
-              price="$365/night"
+              description="Self-contained lakefront cottage, sleeps 3. Direct Lake Dunstan access, and pet-friendly."
+              features={["Lake Access", "Pet Friendly", "Sleeps 3", "Private Hot Tub","Weber BBQ"]}
+              price="$350/night"
             />
           </div>
         </div>
@@ -338,7 +338,7 @@ export default async function HomePage() {
             {[
               { q: "Where is Lakeside Retreat located?", a: "We\u2019re at 96 Smiths Way, Mount Pisa, just 12km from Cromwell. Directly on Lake Dunstan in Central Otago wine country, with the cycle trail 300m away." },
               { q: "What accommodation do you offer?", a: "Two luxury geodesic domes (Dome Pinot 50sqm and Dome Ros\u00e9 40sqm) for couples, each with a private saltwater spa. Plus an adults-only Lakeside Cottage with direct lake access, a wood-fired hot tub (no chemicals), and a warm welcome for well-behaved dogs." },
-              { q: "How far from Queenstown and Wanaka?", a: "45 minutes from Queenstown via the Kawarau Gorge, and 30\u201335 minutes from Wanaka." },
+              { q: "How far from Queenstown and Wanaka?", a: "45 minutes from Queenstown via the Kawarau Gorge, and 30 minutes from Wanaka." },
               { q: "Can I bring my pet?", a: "The Lakeside Cottage is pet-friendly ($50 flat fee, max 2 dogs). The domes are adults-only and not suitable for pets." },
               { q: "What\u2019s the cancellation policy?", a: "Full refund if cancelled 7+ days before check-in. 50% refund for 3\u20136 days. No refund within 3 days." },
               { q: "Why book direct instead of Airbnb?", a: "Save 12\u201318% in service fees. Same stay, better price, and direct communication with your hosts." },
