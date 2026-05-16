@@ -294,7 +294,10 @@ export async function POST(request: Request) {
               booking_source: "website",
               uplisting_sync_status: "pending",
               security_deposit_status: depositStatus,
-              security_deposit_amount: Number(metadata.securityDeposit || 300),
+              // Store the server-side config value, not the (possibly tampered)
+              // metadata value. This is what Stripe actually charged in the
+              // deposit PI above — keeps the DB record honest in mismatch cases.
+              security_deposit_amount: acc?.securityDeposit ?? 300,
               security_deposit_intent_id: depositIntentId,
               deposit_release_due: new Date(
                 new Date(metadata.checkOut).getTime() +
@@ -548,7 +551,7 @@ export async function POST(request: Request) {
             });
 
             await prisma.bookings.updateMany({
-              where: { stripe_payment_id: paymentIntentId },
+              where: { stripe_payment_id: paymentIntentId, deleted_at: null },
               data: {
                 payment_status: "refunded",
                 status: "cancelled",

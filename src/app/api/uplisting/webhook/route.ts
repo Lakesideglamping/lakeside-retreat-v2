@@ -3,6 +3,7 @@ import { verifyWebhookSignature, isConfigured } from "@/lib/uplisting";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { randomUUID } from "crypto";
+import type { Prisma } from "@/generated/prisma/client";
 
 // Map Uplisting property IDs back to our accommodation slugs.
 // No fallback values — if the env vars are missing we fail closed rather than
@@ -188,7 +189,7 @@ export async function POST(request: Request) {
         if (!uplistingId) break;
 
         try {
-          const updateData: Record<string, unknown> = {
+          const updateData: Prisma.bookingsUpdateManyMutationInput = {
             updated_at: new Date(),
           };
 
@@ -207,8 +208,10 @@ export async function POST(request: Request) {
           if (data.status === "cancelled")
             updateData.status = "cancelled";
 
+          // Skip soft-deleted rows — an admin who removed the booking shouldn't
+          // have it resurrected by a downstream channel update.
           const result = await prisma.bookings.updateMany({
-            where: { uplisting_id: uplistingId },
+            where: { uplisting_id: uplistingId, deleted_at: null },
             data: updateData,
           });
 
@@ -228,7 +231,7 @@ export async function POST(request: Request) {
 
         try {
           const result = await prisma.bookings.updateMany({
-            where: { uplisting_id: uplistingId },
+            where: { uplisting_id: uplistingId, deleted_at: null },
             data: {
               status: "cancelled",
               updated_at: new Date(),
