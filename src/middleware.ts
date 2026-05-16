@@ -5,6 +5,14 @@ import { jwtVerify } from "jose";
 const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE === "true";
 const IS_PROD = process.env.NODE_ENV === "production";
 
+// Fail loud at boot if JWT_SECRET is missing — without this, every admin
+// request silently fails jwtVerify and redirects to /admin/login with no
+// explanation. Encode once at module scope rather than per request.
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET is required");
+}
+const JWT_SECRET_BYTES = new TextEncoder().encode(process.env.JWT_SECRET);
+
 /**
  * Build a per-request CSP header with a unique script nonce. Modern
  * (CSP3) browsers see 'strict-dynamic' and ignore 'unsafe-inline',
@@ -86,8 +94,7 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-      await jwtVerify(token, secret, {
+      await jwtVerify(token, JWT_SECRET_BYTES, {
         issuer: "lakeside-retreat",
         audience: "admin-panel",
       });
