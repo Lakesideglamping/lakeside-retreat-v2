@@ -159,7 +159,10 @@ export function DashboardContent({
           )}
           {notifications.recentMessages > 0 && (
             <Alert variant="info" title="New Messages">
-              {notifications.recentMessages} new contact message(s) in the last 24 hours.
+              {notifications.recentMessages} new contact message(s) in the last 24 hours.{" "}
+              <Link href="/admin/messages" className="font-semibold underline">
+                View messages →
+              </Link>
             </Alert>
           )}
           {notifications.abandonedCheckouts > 0 && (

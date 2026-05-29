@@ -3,8 +3,19 @@ import { contactFormSchema } from "@/lib/validations";
 import { sendContactEmail } from "@/lib/email";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { logger } from "@/lib/logger";
+import { prisma } from "@/lib/db";
 
 const ALLOWED_ORIGIN = process.env.NEXT_PUBLIC_BASE_URL || "https://lakesideretreat.co.nz";
+
+// Human-readable labels for the subject enum, stored as a prefix on the
+// message (the contact_messages table has no dedicated subject column).
+const SUBJECT_LABELS: Record<string, string> = {
+  booking: "Booking enquiry",
+  availability: "Availability",
+  special: "Special request",
+  feedback: "Feedback",
+  other: "Other",
+};
 
 /**
  * Verify the request originates from our own site by checking the Origin
@@ -61,6 +72,26 @@ export async function POST(request: Request) {
         { error: "Validation failed", details: result.error.flatten().fieldErrors },
         { status: 400 }
       );
+    }
+
+    // Persist the enquiry so it's reviewable in the admin panel (Messages),
+    // not just delivered by email. Fail-open: the contact form otherwise
+    // works without the DB, so a database blip must not lose the email or
+    // surface an error to the visitor — we log and still send the email.
+    try {
+      const subjectLabel =
+        SUBJECT_LABELS[result.data.subject] ?? result.data.subject;
+      await prisma.contact_messages.create({
+        data: {
+          name: result.data.name,
+          email: result.data.email,
+          message: `[${subjectLabel}] ${result.data.message}`,
+        },
+      });
+    } catch (dbErr) {
+      logger.error("[api/contact] failed to persist message (continuing)", {
+        error: dbErr instanceof Error ? dbErr.message : String(dbErr),
+      });
     }
 
     await sendContactEmail(result.data);
