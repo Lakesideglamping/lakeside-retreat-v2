@@ -292,7 +292,7 @@ export default async function DomeRosePage() {
                 <p className="text-muted text-sm mb-3">
                   Adults-only lakefront cottage with wood-fired hot tub. Sleeps up to 3.
                 </p>
-                <p className="text-burgundy font-semibold">$350/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$365/night &rarr;</p>
               </div>
             </Link>
           </div>

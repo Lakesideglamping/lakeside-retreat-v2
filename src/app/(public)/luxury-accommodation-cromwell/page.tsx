@@ -7,12 +7,12 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
   description:
-    "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $350/night.",
+    "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $365/night.",
 
   alternates: { canonical: "/luxury-accommodation-cromwell" },
   openGraph: {
     title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
-    description: "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $350/night.",
+    description: "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $365/night.",
     url: "https://lakesideretreat.co.nz/luxury-accommodation-cromwell",
     images: [
       {
@@ -202,7 +202,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/lakeside-cottage-exterior.jpeg",
                 title: "Lakeside Cottage",
                 badge: "Adults-Only · Pet Friendly",
-                price: "$350/night",
+                price: "$365/night",
                 size: "Sleeps 3",
                 desc: "Self-contained cottage with direct lake access, wood-fired hot tub, BBQ, kitchenette, and dog-friendly.",
               },

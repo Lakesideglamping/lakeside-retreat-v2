@@ -6,14 +6,14 @@ import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema, 
 import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
-  title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay | $350/night",
+  title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay | $365/night",
   description:
-    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Adults-only lakefront stay in Central Otago — $350/night.",
+    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Adults-only lakefront stay in Central Otago — $365/night.",
   alternates: { canonical: '/lakeside-cottage' },
   openGraph: {
     title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay",
     description:
-      "Adults-only lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, BBQ, wood-fired hot tub, and dog-friendly. $350/night in Cromwell, Central Otago.",
+      "Adults-only lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, BBQ, wood-fired hot tub, and dog-friendly. $365/night in Cromwell, Central Otago.",
     url: "https://lakesideretreat.co.nz/lakeside-cottage",
     images: [
       {
@@ -55,7 +55,7 @@ const galleryImages = [
 ];
 
 const pricingFeatures = [
-  "Nightly rate: $350/night (GST incl.)",
+  "Nightly rate: $365/night (GST incl.)",
   "Cleaning fee: included in your nightly rate",
   "Extra guests: $100/person/night (max 3)",
   "Pets: $50 flat fee per stay",
@@ -120,8 +120,8 @@ export default async function LakesideCottagePage() {
             Step off the deck, into the lake. Dogs welcome too.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=lakeside-cottage" ariaLabel="Book Lakeside Cottage now — $350 per night">
-              Book Now — $350/night
+            <Button href="/book?a=lakeside-cottage" ariaLabel="Book Lakeside Cottage now — $365 per night">
+              Book Now — $365/night
             </Button>
             <Button href="#gallery" variant="outline">
               View Gallery
@@ -229,7 +229,7 @@ export default async function LakesideCottagePage() {
         <div className="max-w-[500px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">Pricing</h2>
           <div className="bg-cream rounded-3xl p-10 text-center shadow-xl">
-            <div className="text-5xl font-bold text-burgundy mb-1">$350</div>
+            <div className="text-5xl font-bold text-burgundy mb-1">$365</div>
             <p className="text-muted mb-1">per night (2 guests base)</p>
             <p className="text-sm text-teal font-semibold mb-6">GST and cleaning included — no hidden fees</p>
             <ul className="text-left space-y-3 mb-6">
@@ -337,7 +337,7 @@ export default async function LakesideCottagePage() {
           </p>
           <Button
             href="/book?a=lakeside-cottage"
-            ariaLabel="Book Lakeside Cottage now — $350 per night"
+            ariaLabel="Book Lakeside Cottage now — $365 per night"
           >
             Book Lakeside Cottage Now
           </Button>
