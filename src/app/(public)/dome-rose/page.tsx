@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 const features = [
   { title: "Vineyard Views", desc: "Wake up to rows of vines and mountain backdrops" },
-  { title: "Private Outdoor Spa", desc: "Soak under the stars with a glass of local wine" },
+  { title: "Private Saltwater Spa", desc: "Soak under the stars with a glass of local wine" },
   { title: "Romantic Setting", desc: "Intimate 40sqm space designed for couples" },
   { title: "Luxury Super King Bed", desc: "Premium bedding for restful nights" },
   { title: "Eco-Powered", desc: "100% renewable energy with backup power" },
@@ -57,6 +57,7 @@ const pricingFeatures = [
   "Continental breakfast: included",
   "No minimum stay — 1 night bookings welcome",
   "Strictly 18+ — adults only",
+  "No pets — strictly no animals (the cottage is our pet-friendly option)",
   "Security Bond: $300 (refundable, released within 7 days of checkout)",
 ];
 
@@ -81,7 +82,7 @@ export default async function DomeRosePage() {
           maxOccupancy: 2,
           bedType: "Super King",
           images: ["dome-rose-spa1.jpeg", "dome-rose-interior.jpeg"],
-          amenities: ["Private Outdoor Spa", "Mountain Views", "Super King Bed", "Vineyard Setting", "Sustainably Powered", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
+          amenities: ["Private Saltwater Spa", "Mountain Views", "Super King Bed", "Vineyard Setting", "Sustainably Powered", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
           ratingValue: reviewStats.ratingValue,
           reviewCount: reviewStats.reviewCount,
         }),

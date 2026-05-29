@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 const features = [
   { title: "50sqm Living Space", desc: "Our largest dome with spacious open-plan design" },
-  { title: "Private Outdoor Spa", desc: "Relax under the stars in your own spa pool" },
+  { title: "Private Saltwater Spa", desc: "Relax under the stars in your own saltwater spa" },
   { title: "Stargazing Skylight", desc: "Fall asleep watching the Milky Way" },
   { title: "Luxury Super King Bed", desc: "Premium bedding with lake views from your pillow" },
   { title: "Eco-Powered", desc: "100% renewable energy with backup power" },
@@ -58,6 +58,7 @@ const pricingFeatures = [
   "Continental breakfast: included",
   "No minimum stay — 1 night bookings welcome",
   "Strictly 18+ — adults only",
+  "No pets — strictly no animals (the cottage is our pet-friendly option)",
   "Security Bond: $300 (refundable, released within 7 days of checkout)",
 ];
 
@@ -82,7 +83,7 @@ export default async function DomePinotPage() {
           maxOccupancy: 2,
           bedType: "Super King",
           images: ["Pinotfront.jpeg", "gallerydecksitting.jpeg", "pinotinternal.jpeg"],
-          amenities: ["Private Outdoor Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
+          amenities: ["Private Saltwater Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
           ratingValue: reviewStats.ratingValue,
           reviewCount: reviewStats.reviewCount,
         }),
