@@ -52,7 +52,11 @@ export default async function HomePage() {
           alt="Lakeside Retreat glamping domes overlooking Lake Dunstan at sunset"
           fill
           priority
-          className="object-cover object-center"
+          // Source is a 1600x1600 square; in a wide hero, object-center crops
+          // the domes' bases off the bottom. Anchor the crop lower so the
+          // domes + vineyard foreground stay fully in frame (sky crops instead,
+          // which sits behind the headline text anyway).
+          className="object-cover object-[center_65%]"
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/25 to-black/55" />
