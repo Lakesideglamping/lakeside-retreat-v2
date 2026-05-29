@@ -274,7 +274,7 @@ export default async function DomePinotPage() {
                 <p className="text-muted text-sm mb-3">
                   40sqm romantic dome with outdoor spa and vineyard views. Perfect for couples.
                 </p>
-                <p className="text-burgundy font-semibold">$615/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$599/night &rarr;</p>
               </div>
             </Link>
             <Link
@@ -293,9 +293,9 @@ export default async function DomePinotPage() {
               <div className="p-6">
                 <h3 className="font-display text-xl text-burgundy mb-2">Lakeside Cottage</h3>
                 <p className="text-muted text-sm mb-3">
-                  Adults-only lakefront cottage with wood-fired hot tub. Sleeps up to 3.
+                  Adults-only lakefront cottage with wood-fired hot tub. Sleeps up to 3, pets friendly.
                 </p>
-                <p className="text-burgundy font-semibold">$365/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$350/night &rarr;</p>
               </div>
             </Link>
           </div>
