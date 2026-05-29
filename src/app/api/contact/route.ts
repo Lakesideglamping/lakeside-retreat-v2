@@ -74,10 +74,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Persist the enquiry so it's reviewable in the admin panel (Messages),
-    // not just delivered by email. Fail-open: the contact form otherwise
-    // works without the DB, so a database blip must not lose the email or
-    // surface an error to the visitor — we log and still send the email.
+    // Capture the enquiry two independent ways: persist to the DB (so it's
+    // reviewable in the admin Messages panel) and email it (notification).
+    // Each is best-effort and tracked separately. As long as ONE succeeds,
+    // the message is safely captured and we confirm to the visitor — a flaky
+    // SMTP send or a DB blip must not make a successfully-received enquiry
+    // look like a failure (which causes resubmits/duplicates). Only a total
+    // double-failure returns an error so the visitor knows to try again.
+    let persisted = false;
+    let emailed = false;
+
     try {
       const subjectLabel =
         SUBJECT_LABELS[result.data.subject] ?? result.data.subject;
@@ -88,13 +94,29 @@ export async function POST(request: Request) {
           message: `[${subjectLabel}] ${result.data.message}`,
         },
       });
+      persisted = true;
     } catch (dbErr) {
       logger.error("[api/contact] failed to persist message (continuing)", {
         error: dbErr instanceof Error ? dbErr.message : String(dbErr),
       });
     }
 
-    await sendContactEmail(result.data);
+    try {
+      await sendContactEmail(result.data);
+      emailed = true;
+    } catch (mailErr) {
+      logger.error("[api/contact] failed to send email (continuing)", {
+        error: mailErr instanceof Error ? mailErr.message : String(mailErr),
+      });
+    }
+
+    if (!persisted && !emailed) {
+      // The enquiry was neither stored nor emailed — genuinely lost.
+      return NextResponse.json(
+        { error: "Something went wrong. Please try again." },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
