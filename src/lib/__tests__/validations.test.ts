@@ -9,6 +9,7 @@ const validPayload = {
   guests: 2,
   guestName: "Jane Smith",
   guestEmail: "jane@example.com",
+  guestPhone: "+64 21 123 4567",
   adultsOnlyConfirmed: true as const,
 };
 
