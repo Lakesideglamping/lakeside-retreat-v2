@@ -106,7 +106,10 @@ export function BookingWidget() {
   useEffect(() => {
     if (acc) {
       setGuests(Math.min(guests, acc.maxGuests));
-      if (acc.adultsOnly) setPets(0);
+      // Reset pets only for properties that don't allow them (no petFee).
+      // "Adults only" (no children) is independent of "pet friendly" — the
+      // cottage is both, so switching to it must NOT wipe the pet count.
+      if (!acc.petFee) setPets(0);
     }
   }, [acc]); // eslint-disable-line react-hooks/exhaustive-deps
 
