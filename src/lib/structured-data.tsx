@@ -292,35 +292,20 @@ export function createArticleSchema(params: ArticleSchemaParams) {
  * Call this in server components (pages) and pass the result to
  * createLodgingBusinessSchema() and createPropertySchema().
  */
-export async function fetchReviewStats(property?: string): Promise<AggregateRatingStats> {
-  try {
-    // Dynamic import keeps this server-only — avoids bundling Prisma into client chunks.
-    const { prisma } = await import("./db");
-
-    const where = {
-      status: "approved",
-      rating: { not: null },
-      ...(property ? { property } : {}),
-    };
-
-    const result = await prisma.reviews.aggregate({
-      where,
-      _avg: { rating: true },
-      _count: { rating: true },
-    });
-
-    const count = result._count.rating;
-    const avg = result._avg.rating;
-
-    if (!count || !avg) {
-      return { ratingValue: "4.9", reviewCount: "416" };
-    }
-
-    return {
-      ratingValue: avg.toFixed(1),
-      reviewCount: String(count),
-    };
-  } catch {
-    return { ratingValue: "4.9", reviewCount: "416" };
-  }
+export async function fetchReviewStats(_property?: string): Promise<AggregateRatingStats> {
+  // Canonical, business-wide review figures used in structured data on the
+  // homepage and every property page. This is the cross-platform total
+  // (Airbnb + Booking.com + direct) the business advertises — larger than the
+  // subset of reviews imported into the local `reviews` table.
+  //
+  // CRITICAL: these must stay identical to the review numbers shown in the
+  // visible page copy (hero, /reviews, /book, the marketing landing pages).
+  // Google requires aggregateRating in structured data to match the rating
+  // visible on the page; a mismatch risks a manual structured-data penalty.
+  // If you change these, update the visible copy too (and vice-versa).
+  //
+  // (Previously this returned the live DB count — 295, and per-property
+  // 92/87/116 — which silently disagreed with the "416" shown everywhere on
+  // the site. Pinned to the advertised figure to keep them consistent.)
+  return { ratingValue: "4.9", reviewCount: "416" };
 }

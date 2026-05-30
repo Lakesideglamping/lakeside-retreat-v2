@@ -420,7 +420,14 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
           days === 0 ? "Check-in is today" :
           days === 1 ? "Check-in is tomorrow" :
           `Check-in in ${days} days`;
-        const unpaid = booking.payment_status !== "paid" && booking.payment_status !== "completed";
+        // "Unpaid" excludes channel bookings (paid_external — the guest pays
+        // Booking.com/Airbnb, not us) and refunded bookings, so we don't show
+        // a misleading "payment not settled" warning for them.
+        const unpaid =
+          booking.payment_status !== "paid" &&
+          booking.payment_status !== "completed" &&
+          booking.payment_status !== "paid_external" &&
+          booking.payment_status !== "refunded";
         const notConfirmed = booking.status !== "confirmed";
         const suffix = [
           unpaid ? "payment not settled" : null,
