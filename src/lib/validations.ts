@@ -45,7 +45,15 @@ export const paymentSessionSchema = z.object({
   guests: z.number().int().min(1).max(10),
   guestName: z.string().min(2).max(100),
   guestEmail: z.string().email(),
-  guestPhone: z.string().optional(),
+  // Phone is mandatory — we need a way to reach the guest about their stay.
+  // Min 6 digits is a loose sanity floor that still allows international
+  // formats, spaces, +, (), and hyphens.
+  guestPhone: z
+    .string()
+    .trim()
+    .min(6, "A contact phone number is required")
+    .max(30)
+    .regex(/[0-9]/, "Please enter a valid phone number"),
   specialRequests: z.string().max(500).optional(),
   pets: z.number().int().min(0).max(2).optional(),
   promoCode: z.string().max(50).optional(),

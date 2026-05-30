@@ -82,6 +82,10 @@ export function BookingForm({
     if (!form.guestEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.guestEmail)) {
       errors.guestEmail = "Please enter a valid email address";
     }
+    const phone = form.guestPhone.trim();
+    if (!phone || phone.replace(/[^0-9]/g, "").length < 6) {
+      errors.guestPhone = "Please enter a contact phone number";
+    }
     if (form.specialRequests && form.specialRequests.length > 500) {
       errors.specialRequests = "Special requests must be under 500 characters";
     }
@@ -114,7 +118,7 @@ export function BookingForm({
           pets,
           guestName: form.guestName.trim(),
           guestEmail: form.guestEmail.trim(),
-          guestPhone: form.guestPhone.trim() || undefined,
+          guestPhone: form.guestPhone.trim(),
           specialRequests: form.specialRequests.trim() || undefined,
           adultsOnlyConfirmed: form.adultsOnlyConfirmed,
           ...(promoCode.trim() ? { promoCode: promoCode.trim().toUpperCase() } : {}),
@@ -267,7 +271,7 @@ export function BookingForm({
 
         <div>
           <label htmlFor="guestPhone" className="block text-sm font-semibold mb-1">
-            Phone <span className="text-muted font-normal">(optional)</span>
+            Phone <span className="text-burgundy">*</span>
           </label>
           <input
             id="guestPhone"
@@ -277,7 +281,15 @@ export function BookingForm({
             className={inputClass}
             placeholder="+64 21 123 4567"
             autoComplete="tel"
+            required
+            aria-invalid={!!fieldErrors.guestPhone}
+            aria-describedby={fieldErrors.guestPhone ? "guestPhone-error" : undefined}
           />
+          {fieldErrors.guestPhone && (
+            <p id="guestPhone-error" role="alert" className={errorClass}>
+              {fieldErrors.guestPhone}
+            </p>
+          )}
         </div>
 
         <div>
