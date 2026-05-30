@@ -127,7 +127,7 @@ export default function TermsConditionsPage() {
           <ul>
             <li>Maximum 3 guests, all aged 18+ (2 base, 1 extra at $50/person/night)</li>
             <li>No children or infants permitted</li>
-            <li>Well-behaved dogs welcome (maximum 2 dogs, $50 flat pet fee per stay)</li>
+            <li>Well-behaved dogs welcome (maximum 2 dogs, $25 flat pet fee per stay)</li>
             <li>Pets must not be left unattended in the property</li>
             <li>
               Pet owners are responsible for cleaning up after their animals

@@ -64,7 +64,7 @@ const accommodations = [
       "Queen bed + sofa pullout, sleeps 3",
       "Direct lake access",
       "Wood-fired cedar hot tub (no chemicals)",
-      "Pet friendly ($50 flat fee)",
+      "Pet friendly ($25 flat fee)",
       "Kitchenette (hotplate, fridge, microwave, coffee machine, dishwasher)",
       "Gas BBQ on the deck",
       "Heat pump (heating &amp; AC)",

@@ -31,7 +31,7 @@ const features = [
   { title: "Direct Lake Access", desc: "Step straight from your deck into Lake Dunstan" },
   { title: "Wood-Fired Hot Tub", desc: "Chemical-free cedar tub by the lake — fired by you, steaming under the stars" },
   { title: "Sleeps 3 Guests", desc: "Queen bed plus sofa pullout in the living area" },
-  { title: "Pet Friendly", desc: "Bring your well-behaved dog along — $50 flat fee per stay" },
+  { title: "Pet Friendly", desc: "Bring your well-behaved dog along — $25 flat fee per stay" },
   { title: "Kitchenette", desc: "Hotplate, fridge, microwave, coffee machine, dishwasher" },
   { title: "BBQ on the Deck", desc: "Gas BBQ and outdoor dining overlooking the lake" },
 ];
@@ -58,7 +58,7 @@ const pricingFeatures = [
   "Nightly rate: $365/night (GST incl.)",
   "Cleaning fee: included in your nightly rate",
   "Extra guests: $100/person/night (max 3)",
-  "Pets: $50 flat fee per stay",
+  "Pets: $25 flat fee per stay",
   "Minimum 2 nights (3 nights peak season)",
   "BBQ and direct lake access included",
   "Strictly 18+ — adults only",
@@ -96,7 +96,7 @@ export default async function LakesideCottagePage() {
           { name: "Lakeside Cottage", path: "/lakeside-cottage" },
         ]),
         createFaqSchema([
-          { question: "Can I bring my dog to Lakeside Cottage?", answer: "Yes! The Lakeside Cottage is pet-friendly. Well-behaved dogs are welcome with a $50 flat pet fee per stay. Maximum 2 dogs." },
+          { question: "Can I bring my dog to Lakeside Cottage?", answer: "Yes! The Lakeside Cottage is pet-friendly. Well-behaved dogs are welcome with a $25 flat pet fee per stay. Maximum 2 dogs." },
           { question: "How many people can stay at Lakeside Cottage?", answer: "The cottage accommodates up to 3 guests (2 base, extra guest $100/night)." },
           { question: "Is there lake access from the cottage?", answer: "Yes, the Lakeside Cottage has direct access to Lake Dunstan for swimming and fishing straight from your deck." },
         ]),
@@ -333,7 +333,7 @@ export default async function LakesideCottagePage() {
           </h2>
           <p className="text-lg text-muted mb-8">
             Forty-five minutes from Queenstown, thirty from Wanaka. Book direct —
-            BBQ and lake access included, dogs welcome for $50.
+            BBQ and lake access included, dogs welcome for $25.
           </p>
           <Button
             href="/book?a=lakeside-cottage"

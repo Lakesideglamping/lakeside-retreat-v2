@@ -62,7 +62,7 @@ const accommodations: Accommodation[] = [
     adultsOnly: true,
     minimumAge: 18,
     extraGuestFee: 50,
-    petFee: 50,
+    petFee: 25,
     amenities: ["Queen bed + sofa bed", "Kitchenette", "Lake views", "Pet friendly"],
     images: ["lakeside-cottage-exterior.jpeg", "cottagebedroom.jpeg"],
   },

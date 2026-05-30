@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 const features = [
   { title: "Direct Lake Access", desc: "Walk from your cottage door straight to Lake Dunstan for a swim. Dogs love the calm, clear water." },
   { title: "Secure Outdoor Area", desc: "Fenced outdoor space so your dog can roam safely while you relax on the deck." },
-  { title: "Flat Pet Fee", desc: "A single flat $50 pet fee per stay — not per night. No hidden charges." },
+  { title: "Flat Pet Fee", desc: "A single flat $25 pet fee per stay — not per night. No hidden charges." },
   { title: "Deck by the Water", desc: "Your own deck overlooking the lake — a safe spot to sit with your dog as the sun sets." },
   { title: "Wood-Fired Hot Tub", desc: "Chemical-free cedar tub by the lake — no chlorine, no fumes. Safe to have the dog nearby while you soak." },
   { title: "Kitchenette & BBQ", desc: "Cook at home with a hotplate, microwave, dishwasher, and a gas BBQ on the deck. No worries about restaurants." },
@@ -59,9 +59,9 @@ export default function DogFriendlyAccommodationPage() {
           { name: "Dog-Friendly Accommodation", path: "/dog-friendly-accommodation-central-otago" },
         ]),
         createFaqSchema([
-          { question: "Is there dog-friendly accommodation in Central Otago?", answer: "Yes — Lakeside Retreat's Lakeside Cottage on Lake Dunstan is dog-friendly and welcomes well-behaved dogs with prior approval. The cottage has direct lake access, a secure outdoor area, and is 300 metres from the dog-friendly Otago Rail Trail. A flat $50 pet fee applies per stay." },
+          { question: "Is there dog-friendly accommodation in Central Otago?", answer: "Yes — Lakeside Retreat's Lakeside Cottage on Lake Dunstan is dog-friendly and welcomes well-behaved dogs with prior approval. The cottage has direct lake access, a secure outdoor area, and is 300 metres from the dog-friendly Otago Rail Trail. A flat $25 pet fee applies per stay." },
           { question: "Can I bring my dog to Cromwell?", answer: "Cromwell is a great destination for dogs. Lakeside Retreat's Lakeside Cottage accommodates dogs and puts you close to dog-friendly walks including the Otago Rail Trail, Lake Dunstan shoreline, and Bannockburn Sluicings. The Cromwell Heritage Precinct also has outdoor areas suitable for dogs." },
-          { question: "What is the pet fee at Lakeside Retreat?", answer: "A flat $50 pet fee applies per stay (not per night). This covers additional cleaning and any wear and tear from your pet. Please notify us when booking that you're bringing a dog." },
+          { question: "What is the pet fee at Lakeside Retreat?", answer: "A flat $25 pet fee applies per stay (not per night). This covers additional cleaning and any wear and tear from your pet. Please notify us when booking that you're bringing a dog." },
           { question: "Are the glamping domes dog-friendly?", answer: "No — Dome Pinot and Dome Rosé are adults-only and strictly no pets. Our adults-only Lakeside Cottage is the one property that welcomes dogs." },
         ]),
       ]} />
@@ -124,7 +124,7 @@ export default function DogFriendlyAccommodationPage() {
               <ul className="text-sm text-muted space-y-1">
                 <li>&#10003; Queen bed + sofa pullout, sleeps 3</li>
                 <li>&#10003; Direct Lake Dunstan access</li>
-                <li>&#10003; Dogs welcome (prior approval, $50 flat fee)</li>
+                <li>&#10003; Dogs welcome (prior approval, $25 flat fee)</li>
                 <li>&#10003; Wood-fired cedar hot tub (no chemicals)</li>
                 <li>&#10003; Kitchenette &amp; outdoor BBQ</li>
                 <li>&#10003; Heat pump (heating &amp; AC)</li>
@@ -193,7 +193,7 @@ export default function DogFriendlyAccommodationPage() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-burgundy font-bold mt-1">&#10003;</span>
-                <span>Flat $50 pet fee per stay (not per night)</span>
+                <span>Flat $25 pet fee per stay (not per night)</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-burgundy font-bold mt-1">&#10003;</span>

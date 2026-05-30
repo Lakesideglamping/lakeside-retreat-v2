@@ -169,7 +169,7 @@ export function preArrivalHtml(data: BookingEmailData): string {
     propertyTips = `<div ${alertBox("#2196F3")}>
       <h4 style="margin:0 0 6px;">Cottage Reminder</h4>
       <p style="margin:0 0 8px;">Lakeside Cottage is strictly <strong>18+ adults only</strong>. Guests arriving with anyone under 18 will not be accommodated and no refund will be given.</p>
-      <p style="margin:0;">Well-behaved dogs are welcome ($50 flat fee per stay). Please keep them off the furniture and clean up after them on the property.</p>
+      <p style="margin:0;">Well-behaved dogs are welcome ($25 flat fee per stay). Please keep them off the furniture and clean up after them on the property.</p>
     </div>`;
   }
 
