@@ -335,7 +335,7 @@ export function BookingWidget() {
                 )}
               </div>
 
-              {!acc.adultsOnly && acc.petFee && (
+              {acc.petFee && (
                 <div>
                   <label className="block text-sm font-semibold mb-2">
                     Pets
