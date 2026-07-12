@@ -23,14 +23,14 @@ const guides = [
   {
     category: "Glamping",
     title: "Glamping in Central Otago: The Complete Guide",
-    image: "/images/Pinotfront.jpeg",
+    image: "/images/IMG_8536.jpg",
     excerpt: "Everything you need to know about luxury glamping on Lake Dunstan — domes, spas, stargazing, and wine country.",
     href: "/glamping-central-otago",
   },
   {
     category: "Seasonal",
     title: "Winter Glamping in Central Otago",
-    image: "/images/domesmountainview.jpeg",
+    image: "/images/IMG_1266-1920x1080.jpeg",
     excerpt: "Soak in a private outdoor spa with snow on the mountains. Ski Cardrona by day, stargaze by night.",
     href: "/winter-glamping-central-otago",
   },
@@ -50,43 +50,43 @@ const guides = [
   },
   {
     category: "Cycling",
-    title: "Otago Rail Trail: Accommodation & Guide",
-    image: "/images/vineyard-path.jpg",
+    title: "Central Otago Cycle Trails: Accommodation & Guide",
+    image: "/images/CycleTrailSpring.jpeg",
     excerpt: "Stay 300m from the trailhead. Everything you need to know about NZ's original Great Ride.",
     href: "/otago-rail-trail-accommodation",
   },
   {
     category: "Water Activities",
     title: "Lake Dunstan: Swimming, Fishing & More",
-    image: "/images/magical-sunset.jpg",
+    image: "/images/OldTownCromwell.jpeg",
     excerpt: "Your guide to water activities on Lake Dunstan, from swimming spots to the best fishing coves.",
     href: "/cromwell-activities",
   },
   {
     category: "Day Trips",
     title: "Queenstown Day Trip: Adventure Awaits",
-    image: "/images/lake-mountains-perfect.jpg",
+    image: "/images/Queenstown.jpeg",
     excerpt: "Bungy, gondola, jet boat, Arrowtown — then back to your spa or wood-fired hot tub. Queenstown is just 45 minutes away.",
     href: "/weekend-getaway-queenstown",
   },
   {
     category: "Day Trips",
     title: "Wanaka: Lakes, Mountains & That Tree",
-    image: "/images/lakeviewautumn.jpeg",
+    image: "/images/Wanaka.jpeg",
     excerpt: "That Tree, Roy's Peak, Rippon Vineyard, and great cafés — just 45 minutes from Lakeside Retreat.",
     href: "/wanaka-day-trip",
   },
   {
     category: "Seasonal",
     title: "Best Time to Visit Central Otago",
-    image: "/images/golden-vineyard-autumn.jpg",
+    image: "/images/LakeDunstanReflaction.jpeg",
     excerpt: "A season-by-season guide to Central Otago — autumn harvest, winter snow, spring blossom, and long summer days.",
     href: "/autumn-central-otago",
   },
   {
     category: "Food & Dining",
     title: "Food & Dining in Central Otago",
-    image: "/images/ViewfromVineyard.jpeg",
+    image: "/images/Fruits.jpeg",
     excerpt: "Winery restaurants, Cromwell Heritage Precinct cafés, Wanaka dining, stone fruit stalls, and local produce guides.",
     href: "/food-dining-central-otago",
   },
@@ -103,7 +103,7 @@ export default function GuidesPage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/vineyard.jpeg"
+        src="/images/20260422155523_0057.JPG"
         alt="Central Otago vineyard near Lakeside Retreat"
         minHeight="50vh"
       >
@@ -134,8 +134,7 @@ export default function GuidesPage() {
                 Central Otago is renowned for producing some of the world&apos;s finest Pinot Noir.
                 With 30+ wineries within 15 minutes of Lakeside Retreat, you&apos;re perfectly
                 positioned to explore. Start at Carrick Winery for organic wines and lunch, then
-                visit Mt Difficulty for stunning views, and finish at Wooing Tree for their unique
-                underground cellar.
+                visit Mt Difficulty for stunning views, and finish at Wooing Tree, experience their brand-new modern cellar door.
               </p>
               <div>
                 <Link

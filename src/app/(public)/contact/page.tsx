@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description:
       "Enquiries, availability, and bookings for luxury glamping domes and lakeside cottage in Cromwell, Central Otago.",
     url: "https://lakesideretreat.co.nz/contact",
-    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat" }],
+    images: [{ url: "/images/WinterVineyard.jpeg", width: 1200, height: 800, alt: "Lakeside Retreat" }],
     type: "website",
   },
 };
@@ -38,7 +38,7 @@ export default function ContactPage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/domesmountainview.jpeg"
+        src="/images/WinterVineyard.jpeg"
         alt="Glamping domes with mountain views at Lakeside Retreat"
         minHeight="50vh"
       >
@@ -87,7 +87,7 @@ export default function ContactPage() {
         {/* Map */}
         <div className="max-w-[1200px] mx-auto mt-16">
           <iframe
-            src="https://maps.google.com/maps?q=-45.038710,169.197693&z=14&output=embed"
+            src="https://maps.google.com/maps?q=-44.947962,169.2659199&z=14&output=embed"
             className="w-full h-[400px] rounded-xl border-0"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"

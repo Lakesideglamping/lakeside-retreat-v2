@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/winter-glamping-central-otago",
     images: [
       {
-        url: "/images/dome-rose-spa1.jpeg",
+        url: "/images/IMG_1266-1920x1080.jpeg",
         width: 1200,
         height: 800,
         alt: "Winter glamping dome with outdoor spa and snow-capped Pisa Range views",
@@ -30,19 +30,19 @@ const winterHighlights = [
   {
     title: "Private Outdoor Spa in the Snow",
     desc: "There is nothing quite like soaking in a hot saltwater spa while snow sits on the mountain peaks above you. Each dome has its own private outdoor spa — warm water, cold air, extraordinary views.",
-    image: "/images/pinotspa.jpeg",
+    image: "/images/dome-rose-spa.jpeg",
     alt: "Private outdoor spa at Lakeside Retreat with snow-capped mountain views, Central Otago winter",
   },
   {
     title: "Cosy Dome Interiors",
     desc: "Our geodesic domes are engineered for exceptional insulation. An efficient heat pump, insulated twin-wall panels, and a warm interior make them a perfect winter cocoon.",
-    image: "/images/windowview.jpeg",
+    image: "/images/pinotinternal.jpeg",
     alt: "Warm cosy interior of Dome Pinot with views over winter Lake Dunstan",
   },
   {
     title: "Stargazing at Its Best",
     desc: "Winter nights in Central Otago are among the clearest in New Zealand. The Milky Way, Southern Cross, and Magellanic Clouds are spectacular. Dome Pinot's skylight puts the galaxy directly above your bed.",
-    image: "/images/pinotinternal.jpeg",
+    image: "/images/SkyView.jpeg",
     alt: "Dome Pinot interior with stargazing skylight — winter glamping Central Otago",
   },
 ];
@@ -81,7 +81,7 @@ const winterActivities = [
 ];
 
 const seasons = [
-  { season: "June–August", label: "Winter", temp: "–2°C to 12°C", conditions: "Snow on mountains, frost mornings, crystal-clear nights — the most dramatic season." },
+  { season: "June–August", label: "Winter", temp: "–4°C to 12°C", conditions: "Snow on mountains, frost mornings, crystal-clear nights — the most dramatic season." },
   { season: "September–November", label: "Spring", temp: "8°C to 18°C", conditions: "Blossom on the orchards, migratory birds return, the first warm days of the year." },
   { season: "December–February", label: "Summer", temp: "18°C to 30°C", conditions: "Long sunny days, lake swimming, cycling, vineyard lunches — peak season." },
   { season: "March–May", label: "Autumn", temp: "5°C to 20°C", conditions: "Golden vineyards, harvest season, cooler evenings — many say the most beautiful time to visit." },
@@ -95,7 +95,7 @@ export default function WinterGlampingPage() {
           title: "Winter Glamping Central Otago | Cosy Domes, Outdoor Spas & Snow Views",
           description: "Winter glamping on Lake Dunstan — soak in your private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes, stargazing, and skiing nearby.",
           path: "/winter-glamping-central-otago",
-          image: "domesmountainview.jpeg",
+          image: "IMG_1266-1920x1080.jpeg",
           datePublished: "2025-06-01",
           dateModified: "2026-03-01",
         }),
@@ -116,7 +116,7 @@ export default function WinterGlampingPage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/domesmountainview.jpeg"
+          src="/images/SunSetDome.jpeg"
           alt="Luxury glamping domes at Lakeside Retreat with snow-capped mountain views, Central Otago winter"
           fill
           priority
@@ -271,7 +271,7 @@ export default function WinterGlampingPage() {
                 bookHref: "/book?a=dome-pinot",
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
-                price: "$635/night",
+                price: "$650/night",
                 winter: ["Heat pump climate control", "Stargazing skylight above bed", "Private outdoor saltwater spa", "Panoramic Pisa Range snow views"],
               },
               {
@@ -279,7 +279,7 @@ export default function WinterGlampingPage() {
                 bookHref: "/book?a=dome-rose",
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
-                price: "$615/night",
+                price: "$599/night",
                 winter: ["Heat pump climate control", "Private outdoor saltwater spa", "Mountain & vineyard views", "Outdoor dining deck with heater"],
               },
             ].map((dome) => (

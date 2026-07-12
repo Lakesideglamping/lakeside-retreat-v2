@@ -6,14 +6,14 @@ import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema, 
 import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
-  title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay | $365/night",
+  title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay | $350/night",
   description:
-    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Adults-only lakefront stay in Central Otago — $365/night.",
+    "Lakeside Cottage — pet-friendly, self-contained holiday home on Lake Dunstan, Cromwell. Sleeps 3, kitchenette, direct lake access. Adults-only lakefront stay in Central Otago — $350/night.",
   alternates: { canonical: '/lakeside-cottage' },
   openGraph: {
     title: "Lakeside Cottage | Adults-Only Pet-Friendly Lakefront Stay",
     description:
-      "Adults-only lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, BBQ, wood-fired hot tub, and dog-friendly. $365/night in Cromwell, Central Otago.",
+      "Adults-only lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, BBQ, wood-fired hot tub, and dog-friendly. $350/night in Cromwell, Central Otago.",
     url: "https://lakesideretreat.co.nz/lakeside-cottage",
     images: [
       {
@@ -51,11 +51,11 @@ const galleryImages = [
   { src: "/images/lakeview.jpeg", alt: "Lake Dunstan views from Lakeside Cottage" },
   { src: "/images/cottagebedroom.jpeg", alt: "Lakeside Cottage bedroom with mountain views" },
   { src: "/images/cottagebathroom.jpeg", alt: "Lakeside Cottage bathroom with timber vanity" },
-  { src: "/images/vineyard.jpeg", alt: "Surrounding vineyard landscape" },
+  { src: "/images/lakesidecottageinterior.jpeg", alt: "Sitting area with lake views" },
 ];
 
 const pricingFeatures = [
-  "Nightly rate: $365/night (GST incl.)",
+  "Nightly rate: $350/night (GST incl.)",
   "Cleaning fee: included in your nightly rate",
   "Extra guests: $100/person/night (max 3)",
   "Pets: $25 flat fee per stay",
@@ -81,7 +81,7 @@ export default async function LakesideCottagePage() {
           id: "lakeside-cottage",
           name: "Lakeside Cottage",
           description: "Adults-only lakefront cottage with direct Lake Dunstan access, sleeps 3, kitchenette, wood-fired hot tub, and dog-friendly.",
-          price: 365,
+          price: 350,
           floorSize: 65,
           maxOccupancy: 3,
           bedType: "Queen",
@@ -104,7 +104,7 @@ export default async function LakesideCottagePage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/lakeside-cottage-exterior.jpeg"
+          src="/images/vineyard.jpeg"
           alt="Lakeside Cottage with direct Lake Dunstan access, Cromwell Central Otago"
           fill
           priority
@@ -120,8 +120,8 @@ export default async function LakesideCottagePage() {
             Step off the deck, into the lake. Dogs welcome too.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=lakeside-cottage" ariaLabel="Book Lakeside Cottage now — $365 per night">
-              Book Now — $365/night
+            <Button href="/book?a=lakeside-cottage" ariaLabel="Book Lakeside Cottage now — $350 per night">
+              Book Now — $350/night
             </Button>
             <Button href="#gallery" variant="outline">
               View Gallery
@@ -154,7 +154,7 @@ export default async function LakesideCottagePage() {
           </h2>
           <p className="max-w-[800px] mx-auto text-center text-lg leading-8 text-muted mb-12">
             Lakeside Cottage is a self-contained holiday home right on Lake Dunstan.
-            A queen bed in the bedroom, a sofa pullout in the living area — sleeps three,
+            A queen bed in the bedroom, a sofa pullout (queen size bed)in the living area — sleeps three,
             ideal for couples or close friends (18+ only). Mornings for a swim off the deck,
             evenings for a BBQ with the lake at your feet, nights in the wood-fired
             cedar tub while the sky goes black. Dogs welcome too.
@@ -229,7 +229,7 @@ export default async function LakesideCottagePage() {
         <div className="max-w-[500px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">Pricing</h2>
           <div className="bg-cream rounded-3xl p-10 text-center shadow-xl">
-            <div className="text-5xl font-bold text-burgundy mb-1">$365</div>
+            <div className="text-5xl font-bold text-burgundy mb-1">$350</div>
             <p className="text-muted mb-1">per night (2 guests base)</p>
             <p className="text-sm text-teal font-semibold mb-6">GST and cleaning included — no hidden fees</p>
             <ul className="text-left space-y-3 mb-6">
@@ -276,7 +276,7 @@ export default async function LakesideCottagePage() {
                 <p className="text-muted text-sm mb-3">
                   Our flagship 50sqm luxury dome with panoramic Lake Dunstan views and private spa.
                 </p>
-                <p className="text-burgundy font-semibold">$635/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$650/night &rarr;</p>
               </div>
             </Link>
             <Link
@@ -297,7 +297,7 @@ export default async function LakesideCottagePage() {
                 <p className="text-muted text-sm mb-3">
                   40sqm romantic dome with outdoor spa and vineyard views. Perfect for couples.
                 </p>
-                <p className="text-burgundy font-semibold">$615/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$599/night &rarr;</p>
               </div>
             </Link>
           </div>
@@ -332,12 +332,12 @@ export default async function LakesideCottagePage() {
             Step off the deck. Into the lake. Dog at your heels.
           </h2>
           <p className="text-lg text-muted mb-8">
-            Forty-five minutes from Queenstown, thirty from Wanaka. Book direct —
+            45 minutes from Queenstown, 30 from Wanaka. Book direct —
             BBQ and lake access included, dogs welcome for $25.
           </p>
           <Button
             href="/book?a=lakeside-cottage"
-            ariaLabel="Book Lakeside Cottage now — $365 per night"
+            ariaLabel="Book Lakeside Cottage now — $350 per night"
           >
             Book Lakeside Cottage Now
           </Button>

@@ -5,21 +5,21 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Otago Rail Trail Accommodation | Luxury Stay 300m from the Trail",
+  title: "Central Otago Cycle Trails Accommodation | Luxury Stay 300m from the Trail",
   description:
-    "Luxury accommodation for Otago Rail Trail cyclists — just 300m from the trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $365/night.",
+    "Luxury accommodation for Central Otago Cycle Trails cyclists — just 300m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $350/night.",
 
   alternates: { canonical: "/otago-rail-trail-accommodation" },
   openGraph: {
-    title: "Otago Rail Trail Accommodation | Luxury Stay 300m from the Trail",
-    description: "Luxury accommodation for Otago Rail Trail cyclists — just 300m from the trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $365/night.",
+    title: "Central Otago Cycle Trails Accommodation | Luxury Stay 300m from the Trail",
+    description: "Luxury accommodation for Central Otago Cycle Trails cyclists — just 300m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $350/night.",
     url: "https://lakesideretreat.co.nz/otago-rail-trail-accommodation",
     images: [
       {
-        url: "/images/lakeside-cottage-exterior.jpeg",
+        url: "/images/LakeDunstanCycleTrail.jpeg",
         width: 1200,
         height: 800,
-        alt: "Otago Rail Trail accommodation — Lakeside Cottage 300m from the trailhead",
+        alt: "Central Otago Cycle Trails accommodation — Lakeside Cottage 300m from the Lake Dunstan Trail trailhead",
       },
     ],
     type: "article",
@@ -28,37 +28,55 @@ export const metadata: Metadata = {
 
 const trailSections = [
   {
-    name: "Cromwell to Clyde (17km)",
-    description: "Flat and accessible, this section follows the shores of Lake Dunstan through rocky gorges. Perfect for beginners. Starts 300m from Lakeside Retreat.",
+    name: "The Lake DunstanTrail (55km)",
+    description: "Starts 300m from Lakeside Retreat, the trail runs along Lake Dunstan, the Kawarau River, and the Clutha River, linking Cromwell and Clyde. It's one of the most accessible cycle trail, the section from Smiths Way to Cromwell Heritage Precinct (16km, Grade 1) is a popular day ride, winding alongside Lake Dunstan via Pisa Moorings with plenty of spots to rest beside the lake. Beyond Cromwell, the first section through to Carrick Winery and Cornish Point is mostly easy Grade 2 riding, while beyond Cornish Point it becomes more challenging with narrow sections and exposed cliff faces.",
     duration: "2–3 hours",
-    difficulty: "Easy",
+    difficulty: "(Grade 1–3) Easy",
+  },
+  {
+    name: "The Kawarau Gorge Trail (42km)",
+    description: "Opens in Sept 2026 The Kawarau Gorge Trail is NZ's newest Great Ride.  The trail connects Cromwell to Gibbston Valley on a spectacular journey alongside the Kawarau River. Starting in Cromwell - Central Otago wine country, the trail enters into a dramatic and remote gorge, a place few have experienced until now.",
+    duration: "2–3 hours",
+    difficulty: "(Grade 1–3) Easy",
+  },
+  {
+    name: "Bannockburn Sluicings Loop (3.5km)",
+    description: "A favourite for Cromwell mountain bikers. The 3.5km loop  winds around the former Bannockburn goldfield, where you'll see remains of dams, water races, tunnels and towering cliff faces — all that's left of hills sluiced away during the gold rush. Also reachable via the Lake Dunstan Trail.",
+    duration: "1.5–2 hours",
+    difficulty: "(Grade 2–3) Easy–Moderate",
   },
   {
     name: "Clyde to Alexandra (11km)",
     description: "A short, flat section through the Clutha Valley past orchards and the historic Clyde Dam. Easy riding with lovely river scenery.",
     duration: "1.5–2 hours",
-    difficulty: "Easy",
+    difficulty: "(Grade 1–2) Easy",
   },
   {
-    name: "Alexandra to Omakau (29km)",
-    description: "The landscape opens up to high schist tors, rolling farmland, and wide Central Otago skies. Passes through the historic township of Chatto Creek.",
-    duration: "3–4 hours",
-    difficulty: "Easy–Moderate",
+    name: "Otago Central Rail Trail (152km)",
+    description: "The original Great Ride, following the old railway line between Clyde and Middlemarch. The classic experience is to ride it over several days, but the trail can easily be broken into shorter rides, with highlights including spectacular railway bridges and tunnels, abandoned gold diggings, and historic architecture. The Clyde end is the natural starting point from Cromwell.",
+    duration: "1–5 days",
+    difficulty: "(Grade 1–2) Easy",
   },
   {
-    name: "Omakau to Ranfurly (38km)",
-    description: "Enter the Maniototo plains — the most remote and dramatic section of the trail. Long flat stretches and incredible dark skies at night.",
-    duration: "4–5 hours",
-    difficulty: "Moderate",
+    name: "Roxburgh Gorge Trail  (34km)",
+    description: "The Trail starts from the Lake Roxburgh Dam to Clyde (21km), with a jet boat ride in the middle on the Clutha Mata-Au River (13km). The trail is a breathtaking journey through some of Central Otago's most remote and dramatic landscapes. The track follows the Clutha River and Lake Roxburgh, flanked by steep rugged cliffs, and passes historic gold mining sites. Bookings for the jet boat transfer are essential.",
+    duration: "1 day",
+    difficulty: "(Grade 1–2) Easy",
+  },
+  {
+    name: "Clutha Gold Trail (135km)",
+    description: "This trail showcases the rich history of the Central Otago and Clutha regions, following the path once traversed by gold miners during the 19th-century gold rush. Walkers and cyclists can immerse themselves in the picturesque landscapes, including rolling hills, lush woodlands, and the mesmerizing colours of the Clutha River..",
+    duration: "2–4 days",
+    difficulty: "(Grade 1–2) Easy",
   },
 ];
 
 const whyStayHere = [
-  { title: "300m from the Trail", desc: "Walk from your accommodation to the Otago Rail Trail in 5 minutes. No car needed to access the Cromwell trailhead." },
+  { title: "300m from the Trail", desc: "Walk from your accommodation to the Lake Dunstan Cycle Trail in 2 minutes. No car needed to access the Cromwell trailhead." },
   { title: "Bike Storage & Wash", desc: "Secure covered bike storage and a hose-down area available for all guests." },
   { title: "Early Breakfast", desc: "Continental breakfast included with dome bookings, stocked ready for an early start. Pack what you need for the trail." },
-  { title: "Laundry Facilities", desc: "Wash and dry your cycling gear overnight. Arrive fresh for each day on the trail." },
-  { title: "Shuttles & Hire", desc: "We can help organise bike hire, shuttle pickups, and luggage transfers for multi-day trail itineraries." },
+  { title: "Laundry Facilities", desc: "Avaialbe in the Lakeside Cottage - Wash and dry your cycling gear overnight. Arrive fresh for each day on the trail." },
+  { title: "Shuttles & Hire", desc: "We can provide information about bike hire, shuttle pickups, and luggage transfers for multi-day trail itineraries." },
   { title: "Recovery Spa or Hot Tub", desc: "Private saltwater spa in the domes, or a wood-fired cedar hot tub at the cottage. Nothing better after a long day in the saddle." },
 ];
 
@@ -67,29 +85,29 @@ export default function OtagoRailTrailAccommodationPage() {
     <>
       <JsonLd data={[
         createArticleSchema({
-          title: "Otago Rail Trail Accommodation | Luxury Stay 300m from the Trail",
-          description: "Luxury accommodation for Otago Rail Trail cyclists — geodesic domes and lakeside cottage just 300m from the Cromwell trailhead.",
+          title: "Otago Cycle Trails Accommodation | Luxury Stay 300m from the Trail",
+          description: "Luxury accommodation for Central Otago Trail cyclists — geodesic domes and lakeside cottage just 300m from the Cromwell trailhead.",
           path: "/otago-rail-trail-accommodation",
-          image: "vineyard-path.jpg",
-          datePublished: "2025-05-15",
+          image: "LakeDunstanCycleTrail.jpeg",
+          datePublished: "2026-05-15",
         }),
         createBreadcrumbSchema([
           { name: "Home", path: "/" },
-          { name: "Otago Rail Trail Accommodation", path: "/otago-rail-trail-accommodation" },
+          { name: "Otago Cycle Trails Accommodation", path: "/otago-cycle-trail-accommodation" },
         ]),
         createFaqSchema([
-          { question: "What is the best accommodation for the Otago Rail Trail?", answer: "Lakeside Retreat at Mount Pisa is perfectly located for the Otago Rail Trail — just 300m from the Cromwell trailhead. Cyclists stay in luxury geodesic domes or a lakeside cottage, with bike storage, early breakfast, laundry facilities, and a private outdoor spa for post-ride recovery. $365/night." },
-          { question: "Where does the Otago Rail Trail start?", answer: "The Otago Rail Trail runs between Clyde and Middlemarch (150km). The Cromwell to Clyde section is the most popular starting point and is just 300 metres from Lakeside Retreat. Cromwell is approximately 45 minutes from Queenstown." },
+          { question: "What is the best accommodation for the Otago Cycle Trails?", answer: "Lakeside Retreat at Mount Pisa is perfectly located for the Lake Dunstan Trail — just 300m from the trailhead. Cyclists stay in luxury geodesic domes or a lakeside cottage, with bike storage, early breakfast, laundry facilities, and a private outdoor spa for post-ride recovery. $350/night." },
+          { question: "Where does the Lake Dustan Cycle Trail start?", answer: "The Lake Dustan Cycle Trail runs between Clyde and Cromwell (55km). The Cromwell to Clyde section is the most popular starting point and is just 300 metres from Lakeside Retreat." },
           { question: "How many days does the Otago Rail Trail take?", answer: "The full Otago Rail Trail takes 4–5 days to complete at a relaxed pace. Many cyclists do just the Cromwell to Clyde section (2–3 hours) as a day ride. Lakeside Retreat is ideal as a base for the first 1–2 days or as the final night before completing the trail." },
-          { question: "Is the Otago Rail Trail suitable for beginners?", answer: "Yes — the Otago Rail Trail is graded as an easy to moderate ride with most sections being flat or gently undulating on a well-maintained gravel surface. The Cromwell to Clyde section is completely flat and follows Lake Dunstan — ideal for first-time trail riders." },
+          { question: "Is the Central Otago Cycle Trails suitable for beginners?", answer: "Yes — the Central Otago Cycle Trails is graded as an easy to moderate ride with most sections being flat or gently undulating on a well-maintained gravel surface. The Cromwell to Clyde section is grade 1-2 and follows Lake Dunstan — ideal for first-time trail riders." },
         ]),
       ]} />
 
       {/* Hero */}
       <section className="relative min-h-[65vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/vineyard-path.jpg"
-          alt="Otago Rail Trail cycling path through Central Otago wine country"
+          src="/images/LakeDunstanCycleTrail.jpeg"
+          alt="Central Otago Cycle Trails cycling through Central Otago wine country"
           fill
           priority
           className="object-cover object-center"
@@ -98,10 +116,10 @@ export default function OtagoRailTrailAccommodationPage() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative max-w-[750px] px-5 pt-20">
           <h1 className="font-display text-5xl md:text-6xl text-white mb-4 drop-shadow-lg">
-            Otago Rail Trail Accommodation
+          Central Otago Cycle Trails Accommodation
           </h1>
           <p className="text-xl mb-8 opacity-95">
-            Luxury stay just 300 metres from the trail at Cromwell.
+            Luxury stay just 300 metres from the Lake Dunstan trail at Cromwell.
             Saltwater spas in the domes, wood-fired hot tub at the cottage.
           </p>
           <Button href="/book">Book Your Trail Stay</Button>
@@ -113,7 +131,7 @@ export default function OtagoRailTrailAccommodationPage() {
         <ol className="flex items-center gap-2 px-5 py-3 text-sm max-w-[1200px] mx-auto">
           <li><Link href="/" className="text-burgundy no-underline hover:underline">Home</Link></li>
           <li className="text-gray-400">&rsaquo;</li>
-          <li className="text-muted">Otago Rail Trail Accommodation</li>
+          <li className="text-muted">Central Otago Cycle Trails Accommodation</li>
         </ol>
       </nav>
 
@@ -133,13 +151,10 @@ export default function OtagoRailTrailAccommodationPage() {
       <section className="py-20 px-5">
         <div className="max-w-[800px] mx-auto text-center">
           <h2 className="font-display text-4xl mb-6">
-            New Zealand&apos;s Original Great Ride
+            New Zealand&apos;s Otago Great Rides
           </h2>
           <p className="text-lg leading-8 text-muted mb-6">
-            The Otago Central Rail Trail follows the historic Central Otago railway line between
-            Clyde and Middlemarch (150km). One of New Zealand&apos;s original Great Rides, it passes
-            through spectacular Central Otago scenery: schist tors, river gorges, old tunnel and
-            viaduct crossings, and the wide open Maniototo plains.
+          The Otago Cycle Trails cater to cyclists of all levels, with well-maintained paths and support services, including bike hire, accommodation, and shuttle services. Whether you're a leisure cyclist seeking a scenic escape or a seasoned adventurer, the Otago Trails promise an unforgettable two-wheeled adventure through the heart of the lower South Island's stunning landscapes and rich history.
           </p>
           <p className="text-lg leading-8 text-muted">
             The most popular and accessible section is Cromwell to Clyde (17km, 2–3 hours),
@@ -152,7 +167,7 @@ export default function OtagoRailTrailAccommodationPage() {
       {/* Trail Sections */}
       <section className="py-20 px-5 bg-white">
         <div className="max-w-[900px] mx-auto">
-          <h2 className="font-display text-4xl text-center mb-12">Trail Sections at a Glance</h2>
+          <h2 className="font-display text-4xl text-center mb-12">Central Otago Great Ride at a Glance</h2>
           <div className="space-y-4">
             {trailSections.map((section, i) => (
               <div key={section.name} className={`rounded-xl p-6 ${i === 0 ? "bg-burgundy text-white" : "bg-cream"}`}>
@@ -201,7 +216,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
                 badge: "Adults Only",
-                price: "$635/night",
+                price: "$650/night",
                 notes: "Private spa, stargazing skylight, breakfast included",
               },
               {
@@ -209,7 +224,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
                 badge: "Adults Only",
-                price: "$615/night",
+                price: "$599/night",
                 notes: "Private spa, vineyard views, kitchenette",
               },
               {
@@ -217,7 +232,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 image: "/images/lakeside-cottage-exterior.jpeg",
                 title: "Lakeside Cottage",
                 badge: "Adults-Only · Pet Friendly",
-                price: "$365/night",
+                price: "$350/night",
                 notes: "Queen + sofa bed, sleeps 3, wood-fired hot tub, direct lake access",
               },
             ].map((acc) => (
@@ -265,7 +280,7 @@ export default function OtagoRailTrailAccommodationPage() {
       {/* CTA */}
       <section className="py-20 px-5 text-center">
         <div className="max-w-[600px] mx-auto">
-          <h2 className="font-display text-4xl mb-4">Book Your Rail Trail Base</h2>
+          <h2 className="font-display text-4xl mb-4">Book Your Cycle Trail Base</h2>
           <p className="text-lg text-muted mb-8">
             300m to the trailhead. Spa or hot tub for post-ride recovery.
             Luxury domes and lakeside cottage available.

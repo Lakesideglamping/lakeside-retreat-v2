@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description:
       "Meet Stephen and Sandy, hosts of Central Otago's premier sustainably powered retreat on Lake Dunstan.",
     url: "https://lakesideretreat.co.nz/our-story",
-    images: [{ url: "/images/solarpanel.jpeg", width: 1200, height: 800, alt: "Lakeside Retreat \u2014 solar powered" }],
+    images: [{ url: "/images/galleryrainbow.jpeg", width: 1200, height: 800, alt: "Lakeside Retreat \u2014 solar powered" }],
     type: "website",
   },
 };
@@ -30,7 +30,7 @@ const timeline = [
 
 const values = [
   { title: "Quiet", desc: "The kind you drive a long way to find." },
-  { title: "Care", desc: "Your bed made, your kettle on." },
+  { title: "Care", desc: "Your bed made, your spa ready." },
   { title: "Place", desc: "What the lake gives, we give back." },
   { title: "Detail", desc: "Down to the last tea bag." },
 ];
@@ -47,7 +47,7 @@ export default function OurStoryPage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/dome-rose-spa1.jpeg"
+        src="/images/galleryrainbow.jpeg"
         alt="Dome Rose with private spa at Lakeside Retreat"
         minHeight="60vh"
         overlayOpacity={0.35}
@@ -78,7 +78,7 @@ export default function OurStoryPage() {
             </p>
           </div>
           <Image
-            src="/images/vineyard.jpeg"
+            src="/images/solarpanel.jpeg"
             alt="View of Lake Dunstan and vineyards from Lakeside Retreat"
             width={800}
             height={600}

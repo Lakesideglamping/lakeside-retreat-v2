@@ -68,7 +68,7 @@ export default function ExplorePage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/lake-mountains-perfect.jpg"
+        src="/images/20220110_081038.jpg"
         alt="Lake and mountains of Central Otago near Cromwell"
         minHeight="60vh"
         overlayOpacity={0.35}

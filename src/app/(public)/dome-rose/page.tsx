@@ -6,18 +6,18 @@ import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema, 
 import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
-  title: "Dome Ros\u00e9 | Romantic Getaway Central Otago | $615/night",
+  title: "Dome Ros\u00e9 | Romantic Getaway Central Otago | $599/night",
   description:
-    "Dome Ros\u00e9 — intimate 40sqm glamping dome perfect for couples in Cromwell, Central Otago. Outdoor spa, mountain views, vineyard setting on Lake Dunstan. Book direct — $615/night.",
+    "Dome Ros\u00e9 — intimate 40sqm glamping dome perfect for couples in Cromwell, Central Otago. Outdoor spa, mountain views, vineyard setting on Lake Dunstan. Book direct — $599/night.",
   alternates: { canonical: '/dome-rose' },
   openGraph: {
     title: "Dome Rosé | Romantic Glamping Dome — Vineyard Views, Central Otago",
     description:
-      "40sqm romantic dome with private outdoor spa, vineyard and mountain views. The perfect couples escape — $615/night in Central Otago wine country.",
+      "40sqm romantic dome with private outdoor spa, vineyard and mountain views. The perfect couples escape — $599/night in Central Otago wine country.",
     url: "https://lakesideretreat.co.nz/dome-rose",
     images: [
       {
-        url: "/images/dome-rose-spa1.jpeg",
+        url: "/images/galleryrainbow.jpeg",
         width: 1200,
         height: 630,
         alt: "Dome Rosé private outdoor spa overlooking Central Otago vineyard at dusk",
@@ -48,11 +48,14 @@ const amenities = [
 const galleryImages = [
   { src: "/images/dome-rose-spa1.jpeg", alt: "Dome Ros\u00e9 with private outdoor spa" },
   { src: "/images/domesmountainview.jpeg", alt: "Mountain views from Dome Ros\u00e9" },
-  { src: "/images/vineyard.jpeg", alt: "Vineyard views surrounding Dome Ros\u00e9" },
+  { src: "/images/SkyView.jpeg", alt: "Vineyard views surrounding Dome Ros\u00e9" },
+  { src: "/images/IMG_1403.webp", alt: "Dome Rose interior" },
+  { src: "/images/IMG_E8726.jpg", alt: "Mountain views from Dome Ros\u00e9 desking" },
+  { src: "/images/IMG_8043.jpg", alt: "Dome Rose entrance" },
 ];
 
 const pricingFeatures = [
-  "Nightly rate: $615/night (GST incl.)",
+  "Nightly rate: $599/night (GST incl.)",
   "Cleaning fee: included in your nightly rate",
   "Continental breakfast: included",
   "No minimum stay — 1 night bookings welcome",
@@ -77,7 +80,7 @@ export default async function DomeRosePage() {
           id: "dome-rose",
           name: "Dome Rosé",
           description: "Romantic 40sqm luxury geodesic dome with vineyard views, private outdoor spa, and intimate wine country setting.",
-          price: 615,
+          price: 599,
           floorSize: 40,
           maxOccupancy: 2,
           bedType: "Super King",
@@ -100,7 +103,7 @@ export default async function DomeRosePage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/dome-rose-spa1.jpeg"
+          src="/images/20211122_185234.jpg"
           alt="Dome Rosé romantic geodesic dome with private outdoor spa and vineyard views"
           fill
           priority
@@ -116,8 +119,8 @@ export default async function DomeRosePage() {
             Soak under the stars. Wake among the vines.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=dome-rose" ariaLabel="Book Dome Rosé now — $615 per night">
-              Book Now — $615/night
+            <Button href="/book?a=dome-rose" ariaLabel="Book Dome Rosé now — $599 per night">
+              Book Now — $599/night
             </Button>
             <Button href="#gallery" variant="outline">
               View Gallery
@@ -219,7 +222,7 @@ export default async function DomeRosePage() {
         <div className="max-w-[500px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">Pricing</h2>
           <div className="bg-cream rounded-3xl p-10 text-center shadow-xl">
-            <div className="text-5xl font-bold text-burgundy mb-1">$615</div>
+            <div className="text-5xl font-bold text-burgundy mb-1">$599</div>
             <p className="text-muted mb-1">per night (2 guests)</p>
             <p className="text-sm text-teal font-semibold mb-6">GST and cleaning included — no hidden fees</p>
             <ul className="text-left space-y-3 mb-6">
@@ -260,7 +263,7 @@ export default async function DomeRosePage() {
             >
               <div className="relative h-[200px]">
                 <Image
-                  src="/images/Pinotfront.jpeg"
+                  src="/images/gallerydeck.jpeg"
                   alt="Dome Pinot luxury geodesic dome with Lake Dunstan views"
                   fill
                   className="object-cover"
@@ -272,7 +275,7 @@ export default async function DomeRosePage() {
                 <p className="text-muted text-sm mb-3">
                   Our flagship 50sqm luxury dome with panoramic Lake Dunstan views and private spa.
                 </p>
-                <p className="text-burgundy font-semibold">$635/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$650/night &rarr;</p>
               </div>
             </Link>
             <Link
@@ -281,7 +284,7 @@ export default async function DomeRosePage() {
             >
               <div className="relative h-[200px]">
                 <Image
-                  src="/images/lakeside-cottage-exterior.jpeg"
+                  src="/images/vineyardlakeview.jpeg"
                   alt="Lakeside Cottage — adults-only pet-friendly lakefront stay"
                   fill
                   className="object-cover"
@@ -293,7 +296,7 @@ export default async function DomeRosePage() {
                 <p className="text-muted text-sm mb-3">
                   Adults-only lakefront cottage with wood-fired hot tub. Sleeps up to 3.
                 </p>
-                <p className="text-burgundy font-semibold">$365/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$350/night &rarr;</p>
               </div>
             </Link>
           </div>
@@ -333,7 +336,7 @@ export default async function DomeRosePage() {
           </p>
           <Button
             href="/book?a=dome-rose"
-            ariaLabel="Book Dome Rosé now — $615 per night"
+            ariaLabel="Book Dome Rosé now — $599 per night"
           >
             Book Dome Rosé Now
           </Button>

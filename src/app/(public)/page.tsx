@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description:
       "Adults-only luxury glamping domes and pet-friendly lakeside cottage on Lake Dunstan, Central Otago. Private spas, vineyard views, 4.9\u2605 reviews.",
     url: "https://lakesideretreat.co.nz/",
-    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat \u2014 luxury glamping on Lake Dunstan" }],
+    images: [{ url: "/images/IMG_0136.JPG", width: 1200, height: 800, alt: "Lakeside Retreat \u2014 luxury glamping on Lake Dunstan" }],
     type: "website",
   },
 };
@@ -48,7 +48,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/domes-vineyard-sunset.jpg"
+          src="/images/IMG_0136.JPG"
           alt="Lakeside Retreat glamping domes overlooking Lake Dunstan at sunset"
           fill
           priority
@@ -74,7 +74,7 @@ export default async function HomePage() {
           </p>
           <Button href="/book">Book Your Escape</Button>
           <p className="text-white/85 text-sm mt-5">
-            From <span className="font-semibold text-white">$365/night</span> &middot; Free cancellation 7+ days before
+            From <span className="font-semibold text-white">$350/night</span> &middot; Free cancellation 7+ days before
           </p>
         </div>
       </section>
@@ -101,7 +101,7 @@ export default async function HomePage() {
             </div>
           </div>
           <Image
-            src="/images/gallerydecksitting.jpeg"
+            src="/images/IMG_0097.JPG"
             alt="View from the dome deck across the golden vineyard and Lake Dunstan"
             width={1000}
             height={750}
@@ -163,7 +163,7 @@ export default async function HomePage() {
             <Button href="/explore">Explore Local Area</Button>
           </div>
           <Image
-            src="/images/lake-mountains-perfect.jpg"
+            src="/images/LakeDView.jpeg"
             alt="Lake Dunstan location and surrounding Central Otago wine country"
             width={1920}
             height={1440}
@@ -196,7 +196,7 @@ export default async function HomePage() {
               badge="Adults Only"
               description="50sqm of calm. Lake from the bed, stars through the roof, spa out the door."
               features={["Lake Views", "Vineyard Views","Private Spa", "Breakfast Included", "Super King Bed"]}
-              price="$635/night"
+              price="$650/night"
             />
             <AccommodationCard
               href="/dome-rose"
@@ -205,7 +205,7 @@ export default async function HomePage() {
               badge="Adults Only"
               description="40sqm geodesic dome tucked into the vines. Private spa, super-king bed, vineyard at the window."
               features={["Vineyard Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
-              price="$615/night"
+              price="$599/night"
             />
             <AccommodationCard
               href="/lakeside-cottage"
@@ -213,7 +213,7 @@ export default async function HomePage() {
               title="Lakeside Cottage"
               description="Self-contained lakefront cottage, sleeps 3. Direct Lake Dunstan access, and pet-friendly."
               features={["Lake Access", "Pet Friendly", "Sleeps 3", "Private Hot Tub","Weber BBQ"]}
-              price="$365/night"
+              price="$350/night"
             />
           </div>
         </div>

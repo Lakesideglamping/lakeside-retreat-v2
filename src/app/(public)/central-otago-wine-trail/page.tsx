@@ -30,33 +30,36 @@ export const metadata: Metadata = {
 const regions = [
   {
     name: "Bannockburn: The Burgundy of the South",
-    distance: "10-15 minutes from Lakeside Retreat",
+    distance: "10-25 minutes from Lakeside Retreat",
     desc: "North-facing slopes, schist soils, and gold-mining heritage make Bannockburn one of Central Otago's most acclaimed sub-regions.",
     wineries: [
-      { name: "Felton Road", note: "Biodynamic, tastings by appointment only" },
-      { name: "Burn Cottage", note: "Biodynamic, single-vineyard Pinot Noir" },
-      { name: "Carrick Winery", note: "Certified organic, on-site restaurant" },
-      { name: "Mt Difficulty", note: "Cellar door in Bannockburn village, Kawarau Gorge views" },
+      { name: "Felton Road", note: "Biodynamic, tastings by appointment only", url: "https://feltonroad.com" },
+      { name: "Desert Heart", note: "Vineyard kitchen with 360-degree river and mountain view.", url: "https://desertheart.co.nz" },
+      { name: "Carrick Winery", note: "Certified organic, on-site restaurant", url: "https://www.carrick.co.nz" },
+      { name: "Mt Difficulty", note: "Cellar door in Bannockburn village, Kawarau Gorge views", url: "https://www.mtdifficulty.nz" },
     ],
   },
   {
-    name: "Cromwell Basin: Your Nearest Neighbours",
+    name: "Pisa andCromwell Basin: Your Nearest Neighbours",
     distance: "5-15 minutes from Lakeside Retreat",
     desc: "Diverse winery experiences in a compact area, perfect for an afternoon of tasting.",
     wineries: [
-      { name: "Wooing Tree", note: "Underground barrel hall, Pinot Noir/Pinot Gris/sparkling Blush" },
-      { name: "Mondillo", note: "Boutique Italian-inspired estate" },
-      { name: "Aurum Wines", note: "Elegant Pinot Noir and Riesling near Lake Dunstan" },
+      { name: "Wooing Tree", note: "Award-winning wines with delicious seasonal menu and platters", url: "https://www.wooingtree.co.nz" },
+      { name: "Quartz Reef", note: "Specialists in méthode traditionnelle sparkling wine and Pinot Noir", url: "https://www.quartzreef.co.nz" },
+      { name: "Misha's Vineyard", note: "World-Class central Otago wines", url: "https://mishasvineyard.com" },
+      { name: "Aurum Wines", note: "Elegant Pinot Noir and Riesling near Lake Dunstan", url: "https://www.aurumwines.co.nz" },
     ],
   },
   {
-    name: "Pisa and Lowburn: Lakeside Vineyards",
+    name: "Northburn and Lowburn: Lakeside Vineyards",
     distance: "10-20 minutes from Lakeside Retreat",
     desc: "Ancient glacial terraces with elevated, sun-drenched sites producing wines of exceptional depth.",
     wineries: [
-      { name: "Valli", note: "Winemaker Grant Taylor, single-vineyard wines across sub-regions" },
-      { name: "Domain Road Vineyard", note: "Family-run, textured Pinot Noir" },
-      { name: "Wild Irishman", note: "Smaller producer, tastings by appointment" },
+     
+      { name: "The Cloudy Bay Shed", note: "It's much more than a cellar door—it's a premium wine, food, and scenery experience", url: "https://www.cloudybay.com/en-nz/" },
+      { name: "Rockburn Winery", note: "One of Central Otago's most respected wineries, renowned for producing elegant, award-winning Pinot Noir", url: "https://www.rockburn.co.nz" },
+      { name: "Wild Earth Wines", note: "Creating dishes expertly matched with award winning wines, and served in a rustic way", url: "https://www.wildearthwines.co.nz/cellar-door" },
+      { name: "Domain Road Vineyard", note: "Family-run, textured Pinot Noir", url: "https://www.domainroadvineyard.co.nz" },
     ],
   },
   {
@@ -64,9 +67,9 @@ const regions = [
     distance: "25-35 minutes from Lakeside Retreat",
     desc: "New Zealand's coolest and highest wine-producing area, nestled in the Kawarau Gorge between Cromwell and Queenstown. Famous for elegant, cool-climate Pinot Noir.",
     wineries: [
-      { name: "Gibbston Valley Winery", note: "NZ's largest wine cave — underground barrel cellar, restaurant, and guided tours" },
-      { name: "Peregrine Wines", note: "Architecturally stunning winery, award-winning Pinot Noir and Pinot Gris" },
-      { name: "Chard Farm", note: "One of Central Otago's original estates, dramatic gorge setting" },
+      { name: "Gibbston Valley Winery", note: "NZ's largest wine cave — underground barrel cellar, restaurant, and guided tours", url: "https://www.gibbstonvalley.com" },
+      { name: "Peregrine Wines", note: "Architecturally stunning winery, award-winning Pinot Noir and Pinot Gris", url: "https://www.peregrinewines.co.nz" },
+      { name: "Chard Farm", note: "One of Central Otago's original estates, dramatic gorge setting", url: "https://www.chardfarm.co.nz" },
     ],
   },
   {
@@ -74,9 +77,10 @@ const regions = [
     distance: "20-30 minutes from Lakeside Retreat",
     desc: "Hot, dry summers and cool nights on the eastern shores of Lake Dunstan produce wines of exceptional concentration and depth.",
     wineries: [
-      { name: "Quartz Reef", note: "Specialists in méthode traditionnelle sparkling wine and Pinot Noir" },
-      { name: "Bendigo Estate", note: "Boutique producer with stunning lake and Pisa Range views" },
-      { name: "Prophecy Rock", note: "Small-batch Pinot Noir, open by appointment" },
+    
+      { name: "Maori Point", note: "Certified sustainable award winning wines in a beautiful vineyard", url: "https://maoripoint.co.nz" },
+      { name: "Prophecy Rock", note: "Small-batch Pinot Noir, open by appointment", url: "https://www.prophetsrock.co.nz" },
+      { name: "Mondillo", note: "Boutique Italian-inspired estate", url: "https://www.mondillo.co.nz" },
     ],
   },
   {
@@ -84,9 +88,9 @@ const regions = [
     distance: "40-50 minutes from Lakeside Retreat",
     desc: "The oldest commercial wine-growing area in Central Otago, with a harsh continental climate producing distinctive, food-friendly styles.",
     wineries: [
-      { name: "Two Paddocks", note: "Owned by actor Sam Neill — Pinot Noir and Riesling, tastings in Clyde" },
-      { name: "Grasshopper Rock", note: "High-altitude vineyard, limited production, appointments recommended" },
-      { name: "Doctors Flat Vineyard", note: "Small family producer, intense Pinot Noir from old vines" },
+      { name: "Two Paddocks", note: "Owned by actor Sam Neill — Pinot Noir and Riesling, tastings in Clyde", url: "https://www.twopaddocks.co.nz" },
+      { name: "Three Miners", note: "15.5 ha vineyardsituated in Earnscleugh Valley, appointments recommended", url: "https://threeminers.com/" },
+      { name: "Monte Christo", note: "The Paris family making wine since 1864", url: "https://www.montechristowinery.co.nz" },
     ],
   },
 ];
@@ -178,7 +182,18 @@ export default function WineTrailPage() {
                 <div key={w.name} className="bg-cream rounded-xl p-5 flex items-start gap-3">
                   <span className="text-burgundy font-bold mt-0.5">&#10003;</span>
                   <div>
-                    <span className="font-semibold text-burgundy">{w.name}</span>
+                    {w.url ? (
+                      <a
+                        href={w.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-burgundy underline hover:no-underline"
+                      >
+                        {w.name}
+                      </a>
+                    ) : (
+                      <span className="font-semibold text-burgundy">{w.name}</span>
+                    )}
                     <span className="text-muted text-sm"> &mdash; {w.note}</span>
                   </div>
                 </div>
@@ -215,9 +230,9 @@ export default function WineTrailPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", price: "$635/night" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", price: "$615/night" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", price: "$365/night" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", price: "$650/night" },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", price: "$599/night" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", price: "$350/night" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -262,7 +277,7 @@ export default function WineTrailPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Wine Country Escape</h2>
           <p className="text-lg text-muted mb-8">
             30+ cellar doors within 15 minutes. Spa or hot tub to return to each evening.
-            Domes $615 &bull; Cottage $365/night.
+            Domes $599 &bull; Cottage $350/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

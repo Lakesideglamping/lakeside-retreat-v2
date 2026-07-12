@@ -8,14 +8,14 @@ import { JsonLd, createLodgingBusinessSchema, createBreadcrumbSchema } from "@/l
 export const metadata: Metadata = {
   title: "Luxury Accommodation Central Otago | Glamping Domes & Lakeside Cottage",
   description:
-    "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Stargazing skylights, vineyard views. $365/night.",
+    "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Stargazing skylights, vineyard views. $350/night.",
   alternates: { canonical: "/stay" },
   openGraph: {
     title: "Luxury Accommodation Central Otago | Glamping Domes & Lakeside Cottage",
     description:
       "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell.",
     url: "https://lakesideretreat.co.nz/stay",
-    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat accommodation" }],
+    images: [{ url: "/images/HeadingWarm.JPEG", width: 1200, height: 800, alt: "Lakeside Retreat accommodation" }],
     type: "website",
   },
 };
@@ -26,7 +26,7 @@ const accommodations = [
     image: "/images/Pinotfront.jpeg",
     title: "Dome Pinot",
     adultsOnly: true,
-    price: "$635",
+    price: "$650",
     tagline: "50sqm luxury dome with panoramic Lake Dunstan views, private spa, and stargazing skylight.",
     features: [
       "Super King bed with premium linens",
@@ -42,7 +42,7 @@ const accommodations = [
     image: "/images/dome-rose-spa1.jpeg",
     title: "Dome Ros\u00e9",
     adultsOnly: true,
-    price: "$615",
+    price: "$599",
     tagline: "40sqm romantic retreat with vineyard views, private spa, and a kitchenette for in-dome dining.",
     features: [
       "Super King bed with luxury bedding",
@@ -58,7 +58,7 @@ const accommodations = [
     image: "/images/lakeside-cottage-exterior.jpeg",
     title: "Lakeside Cottage",
     adultsOnly: false,
-    price: "$365",
+    price: "$350",
     tagline: "Right on the water. Wood-fired tub steaming under the stars. BBQ on the deck, dog at your feet.",
     features: [
       "Queen bed + sofa pullout, sleeps 3",
@@ -84,7 +84,7 @@ export default function StayPage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/domesmountainview.jpeg"
+        src="/images/DJI_20260423092341_0042_D.jpg"
         alt="Glamping domes with mountain views at Lakeside Retreat"
         minHeight="60vh"
         overlayOpacity={0.4}

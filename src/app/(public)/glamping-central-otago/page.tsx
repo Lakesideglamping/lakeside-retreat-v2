@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/glamping-central-otago",
     images: [
       {
-        url: "/images/dome-rose-spa1.jpeg",
+        url: "/images/domes-vineyard-sunset.jpg",
         width: 1200,
         height: 800,
         alt: "Luxury geodesic glamping dome with outdoor spa on Lake Dunstan, Central Otago",
@@ -30,17 +30,17 @@ const features = [
   {
     title: "Private Outdoor Spa",
     desc: "Each dome has its own saltwater outdoor spa with uninterrupted Lake Dunstan and mountain views. Perfect for sunrise soaks or stargazing at night.",
-    image: "/images/dome-rose-spa1.jpeg",
+    image: "/images/SpaArialView.jpeg",
   },
   {
     title: "Stargazing Skylight",
     desc: "Dome Pinot features a panoramic skylight directly above the bed. With zero light pollution, the Milky Way is visible on clear nights — no telescope needed.",
-    image: "/images/windowview.jpeg",
+    image: "/images/MilkyWay.jpg",
   },
   {
     title: "Vineyard & Lake Views",
     desc: "Wake up to panoramic views of Lake Dunstan, the Pisa Range, and Central Otago's famous vineyards. There are 30+ wineries within 15 minutes.",
-    image: "/images/PinotLakeView.jpeg",
+    image: "/images/springview.jpeg",
   },
 ];
 
@@ -53,7 +53,7 @@ const comparisonPoints = [
   { feature: "Otago Rail Trail access (300m)", basic: false, lakeside: true },
   { feature: "30+ wineries within 15 min", basic: false, lakeside: true },
   { feature: "Heated bathroom", basic: true, lakeside: true },
-  { feature: "King size bed", basic: true, lakeside: true },
+  { feature: "Super King size bed", basic: false, lakeside: true },
 ];
 
 const domes = [
@@ -61,7 +61,7 @@ const domes = [
     slug: "dome-pinot",
     name: "Dome Pinot",
     size: "50sqm",
-    price: "$635/night",
+    price: "$650/night",
     image: "/images/Pinotfront.jpeg",
     tagline: "Larger of the two domes with panoramic Lake Dunstan views, stargazing skylight, private saltwater spa, and continental breakfast included.",
     highlights: ["50sqm geodesic dome", "Stargazing skylight above bed", "Private saltwater outdoor spa", "Lake & Pisa Range views", "Kitchenette", "Continental breakfast"],
@@ -70,7 +70,7 @@ const domes = [
     slug: "dome-rose",
     name: "Dome Rosé",
     size: "40sqm",
-    price: "$615/night",
+    price: "$599/night",
     image: "/images/dome-rose-spa1.jpeg",
     tagline: "Intimate retreat with vineyard and mountain views, private outdoor spa, luxury super king bed, and outdoor dining deck.",
     highlights: ["40sqm geodesic dome", "Private saltwater outdoor spa", "Vineyard & mountain views", "Luxury super king bed", "Outdoor dining deck", "Kitchenette"],
@@ -85,7 +85,7 @@ export default function GlampingCentralOtagoPage() {
           title: "Glamping Central Otago | Luxury Geodesic Domes on Lake Dunstan",
           description: "Central Otago's premier glamping experience — luxury geodesic domes with private outdoor spas, stargazing skylights, and vineyard views.",
           path: "/glamping-central-otago",
-          image: "Pinotfront.jpeg",
+          image: "IMG_8536.jpg",
           datePublished: "2025-02-01",
         }),
         createBreadcrumbSchema([
@@ -94,7 +94,7 @@ export default function GlampingCentralOtagoPage() {
         ]),
         createFaqSchema([
           { question: "What is glamping in Central Otago like?", answer: "Glamping in Central Otago combines luxury accommodation with stunning natural surroundings. At Lakeside Retreat, our geodesic domes offer private outdoor spas, stargazing skylights, panoramic Lake Dunstan views, and vineyard scenery — far more comfortable than traditional camping but deeply connected to the landscape." },
-          { question: "How much does glamping in Central Otago cost?", answer: "Lakeside Retreat's luxury glamping domes start at $615/night (Dome Rosé) and $635/night (Dome Pinot), including continental breakfast. Our Lakeside Cottage is $365/night and sleeps up to 3 guests." },
+          { question: "How much does glamping in Central Otago cost?", answer: "Lakeside Retreat's luxury glamping domes start at $599/night (Dome Rosé) and $650/night (Dome Pinot), including continental breakfast. Our Lakeside Cottage is $350/night and sleeps up to 3 guests." },
           { question: "Where is the best glamping in New Zealand?", answer: "Central Otago is widely regarded as one of New Zealand's best glamping regions thanks to its dramatic landscapes, world-class wineries, and dark skies. Lakeside Retreat on Lake Dunstan offers a combination of private spas, stargazing, vineyard access, and the Otago Rail Trail — making it one of NZ's top-rated glamping experiences." },
           { question: "Is glamping suitable for couples?", answer: "Absolutely. Both of our glamping domes are adults-only and designed specifically for couples — private outdoor spas, stargazing skylights, premium bedding, and complete seclusion. Many guests use Lakeside Retreat for anniversary trips, honeymoons, and romantic getaways." },
         ]),
@@ -103,7 +103,7 @@ export default function GlampingCentralOtagoPage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/Pinotfront.jpeg"
+          src="/images/IMG_8536.jpg"
           alt="Luxury glamping dome at Lakeside Retreat overlooking Lake Dunstan, Central Otago"
           fill
           priority

@@ -7,16 +7,16 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Autumn in Central Otago | Golden Vineyards & Harvest Season Accommodation",
   description:
-    "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — $365/night.",
+    "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — $350/night.",
 
   alternates: { canonical: "/autumn-central-otago" },
   openGraph: {
     title: "Autumn in Central Otago | Golden Vineyards & Harvest Season Accommodation",
-    description: "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — $365/night.",
+    description: "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — $350/night.",
     url: "https://lakesideretreat.co.nz/autumn-central-otago",
     images: [
       {
-        url: "/images/vineyard.jpeg",
+        url: "/images/IMG_0097.jpg",
         width: 1200,
         height: 800,
         alt: "Golden autumn vineyards in Central Otago with Lake Dunstan in the background",
@@ -30,20 +30,20 @@ const autumnHighlights = [
   {
     title: "Golden Vineyards at Harvest",
     desc: "March and April bring Central Otago's pinot noir harvest — the vines turn gold and amber, cellar doors buzz with activity, and the landscape looks like a painting. With 30+ wineries within 15 minutes, you're perfectly placed to experience it.",
-    image: "/images/vineyard-path.jpg",
+    image: "/images/VineyardAutumn.jpeg",
     alt: "Golden autumn vineyards in Central Otago during pinot noir harvest season",
   },
   {
     title: "Outdoor Spa in Crisp Autumn Air",
     desc: "There is something especially magical about soaking in a hot saltwater spa as the air turns cool and the leaves change colour around you. Autumn evenings at Lakeside Retreat — when the mountains glow gold and the sky is perfectly clear — are simply unforgettable.",
-    image: "/images/pinotspa.jpeg",
+    image: "/images/spa.jpeg",
     alt: "Private outdoor spa at Lakeside Retreat with autumn mountain views, Central Otago",
   },
   {
     title: "Best Cycling Conditions of the Year",
-    desc: "The Otago Rail Trail is at its finest in autumn. Cooler temperatures make for comfortable riding, the trees along the trail turn brilliant gold, and the crowds of summer have gone. The Cromwell to Clyde section starts just 300m from the retreat.",
-    image: "/images/windowview.jpeg",
-    alt: "Autumn cycling conditions on the Otago Rail Trail near Cromwell",
+    desc: "The Otago cycle trails are at its finest in autumn. Cooler temperatures make for comfortable riding, the trees along the trail turn brilliant gold, and the crowds of summer have gone. The Lake Dunstan Cycle Trail (Cromwell to Clyde section) starts just 300m from the retreat.",
+    image: "/images/CycleTrail.jpeg",
+    alt: "Autumn cycling conditions on Cromwell",
   },
 ];
 
@@ -54,7 +54,7 @@ const autumnActivities = [
     desc: "March–April is harvest time in Central Otago wine country. Visit Felton Road, Carrick, Mt Difficulty, and Bannockburn cellar doors for harvest tastings and behind-the-scenes winery experiences.",
   },
   {
-    title: "Otago Rail Trail",
+    title: "Otago Lake Dunstan Cycle Trail",
     distance: "300m",
     desc: "Autumn is the best season for the trail — golden poplars and willows line the route, temperatures are perfect for riding, and you'll have the path largely to yourself.",
   },
@@ -82,9 +82,9 @@ const autumnActivities = [
 
 const seasons = [
   { season: "March–May", label: "Autumn", temp: "5°C to 20°C", conditions: "Golden vineyards, harvest season, crisp evenings — many say the most beautiful time to visit." },
-  { season: "June–August", label: "Winter", temp: "–2°C to 12°C", conditions: "Snow on mountains, frost mornings, crystal-clear nights — the most dramatic season." },
+  { season: "June–August", label: "Winter", temp: "–4°C to 12°C", conditions: "Snow on mountains, frost mornings, crystal-clear nights — the most dramatic season." },
   { season: "September–November", label: "Spring", temp: "8°C to 18°C", conditions: "Blossom on the orchards, migratory birds return, the first warm days of the year." },
-  { season: "December–February", label: "Summer", temp: "18°C to 30°C", conditions: "Long sunny days, lake swimming, cycling, vineyard lunches — peak season." },
+  { season: "December–February", label: "Summer", temp: "18°C to 33°C", conditions: "Long sunny days, lake swimming, cycling, vineyard lunches — peak season." },
 ];
 
 export default function AutumnCentralOtagoPage() {
@@ -95,8 +95,8 @@ export default function AutumnCentralOtagoPage() {
           title: "Autumn in Central Otago | Golden Vineyards & Harvest Season Accommodation",
           description: "Central Otago in autumn — golden vineyards, pinot noir harvest, crisp spa evenings, and world-class cycling on the Otago Rail Trail.",
           path: "/autumn-central-otago",
-          image: "vineyard-path.jpg",
-          datePublished: "2025-03-01",
+          image: "VineyardAutumn.jpeg",
+          datePublished: "2026-03-01",
           dateModified: "2026-03-14",
         }),
         createBreadcrumbSchema([
@@ -106,8 +106,8 @@ export default function AutumnCentralOtagoPage() {
         ]),
         createFaqSchema([
           { question: "When is autumn in Central Otago?", answer: "Autumn in Central Otago runs from March through May. March and April are the peak harvest months with the most dramatic colour in the vineyards. May brings cooler temperatures and the first frosts, which create spectacular conditions for the spa and stargazing." },
-          { question: "What is Central Otago like in autumn?", answer: "Autumn is arguably the most beautiful season in Central Otago. The vineyards turn gold and amber during pinot noir harvest (March–April), the Otago Rail Trail is at its best with autumn foliage, the lake is still warm enough for swimming, and the evenings are perfect for soaking in a private outdoor spa under clear skies." },
-          { question: "Is the Otago Rail Trail good in autumn?", answer: "Autumn is the best season for the Otago Rail Trail. Temperatures are comfortable for cycling (typically 10–20°C during the day), the poplars and willows along the trail turn brilliant gold in April, and the crowds are far smaller than summer. The Cromwell to Clyde section starts just 300m from Lakeside Retreat." },
+          { question: "What is Central Otago like in autumn?", answer: "Autumn is arguably the most beautiful season in Central Otago. The vineyards turn gold and amber during pinot noir harvest (March–April), the Otago cycle trails are at its best with autumn foliage, the lake is still warm enough for swimming, and the evenings are perfect for soaking in a private outdoor spa under clear skies." },
+          { question: "Is the Otago Rail Trail good in autumn?", answer: "Autumn is the best season for the Otago Rail Trail. Temperatures are comfortable for cycling (typically 10–20°C during the day), the poplars and willows along the trail turn brilliant gold in April, and the crowds are far smaller than summer. The Lake Dunstan Cycle Trail (Cromwell to Clyde section) starts just 300m from Lakeside Retreat." },
           { question: "Can I swim in Lake Dunstan in autumn?", answer: "Yes — Lake Dunstan stays warm well into autumn. March and April are ideal for swimming, with water temperatures typically around 18–20°C following the summer. The Lakeside Cottage has direct lake access for swimming straight off the deck." },
           { question: "What is the pinot noir harvest season in Central Otago?", answer: "The Central Otago pinot noir harvest typically runs from late March through April. It's a wonderful time to visit the region — cellar doors are busy, many wineries offer harvest experiences and special tastings, and the vineyard landscapes are at their most spectacular with golden and amber tones." },
         ]),
@@ -116,7 +116,7 @@ export default function AutumnCentralOtagoPage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/vineyard-path.jpg"
+          src="/images/IMG_0097.jpg"
           alt="Golden autumn vineyards in Central Otago during harvest season"
           fill
           priority
@@ -162,7 +162,7 @@ export default function AutumnCentralOtagoPage() {
           <p className="text-lg leading-8 text-muted">
             Lakeside Retreat sits in the heart of it all — surrounded by 30+ wineries,
             300 metres from the{" "}
-            <Link href="/otago-rail-trail-accommodation" className="text-burgundy no-underline hover:underline">Otago Rail Trail</Link>
+            <Link href="/otago-rail-trail-accommodation" className="text-burgundy no-underline hover:underline">Otago Lake Dunstan Cycle Trail</Link>
             , and on the shores of Lake Dunstan. The outdoor spas feel perfect in the
             crisp autumn air, and the night skies become increasingly spectacular as
             the evenings cool.
@@ -278,7 +278,7 @@ export default function AutumnCentralOtagoPage() {
                 bookHref: "/book?a=dome-pinot",
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
-                price: "$635/night",
+                price: "$650/night",
                 autumn: ["Private outdoor spa for cool evenings", "Stargazing skylight — clear autumn skies", "Panoramic vineyard & lake views", "Continental breakfast included"],
               },
               {
@@ -286,8 +286,16 @@ export default function AutumnCentralOtagoPage() {
                 bookHref: "/book?a=dome-rose",
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
-                price: "$615/night",
+                price: "$599/night",
                 autumn: ["Private outdoor spa", "Vineyard & mountain views", "Luxury super king bed", "Outdoor dining deck — perfect in autumn"],
+              },
+              {
+                href: "/lakeside-cottage",
+                bookHref: "/book?a=lakeside-cottage",
+                image: "/images/cottage.jpg",
+                title: "Lakeside Cottage",
+                price: "$350/night",
+                autumn: ["Sleeps 3", "Wood-fired hot tub", "Dog-friendly", "Direct lake access"],
               },
             ].map((dome) => (
               <div key={dome.href} className="bg-cream rounded-2xl overflow-hidden shadow-lg">
@@ -312,13 +320,7 @@ export default function AutumnCentralOtagoPage() {
               </div>
             ))}
           </div>
-          <div className="mt-8 bg-cream rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <h3 className="font-display text-xl text-burgundy mb-1">Lakeside Cottage</h3>
-              <p className="text-muted text-sm">$365/night &bull; Sleeps 3 &bull; Wood-fired hot tub &bull; Dog-friendly &bull; Direct lake access</p>
-            </div>
-            <Button href="/book?a=lakeside-cottage">Book Cottage &rarr;</Button>
-          </div>
+          
           <p className="text-center text-muted text-sm mt-6">
             Strictly adults only (domes) &bull; Continental breakfast included &bull;{" "}
             <Link href="/contact" className="text-burgundy no-underline hover:underline">Questions? Contact us</Link>
@@ -334,7 +336,7 @@ export default function AutumnCentralOtagoPage() {
             {[
               { href: "/winter-glamping-central-otago", title: "Winter Glamping Guide", desc: "Snow views, ski fields & cosy dome evenings" },
               { href: "/glamping-central-otago", title: "Glamping Central Otago", desc: "Our full glamping guide for all seasons" },
-              { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail Stays", desc: "300m from the Cromwell trailhead" },
+              { href: "/otago-rail-trail-accommodation", title: "Otago Cycle Trail Stays", desc: "300m from the Cromwell trailhead" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
                 <p className="font-semibold text-burgundy mb-1">{link.title}</p>

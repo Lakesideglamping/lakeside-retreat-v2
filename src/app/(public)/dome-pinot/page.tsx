@@ -6,18 +6,18 @@ import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema, 
 import { PropertyAvailability } from "@/components/booking/property-availability";
 
 export const metadata: Metadata = {
-  title: "Dome Pinot | Geodesic Dome Accommodation NZ | $635/night",
+  title: "Dome Pinot | Geodesic Dome Accommodation NZ | $650/night",
   description:
-    "Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct — $635/night.",
+    "Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct — $650/night.",
   alternates: { canonical: '/dome-pinot' },
   openGraph: {
     title: "Dome Pinot | Luxury Geodesic Dome — Lake Dunstan, Central Otago",
     description:
-      "50sqm luxury glamping dome with private outdoor spa, stargazing skylight, and panoramic Lake Dunstan views. Adults-only escape — $635/night.",
+      "50sqm luxury glamping dome with private outdoor spa, stargazing skylight, and panoramic Lake Dunstan views. Adults-only escape — $650/night.",
     url: "https://lakesideretreat.co.nz/dome-pinot",
     images: [
       {
-        url: "/images/Pinotfront.jpeg",
+        url: "/images/20220125_091449.jpg",
         width: 1200,
         height: 630,
         alt: "Dome Pinot luxury geodesic dome with panoramic Lake Dunstan views",
@@ -47,13 +47,15 @@ const amenities = [
 
 const galleryImages = [
   { src: "/images/Pinotfront.jpeg", alt: "Dome Pinot exterior with snow-capped mountain views" },
-  { src: "/images/gallerydecksitting.jpeg", alt: "Dome Pinot private deck overlooking the autumn vineyard and lake" },
+  { src: "/images/IMG_0097.jpg", alt: "Dome Pinot private deck overlooking the spring vineyard and lake" },
   { src: "/images/pinotinternal.jpeg", alt: "Dome Pinot interior luxury living space" },
   { src: "/images/windowview.jpeg", alt: "View from inside Dome Pinot over the vineyard and Lake Dunstan" },
+  { src: "/images/GallerySwingChair.jpeg", alt: "View from swing chair over the vineyard and Lake Dunstan" },
+  { src: "/images/pinotexternal2.JPEG", alt: "Dome Pinot from the driveway over looking vineyard and Lake Dunstan" },
 ];
 
 const pricingFeatures = [
-  "Nightly rate: $635/night (GST incl.)",
+  "Nightly rate: $650/night (GST incl.)",
   "Cleaning fee: included in your nightly rate",
   "Continental breakfast: included",
   "No minimum stay — 1 night bookings welcome",
@@ -78,11 +80,11 @@ export default async function DomePinotPage() {
           id: "dome-pinot",
           name: "Dome Pinot",
           description: "Flagship 50sqm luxury geodesic dome with panoramic Lake Dunstan views, private outdoor spa, stargazing skylight, and eco-luxury comfort.",
-          price: 635,
+          price: 650,
           floorSize: 50,
           maxOccupancy: 2,
           bedType: "Super King",
-          images: ["Pinotfront.jpeg", "gallerydecksitting.jpeg", "pinotinternal.jpeg"],
+          images: ["20220125_091449.jpg", "gallerydecksitting.jpeg", "pinotinternal.jpeg"],
           amenities: ["Private Saltwater Spa", "Stargazing Skylight", "Super King Bed", "Panoramic Lake Views", "Sustainably Powered", "Heat Pump", "Kitchenette", "Free WiFi", "Free Parking"],
           ratingValue: reviewStats.ratingValue,
           reviewCount: reviewStats.reviewCount,
@@ -102,7 +104,7 @@ export default async function DomePinotPage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/Pinotfront.jpeg"
+          src="/images/20220125_091449.jpg"
           alt="Dome Pinot luxury geodesic dome with panoramic Lake Dunstan views"
           fill
           priority
@@ -118,8 +120,8 @@ export default async function DomePinotPage() {
             Our flagship. The lake from the bed. The Milky Way through the roof.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=dome-pinot" ariaLabel="Book Dome Pinot now — $635 per night">
-              Book Now — $635/night
+            <Button href="/book?a=dome-pinot" ariaLabel="Book Dome Pinot now — $650 per night">
+              Book Now — $650/night
             </Button>
             <Button href="#gallery" variant="outline">
               View Gallery
@@ -222,7 +224,7 @@ export default async function DomePinotPage() {
         <div className="max-w-[500px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">Pricing</h2>
           <div className="bg-cream rounded-3xl p-10 text-center shadow-xl">
-            <div className="text-5xl font-bold text-burgundy mb-1">$635</div>
+            <div className="text-5xl font-bold text-burgundy mb-1">$650</div>
             <p className="text-muted mb-1">per night (2 guests)</p>
             <p className="text-sm text-teal font-semibold mb-6">GST and cleaning included — no hidden fees</p>
             <ul className="text-left space-y-3 mb-6">
@@ -275,7 +277,7 @@ export default async function DomePinotPage() {
                 <p className="text-muted text-sm mb-3">
                   40sqm romantic dome with outdoor spa and vineyard views. Perfect for couples.
                 </p>
-                <p className="text-burgundy font-semibold">$615/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$599/night &rarr;</p>
               </div>
             </Link>
             <Link
@@ -296,7 +298,7 @@ export default async function DomePinotPage() {
                 <p className="text-muted text-sm mb-3">
                   Adults-only lakefront cottage with wood-fired hot tub. Sleeps up to 3, pets friendly.
                 </p>
-                <p className="text-burgundy font-semibold">$365/night &rarr;</p>
+                <p className="text-burgundy font-semibold">$350/night &rarr;</p>
               </div>
             </Link>
           </div>
@@ -336,7 +338,7 @@ export default async function DomePinotPage() {
           </p>
           <Button
             href="/book?a=dome-pinot"
-            ariaLabel="Book Dome Pinot now — $635 per night"
+            ariaLabel="Book Dome Pinot now — $650 per night"
           >
             Book Dome Pinot Now
           </Button>

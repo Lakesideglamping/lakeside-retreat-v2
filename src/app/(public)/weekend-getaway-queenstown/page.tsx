@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/weekend-getaway-queenstown",
     images: [
       {
-        url: "/images/magical-sunset.jpg",
+        url: "/images/Queenstown.jpeg",
         width: 1200,
         height: 800,
         alt: "Weekend getaway from Queenstown — Lakeside Retreat, 45 minutes away",
@@ -106,7 +106,7 @@ export default function WeekendGetawayPage() {
           title: "Queenstown Day Trip from Lakeside Retreat — Adventure Guide",
           description: "Make the most of a day trip to Queenstown from your Central Otago base — bungee, gondola, jet boat, Arrowtown, and more, just 45 minutes away.",
           path: "/weekend-getaway-queenstown",
-          image: "lake-mountains-perfect.jpg",
+          image: "Queenstown.jpeg",
           datePublished: "2025-06-15",
         }),
         createBreadcrumbSchema([
@@ -124,7 +124,7 @@ export default function WeekendGetawayPage() {
 
       {/* Hero */}
       <HeroBackground
-        src="/images/lake-mountains-perfect.jpg"
+        src="/images/Queenstown.jpeg"
         alt="Lake and mountains on the drive between Cromwell and Queenstown"
         minHeight="60vh"
         overlayOpacity={0.45}
@@ -184,7 +184,7 @@ export default function WeekendGetawayPage() {
       </section>
 
       {/* The Drive */}
-      <section className="py-16 px-5 bg-burgundy text-white">
+      <section className="py-8 px-5 bg-burgundy text-white">
         <div className="max-w-[800px] mx-auto text-center">
           <h2 className="font-display text-3xl mb-4">
             A Scenic Drive You&apos;ll Love
@@ -270,7 +270,7 @@ export default function WeekendGetawayPage() {
           <h2 className="font-display text-4xl text-center mb-10">Practical Tips</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             {[
-              { title: "Book Activities in Advance", desc: "Shotover Jet and Skyline Gondola can sell out in peak season (Dec–Feb, July ski). Book online the evening before or at breakfast." },
+              { title: "Book Activities in Advance", desc: "Shotover Jet and Skyline Gondola can sell out in peak season (Dec–Feb, Apr). Book online the evening before or at breakfast." },
               { title: "Arrive Early", desc: "Queenstown gets busy by mid-morning, especially in summer. Leaving Lakeside Retreat by 8:30am means you beat the tour buses and queues." },
               { title: "Queenstown Parking", desc: "Use the Lakeview car park (paid, 10-min walk to town) or Queenstown Events Centre (free, 15-min walk). Avoid central parking — it's limited and expensive." },
               { title: "Gibbston Valley Detour", desc: "On the return drive, detour into the Gibbston Valley for a winery stop. Peregrine and Gibbston Valley Winery are just off SH6 on the way back to Cromwell." },
@@ -340,7 +340,7 @@ export default function WeekendGetawayPage() {
           <div className="grid sm:grid-cols-3 gap-4">
             {[
               { href: "/cromwell-activities", title: "Lake Dunstan Activities", desc: "Swimming, cycling & lakeside walks from your door" },
-              { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail", desc: "NZ's iconic cycle trail starts 300m away" },
+              { href: "/otago-rail-trail-accommodation", title: "Central Otago Cycle Trails", desc: "NZ's iconic Lake Dunstan cycle trail starts 200m away" },
               { href: "/central-otago-wine-trail", title: "Central Otago Wine Trail", desc: "30+ cellar doors within 15 minutes of the retreat" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
@@ -358,7 +358,7 @@ export default function WeekendGetawayPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Central Otago Base</h2>
           <p className="text-lg text-muted mb-8">
             45 minutes to Queenstown. Spa or hot tub to return to. Wine country on your doorstep.
-            Luxury domes $615 &bull; Cottage $365/night.
+            Luxury domes $650 &bull; Cottage $350/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

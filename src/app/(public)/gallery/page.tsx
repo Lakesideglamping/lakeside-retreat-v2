@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     description:
       "Photos of Lakeside Retreat: luxury geodesic domes, private spas, Lake Dunstan views, Central Otago.",
     url: "https://lakesideretreat.co.nz/gallery",
-    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat gallery" }],
+    images: [{ url: "/images/LakeDunstanCloud.jpeg", width: 1200, height: 800, alt: "Lakeside Retreat gallery" }],
     type: "website",
   },
 };
@@ -29,7 +29,7 @@ export default function GalleryPage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/domes-vineyard-sunset.jpg"
+        src="/images/LakeDunstanCloud.jpeg"
         alt="Glamping domes at sunset over Lake Dunstan vineyards"
         minHeight="50vh"
       >

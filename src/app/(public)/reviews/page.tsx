@@ -72,7 +72,7 @@ export default async function ReviewsPage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/domesmountainview.jpeg"
+        src="/images/20210618_084416.jpg"
         alt="Glamping domes with mountain views at Lakeside Retreat"
         minHeight="50vh"
       >

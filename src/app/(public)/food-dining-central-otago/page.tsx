@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/food-dining-central-otago",
     images: [
       {
-        url: "/images/vineyard.jpeg",
+        url: "/images/Fruits.jpeg",
         width: 1200,
         height: 800,
         alt: "Central Otago food and wine — cellar doors and vineyard dining",
@@ -32,8 +32,8 @@ const categories = [
     name: "Winery Restaurants",
     icon: "🍷",
     places: [
-      { name: "Carrick Winery Restaurant", distance: "10 min", desc: "Certified organic winery with a stunning restaurant overlooking the vineyard. Seasonal menu using local Central Otago produce. Lunch daily, dinner by arrangement." },
-      { name: "Mt Difficulty Restaurant", distance: "12 min", desc: "Cellar door restaurant in Bannockburn with panoramic Kawarau Gorge views. Excellent lunch menu, award-winning Pinot Noir by the glass." },
+      { name: "Carrick Winery Restaurant", distance: "20 min", desc: "Certified organic winery with a stunning restaurant overlooking the vineyard. Seasonal menu using local Central Otago produce. Lunch daily, dinner by arrangement." },
+      { name: "Mt Difficulty Restaurant", distance: "15 min", desc: "Cellar door restaurant in Bannockburn with panoramic Kawarau Gorge views. Excellent lunch menu, award-winning Pinot Noir by the glass." },
       { name: "Gibbston Valley Winery", distance: "30 min", desc: "NZ's most visited winery — underground cave, restaurant, and cheese rooms. Full lunch menu, cave tours, and wine tastings. Book ahead in summer." },
       { name: "Wooing Tree", distance: "10 min", desc: "Relaxed cellar door with platters, wines, and the famous underground barrel hall. Great for a casual afternoon with a glass of Blush." },
     ],
@@ -42,19 +42,20 @@ const categories = [
     name: "Cromwell Cafés & Restaurants",
     icon: "☕",
     places: [
-      { name: "Armando's Kitchen", distance: "10 min", desc: "Beloved Italian restaurant in the Cromwell Heritage Precinct. Housemade pasta, wood-fired pizza, and a great Central Otago wine list. Book ahead — locals love it." },
-      { name: "The Grain Kitchen & Bar", distance: "10 min", desc: "All-day dining in Cromwell town centre. Good coffee, cabinet food, and hearty mains. Reliable spot for breakfast or a casual lunch." },
-      { name: "Cromwell Heritage Precinct Cafés", distance: "10 min", desc: "The historic stone buildings by the lake house several artisan cafés, a bakery, and gift shops. Perfect for a morning coffee and a stroll by the water." },
-      { name: "Highlands Motorsport Park Café", distance: "8 min", desc: "Open daily — good café food with views of the racetrack. Popular with families and car enthusiasts. Quick and easy." },
+      { name: "Black Rabbit Kitchen & Bar", distance: "20 min", desc: "This is the kind of place where everyone will find something they like, from little bites to full meals for big appetites. Comfort food at its finest." },
+      { name: "Moorings Restaurant", distance: "5 min", desc: "Grab a bite at the stylish cafe & wine bar or enjoy a la carte dining with award winning local wines in the Restaurant. Offering breakfast, lunch and dinner, along with pizzas and bar snacks." },
+      { name: "Cromwell Heritage Precinct Cafés", distance: "15 min", desc: "The historic stone buildings by the lake house several artisan cafés, a bakery, and gift shops. Perfect for a morning coffee and a stroll by the water." },
+      { name: "Highlands Motorsport Park Café", distance: "12 min", desc: "Open daily — good café food with views of the racetrack. Popular with families and car enthusiasts. Quick and easy." },
     ],
   },
   {
     name: "Wanaka Dining",
     icon: "🏔️",
     places: [
-      { name: "Francesca's Italian Kitchen", distance: "45 min", desc: "One of Wanaka's most celebrated restaurants — housemade pasta, wood-fired dishes, and an intimate atmosphere. Book well ahead in summer." },
-      { name: "Kika", distance: "45 min", desc: "Modern, seasonal menu in a relaxed Wanaka setting. Great for lunch or dinner, excellent NZ wine list." },
-      { name: "Ritual Café", distance: "45 min", desc: "Wanaka's best coffee, right on the lakefront. A Wanaka institution — perfect for breakfast with lake views." },
+      { name: "Francesca's Italian Kitchen", distance: "35 min", desc: "One of Wanaka's most celebrated restaurants — housemade pasta, wood-fired dishes, and an intimate atmosphere. Book well ahead in summer." },
+      { name: "Kika", distance: "35 min", desc: "Modern, seasonal menu in a relaxed Wanaka setting. Great for lunch or dinner, excellent NZ wine list." },
+      { name: "Cardrona Hotel", distance: "45 min", desc: "It's rustic charm, spectacular mountain setting and rich history make it a must see while in Central Otago." },
+      { name: "Arc Wanaka", distance: "35 min", desc: "Offers unforgettable dining in Wānaka — perfect for any special or spontaneous occasion." },
     ],
   },
 ];
@@ -93,7 +94,7 @@ export default function FoodDiningPage() {
 
       {/* Hero */}
       <HeroBackground
-        src="/images/ViewfromVineyard.jpeg"
+        src="/images/Fruits.jpeg"
         alt="View from a Central Otago vineyard near Cromwell"
         minHeight="60vh"
         overlayOpacity={0.45}
@@ -187,7 +188,7 @@ export default function FoodDiningPage() {
               { tip: "Book winery restaurants ahead", detail: "Carrick and Mt Difficulty book out fast in summer and autumn — reserve before you arrive." },
               { tip: "Don't miss the stone fruit stalls", detail: "The roadside stalls on SH8 near Cromwell in Dec–Feb sell the best cherries and apricots in the country." },
               { tip: "Lunch over dinner at wineries", detail: "Most winery restaurants serve lunch only. Plan your day around a long winery lunch rather than driving back in the evening." },
-              { tip: "Armando's needs a booking", detail: "One of the most popular restaurants in the area — walk-ins are often turned away. Book a day or two ahead." },
+              { tip: "Check out the local markets", detail: "You'll fall in love with the relaxed, friendly atmosphere and of course, the talented artisan producers." },
             ].map((t) => (
               <div key={t.tip} className="bg-white/10 rounded-xl p-4">
                 <p className="font-semibold text-white mb-1">{t.tip}</p>
@@ -204,9 +205,9 @@ export default function FoodDiningPage() {
           <h2 className="font-display text-4xl text-center mb-10">Stay in the Heart of It</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "$635/night", note: "Private spa, vineyard views, breakfast included" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Rosé", badge: "Adults Only", price: "$615/night", note: "Private spa, mountain views, kitchenette" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "$365/night", note: "Sleeps 3, wood-fired hot tub, direct lake access" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "$650/night", note: "Private spa, vineyard views, breakfast included" },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Rosé", badge: "Adults Only", price: "$599/night", note: "Private spa, mountain views, kitchenette" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "$350/night", note: "Sleeps 3, wood-fired hot tub, direct lake access" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -257,7 +258,7 @@ export default function FoodDiningPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Stay</h2>
           <p className="text-lg text-muted mb-8">
             Winery restaurants, stone fruit stalls, and Cromwell&apos;s best cafés — all on your doorstep.
-            Domes $615 &bull; Cottage $365/night.
+            Domes $599 &bull; Cottage $350/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

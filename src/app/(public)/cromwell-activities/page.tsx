@@ -8,16 +8,16 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Things to Do in Cromwell | Activities Guide — Cycling, Wine & Lake Dunstan",
   description:
-    "Complete guide to Cromwell activities: Otago Rail Trail cycling, Lake Dunstan water sports, Central Otago wine tasting, heritage precinct, and day trips to Queenstown.",
+    "Complete guide to Cromwell activities: Otago cycle trails, Lake Dunstan water sports, Central Otago wine tasting, heritage precinct, and day trips to Queenstown.",
 
   alternates: { canonical: "/cromwell-activities" },
   openGraph: {
     title: "Things to Do in Cromwell | Activities Guide — Cycling, Wine & Lake Dunstan",
-    description: "Complete guide to Cromwell activities: Otago Rail Trail cycling, Lake Dunstan water sports, Central Otago wine tasting, heritage precinct, and day trips to Queenstown.",
+    description: "Complete guide to Cromwell activities: Otago cycle trails, Lake Dunstan water sports, Central Otago wine tasting, heritage precinct, and day trips to Queenstown.",
     url: "https://lakesideretreat.co.nz/cromwell-activities",
     images: [
       {
-        url: "/images/lakeview.jpeg",
+        url: "/images/OldTownCromwell.jpeg",
         width: 1200,
         height: 800,
         alt: "Lake Dunstan and Cromwell activities — cycling, wine trails, heritage walks",
@@ -44,7 +44,7 @@ const seasons = [
 const dayTrips = [
   { title: "Queenstown", time: "45 min", desc: "Bungy, jet boats, gondola, shopping, and the scenic Kawarau Gorge drive." },
   { title: "Wanaka", time: "30 min", desc: "Puzzling World, That Wanaka Tree, Roy's Peak, and lakeside cafes." },
-  { title: "Arrowtown", time: "35 min", desc: "Gold rush village, boutique shopping, cafes, and the Chinese Settlement." },
+  { title: "Arrowtown", time: "35 min", desc: "Gold rush village, boutique shopping, cafes, Ayrburn Farm and the Chinese Settlement." },
   { title: "Alexandra", time: "30 min", desc: "Otago Rail Trail gateway, Central Stories museum, and riverside walks." },
 ];
 
@@ -67,13 +67,13 @@ export default function CromwellActivitiesPage() {
         createFaqSchema([
           { question: "What are the best things to do in Cromwell?", answer: "Cromwell sits on Lake Dunstan in the heart of Central Otago. Top activities include cycling the Lake Dunstan Cycle Trail and Otago Rail Trail, wine tasting at 30+ cellar doors within 15 minutes, swimming and paddleboarding on Lake Dunstan, visiting the historic Heritage Precinct, and day trips to Queenstown, Wanaka, and Arrowtown." },
           { question: "How far is Cromwell from Queenstown?", answer: "Cromwell is 45 minutes' drive from Queenstown via the scenic Kawarau Gorge. Wanaka is just 30 minutes in the other direction, making Cromwell an ideal base for exploring both." },
-          { question: "Is the Otago Rail Trail close to Cromwell?", answer: "Yes. The Otago Rail Trail passes 300 metres from Lakeside Retreat. The Cromwell to Clyde section is roughly 15km, flat, and suitable for all fitness levels." },
+          { question: "Is the Otago Lake Dunstan Trail close to Cromwell?", answer: "Yes. The Otago Lake Dunstan Trail passes 300 metres from Lakeside Retreat. The Cromwell to Clyde section is roughly 15km, flat, and suitable for all fitness levels." },
           { question: "What's the best time of year to visit Cromwell?", answer: "Summer (Dec-Feb) for lake swimming and long evenings; autumn (Mar-May) for golden vineyard colours and harvest events; winter (Jun-Aug) for nearby ski fields and cosy cellar doors; spring (Sep-Nov) for blossoms and shoulder-season pricing." },
         ]),
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/lakeview.jpeg"
+        src="/images/OldTownCromwell.jpeg"
         alt="Lake Dunstan view from Cromwell, Central Otago"
         minHeight="60vh"
         overlayOpacity={0.4}
@@ -108,17 +108,16 @@ export default function CromwellActivitiesPage() {
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div className="bg-cream rounded-2xl overflow-hidden">
               <Image
-                src="/images/vineyard-path.jpg"
-                alt="Otago Rail Trail"
+                src="/images/DunstanCycleTrail.jpeg"
+                alt="Central Otago Cycle Trails"
                 width={800}
                 height={500}
                 className="w-full h-[200px] object-cover"
               />
               <div className="p-6">
-                <h3 className="font-display text-xl mb-2">Otago Rail Trail</h3>
+                <h3 className="font-display text-xl mb-2">Central Otago Cycle Trails</h3>
                 <p className="text-muted text-sm">
-                  152km Middlemarch to Clyde, passing just 300m from Lakeside Retreat. The Cromwell
-                  to Clyde section is ~15km, flat, and suitable for all fitness levels.
+                The Central Otago cycle trails are yours to explore, whatever adventure you have in mind. Whether you're planning a romantic getaway, a family escape, an adrenaline-fuelled ride, or a journey unlike any other, you'll find it here in Central Otago.
                 </p>
               </div>
             </div>
@@ -146,10 +145,10 @@ export default function CromwellActivitiesPage() {
       <section className="py-20 px-5">
         <div className="max-w-[800px] mx-auto text-center">
           <h2 className="font-display text-4xl mb-6">Historic Cromwell Heritage Precinct</h2>
-          <p className="text-lg leading-8 text-muted">
+          <p className="text-lg leading-8 text-muted mb-8">
             Built when the Clyde Dam raised Lake Dunstan in the 1990s, the Heritage Precinct
             features beautifully restored 19th-century buildings housing craft shops, galleries,
-            a bookshop, and charming cafes. Just 10 minutes from Lakeside Retreat with free parking.
+            a bookshop, an event centre, and charming cafes. Just 10 minutes from Lakeside Retreat with free parking.
           </p>
         </div>
       </section>
@@ -192,9 +191,9 @@ export default function CromwellActivitiesPage() {
           <h2 className="font-display text-4xl text-center mb-10">Where to Stay in Cromwell</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "$635/night" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "$615/night" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "$365/night" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "$650/night" },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "$599/night" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Pet Friendly", price: "$350/night" },
             ].map((acc) => (
               <Link
                 key={acc.href}
