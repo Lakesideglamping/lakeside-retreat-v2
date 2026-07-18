@@ -7,12 +7,12 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Glamping Central Otago | Luxury Geodesic Domes on Lake Dunstan",
   description:
-    "Central Otago's premier glamping experience. Two luxury geodesic domes with private outdoor spas, stargazing skylights, vineyard views, and continental breakfast. $615/night.",
+    "Central Otago's premier glamping experience. Two luxury geodesic domes with private outdoor spas, stargazing skylights, vineyard views, and continental breakfast. From $599/night.",
   alternates: { canonical: "/glamping-central-otago" },
   openGraph: {
     title: "Glamping Central Otago | Luxury Geodesic Domes on Lake Dunstan",
     description:
-      "Luxury geodesic domes with private saltwater spas, stargazing skylights, and vineyard views on Lake Dunstan. Adults-only glamping — $615/night.",
+      "Luxury geodesic domes with private saltwater spas, stargazing skylights, and vineyard views on Lake Dunstan. Adults-only glamping — from $599/night.",
     url: "https://lakesideretreat.co.nz/glamping-central-otago",
     images: [
       {

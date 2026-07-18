@@ -305,9 +305,9 @@ export default function WeekendGetawayPage() {
           <h2 className="font-display text-4xl text-center mb-10">Your Queenstown Base</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "$635/night", note: "Private spa, skylight, breakfast" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "$615/night", note: "Private spa, vineyard views" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Adults-Only · Pet Friendly", price: "$365/night", note: "Sleeps 3, wood-fired hot tub, lake access, dogs welcome" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", badge: "Adults Only", price: "$650/night", note: "Private spa, skylight, breakfast" },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", badge: "Adults Only", price: "$599/night", note: "Private spa, vineyard views" },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", badge: "Adults-Only · Pet Friendly", price: "$350/night", note: "Sleeps 3, wood-fired hot tub, lake access, dogs welcome" },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -358,7 +358,7 @@ export default function WeekendGetawayPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Central Otago Base</h2>
           <p className="text-lg text-muted mb-8">
             45 minutes to Queenstown. Spa or hot tub to return to. Wine country on your doorstep.
-            Luxury domes $650 &bull; Cottage $350/night.
+            Luxury domes from $599 &bull; Cottage $350/night.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>

@@ -7,12 +7,12 @@ import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } 
 export const metadata: Metadata = {
   title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
   description:
-    "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $365/night.",
+    "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $350/night.",
 
   alternates: { canonical: "/luxury-accommodation-cromwell" },
   openGraph: {
     title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
-    description: "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $365/night.",
+    description: "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $350/night.",
     url: "https://lakesideretreat.co.nz/luxury-accommodation-cromwell",
     images: [
       {
@@ -182,7 +182,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
                 badge: "Adults Only",
-                price: "$635/night",
+                price: "$650/night",
                 size: "50sqm",
                 desc: "Larger dome with stargazing skylight, panoramic lake views, private saltwater spa, and continental breakfast.",
               },
@@ -192,7 +192,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
                 badge: "Adults Only",
-                price: "$615/night",
+                price: "$599/night",
                 size: "40sqm",
                 desc: "Intimate retreat with vineyard and mountain views, private outdoor spa, luxury super king bed.",
               },
@@ -202,7 +202,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/lakeside-cottage-exterior.jpeg",
                 title: "Lakeside Cottage",
                 badge: "Adults-Only · Pet Friendly",
-                price: "$365/night",
+                price: "$350/night",
                 size: "Sleeps 3",
                 desc: "Self-contained cottage with direct lake access, wood-fired hot tub, BBQ, kitchenette, and dog-friendly.",
               },
