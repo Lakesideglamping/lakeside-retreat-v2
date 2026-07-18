@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description:
       "416 verified reviews, 4.9\u2605 average. Central Otago's top-rated glamping and lakeside cottage.",
     url: "https://lakesideretreat.co.nz/reviews",
-    images: [{ url: "/images/domes-vineyard-sunset.jpg", width: 1200, height: 800, alt: "Lakeside Retreat reviews" }],
+    images: [{ url: "/images/20210618_084416.jpg", width: 1200, height: 800, alt: "Lakeside Retreat reviews" }],
     type: "website",
   },
 };
@@ -30,6 +30,22 @@ export default async function ReviewsPage() {
     prisma.reviews.findMany({
       where: { status: "approved" },
       orderBy: [{ is_featured: "desc" }, { stay_date: "desc" }],
+      // Only fetch the columns the page actually renders (was pulling every
+      // column of every row). is_featured is needed for the orderBy.
+      select: {
+        id: true,
+        guest_name: true,
+        platform: true,
+        rating: true,
+        review_text: true,
+        stay_date: true,
+        property: true,
+        is_featured: true,
+      },
+      // Cap the initial payload. The total-count stat still shows all
+      // approved reviews (it comes from the separate aggregate below), but
+      // we only ship the most relevant 60 rows to the browser instead of all.
+      take: 60,
     }),
     prisma.reviews.aggregate({
       where: { status: "approved" },
