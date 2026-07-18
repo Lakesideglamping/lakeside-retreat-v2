@@ -30,7 +30,6 @@ export default async function HomePage() {
         createBreadcrumbSchema([
           { name: "Home", path: "/" },
           { name: "Accommodation", path: "/stay" },
-          { name: "Things to Do", path: "/explore" },
         ]),
         createFaqSchema([
           { question: "Where is Lakeside Retreat located in Central Otago?", answer: "Lakeside Retreat is located at 96 Smiths Way, Mount Pisa, just 12km from Cromwell town centre. We're positioned directly on Lake Dunstan in the heart of Central Otago wine country, with the Otago Rail Trail cycle trail just 300m from our accommodation." },
@@ -60,9 +59,11 @@ export default async function HomePage() {
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/25 to-black/55" />
-        <div className="relative max-w-[700px] px-5 pt-20">
-          <h1 className="font-display text-5xl md:text-6xl text-white mb-4 drop-shadow-lg">
-            Luxury Glamping on Lake Dunstan, Central Otago
+        <div className="relative max-w-[700px] md:max-w-[900px] px-5 pt-20">
+          <h1 className="font-display text-5xl text-white mb-4 drop-shadow-lg">
+            Luxury Glamping on Lake Dunstan,
+            {/* Desktop: force exactly 2 lines. Mobile: hidden, wraps naturally. */}
+            <br className="hidden md:block" /> Central Otago
           </h1>
           <div className="flex items-center justify-center gap-2 mb-5">
             <span className="text-yellow-400 text-lg" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
@@ -160,7 +161,7 @@ export default async function HomePage() {
               bustle. By sunset, the rest of the world feels
               very far away.
             </p>
-            <Button href="/explore">Explore Local Area</Button>
+            <Button href="/guides">Explore Local Area</Button>
           </div>
           <Image
             src="/images/LakeDView.jpeg"

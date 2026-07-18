@@ -15,7 +15,6 @@ const leftLinks = [
 const rightLinks = [
   { href: "/reviews", label: "Reviews" },
   { href: "/our-story", label: "Story" },
-  { href: "/explore", label: "Explore" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -26,7 +25,6 @@ const allLinks = [
   { href: "/guides", label: "Guides" },
   { href: "/reviews", label: "Reviews" },
   { href: "/our-story", label: "Our Story" },
-  { href: "/explore", label: "Explore" },
   { href: "/contact", label: "Contact" },
 ];
 

@@ -49,7 +49,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/stay", priority: 0.9, changeFrequency: "weekly" },
     { path: "/gallery", priority: 0.8, changeFrequency: "weekly" },
     { path: "/reviews", priority: 0.8, changeFrequency: "monthly" },
-    { path: "/explore", priority: 0.7, changeFrequency: "monthly" },
     { path: "/cromwell-activities", priority: 0.7, changeFrequency: "monthly" },
     { path: "/guides", priority: 0.7, changeFrequency: "monthly" },
     { path: "/central-otago-wine-trail", priority: 0.7, changeFrequency: "monthly" },

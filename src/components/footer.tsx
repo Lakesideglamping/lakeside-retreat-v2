@@ -9,7 +9,6 @@ const stayLinks = [
 ];
 
 const exploreLinks = [
-  { href: "/explore", label: "Things to Do" },
   { href: "/guides", label: "Local Guides" },
   { href: "/central-otago-wine-trail", label: "Wine Trail Guide" },
   { href: "/cromwell-activities", label: "Cromwell Activities" },

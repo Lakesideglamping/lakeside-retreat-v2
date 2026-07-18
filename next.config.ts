@@ -77,8 +77,11 @@ const nextConfig: NextConfig = {
       { source: "/contact.html", destination: "/contact", permanent: true },
       { source: "/stay.html", destination: "/stay", permanent: true },
       { source: "/reviews.html", destination: "/reviews", permanent: true },
-      { source: "/explore.html", destination: "/explore", permanent: true },
       { source: "/our-story.html", destination: "/our-story", permanent: true },
+      // The /explore page was removed; redirect it (and the legacy .html
+      // variant) to /guides so existing links and search-indexed URLs don't 404.
+      { source: "/explore", destination: "/guides", permanent: true },
+      { source: "/explore.html", destination: "/guides", permanent: true },
     ];
   },
 };

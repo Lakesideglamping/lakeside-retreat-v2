@@ -122,7 +122,7 @@ export default async function BookingSuccessPage({
         <div className="flex gap-4 justify-center flex-wrap">
           <Button href="/">Back to Homepage</Button>
           <Link
-            href="/explore"
+            href="/guides"
             className="inline-block px-6 py-3 rounded-full border-2 border-burgundy text-burgundy font-semibold hover:-translate-y-0.5 transition-transform no-underline"
           >
             Plan Your Trip
