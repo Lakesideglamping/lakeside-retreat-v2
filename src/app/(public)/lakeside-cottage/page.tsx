@@ -333,7 +333,8 @@ export default async function LakesideCottagePage() {
           </h2>
           <p className="text-lg text-muted mb-8">
             45 minutes from Queenstown, 30 from Wanaka. Book direct —
-            BBQ and lake access included, dogs welcome for $25.
+            BBQ and lake access included, dogs welcome for $25. 
+            Gift vouchers are available.
           </p>
           <Button
             href="/book?a=lakeside-cottage"

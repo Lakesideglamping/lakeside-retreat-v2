@@ -334,7 +334,7 @@ export default async function DomePinotPage() {
           </h2>
           <p className="text-lg text-muted mb-8">
             Forty-five minutes from Queenstown. A world away from it.
-            Book direct — breakfast is on us.
+            Gift vouchers are available. Book direct — breakfast is on us.
           </p>
           <Button
             href="/book?a=dome-pinot"

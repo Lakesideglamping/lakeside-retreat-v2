@@ -331,7 +331,7 @@ export default async function DomeRosePage() {
             The vines are waiting.
           </h2>
           <p className="text-lg text-muted mb-8">
-            Forty-five minutes from Queenstown. A world away from it. Book
+            Forty-five minutes from Queenstown. A world away from it.  Gift vouchers are available. Book
             direct &mdash; breakfast is on us.
           </p>
           <Button

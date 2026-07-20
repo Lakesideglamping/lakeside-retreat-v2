@@ -347,6 +347,22 @@ export default async function HomePage() {
               { q: "Can I bring my pet?", a: "The Lakeside Cottage is pet-friendly ($25 flat fee, max 2 dogs). The domes are adults-only and not suitable for pets." },
               { q: "What\u2019s the cancellation policy?", a: "Full refund if cancelled 7+ days before check-in. 50% refund for 3\u20136 days. No refund within 3 days." },
               { q: "Why book direct instead of Airbnb?", a: "Save 12\u201318% in service fees. Same stay, better price, and direct communication with your hosts." },
+              {
+                q: "Are gift vouchers available?",
+                a: (
+                  <>
+                    Yes, simply contact us by email{" "}
+                    <a href="mailto:info@lakesideretreat.co.nz">
+                      <strong>info@lakesideretreat.co.nz</strong>
+                    </a>{" "}
+                    or phone{" "}
+                    <a href="tel:+6421368682">
+                      <strong>+64 21 368 682</strong>
+                    </a>
+                    , and we will arrange everything.
+                  </>
+                )
+              }
             ].map((faq) => (
               <details key={faq.q} className="group bg-cream rounded-xl overflow-hidden">
                 <summary className="flex items-center justify-between cursor-pointer p-5 font-semibold text-body hover:text-burgundy transition-colors list-none">

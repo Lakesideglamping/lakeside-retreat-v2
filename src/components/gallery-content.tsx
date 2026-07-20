@@ -15,7 +15,7 @@ const categoryLabels: Record<Category, string> = {
 };
 
 const galleryItems = [
-  { src: "/images/domes-portrait-lake.jpg", alt: "Both geodesic domes with vineyard rows leading to Lake Dunstan", title: "Vineyard & Lake", category: "domes" as Category },
+  { src: "/images/20210618_084416.jpg", alt: "Mt Pisa Autumn Mountain View", title: "Autumn Mt Pisa", category: "views" as Category },
   { src: "/images/hottub-lakeview.jpg", alt: "Wood-fired cedar hot tub with Lake Dunstan and mountain backdrop", title: "Cedar Hot Tub", category: "amenities" as Category },
   { src: "/images/domes-vineyard-sunset.jpg", alt: "Both glamping domes at Lakeside Retreat with Lake Dunstan and sunset sky", title: "Domes at Sunset", category: "domes" as Category },
   { src: "/images/Pinotfront.jpeg", alt: "Dome Pinot exterior with snow-capped mountain views", title: "Dome Pinot Exterior", category: "domes" as Category },
@@ -32,6 +32,10 @@ const galleryItems = [
   { src: "/images/gallerydecksitting.jpeg", alt: "Dome deck overlooking the golden autumn vineyard and Lake Dunstan", title: "Deck Views", category: "amenities" as Category },
   { src: "/images/pinotspa.jpeg", alt: "Dome Pinot private saltwater spa with lake and mountain views", title: "Dome Spa", category: "amenities" as Category },
   { src: "/images/gallerydeck.jpeg", alt: "Relaxing on the deck with vineyard views", title: "Your Private Retreat", category: "amenities" as Category },
+  { src: "/images/DroneViewRose.jpeg", alt: "Dome and vineyard arial views", title: "Dome Rose' Arial View", category: "domes" as Category },
+  { src: "/images/domes-portrait-lake.jpg", alt: "Both geodesic domes with vineyard rows leading to Lake Dunstan", title: "Vineyard & Lake", category: "domes" as Category },
+  { src: "/images/WinterVineyard.jpeg", alt: "Winter Vineyard View", title: "Winter Vineyard View", category: "views" as Category },
+  { src: "/images/20220110_081038.jpg", alt: "Lake Dunstan", title: "Lake Dunstan", category: "views" as Category },
 ];
 
 export function GalleryContent() {
