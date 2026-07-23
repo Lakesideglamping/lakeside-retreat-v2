@@ -5,21 +5,21 @@ import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Central Otago Cycle Trails Accommodation | Luxury Stay 300m from the Trail",
+  title: "Central Otago Cycle Trails Accommodation | Luxury Stay 200m from the Trail",
   description:
-    "Luxury accommodation for Central Otago Cycle Trails cyclists — just 300m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $350/night.",
+    "Luxury accommodation for Central Otago Cycle Trails cyclists — just 200m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $350/night.",
 
   alternates: { canonical: "/otago-rail-trail-accommodation" },
   openGraph: {
-    title: "Central Otago Cycle Trails Accommodation | Luxury Stay 300m from the Trail",
-    description: "Luxury accommodation for Central Otago Cycle Trails cyclists — just 300m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $350/night.",
+    title: "Central Otago Cycle Trails Accommodation | Luxury Stay 200m from the Trail",
+    description: "Luxury accommodation for Central Otago Cycle Trails cyclists — just 200m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $350/night.",
     url: "https://lakesideretreat.co.nz/otago-rail-trail-accommodation",
     images: [
       {
         url: "/images/LakeDunstanCycleTrail.jpeg",
         width: 1200,
         height: 800,
-        alt: "Central Otago Cycle Trails accommodation — Lakeside Cottage 300m from the Lake Dunstan Trail trailhead",
+        alt: "Central Otago Cycle Trails accommodation — Lakeside Cottage 200m from the Lake Dunstan Trail trailhead",
       },
     ],
     type: "article",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 const trailSections = [
   {
     name: "The Lake DunstanTrail (55km)",
-    description: "Starts 300m from Lakeside Retreat, the trail runs along Lake Dunstan, the Kawarau River, and the Clutha River, linking Cromwell and Clyde. It's one of the most accessible cycle trail, the section from Smiths Way to Cromwell Heritage Precinct (16km, Grade 1) is a popular day ride, winding alongside Lake Dunstan via Pisa Moorings with plenty of spots to rest beside the lake. Beyond Cromwell, the first section through to Carrick Winery and Cornish Point is mostly easy Grade 2 riding, while beyond Cornish Point it becomes more challenging with narrow sections and exposed cliff faces.",
+    description: "Starts 200m from Lakeside Retreat, the trail runs along Lake Dunstan, the Kawarau River, and the Clutha River, linking Cromwell and Clyde. It's one of the most accessible cycle trail, the section from Smiths Way to Cromwell Heritage Precinct (16km, Grade 1) is a popular day ride, winding alongside Lake Dunstan via Pisa Moorings with plenty of spots to rest beside the lake. Beyond Cromwell, the first section through to Carrick Winery and Cornish Point is mostly easy Grade 2 riding, while beyond Cornish Point it becomes more challenging with narrow sections and exposed cliff faces.",
     duration: "2–3 hours",
     difficulty: "(Grade 1–3) Easy",
   },
@@ -72,7 +72,7 @@ const trailSections = [
 ];
 
 const whyStayHere = [
-  { title: "300m from the Trail", desc: "Walk from your accommodation to the Lake Dunstan Cycle Trail in 2 minutes. No car needed to access the Cromwell trailhead." },
+  { title: "200m from the Trail", desc: "Walk from your accommodation to the Lake Dunstan Cycle Trail in 2 minutes. No car needed to access the Cromwell trailhead." },
   { title: "Bike Storage & Wash", desc: "Secure covered bike storage and a hose-down area available for all guests." },
   { title: "Early Breakfast", desc: "Continental breakfast included with dome bookings, stocked ready for an early start. Pack what you need for the trail." },
   { title: "Laundry Facilities", desc: "Avaialbe in the Lakeside Cottage - Wash and dry your cycling gear overnight. Arrive fresh for each day on the trail." },
@@ -85,8 +85,8 @@ export default function OtagoRailTrailAccommodationPage() {
     <>
       <JsonLd data={[
         createArticleSchema({
-          title: "Otago Cycle Trails Accommodation | Luxury Stay 300m from the Trail",
-          description: "Luxury accommodation for Central Otago Trail cyclists — geodesic domes and lakeside cottage just 300m from the Cromwell trailhead.",
+          title: "Otago Cycle Trails Accommodation | Luxury Stay 200m from the Trail",
+          description: "Luxury accommodation for Central Otago Trail cyclists — geodesic domes and lakeside cottage just 200m from the Cromwell trailhead.",
           path: "/otago-rail-trail-accommodation",
           image: "LakeDunstanCycleTrail.jpeg",
           datePublished: "2026-05-15",
@@ -96,8 +96,8 @@ export default function OtagoRailTrailAccommodationPage() {
           { name: "Otago Cycle Trails Accommodation", path: "/otago-cycle-trail-accommodation" },
         ]),
         createFaqSchema([
-          { question: "What is the best accommodation for the Otago Cycle Trails?", answer: "Lakeside Retreat at Mount Pisa is perfectly located for the Lake Dunstan Trail — just 300m from the trailhead. Cyclists stay in luxury geodesic domes or a lakeside cottage, with bike storage, early breakfast, laundry facilities, and a private outdoor spa for post-ride recovery. $350/night." },
-          { question: "Where does the Lake Dustan Cycle Trail start?", answer: "The Lake Dustan Cycle Trail runs between Clyde and Cromwell (55km). The Cromwell to Clyde section is the most popular starting point and is just 300 metres from Lakeside Retreat." },
+          { question: "What is the best accommodation for the Otago Cycle Trails?", answer: "Lakeside Retreat at Mount Pisa is perfectly located for the Lake Dunstan Trail — just 200m from the trailhead. Cyclists stay in luxury geodesic domes or a lakeside cottage, with bike storage, early breakfast, laundry facilities, and a private outdoor spa for post-ride recovery. $350/night." },
+          { question: "Where does the Lake Dustan Cycle Trail start?", answer: "The Lake Dustan Cycle Trail runs between Clyde and Cromwell (55km). The Cromwell to Clyde section is the most popular starting point and is just 200 metres from Lakeside Retreat." },
           { question: "How many days does the Otago Rail Trail take?", answer: "The full Otago Rail Trail takes 4–5 days to complete at a relaxed pace. Many cyclists do just the Cromwell to Clyde section (2–3 hours) as a day ride. Lakeside Retreat is ideal as a base for the first 1–2 days or as the final night before completing the trail." },
           { question: "Is the Central Otago Cycle Trails suitable for beginners?", answer: "Yes — the Central Otago Cycle Trails is graded as an easy to moderate ride with most sections being flat or gently undulating on a well-maintained gravel surface. The Cromwell to Clyde section is grade 1-2 and follows Lake Dunstan — ideal for first-time trail riders." },
         ]),
@@ -119,7 +119,7 @@ export default function OtagoRailTrailAccommodationPage() {
           Central Otago Cycle Trails Accommodation
           </h1>
           <p className="text-xl mb-8 opacity-95">
-            Luxury stay just 300 metres from the Lake Dunstan trail at Cromwell.
+            Luxury stay just 200 metres from the Lake Dunstan trail at Cromwell.
             Saltwater spas in the domes, wood-fired hot tub at the cottage.
           </p>
           <Button href="/book">Book Your Trail Stay</Button>
@@ -139,7 +139,7 @@ export default function OtagoRailTrailAccommodationPage() {
       <section className="py-16 px-5 bg-burgundy text-white text-center">
         <div className="max-w-[800px] mx-auto">
           <p className="font-display text-3xl mb-2">
-            &#128690; Just 300 Metres from the Otago Rail Trail Trailhead
+            &#128690; Just 200 Metres from the Otago Rail Trail Trailhead
           </p>
           <p className="text-white/90 text-lg">
             Walk to the trail from your accommodation. No car, no shuttle, no hassle.
@@ -282,7 +282,7 @@ export default function OtagoRailTrailAccommodationPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Cycle Trail Base</h2>
           <p className="text-lg text-muted mb-8">
-            300m to the trailhead. Spa or hot tub for post-ride recovery.
+            200m to the trailhead. Spa or hot tub for post-ride recovery.
             Luxury domes and lakeside cottage available.
           </p>
           <Button href="/book">Check Availability & Book</Button>

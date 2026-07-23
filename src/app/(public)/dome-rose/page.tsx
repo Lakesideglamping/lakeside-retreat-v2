@@ -42,7 +42,7 @@ const amenities = [
   { title: "Climate Control", desc: "Heat pump keeps the dome cosy year-round" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
   { title: "Free Parking", desc: "Private parking right at your dome" },
-  { title: "Cycle Trail Access", desc: "300m to Otago Rail Trail" },
+  { title: "Cycle Trail Access", desc: "200m to Otago Rail Trail" },
 ];
 
 const galleryImages = [

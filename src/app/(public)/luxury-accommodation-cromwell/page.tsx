@@ -65,7 +65,7 @@ export default function LuxuryAccommodationCromwellPage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/PinotLakeView.jpeg"
+          src="/images/alpenglow-mountains.jpeg"
           alt="Luxury glamping dome with panoramic Lake Dunstan views, Cromwell"
           fill
           priority

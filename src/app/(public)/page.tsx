@@ -32,13 +32,13 @@ export default async function HomePage() {
           { name: "Accommodation", path: "/stay" },
         ]),
         createFaqSchema([
-          { question: "Where is Lakeside Retreat located in Central Otago?", answer: "Lakeside Retreat is located at 96 Smiths Way, Mount Pisa, just 12km from Cromwell town centre. We're positioned directly on Lake Dunstan in the heart of Central Otago wine country, with the Otago Rail Trail cycle trail just 300m from our accommodation." },
+          { question: "Where is Lakeside Retreat located in Central Otago?", answer: "Lakeside Retreat is located at 96 Smiths Way, Mount Pisa, just 12km from Cromwell town centre. We're positioned directly on Lake Dunstan in the heart of Central Otago wine country, with the Otago Rail Trail cycle trail just 200m from our accommodation." },
           { question: "What type of accommodation do you offer?", answer: "We offer two luxury geodesic glamping domes and an adults-only lakefront cottage, all with Lake Dunstan and mountain views. Dome Pinot (50sqm) and Dome Ros\u00e9 (40sqm) are designed for couples with private saltwater spas. Our Lakeside Cottage is strictly 18+ with direct lake access, a wood-fired hot tub, and is dog-friendly." },
           { question: "Is Lakeside Retreat good for glamping in Central Otago?", answer: "Yes — Lakeside Retreat is Central Otago's premier glamping destination. Our two luxury geodesic domes feature private outdoor spas, stargazing skylights, panoramic Lake Dunstan and mountain views, and continental breakfast included. It's a unique alternative to traditional hotels in the region." },
           { question: "How close are you to Central Otago wineries?", answer: "We're in the heart of Central Otago wine country with 30+ wineries within 15 minutes, including Felton Road, Carrick, Mt Difficulty, Wooing Tree, and Bannockburn's award-winning cellar doors." },
           { question: "How far is Lakeside Retreat from Queenstown?", answer: "Approximately 45 minutes' drive from Queenstown via the scenic Kawarau Gorge. Wanaka is just 30 minutes in the other direction. We're perfectly positioned as a quieter, more affordable alternative to Queenstown accommodation." },
           { question: "Can I bring my dog to Lakeside Retreat?", answer: "Yes! The Lakeside Cottage is pet-friendly and welcomes well-behaved dogs with prior approval. A flat $25 pet fee applies. The cottage has direct lake access and a secure outdoor area. The glamping domes are adults-only and not suitable for pets." },
-          { question: "Is Lakeside Retreat close to the Otago Rail Trail?", answer: "The Otago Rail Trail (New Zealand's original Great Ride) is just 300 metres from Lakeside Retreat. You can walk from your accommodation to the trail start. The Cromwell to Clyde section is flat and spectacular — ideal for cyclists of all fitness levels." },
+          { question: "Is Lakeside Retreat close to the Otago Rail Trail?", answer: "The Otago Rail Trail (New Zealand's original Great Ride) is just 200 metres from Lakeside Retreat. You can walk from your accommodation to the trail start. The Cromwell to Clyde section is flat and spectacular — ideal for cyclists of all fitness levels." },
           { question: "What is the minimum stay at Lakeside Retreat?", answer: "Our luxury domes (Dome Pinot and Dome Ros\u00e9) have a 1-night minimum stay, though 2+ nights is recommended to fully experience the retreat. The Lakeside Cottage has a 2-night minimum stay (3 nights in peak season)." },
           { question: "What's the cancellation policy?", answer: "Full refund if cancelled 7+ days before check-in. 50% refund for 3-6 days. No refund within 3 days." },
           { question: "Why book direct instead of Airbnb?", answer: "Booking direct saves you 12-18% in service fees that platforms charge. You get the same luxury stay at a lower price with direct host communication and the ability to discuss special requests with Stephen and Sandy." },
@@ -129,7 +129,7 @@ export default async function HomePage() {
             </svg>
             <div>
               <p className="font-display text-lg text-body">Direct Lake Access</p>
-              <p className="text-sm text-muted mt-1">300m to Lake Dunstan</p>
+              <p className="text-sm text-muted mt-1">200m to Lake Dunstan</p>
             </div>
           </div>
           <div className="flex flex-col items-center gap-3">
@@ -341,7 +341,7 @@ export default async function HomePage() {
           <h2 className="font-display text-4xl text-center mb-12">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {[
-              { q: "Where is Lakeside Retreat located?", a: "We\u2019re at 96 Smiths Way, Mount Pisa, just 12km from Cromwell. Directly on Lake Dunstan in Central Otago wine country, with the cycle trail 300m away." },
+              { q: "Where is Lakeside Retreat located?", a: "We\u2019re at 96 Smiths Way, Mount Pisa, just 12km from Cromwell. Directly on Lake Dunstan in Central Otago wine country, with the cycle trail 200m away." },
               { q: "What accommodation do you offer?", a: "Two luxury geodesic domes (Dome Pinot 50sqm and Dome Ros\u00e9 40sqm) for couples, each with a private saltwater spa. Plus an adults-only Lakeside Cottage with direct lake access, a wood-fired hot tub (no chemicals), and a warm welcome for well-behaved dogs." },
               { q: "How far from Queenstown and Wanaka?", a: "45 minutes from Queenstown via the Kawarau Gorge, and 30 minutes from Wanaka." },
               { q: "Can I bring my pet?", a: "The Lakeside Cottage is pet-friendly ($25 flat fee, max 2 dogs). The domes are adults-only and not suitable for pets." },

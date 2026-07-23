@@ -34,7 +34,7 @@ const features = [
   },
   {
     title: "Stargazing Skylight",
-    desc: "Dome Pinot features a panoramic skylight directly above the bed. With zero light pollution, the Milky Way is visible on clear nights — no telescope needed.",
+    desc: "Both domes feature a panoramic skylight above the bed. With zero light pollution, the Milky Way is visible on clear nights — no telescope needed.",
     image: "/images/MilkyWay.jpg",
   },
   {
@@ -50,7 +50,7 @@ const comparisonPoints = [
   { feature: "Continental breakfast included", basic: false, lakeside: true },
   { feature: "Kitchenette", basic: false, lakeside: true },
   { feature: "Lake Dunstan views", basic: false, lakeside: true },
-  { feature: "Otago Rail Trail access (300m)", basic: false, lakeside: true },
+  { feature: "Otago Lake Dunstan Cycle Trail access (200m)", basic: false, lakeside: true },
   { feature: "30+ wineries within 15 min", basic: false, lakeside: true },
   { feature: "Heated bathroom", basic: true, lakeside: true },
   { feature: "Super King size bed", basic: false, lakeside: true },
@@ -95,7 +95,7 @@ export default function GlampingCentralOtagoPage() {
         createFaqSchema([
           { question: "What is glamping in Central Otago like?", answer: "Glamping in Central Otago combines luxury accommodation with stunning natural surroundings. At Lakeside Retreat, our geodesic domes offer private outdoor spas, stargazing skylights, panoramic Lake Dunstan views, and vineyard scenery — far more comfortable than traditional camping but deeply connected to the landscape." },
           { question: "How much does glamping in Central Otago cost?", answer: "Lakeside Retreat's luxury glamping domes start at $599/night (Dome Rosé) and $650/night (Dome Pinot), including continental breakfast. Our Lakeside Cottage is $350/night and sleeps up to 3 guests." },
-          { question: "Where is the best glamping in New Zealand?", answer: "Central Otago is widely regarded as one of New Zealand's best glamping regions thanks to its dramatic landscapes, world-class wineries, and dark skies. Lakeside Retreat on Lake Dunstan offers a combination of private spas, stargazing, vineyard access, and the Otago Rail Trail — making it one of NZ's top-rated glamping experiences." },
+          { question: "Where is the best glamping in New Zealand?", answer: "Central Otago is widely regarded as one of New Zealand's best glamping regions thanks to its dramatic landscapes, world-class wineries, and dark skies. Lakeside Retreat on Lake Dunstan offers a combination of private spas, stargazing, vineyard access, and the Otago cycle trails — making it one of NZ's top-rated glamping experiences." },
           { question: "Is glamping suitable for couples?", answer: "Absolutely. Both of our glamping domes are adults-only and designed specifically for couples — private outdoor spas, stargazing skylights, premium bedding, and complete seclusion. Many guests use Lakeside Retreat for anniversary trips, honeymoons, and romantic getaways." },
         ]),
       ]} />
@@ -145,10 +145,10 @@ export default function GlampingCentralOtagoPage() {
           </p>
           <p className="text-lg leading-8 text-muted">
             Located at 96 Smiths Way, Mount Pisa — in the heart of Central Otago wine country,
-            300 metres from the{" "}
-            <Link href="/otago-rail-trail-accommodation" className="text-burgundy no-underline hover:underline">Otago Rail Trail</Link>
+            200 metres from the{" "}
+            <Link href="/otago-rail-trail-accommodation" className="text-burgundy no-underline hover:underline">Otago cycle trails</Link>
             , and 45 minutes from Queenstown. Rated
-            4.9/5 by 416 guests across Airbnb and Booking.com.
+            4.9/5 by 416 guests across Airbnb and Booking.com, makes it your perfect romantic getaway!
           </p>
         </div>
       </section>
@@ -271,7 +271,7 @@ export default function GlampingCentralOtagoPage() {
               { label: "Queenstown", time: "45 min" },
               { label: "Wanaka", time: "30 min" },
               { label: "Nearest Winery", time: "5 min" },
-              { label: "Otago Rail Trail", time: "300m walk" },
+              { label: "Lake Dunstan Cycle Trail", time: "200m walk" },
             ].map((item) => (
               <div key={item.label} className="bg-white rounded-xl p-5 text-center shadow-sm">
                 <div className="font-bold text-burgundy text-xl">{item.time}</div>
@@ -292,7 +292,7 @@ export default function GlampingCentralOtagoPage() {
             {[
               { q: "Do I need to bring my own bedding?", a: "No — both domes come fully equipped with premium bedding, pillows, and towels. Continental breakfast provisions are stocked in the kitchenette. You just arrive and relax." },
               { q: "Is the glamping heated for winter stays?", a: "Yes. Both domes have a heat pump, a fully insulated geodesic structure, and a heated bathroom. Winter stays are particularly magical with snow on the Pisa Range visible from your spa." },
-              { q: "Can I see the Milky Way from the glamping domes?", a: "Yes — on clear nights the Milky Way is spectacularly visible. Dome Pinot has a panoramic skylight directly above the bed. There's minimal light pollution at our rural Mount Pisa location, making it one of the best stargazing spots in Central Otago." },
+              { q: "Can I see the Milky Way from the glamping domes?", a: "Yes — on clear nights the Milky Way is spectacularly visible. Both domes have a panoramic skylight above the bed. There's minimal light pollution at our rural Mount Pisa location, making it one of the best stargazing spots in Central Otago." },
               { q: "Is there Wi-Fi at the glamping site?", a: "Yes, both domes and the cottage have fast Wi-Fi. However, many guests find they naturally disconnect and enjoy the peace and quiet of the location." },
             ].map((item) => (
               <div key={item.q} className="bg-cream rounded-xl p-6">
@@ -322,8 +322,8 @@ export default function GlampingCentralOtagoPage() {
           <div className="grid sm:grid-cols-3 gap-4">
             {[
               { href: "/winter-glamping-central-otago", title: "Winter Glamping Guide", desc: "Heated domes, outdoor spas in the snow & ski fields nearby" },
-              { href: "/otago-rail-trail-accommodation", title: "Otago Rail Trail Stays", desc: "300m from the Cromwell trailhead — the perfect trail base" },
-              { href: "/luxury-accommodation-cromwell", title: "Luxury Accommodation Cromwell", desc: "Compare all three of our Central Otago properties" },
+              { href: "/otago-rail-trail-accommodation", title: "Otago Cycle Trails Stay", desc: "200m from the Cromwell trailhead — the perfect trail base" },
+              { href: "/luxury-accommodation-cromwell", title: "Luxury Accommodation", desc: "Compare all three of our Central Otago properties" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
                 <p className="font-semibold text-burgundy mb-1">{link.title}</p>

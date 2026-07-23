@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/couples-retreat-central-otago",
     images: [
       {
-        url: "/images/dome-rose-spa1.jpeg",
+        url: "/images/MountainCloud.jpeg",
         width: 1200,
         height: 800,
         alt: "Couples retreat dome with private outdoor spa, Central Otago",
@@ -36,12 +36,12 @@ const itinerary = [
   {
     day: "Day 2",
     title: "Wine Trail and Vineyard Dining",
-    desc: "Start with a slow morning, then drive 10 minutes to Bannockburn. Visit Mt Difficulty for Pinot Noir tasting, Carrick Winery for organic vineyard platters, and Wooing Tree's underground cellar. Enjoy a picnic by Lake Dunstan in the afternoon, then dinner at Carrick or Stoaker Room.",
+    desc: "Start with a slow morning, then drive 10 minutes to Bannockburn. Visit Mt Difficulty for Pinot Noir tasting, Carrick Winery for organic vineyard platters, and Wooing Tree's cellar door. Enjoy a picnic by Lake Dunstan in the afternoon, then dinner at Carrick or Stoaker Room.",
   },
   {
     day: "Day 3",
     title: "Cycle the Rail Trail and Farewell Brunch",
-    desc: "Hire bikes and ride the Otago Rail Trail (300m from the retreat). The Cromwell to Clyde section follows the Kawarau River — flat and relaxed. Finish with brunch at the historic precinct. Optionally take the Crown Range Road to Queenstown for stunning views.",
+    desc: "Hire bikes and ride the Otago Rail Trail (200m from the retreat). The Cromwell to Clyde section follows the Kawarau River — flat and relaxed. Finish with brunch at the historic precinct. Optionally take the Crown Range Road to Queenstown for stunning views.",
   },
 ];
 
@@ -73,7 +73,7 @@ export default function CouplesRetreatPage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/dome-rose-spa1.jpeg"
+        src="/images/mtPisa.jpeg"
         alt="Dome Rose private outdoor spa — romantic couples retreat in Central Otago"
         minHeight="60vh"
         overlayOpacity={0.4}
@@ -108,7 +108,7 @@ export default function CouplesRetreatPage() {
             While Queenstown and Wanaka draw the crowds, Central Otago offers something rarer:
             space, silence, and genuine escape. Lakeside Retreat sits at 96 Smiths Way, Mount Pisa,
             with views across Lake Dunstan toward Bannockburn, surrounded by vineyards and framed
-            by the Pisa Range. The famous Otago Rail Trail is just 300m away.
+            by the Pisa Range. The famous Otago Rail Trail is just 200m away.
           </p>
         </div>
       </section>

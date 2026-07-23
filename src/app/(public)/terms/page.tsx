@@ -5,7 +5,8 @@ export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:
     "Lakeside Retreat terms and conditions covering bookings, cancellation, security bond, property rules, and guest responsibilities.",
-};
+    
+  };
 
 export default function TermsConditionsPage() {
   return (

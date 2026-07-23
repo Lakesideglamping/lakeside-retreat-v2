@@ -30,7 +30,7 @@ const winterHighlights = [
   {
     title: "Private Outdoor Spa in the Snow",
     desc: "There is nothing quite like soaking in a hot saltwater spa while snow sits on the mountain peaks above you. Each dome has its own private outdoor spa — warm water, cold air, extraordinary views.",
-    image: "/images/dome-rose-spa.jpeg",
+    image: "/images/spa.jpeg",
     alt: "Private outdoor spa at Lakeside Retreat with snow-capped mountain views, Central Otago winter",
   },
   {
@@ -64,8 +64,8 @@ const winterActivities = [
     desc: "Winter is the best time for intimate cellar door visits — no crowds. Felton Road, Carrick, and Mt Difficulty are open year-round with cosy tasting rooms.",
   },
   {
-    title: "Otago Rail Trail",
-    distance: "300m",
+    title: "Lake Dunstan Cycle Trail",
+    distance: "200m",
     desc: "The trail is open year-round. Winter riding offers dramatic frost landscapes, crisp air, and zero other cyclists. The flat Cromwell–Clyde section is manageable in most winter conditions.",
   },
   {

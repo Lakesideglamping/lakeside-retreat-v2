@@ -42,7 +42,7 @@ const amenities = [
   { title: "Climate Control", desc: "Heat pump for heating and air conditioning" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
   { title: "Free Parking", desc: "Space for multiple vehicles" },
-  { title: "Cycle Trail Access", desc: "300m to Otago Rail Trail" },
+  { title: "Cycle Trail Access", desc: "200m to Otago Rail Trail" },
 ];
 
 const galleryImages = [

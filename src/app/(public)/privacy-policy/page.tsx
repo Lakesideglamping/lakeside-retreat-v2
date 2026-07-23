@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
           <p className="text-muted">
             How we collect, use, and protect your personal information
           </p>
-          <p className="text-muted text-sm mt-2">Last updated: March 2026</p>
+          <p className="text-muted text-sm mt-2">Last updated: Jun 2026</p>
         </div>
       </section>
 

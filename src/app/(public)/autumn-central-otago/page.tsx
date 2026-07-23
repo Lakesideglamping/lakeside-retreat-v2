@@ -41,7 +41,7 @@ const autumnHighlights = [
   },
   {
     title: "Best Cycling Conditions of the Year",
-    desc: "The Otago cycle trails are at its finest in autumn. Cooler temperatures make for comfortable riding, the trees along the trail turn brilliant gold, and the crowds of summer have gone. The Lake Dunstan Cycle Trail (Cromwell to Clyde section) starts just 300m from the retreat.",
+    desc: "The Otago cycle trails are at its finest in autumn. Cooler temperatures make for comfortable riding, the trees along the trail turn brilliant gold, and the crowds of summer have gone. The Lake Dunstan Cycle Trail (Cromwell to Clyde section) starts just 200m from the retreat.",
     image: "/images/CycleTrail.jpeg",
     alt: "Autumn cycling conditions on Cromwell",
   },
@@ -55,7 +55,7 @@ const autumnActivities = [
   },
   {
     title: "Otago Lake Dunstan Cycle Trail",
-    distance: "300m",
+    distance: "200m",
     desc: "Autumn is the best season for the trail — golden poplars and willows line the route, temperatures are perfect for riding, and you'll have the path largely to yourself.",
   },
   {
@@ -107,7 +107,7 @@ export default function AutumnCentralOtagoPage() {
         createFaqSchema([
           { question: "When is autumn in Central Otago?", answer: "Autumn in Central Otago runs from March through May. March and April are the peak harvest months with the most dramatic colour in the vineyards. May brings cooler temperatures and the first frosts, which create spectacular conditions for the spa and stargazing." },
           { question: "What is Central Otago like in autumn?", answer: "Autumn is arguably the most beautiful season in Central Otago. The vineyards turn gold and amber during pinot noir harvest (March–April), the Otago cycle trails are at its best with autumn foliage, the lake is still warm enough for swimming, and the evenings are perfect for soaking in a private outdoor spa under clear skies." },
-          { question: "Is the Otago Rail Trail good in autumn?", answer: "Autumn is the best season for the Otago Rail Trail. Temperatures are comfortable for cycling (typically 10–20°C during the day), the poplars and willows along the trail turn brilliant gold in April, and the crowds are far smaller than summer. The Lake Dunstan Cycle Trail (Cromwell to Clyde section) starts just 300m from Lakeside Retreat." },
+          { question: "Is the Otago Rail Trail good in autumn?", answer: "Autumn is the best season for the Otago Rail Trail. Temperatures are comfortable for cycling (typically 10–20°C during the day), the poplars and willows along the trail turn brilliant gold in April, and the crowds are far smaller than summer. The Lake Dunstan Cycle Trail (Cromwell to Clyde section) starts just 200m from Lakeside Retreat." },
           { question: "Can I swim in Lake Dunstan in autumn?", answer: "Yes — Lake Dunstan stays warm well into autumn. March and April are ideal for swimming, with water temperatures typically around 18–20°C following the summer. The Lakeside Cottage has direct lake access for swimming straight off the deck." },
           { question: "What is the pinot noir harvest season in Central Otago?", answer: "The Central Otago pinot noir harvest typically runs from late March through April. It's a wonderful time to visit the region — cellar doors are busy, many wineries offer harvest experiences and special tastings, and the vineyard landscapes are at their most spectacular with golden and amber tones." },
         ]),
@@ -161,7 +161,7 @@ export default function AutumnCentralOtagoPage() {
           </p>
           <p className="text-lg leading-8 text-muted">
             Lakeside Retreat sits in the heart of it all — surrounded by 30+ wineries,
-            300 metres from the{" "}
+            200 metres from the{" "}
             <Link href="/otago-rail-trail-accommodation" className="text-burgundy no-underline hover:underline">Otago Lake Dunstan Cycle Trail</Link>
             , and on the shores of Lake Dunstan. The outdoor spas feel perfect in the
             crisp autumn air, and the night skies become increasingly spectacular as
@@ -336,7 +336,7 @@ export default function AutumnCentralOtagoPage() {
             {[
               { href: "/winter-glamping-central-otago", title: "Winter Glamping Guide", desc: "Snow views, ski fields & cosy dome evenings" },
               { href: "/glamping-central-otago", title: "Glamping Central Otago", desc: "Our full glamping guide for all seasons" },
-              { href: "/otago-rail-trail-accommodation", title: "Otago Cycle Trail Stays", desc: "300m from the Cromwell trailhead" },
+              { href: "/otago-rail-trail-accommodation", title: "Otago Cycle Trail Stays", desc: "200m from the Cromwell trailhead" },
             ].map((link) => (
               <Link key={link.href} href={link.href} className="block bg-white rounded-xl p-5 no-underline hover:-translate-y-1 transition-transform shadow-sm">
                 <p className="font-semibold text-burgundy mb-1">{link.title}</p>

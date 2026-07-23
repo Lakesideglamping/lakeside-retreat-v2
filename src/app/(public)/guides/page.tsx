@@ -51,8 +51,8 @@ const guides = [
   {
     category: "Cycling",
     title: "Central Otago Cycle Trails: Accommodation & Guide",
-    image: "/images/CycleTrailSpring.jpeg",
-    excerpt: "Stay 300m from the trailhead. Everything you need to know about NZ's original Great Ride.",
+    image: "/images/CycleTrail.jpeg",
+    excerpt: "Stay 200m from the trailhead. Everything you need to know about NZ's original Great Ride.",
     href: "/otago-rail-trail-accommodation",
   },
   {
@@ -75,13 +75,6 @@ const guides = [
     image: "/images/Wanaka.jpeg",
     excerpt: "That Tree, Roy's Peak, Rippon Vineyard, and great cafés — just 45 minutes from Lakeside Retreat.",
     href: "/wanaka-day-trip",
-  },
-  {
-    category: "Seasonal",
-    title: "Best Time to Visit Central Otago",
-    image: "/images/LakeDunstanReflaction.jpeg",
-    excerpt: "A season-by-season guide to Central Otago — autumn harvest, winter snow, spring blossom, and long summer days.",
-    href: "/autumn-central-otago",
   },
   {
     category: "Food & Dining",
