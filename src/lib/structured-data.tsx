@@ -293,6 +293,9 @@ export function createArticleSchema(params: ArticleSchemaParams) {
  * createLodgingBusinessSchema() and createPropertySchema().
  */
 export async function fetchReviewStats(_property?: string): Promise<AggregateRatingStats> {
+  // Param kept for call-site compatibility (property pages pass their slug);
+  // intentionally unused while stats are pinned to the advertised figure.
+  void _property;
   // Canonical, business-wide review figures used in structured data on the
   // homepage and every property page. This is the cross-platform total
   // (Airbnb + Booking.com + direct) the business advertises — larger than the

@@ -7,8 +7,8 @@ describe("accommodations", () => {
   it("getFromPrice returns the minimum basePrice across all properties", () => {
     const expected = Math.min(...getAll().map((a) => a.basePrice));
     expect(getFromPrice()).toBe(expected);
-    // Sanity: currently cottage at 365
-    expect(getFromPrice()).toBe(365);
+    // Sanity: currently cottage at 350 (updated 2026-06 price change)
+    expect(getFromPrice()).toBe(350);
   });
 
   it("sticky-book-bar does not hardcode a dollar amount", () => {

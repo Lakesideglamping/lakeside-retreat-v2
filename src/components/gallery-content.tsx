@@ -18,31 +18,31 @@ const galleryItems = [
   { src: "/images/20210618_084416.jpg", alt: "Mt Pisa Autumn Mountain View", title: "Autumn Mt Pisa", categories: ["views", "domes"] as Category[] },
   { src: "/images/hottub-lakeview.jpg", alt: "Wood-fired cedar hot tub with Lake Dunstan and mountain backdrop", title: "Cedar Hot Tub", categories: ["views", "amenities", "cottage"] as Category[] },
   { src: "/images/lakeside-cottage-exterior.jpeg", alt: "Lakeside Cottage with direct Lake Dunstan access", title: "Lakeside Cottage", categories: ["views", "cottage"] as Category[] },
-  { src: "/images/cottagebedroom.jpeg", alt: "Lakeside Cottage bedroom with mountain views", title: "Cottage Bedroom", categories: "cottage" as Category },
-  { src: "/images/lakesidecottageinterior.jpeg", alt: "Lakeside Cottage sitting room", title: "Lakeside Cottage", categories: "cottage" as Category },
-  { src: "/images/cottagebathroom.jpeg", alt: "Lakeside Cottage bathroom", title: "Lakeside Cottage", categories: "cottage" as Category },
+  { src: "/images/cottagebedroom.jpeg", alt: "Lakeside Cottage bedroom with mountain views", title: "Cottage Bedroom", categories: ["cottage"] as Category[] },
+  { src: "/images/lakesidecottageinterior.jpeg", alt: "Lakeside Cottage sitting room", title: "Lakeside Cottage", categories: ["cottage"] as Category[] },
+  { src: "/images/cottagebathroom.jpeg", alt: "Lakeside Cottage bathroom", title: "Lakeside Cottage", categories: ["cottage"] as Category[] },
   { src: "/images/CottageMountainView.jpeg", alt: "Lakeside Cottage with mountain views", title: "Cottage moutain view", categories: ["views", "cottage"] as Category[] },
-  { src: "/images/domes-vineyard-sunset.jpg", alt: "Both glamping domes at Lakeside Retreat with Lake Dunstan and sunset sky", title: "Domes at Sunset", categories: "domes" as Category },
-  { src: "/images/Pinotfront.jpeg", alt: "Dome Pinot exterior with snow-capped mountain views", title: "Dome Pinot Exterior", categories: "domes" as Category },
+  { src: "/images/domes-vineyard-sunset.jpg", alt: "Both glamping domes at Lakeside Retreat with Lake Dunstan and sunset sky", title: "Domes at Sunset", categories: ["domes"] as Category[] },
+  { src: "/images/Pinotfront.jpeg", alt: "Dome Pinot exterior with snow-capped mountain views", title: "Dome Pinot Exterior", categories: ["domes"] as Category[] },
   { src: "/images/dome-rose-spa1.jpeg", alt: "Dome Rosé nestled in golden autumn vineyard by the lake", title: "Dome Rosé in Autumn", categories: ["domes", "amenities"] as Category[] },
-  { src: "/images/IMG_1266-1920x1080.jpeg", alt: "Both domes in winter vineyard with snow-capped mountains", title: "Winter at Lakeside", categories: "domes" as Category },
+  { src: "/images/IMG_1266-1920x1080.jpeg", alt: "Both domes in winter vineyard with snow-capped mountains", title: "Winter at Lakeside", categories: ["domes"] as Category[] },
   { src: "/images/Spa.jpeg", alt: "Spa with snow-capped mountains", title: "Winter Spa at Lakeside", categories: ["domes", "amenities"] as Category[] },
   { src: "/images/galleryrainbow.jpeg", alt: "Full rainbow over Lake Dunstan and the vineyards at Lakeside Retreat", title: "Rainbow over the Lake", categories: ["views", "cottage"] as Category[] },
-  { src: "/images/domesmountainview.jpeg", alt: "Both domes among autumn vineyard with mountain backdrop", title: "Mountain Panorama", categories: "views" as Category },
-  { src: "/images/magical-sunset.jpg", alt: "Stunning sunset over Lake Dunstan", title: "Lake Dunstan Sunset", categories: "views" as Category },
-  { src: "/images/vineyard.jpeg", alt: "Central Otago vineyard views from Lakeside Retreat", title: "Vineyard Views", categories: "views" as Category },
-  { src: "/images/pinotinternal.jpeg", alt: "Dome Pinot interior luxury living space with vineyard views", title: "Dome Interior", categories: "domes" as Category },
-  { src: "/images/PinotExterior.jpeg", alt: "Dome Pinot with vineyard views", title: "Dome View From Vineyard", categories: "domes" as Category },
-  { src: "/images/dome-rose-interior.jpeg", alt: "Dome Rosé interior with panoramic windows overlooking the lake", title: "Dome Rosé Interior", categories: "domes" as Category },
+  { src: "/images/domesmountainview.jpeg", alt: "Both domes among autumn vineyard with mountain backdrop", title: "Mountain Panorama", categories: ["views"] as Category[] },
+  { src: "/images/magical-sunset.jpg", alt: "Stunning sunset over Lake Dunstan", title: "Lake Dunstan Sunset", categories: ["views"] as Category[] },
+  { src: "/images/vineyard.jpeg", alt: "Central Otago vineyard views from Lakeside Retreat", title: "Vineyard Views", categories: ["views"] as Category[] },
+  { src: "/images/pinotinternal.jpeg", alt: "Dome Pinot interior luxury living space with vineyard views", title: "Dome Interior", categories: ["domes"] as Category[] },
+  { src: "/images/PinotExterior.jpeg", alt: "Dome Pinot with vineyard views", title: "Dome View From Vineyard", categories: ["domes"] as Category[] },
+  { src: "/images/dome-rose-interior.jpeg", alt: "Dome Rosé interior with panoramic windows overlooking the lake", title: "Dome Rosé Interior", categories: ["domes"] as Category[] },
   { src: "/images/gallerydecksitting.jpeg", alt: "Dome deck overlooking the golden autumn vineyard and Lake Dunstan", title: "Deck Views", categories: ["domes", "amenities"] as Category[] },
   { src: "/images/pinotspa.jpeg", alt: "Dome Pinot private saltwater spa with lake and mountain views", title: "Dome Spa", categories: ["domes", "amenities"] as Category[] },
-  { src: "/images/gallerydeck.jpeg", alt: "Relaxing on the deck with vineyard views", title: "Your Private Retreat", categories: "amenities" as Category },
-  { src: "/images/DroneViewRose.jpeg", alt: "Dome and vineyard arial views", title: "Dome Rose' Arial View", categories: "domes" as Category },
-  { src: "/images/domes-portrait-lake.jpg", alt: "Both geodesic domes with vineyard rows leading to Lake Dunstan", title: "Vineyard & Lake", categories: "domes" as Category },
-  { src: "/images/WinterVineyard.jpeg", alt: "Winter Vineyard View", title: "Winter Vineyard View", categories: "views" as Category },
-  { src: "/images/lakeview.jpeg", alt: "Vineyard Morning", title: "Vineyard Morning", categories: "views" as Category },
-  { src: "/images/LakeDunstanReflaction.jpeg", alt: "Lake Dunstan Reflaction", title: "Lake Dunstan Reflaction", categories: "views" as Category },
-  { src: "/images/20220110_081038.jpg", alt: "Lake Dunstan", title: "Lake Dunstan", categories: "views" as Category },
+  { src: "/images/gallerydeck.jpeg", alt: "Relaxing on the deck with vineyard views", title: "Your Private Retreat", categories: ["amenities"] as Category[] },
+  { src: "/images/DroneViewRose.jpeg", alt: "Dome and vineyard arial views", title: "Dome Rose' Arial View", categories: ["domes"] as Category[] },
+  { src: "/images/domes-portrait-lake.jpg", alt: "Both geodesic domes with vineyard rows leading to Lake Dunstan", title: "Vineyard & Lake", categories: ["domes"] as Category[] },
+  { src: "/images/WinterVineyard.jpeg", alt: "Winter Vineyard View", title: "Winter Vineyard View", categories: ["views"] as Category[] },
+  { src: "/images/lakeview.jpeg", alt: "Vineyard Morning", title: "Vineyard Morning", categories: ["views"] as Category[] },
+  { src: "/images/LakeDunstanReflaction.jpeg", alt: "Lake Dunstan Reflaction", title: "Lake Dunstan Reflaction", categories: ["views"] as Category[] },
+  { src: "/images/20220110_081038.jpg", alt: "Lake Dunstan", title: "Lake Dunstan", categories: ["views"] as Category[] },
 ];
 
 export function GalleryContent() {
@@ -146,7 +146,9 @@ export function GalleryContent() {
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white translate-y-full group-hover:translate-y-0 transition-transform duration-300">
               <div className="font-semibold">{item.title}</div>
-              <div className="text-sm text-burgundy">{categoryLabels[item.category]}</div>
+              {/* Show the first category as the hover label; items can belong
+                  to multiple categories for filtering purposes. */}
+              <div className="text-sm text-burgundy">{categoryLabels[item.categories[0]]}</div>
             </div>
           </button>
         ))}

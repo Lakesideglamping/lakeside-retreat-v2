@@ -117,7 +117,7 @@ export default function CromwellActivitiesPage() {
               <div className="p-6">
                 <h3 className="font-display text-xl mb-2">Central Otago Cycle Trails</h3>
                 <p className="text-muted text-sm">
-                The Central Otago cycle trails are yours to explore, whatever adventure you have in mind. Whether you're planning a romantic getaway, a family escape, an adrenaline-fuelled ride, or a journey unlike any other, you'll find it here in Central Otago.
+                The Central Otago cycle trails are yours to explore, whatever adventure you have in mind. Whether you&apos;re planning a romantic getaway, a family escape, an adrenaline-fuelled ride, or a journey unlike any other, you&apos;ll find it here in Central Otago.
                 </p>
               </div>
             </div>

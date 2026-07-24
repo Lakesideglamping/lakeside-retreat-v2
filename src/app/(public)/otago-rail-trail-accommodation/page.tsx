@@ -154,7 +154,7 @@ export default function OtagoRailTrailAccommodationPage() {
             New Zealand&apos;s Otago Great Rides
           </h2>
           <p className="text-lg leading-8 text-muted mb-6">
-          The Otago Cycle Trails cater to cyclists of all levels, with well-maintained paths and support services, including bike hire, accommodation, and shuttle services. Whether you're a leisure cyclist seeking a scenic escape or a seasoned adventurer, the Otago Trails promise an unforgettable two-wheeled adventure through the heart of the lower South Island's stunning landscapes and rich history.
+          The Otago Cycle Trails cater to cyclists of all levels, with well-maintained paths and support services, including bike hire, accommodation, and shuttle services. Whether you&apos;re a leisure cyclist seeking a scenic escape or a seasoned adventurer, the Otago Trails promise an unforgettable two-wheeled adventure through the heart of the lower South Island&apos;s stunning landscapes and rich history.
           </p>
           <p className="text-lg leading-8 text-muted">
             The most popular and accessible section is Cromwell to Clyde (17km, 2–3 hours),
