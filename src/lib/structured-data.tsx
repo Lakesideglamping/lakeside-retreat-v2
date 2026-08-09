@@ -72,7 +72,7 @@ export function createLodgingBusinessSchema(rating?: AggregateRatingStats) {
     geo,
     telephone: "+64 21 368 682",
     email: "info@lakesideretreat.co.nz",
-    priceRange: "$365-$635 NZD per night",
+    priceRange: "$350-$650 NZD per night",
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue,
