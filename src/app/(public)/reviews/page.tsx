@@ -50,17 +50,16 @@ export default async function ReviewsPage() {
     prisma.reviews.aggregate({
       where: { status: "approved" },
       _count: true,
-      _avg: { rating: true },
     }),
   ]);
 
   const totalReviews = summary._count;
-  const avgRating = summary._avg.rating
-    ? Number(summary._avg.rating).toFixed(1)
-    : "0.0";
 
   const stats = [
-    { label: "Overall Rating", value: avgRating !== "0.0" ? avgRating : "4.9", sub: "out of 5 stars" },
+    // Pinned to the canonical cross-platform figure (matches the 4.9 shown
+    // in the hero, structured data, and site-wide copy). The live DB average
+    // rounds to 5.0 and disagreed with everything else on the site.
+    { label: "Overall Rating", value: "4.9", sub: "out of 5 stars" },
     { label: "Verified Reviews", value: String(totalReviews), sub: "across all platforms" },
     { label: "Return Guests", value: "45%", sub: "come back again" },
     { label: "Would Recommend", value: "98%", sub: "to friends" },
