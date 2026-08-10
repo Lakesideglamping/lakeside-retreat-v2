@@ -61,7 +61,7 @@ export default async function ReviewsPage() {
     // rounds to 5.0 and disagreed with everything else on the site.
     { label: "Overall Rating", value: "4.9", sub: "out of 5 stars" },
     { label: "Verified Reviews", value: String(totalReviews), sub: "across all platforms" },
-    { label: "Return Guests", value: "45%", sub: "come back again" },
+    { label: "Return Guests", value: "33%", sub: "come back again" },
     { label: "Would Recommend", value: "98%", sub: "to friends" },
   ];
 
