@@ -40,8 +40,12 @@ export default async function HomePage() {
           { question: "Can I bring my dog to Lakeside Retreat?", answer: "Yes! The Lakeside Cottage is pet-friendly and welcomes well-behaved dogs with prior approval. A flat $25 pet fee applies. The cottage has direct lake access and a secure outdoor area. The glamping domes are adults-only and not suitable for pets." },
           { question: "Is Lakeside Retreat close to the Otago Rail Trail?", answer: "The Otago Rail Trail (New Zealand's original Great Ride) is just 200 metres from Lakeside Retreat. You can walk from your accommodation to the trail start. The Cromwell to Clyde section is flat and spectacular — ideal for cyclists of all fitness levels." },
           { question: "What is the minimum stay at Lakeside Retreat?", answer: "Our luxury domes (Dome Pinot and Dome Ros\u00e9) have a 1-night minimum stay, though 2+ nights is recommended to fully experience the retreat. The Lakeside Cottage has a 2-night minimum stay (3 nights in peak season)." },
-          { question: "What's the cancellation policy?", answer: "Full refund if cancelled 7+ days before check-in. 50% refund for 3-6 days. No refund within 3 days." },
+          { question: "What's the cancellation policy?", answer: "Full refund if cancelled 14+ days before check-in. No refund within 13 days." },
           { question: "Why book direct instead of Airbnb?", answer: "Booking direct saves you 12-18% in service fees that platforms charge. You get the same luxury stay at a lower price with direct host communication and the ability to discuss special requests with Stephen and Sandy." },
+          // JSON-LD answers must be plain strings (this array is serialized
+          // into Google structured data — JSX links can't go here). The
+          // visible FAQ section below has the clickable-link version.
+          { question: "Are gift vouchers available?", answer: "Yes — simply contact us by email at info@lakesideretreat.co.nz or phone +64 21 368 682, and we will arrange everything." },
         ]),
       ]} />
       {/* Hero */}
@@ -75,7 +79,7 @@ export default async function HomePage() {
           </p>
           <Button href="/book">Book Your Escape</Button>
           <p className="text-white/85 text-sm mt-5">
-            From <span className="font-semibold text-white">$350/night</span> &middot; Free cancellation 7+ days before
+            From <span className="font-semibold text-white">$350/night</span> &middot; Free cancellation 14+ days before
           </p>
         </div>
       </section>
@@ -235,7 +239,7 @@ export default async function HomePage() {
                 <p className="text-sm text-muted">Verified Reviews</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-display text-burgundy">45%</p>
+                <p className="text-4xl font-display text-burgundy">33%</p>
                 <p className="text-sm text-muted">Return Guests</p>
               </div>
               <div className="text-center">
@@ -345,7 +349,7 @@ export default async function HomePage() {
               { q: "What accommodation do you offer?", a: "Two luxury geodesic domes (Dome Pinot 50sqm and Dome Ros\u00e9 40sqm) for couples, each with a private saltwater spa. Plus an adults-only Lakeside Cottage with direct lake access, a wood-fired hot tub (no chemicals), and a warm welcome for well-behaved dogs." },
               { q: "How far from Queenstown and Wanaka?", a: "45 minutes from Queenstown via the Kawarau Gorge, and 30 minutes from Wanaka." },
               { q: "Can I bring my pet?", a: "The Lakeside Cottage is pet-friendly ($25 flat fee, max 2 dogs). The domes are adults-only and not suitable for pets." },
-              { q: "What\u2019s the cancellation policy?", a: "Full refund if cancelled 7+ days before check-in. 50% refund for 3\u20136 days. No refund within 3 days." },
+              { q: "What\u2019s the cancellation policy?", a: "Full refund if cancelled 14+ days before check-in. No refund within 13 days." },
               { q: "Why book direct instead of Airbnb?", a: "Save 12\u201318% in service fees. Same stay, better price, and direct communication with your hosts." },
               {
                 q: "Are gift vouchers available?",

@@ -82,7 +82,7 @@ export default function BookPage() {
             <div className="bg-cream rounded-xl p-4">
               <p className="text-2xl mb-1">&#10003;</p>
               <p className="font-semibold text-body">Free Cancellation</p>
-              <p className="text-xs text-muted">7+ days before</p>
+              <p className="text-xs text-muted">14+ days before</p>
             </div>
           </div>
         </div>
