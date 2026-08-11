@@ -147,22 +147,24 @@ export default function OurStoryPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-5 text-center">
-        <div className="max-w-[600px] mx-auto">
-        <Image
+      <section className="py-20 px-5">
+        <div className="max-w-[1000px] mx-auto grid md:grid-cols-2 gap-10 items-center">
+          <Image
             src="/images/Gapes.jpg"
-            alt="Founders of Lakeside Retreat Steve and Sandy"
-            width={300}
-            height={100}
-            className="rounded-2xl w-full h-auto object-cover"
+            alt="Ripe grapes in the vineyard at Lakeside Retreat"
+            width={600}
+            height={400}
+            className="rounded-2xl w-full max-w-[420px] h-auto object-cover justify-self-center md:justify-self-start"
           />
-          <h2 className="font-display text-4xl mb-4">
-            Come find it for yourself.
-          </h2>
-          <p className="text-lg text-muted mb-8">
-            The wrong turn that changed everything &mdash; take it.
-          </p>
-          <Button href="/book">Book Your Stay</Button>
+          <div className="text-center md:text-left">
+            <h2 className="font-display text-4xl mb-4">
+              Come find it for yourself.
+            </h2>
+            <p className="text-lg text-muted mb-8">
+              The wrong turn that changed everything &mdash; take it.
+            </p>
+            <Button href="/book">Book Your Stay</Button>
+          </div>
         </div>
       </section>
     </>
