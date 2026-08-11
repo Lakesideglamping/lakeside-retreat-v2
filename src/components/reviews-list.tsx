@@ -1,6 +1,6 @@
-"use client";
-
-import { useState } from "react";
+// Server component by design: this list is a fixed single page of reviews
+// with no filters and no "Show More", so it needs no client-side state and
+// ships no JavaScript to the browser.
 
 interface Review {
   id: number;
@@ -19,18 +19,9 @@ const PLATFORM_LABELS: Record<string, string> = {
   google: "Google",
 };
 
-const PROPERTY_FILTERS = [
-  { label: "All Properties", value: "all" },
-  { label: "Dome Pinot", value: "Dome Pinot" },
-  { label: "Dome Rosé", value: "Dome Rose" },
-  { label: "Lakeside Cottage", value: "Lakeside Cottage" },
-];
-
 const PROPERTY_DISPLAY: Record<string, string> = {
   "Dome Rose": "Dome Rosé",
 };
-
-const PAGE_SIZE = 12;
 
 function formatStayDate(dateStr: string | null): string {
   if (!dateStr) return "";
@@ -46,49 +37,19 @@ function renderStars(rating: number) {
   return "★".repeat(rating) + "☆".repeat(5 - rating);
 }
 
-export function ReviewsList({ reviews }: { reviews: Review[] }) {
-  const [filter, setFilter] = useState("all");
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-
-  const filtered = filter === "all"
-    ? reviews
-    : reviews.filter((r) => r.property === filter);
-
-  const visible = filtered.slice(0, visibleCount);
-  const hasMore = visibleCount < filtered.length;
-
-  function handleFilterChange(value: string) {
-    setFilter(value);
-    setVisibleCount(PAGE_SIZE);
-  }
-
+export function ReviewsList({
+  reviews,
+  total,
+}: {
+  reviews: Review[];
+  /** Canonical cross-platform review total (e.g. "416") for the footer line. */
+  total: string;
+}) {
   return (
     <>
-      {/* Filter tabs */}
-      <div className="flex flex-wrap justify-center gap-3 mb-12">
-        {PROPERTY_FILTERS.map((f) => (
-          <button
-            key={f.value}
-            onClick={() => handleFilterChange(f.value)}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-              filter === f.value
-                ? "bg-burgundy text-white"
-                : "bg-cream text-body hover:bg-burgundy/10"
-            }`}
-          >
-            {f.label}
-            {f.value !== "all" && (
-              <span className="ml-1.5 opacity-70">
-                ({reviews.filter((r) => r.property === f.value).length})
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
-
       {/* Review grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {visible.map((r) => (
+        {reviews.map((r) => (
           <div key={r.id} className="bg-white rounded-2xl p-8 shadow-md">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-burgundy to-teal-dark flex items-center justify-center text-white font-bold text-lg">
@@ -119,20 +80,11 @@ export function ReviewsList({ reviews }: { reviews: Review[] }) {
         ))}
       </div>
 
-      {/* Show more / count */}
+      {/* Count line — shows how many are displayed out of the true total */}
       <div className="text-center mt-12">
-        {hasMore ? (
-          <button
-            onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-            className="inline-block px-8 py-3 bg-burgundy text-white rounded-full font-medium hover:bg-burgundy-dark transition-colors"
-          >
-            Show More Reviews ({filtered.length - visibleCount} remaining)
-          </button>
-        ) : (
-          <p className="text-muted text-sm">
-            Showing all {filtered.length} reviews
-          </p>
-        )}
+        <p className="text-muted text-sm">
+          Showing {reviews.length} of {total} verified reviews
+        </p>
       </div>
     </>
   );

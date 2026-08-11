@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { HeroBackground } from "@/components/hero-background";
-import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/lib/structured-data";
+import { JsonLd, createOrganizationSchema, createBreadcrumbSchema, fetchReviewStats } from "@/lib/structured-data";
 import { ReviewsList } from "@/components/reviews-list";
 
 // Revalidate hourly instead of rendering on every request. Reviews change
@@ -26,41 +26,33 @@ export const metadata: Metadata = {
 };
 
 export default async function ReviewsPage() {
-  const [reviews, summary] = await Promise.all([
-    prisma.reviews.findMany({
-      where: { status: "approved" },
-      orderBy: [{ is_featured: "desc" }, { stay_date: "desc" }],
-      // Only fetch the columns the page actually renders (was pulling every
-      // column of every row). is_featured is needed for the orderBy.
-      select: {
-        id: true,
-        guest_name: true,
-        platform: true,
-        rating: true,
-        review_text: true,
-        stay_date: true,
-        property: true,
-        is_featured: true,
-      },
-      // Cap the initial payload. The total-count stat still shows all
-      // approved reviews (it comes from the separate aggregate below), but
-      // we only ship the most relevant 60 rows to the browser instead of all.
-      take: 60,
-    }),
-    prisma.reviews.aggregate({
-      where: { status: "approved" },
-      _count: true,
-    }),
-  ]);
+  // Canonical cross-platform figures (4.9 / 416) — the same source the hero,
+  // structured data, and site-wide copy use, so every number agrees.
+  const { ratingValue, reviewCount } = await fetchReviewStats();
 
-  const totalReviews = summary._count;
+  const reviews = await prisma.reviews.findMany({
+    where: { status: "approved" },
+    orderBy: [{ is_featured: "desc" }, { stay_date: "desc" }],
+    // Only fetch the columns the page actually renders. is_featured is
+    // needed for the orderBy.
+    select: {
+      id: true,
+      guest_name: true,
+      platform: true,
+      rating: true,
+      review_text: true,
+      stay_date: true,
+      property: true,
+      is_featured: true,
+    },
+    // Fixed single page: ship exactly the 12 shown (featured first, then
+    // newest). No "Show More", so there's nothing to fetch beyond these.
+    take: 12,
+  });
 
   const stats = [
-    // Pinned to the canonical cross-platform figure (matches the 4.9 shown
-    // in the hero, structured data, and site-wide copy). The live DB average
-    // rounds to 5.0 and disagreed with everything else on the site.
-    { label: "Overall Rating", value: "4.9", sub: "out of 5 stars" },
-    { label: "Verified Reviews", value: String(totalReviews), sub: "across all platforms" },
+    { label: "Overall Rating", value: ratingValue, sub: "out of 5 stars" },
+    { label: "Verified Reviews", value: reviewCount, sub: "across all platforms" },
     { label: "Return Guests", value: "33%", sub: "come back again" },
     { label: "Would Recommend", value: "98%", sub: "to friends" },
   ];
@@ -117,7 +109,7 @@ export default async function ReviewsPage() {
           <p className="text-center text-muted text-lg mb-8">
             Authentic reviews from Airbnb, Booking.com, and direct bookings
           </p>
-          <ReviewsList reviews={serializedReviews} />
+          <ReviewsList reviews={serializedReviews} total={reviewCount} />
         </div>
       </section>
 
