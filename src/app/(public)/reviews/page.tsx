@@ -33,8 +33,8 @@ export default async function ReviewsPage() {
   const reviews = await prisma.reviews.findMany({
     where: { status: "approved" },
     orderBy: [{ is_featured: "desc" }, { stay_date: "desc" }],
-    // Only fetch the columns the page actually renders. is_featured is
-    // needed for the orderBy.
+    // Only the columns actually rendered. is_featured is deliberately not
+    // selected — SQL can ORDER BY a column without returning it.
     select: {
       id: true,
       guest_name: true,
@@ -43,7 +43,6 @@ export default async function ReviewsPage() {
       review_text: true,
       stay_date: true,
       property: true,
-      is_featured: true,
     },
     // Fixed single page: ship exactly the 12 shown (featured first, then
     // newest). No "Show More", so there's nothing to fetch beyond these.
@@ -57,7 +56,7 @@ export default async function ReviewsPage() {
     { label: "Would Recommend", value: "98%", sub: "to friends" },
   ];
 
-  // Serialize for client component
+  // stay_date is a Date object; convert to a plain string for the list.
   const serializedReviews = reviews.map((r) => ({
     id: r.id,
     guest_name: r.guest_name,
