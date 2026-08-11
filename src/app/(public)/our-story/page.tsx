@@ -78,10 +78,10 @@ export default function OurStoryPage() {
             </p>
           </div>
           <Image
-            src="/images/solarpanel.jpeg"
-            alt="View of Lake Dunstan and vineyards from Lakeside Retreat"
-            width={800}
-            height={600}
+            src="/images/S&S.jpeg"
+            alt="Founders of Lakeside Retreat Steve and Sandy"
+            width={300}
+            height={500}
             className="rounded-2xl w-full h-auto object-cover"
           />
         </div>
@@ -124,22 +124,38 @@ export default function OurStoryPage() {
 
       {/* Promise */}
       <section className="py-20 px-5 bg-white">
-        <div className="max-w-[800px] mx-auto text-center">
-          <h2 className="font-display text-4xl mb-6">What we promise</h2>
-          <p className="text-lg leading-8 text-muted mb-6">
-            A bed made with real care. Coffee already waiting. The kind of
-            quiet you drive a long way to find. When you leave, we want the
-            lake to still be in your head a week later.
-          </p>
-          <p className="text-lg text-muted italic">
-            Stephen &amp; Sandy
-          </p>
+        <div className="max-w-[1000px] mx-auto grid md:grid-cols-2 gap-10 items-center">
+          <div className="text-center md:text-left">
+            <h2 className="font-display text-4xl mb-6">What we promise</h2>
+            <p className="text-lg leading-8 text-muted mb-6">
+              A bed made with real care. Coffee already waiting. The kind of
+              quiet you drive a long way to find. When you leave, we want the
+              lake to still be in your head a week later.
+            </p>
+            <p className="text-lg text-muted italic">
+              Stephen &amp; Sandy
+            </p>
+          </div>
+          <Image
+            src="/images/solarpanel.jpeg"
+            alt="Solar panels powering Lakeside Retreat"
+            width={600}
+            height={400}
+            className="rounded-2xl w-full max-w-[420px] h-auto object-cover justify-self-center md:justify-self-end"
+          />
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-20 px-5 text-center">
         <div className="max-w-[600px] mx-auto">
+        <Image
+            src="/images/Gapes.jpg"
+            alt="Founders of Lakeside Retreat Steve and Sandy"
+            width={300}
+            height={100}
+            className="rounded-2xl w-full h-auto object-cover"
+          />
           <h2 className="font-display text-4xl mb-4">
             Come find it for yourself.
           </h2>
