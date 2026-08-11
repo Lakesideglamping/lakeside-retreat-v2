@@ -374,7 +374,7 @@ export function BookingWidget() {
                       +
                     </button>
                     <span className="text-sm text-muted">
-                      (${acc.petFee}/pet)
+                      (${acc.petFee} flat fee per stay)
                     </span>
                   </div>
                 </div>

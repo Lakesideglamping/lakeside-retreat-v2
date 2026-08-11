@@ -95,12 +95,14 @@ export function calculateLineItems(
     });
   }
 
-  // Pet fee
+  // Pet fee — a single FLAT fee per stay, regardless of how many pets
+  // (max 2). Advertised everywhere as "flat $25 pet fee per stay", so do
+  // NOT multiply by the pet count.
   if (accommodation.petFee && pets > 0) {
     items.push({
-      name: `Pet fee (${pets} pet${pets > 1 ? "s" : ""})`,
+      name: "Pet fee (flat, per stay)",
       amount: accommodation.petFee * 100,
-      quantity: pets,
+      quantity: 1,
     });
   }
 

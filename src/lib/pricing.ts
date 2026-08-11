@@ -61,13 +61,14 @@ export function calculatePrice(
     });
   }
 
-  // Pet fee
+  // Pet fee — a single FLAT fee per stay, regardless of how many pets
+  // (max 2). Must mirror the flat charge in lib/stripe.ts.
   if (accommodation.petFee && pets > 0) {
     items.push({
-      label: `Pet fee (${pets} pet${pets > 1 ? "s" : ""})`,
+      label: "Pet fee (flat, per stay)",
       amount: accommodation.petFee,
-      quantity: pets,
-      total: accommodation.petFee * pets,
+      quantity: 1,
+      total: accommodation.petFee,
     });
   }
 

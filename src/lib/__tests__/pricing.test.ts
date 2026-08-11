@@ -68,7 +68,7 @@ describe("calculatePrice", () => {
     expect(hasExtraGuest).toBe(false);
   });
 
-  it("adds pet fee per pet", () => {
+  it("charges the pet fee as a single flat fee per stay (not per pet)", () => {
     const { totalAmount, lineItems } = calculatePrice(
       cottage,
       "2026-06-01",
@@ -78,8 +78,9 @@ describe("calculatePrice", () => {
     );
     const petItem = lineItems.find((i) => i.label.includes("Pet fee"));
     expect(petItem).toBeDefined();
-    expect(petItem!.total).toBe(100); // 2 pets × $50
-    expect(totalAmount).toBe(365 * 2 + 100);
+    expect(petItem!.quantity).toBe(1);
+    expect(petItem!.total).toBe(50); // flat $50 fixture fee, even with 2 pets
+    expect(totalAmount).toBe(365 * 2 + 50);
   });
 
   it("applies seasonal multiplier to nightly rate", () => {
