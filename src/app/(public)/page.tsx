@@ -39,18 +39,57 @@ export default async function HomePage() {
   // Real guest reviews, straight from the database — 5-star only, featured
   // first then most recent. Previously these four were hardcoded with
   // paraphrased text attributed to real guests.
-  const teaserReviews = await prisma.reviews.findMany({
-    where: { status: "approved", rating: 5 },
-    orderBy: [{ is_featured: "desc" }, { stay_date: "desc" }],
-    select: {
-      id: true,
-      guest_name: true,
-      review_text: true,
-      stay_date: true,
-      property: true,
-    },
-    take: 4,
-  });
+  //
+  // Deliberately one review PER PROPERTY first, so all three are represented
+  // and no card image repeats — ranking alone clusters (the top four are
+  // currently 3x Dome Rose). The fourth slot goes to the best remaining
+  // review whichever property it belongs to.
+  const reviewSelect = {
+    id: true,
+    guest_name: true,
+    review_text: true,
+    stay_date: true,
+    property: true,
+  };
+  const bestFirst = [
+    { is_featured: "desc" as const },
+    { stay_date: "desc" as const },
+  ];
+  const approvedFiveStar = { status: "approved", rating: 5 };
+
+  const [pinot, rose, cottage, topOverall] = await Promise.all([
+    prisma.reviews.findFirst({
+      where: { ...approvedFiveStar, property: "Dome Pinot" },
+      orderBy: bestFirst,
+      select: reviewSelect,
+    }),
+    prisma.reviews.findFirst({
+      where: { ...approvedFiveStar, property: "Dome Rose" },
+      orderBy: bestFirst,
+      select: reviewSelect,
+    }),
+    prisma.reviews.findFirst({
+      where: { ...approvedFiveStar, property: "Lakeside Cottage" },
+      orderBy: bestFirst,
+      select: reviewSelect,
+    }),
+    // Four is provably enough to fill the last slot: at most the three
+    // already-picked reviews can collide with this list.
+    prisma.reviews.findMany({
+      where: approvedFiveStar,
+      orderBy: bestFirst,
+      select: reviewSelect,
+      take: 4,
+    }),
+  ]);
+
+  const teaserReviews = [pinot, rose, cottage].filter((r) => r !== null);
+  for (const candidate of topOverall) {
+    if (teaserReviews.length >= 4) break;
+    if (!teaserReviews.some((r) => r.id === candidate.id)) {
+      teaserReviews.push(candidate);
+    }
+  }
 
   const featuredReviews = teaserReviews.map((r) => {
     const media = PROPERTY_MEDIA[r.property ?? ""] ?? FALLBACK_MEDIA;
