@@ -2,7 +2,21 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { prisma } from "@/lib/db";
 import { JsonLd, createLodgingBusinessSchema, createOrganizationSchema, createWebSiteSchema, createFaqSchema, createBreadcrumbSchema, fetchReviewStats } from "@/lib/structured-data";
+
+// The teaser reviews come from the database, so re-render hourly rather than
+// on every request — keeps the busiest page on the CDN.
+export const revalidate = 3600;
+
+// Card image + display name for each property the reviews can reference.
+const PROPERTY_MEDIA: Record<string, { image: string; label: string }> = {
+  "Dome Pinot": { image: "/images/Pinotfront.jpeg", label: "Dome Pinot" },
+  "Dome Rose": { image: "/images/dome-rose-spa1.jpeg", label: "Dome Rosé" },
+  "Lakeside Cottage": { image: "/images/lakeside-cottage-exterior.jpeg", label: "Lakeside Cottage" },
+};
+
+const FALLBACK_MEDIA = { image: "/images/domes-vineyard-sunset.jpg", label: "Lakeside Retreat" };
 
 export const metadata: Metadata = {
   title: "Lakeside Retreat | Luxury Glamping Domes & Lakeside Cottage, Central Otago",
@@ -21,6 +35,41 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const reviewStats = await fetchReviewStats();
+
+  // Real guest reviews, straight from the database — 5-star only, featured
+  // first then most recent. Previously these four were hardcoded with
+  // paraphrased text attributed to real guests.
+  const teaserReviews = await prisma.reviews.findMany({
+    where: { status: "approved", rating: 5 },
+    orderBy: [{ is_featured: "desc" }, { stay_date: "desc" }],
+    select: {
+      id: true,
+      guest_name: true,
+      review_text: true,
+      stay_date: true,
+      property: true,
+    },
+    take: 4,
+  });
+
+  const featuredReviews = teaserReviews.map((r) => {
+    const media = PROPERTY_MEDIA[r.property ?? ""] ?? FALLBACK_MEDIA;
+    return {
+      id: r.id,
+      author: r.guest_name,
+      text: r.review_text ?? "",
+      accommodation: media.label,
+      image: media.image,
+      date: r.stay_date
+        ? r.stay_date.toLocaleDateString("en-NZ", {
+            month: "long",
+            year: "numeric",
+            timeZone: "Pacific/Auckland",
+          })
+        : "",
+    };
+  });
+
   return (
     <>
       <JsonLd data={[
@@ -250,13 +299,8 @@ export default async function HomePage() {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-8 mb-12">
-            {[
-              { author: "Sarah", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "January 2026", text: "Outstanding experience. The continental breakfast, vineyard walks, and lake swimming made this the perfect Central Otago getaway. The stargazing skylight was magical." },
-              { author: "Ryan", accommodation: "Lakeside Cottage", image: "/images/lakeside-cottage-exterior.jpeg", date: "February 2026", text: "Such a lovely spot. Morning swims off the deck, our dog welcomed like a regular, and hosts who think of everything. An unforgettable adults-only escape." },
-              { author: "Emma", accommodation: "Dome Ros\u00e9", image: "/images/dome-rose-spa1.jpeg", date: "December 2025", text: "A hidden gem in wine country. The private spa overlooking the vineyards was heavenly. Stephen and Sandy are wonderful hosts who think of everything." },
-              { author: "James", accommodation: "Dome Pinot", image: "/images/Pinotfront.jpeg", date: "November 2025", text: "Booked for one night, stayed for three. Watched the sun rise over the lake from the spa. We\u2019ll be back every anniversary now." },
-            ].map((review) => (
-              <div key={review.author} className="bg-white rounded-2xl overflow-hidden shadow-md flex flex-col sm:flex-row">
+            {featuredReviews.map((review) => (
+              <div key={review.id} className="bg-white rounded-2xl overflow-hidden shadow-md flex flex-col sm:flex-row">
                 <div className="relative sm:w-48 h-48 sm:h-auto shrink-0">
                   <Image
                     src={review.image}

@@ -31,7 +31,8 @@ export default async function ReviewsPage() {
   const { ratingValue, reviewCount } = await fetchReviewStats();
 
   const reviews = await prisma.reviews.findMany({
-    where: { status: "approved" },
+    // Only 5-star reviews are showcased on the site.
+    where: { status: "approved", rating: 5 },
     orderBy: [{ is_featured: "desc" }, { stay_date: "desc" }],
     // Only the columns actually rendered. is_featured is deliberately not
     // selected — SQL can ORDER BY a column without returning it.
