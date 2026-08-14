@@ -53,8 +53,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate adults only
-    if (accommodation.adultsOnly && data.pets && data.pets > 0) {
+    // Validate pets. A property allows pets only if it has a petFee — that
+    // is the Lakeside Cottage ($25 flat per stay) and no other. Do NOT gate
+    // this on adultsOnly: every property is adults-only (no children), which
+    // is independent of whether dogs are welcome. Gating on adultsOnly
+    // rejected pets everywhere, including the pet-friendly cottage.
+    if (data.pets && data.pets > 0 && !accommodation.petFee) {
       return NextResponse.json(
         { error: "Pets are not allowed in this accommodation" },
         { status: 400 }
