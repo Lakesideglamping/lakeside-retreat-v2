@@ -78,11 +78,13 @@ export default function OurStoryPage() {
             </p>
           </div>
           <Image
-            src="/images/S&S.jpeg"
+            src="/images/SteveSandy.jpg"
             alt="Founders of Lakeside Retreat Steve and Sandy"
             width={300}
             height={500}
-            className="rounded-2xl w-full h-auto object-cover"
+            // Capped at half its former column-filling width (was 576px on
+            // desktop); centered in its column.
+            className="rounded-2xl w-full max-w-[288px] h-auto object-cover justify-self-center"
           />
         </div>
       </section>
@@ -137,8 +139,8 @@ export default function OurStoryPage() {
             </p>
           </div>
           <Image
-            src="/images/solarpanel.jpeg"
-            alt="Solar panels powering Lakeside Retreat"
+            src="/images/LakeDunstanCloud.jpeg"
+            alt="View over Lake Dunstand at Lakeside Retreat"
             width={600}
             height={400}
             className="rounded-2xl w-full max-w-[420px] h-auto object-cover justify-self-center md:justify-self-end"
@@ -150,7 +152,7 @@ export default function OurStoryPage() {
       <section className="py-20 px-5">
         <div className="max-w-[1000px] mx-auto grid md:grid-cols-2 gap-10 items-center">
           <Image
-            src="/images/Gapes.jpg"
+            src="/images/IMG_8536.jpg"
             alt="Ripe grapes in the vineyard at Lakeside Retreat"
             width={600}
             height={400}
