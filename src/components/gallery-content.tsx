@@ -30,19 +30,29 @@ const galleryItems = [
   { src: "/images/galleryrainbow.jpeg", alt: "Full rainbow over Lake Dunstan and the vineyards at Lakeside Retreat", title: "Rainbow over the Lake", categories: ["views", "cottage"] as Category[] },
   { src: "/images/domesmountainview.jpeg", alt: "Both domes among autumn vineyard with mountain backdrop", title: "Mountain Panorama", categories: ["views"] as Category[] },
   { src: "/images/magical-sunset.jpg", alt: "Stunning sunset over Lake Dunstan", title: "Lake Dunstan Sunset", categories: ["views"] as Category[] },
+  { src: "/images/lakeview.jpeg", alt: "Vineyard Morning", title: "Vineyard Morning", categories: ["views", "domes"] as Category[] },
   { src: "/images/vineyard.jpeg", alt: "Central Otago vineyard views from Lakeside Retreat", title: "Vineyard Views", categories: ["views"] as Category[] },
   { src: "/images/pinotinternal.jpeg", alt: "Dome Pinot interior luxury living space with vineyard views", title: "Dome Interior", categories: ["domes"] as Category[] },
   { src: "/images/PinotExterior.jpeg", alt: "Dome Pinot with vineyard views", title: "Dome View From Vineyard", categories: ["domes"] as Category[] },
   { src: "/images/dome-rose-interior.jpeg", alt: "Dome Rosé interior with panoramic windows overlooking the lake", title: "Dome Rosé Interior", categories: ["domes"] as Category[] },
   { src: "/images/gallerydecksitting.jpeg", alt: "Dome deck overlooking the golden autumn vineyard and Lake Dunstan", title: "Deck Views", categories: ["domes", "amenities"] as Category[] },
-  { src: "/images/pinotspa.jpeg", alt: "Dome Pinot private saltwater spa with lake and mountain views", title: "Dome Spa", categories: ["domes", "amenities"] as Category[] },
+  { src: "/images/IMG_E8724.jpg", alt: "Dome lake and mountain views", title: "Dome view", categories: ["domes","views"] as Category[] },
   { src: "/images/gallerydeck.jpeg", alt: "Relaxing on the deck with vineyard views", title: "Your Private Retreat", categories: ["amenities"] as Category[] },
   { src: "/images/DroneViewRose.jpeg", alt: "Dome and vineyard arial views", title: "Dome Rose' Arial View", categories: ["domes"] as Category[] },
   { src: "/images/domes-portrait-lake.jpg", alt: "Both geodesic domes with vineyard rows leading to Lake Dunstan", title: "Vineyard & Lake", categories: ["domes"] as Category[] },
   { src: "/images/WinterVineyard.jpeg", alt: "Winter Vineyard View", title: "Winter Vineyard View", categories: ["views"] as Category[] },
-  { src: "/images/lakeview.jpeg", alt: "Vineyard Morning", title: "Vineyard Morning", categories: ["views"] as Category[] },
+  
   { src: "/images/LakeDunstanReflaction.jpeg", alt: "Lake Dunstan Reflaction", title: "Lake Dunstan Reflaction", categories: ["views"] as Category[] },
   { src: "/images/20220110_081038.jpg", alt: "Lake Dunstan", title: "Lake Dunstan", categories: ["views"] as Category[] },
+  { src: "/images/LakeDunstanCloud.jpeg", alt: "Lake Dunstan Cloud", title: "Lake Dunstan Cloud", categories: ["views"] as Category[] },
+  { src: "/images/MilkyWayOntheLake.jpg", alt: "Milkyway over Lake Dunstan", title: "Star Gazing", categories: ["views", "domes", "cottage"] as Category[] },
+  { src: "/images/DomeMilkyWay.jpg", alt: "Milkyway over the dome", title: "Lakeside dome", categories: ["views", "domes"] as Category[] },
+  { src: "/images/GasWeber.jpg", alt: "Gas Weber for private use", title: "Gas Weber available for deck", categories: ["amenities", "domes"] as Category[] },
+  { src: "/images/BathRobes.jpg", alt: "Bathrobes available in the dome", title: "Dome robes", categories: ["amenities", "domes"] as Category[] },
+  { src: "/images/RoseKitchen.jpg", alt: "Dome Rose kitchen", title: "Dome Rose kitchen", categories: ["amenities", "domes"] as Category[] },
+  { src: "/images/PinotSpa.jpg", alt: "Dome Pinot spa", title: "Dome spa", categories: ["amenities", "domes"] as Category[] },
+  { src: "/images/20260422153555_0026.jpg", alt: "Vineyard view to the lake", title: "Vineyard view", categories: ["views"] as Category[] },
+
 ];
 
 export function GalleryContent() {

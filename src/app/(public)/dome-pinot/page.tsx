@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 const features = [
-  { title: "50sqm Living Space", desc: "Our largest dome with spacious open-plan design" },
+  { title: "50sqm Living Space", desc: "Our largest dome with spacious open-plan design, plus 30sqm outdoor deck space" },
   { title: "Private Saltwater Spa", desc: "Relax under the stars in your own saltwater spa" },
   { title: "Stargazing Skylight", desc: "Fall asleep watching the Milky Way" },
   { title: "Luxury Super King Bed", desc: "Premium bedding with lake views from your pillow" },
@@ -47,11 +47,14 @@ const amenities = [
 
 const galleryImages = [
   { src: "/images/Pinotfront.jpeg", alt: "Dome Pinot exterior with snow-capped mountain views" },
-  { src: "/images/IMG_0097.jpg", alt: "Dome Pinot private deck overlooking the spring vineyard and lake" },
+  { src: "/images/IMG_0097.jpg", alt: "Dome Pinot private deck overlooking the autumn vineyard and lake" },
   { src: "/images/pinotinternal.jpeg", alt: "Dome Pinot interior luxury living space" },
   { src: "/images/windowview.jpeg", alt: "View from inside Dome Pinot over the vineyard and Lake Dunstan" },
   { src: "/images/GallerySwingChair.jpeg", alt: "View from swing chair over the vineyard and Lake Dunstan" },
   { src: "/images/pinotexternal2.JPEG", alt: "Dome Pinot from the driveway over looking vineyard and Lake Dunstan" },
+  { src: "/images/SpaArialView.JPEG", alt: "Dome Pinot spa arial view" },
+  { src: "/images/PinotKichen.JPG", alt: "Dome Pinot kichen over looking vineyard and Lake Dunstan"},
+  { src: "/images/DomeMilkyWay.JPG", alt: "Star gazing at night" },
 ];
 
 const pricingFeatures = [

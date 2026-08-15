@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/lakeside-cottage",
     images: [
       {
-        url: "/images/lakeside-cottage-exterior.jpeg",
+        url: "/images/HeadingWarm.jpeg",
         width: 1200,
         height: 630,
         alt: "Lakeside Cottage with direct Lake Dunstan access, Cromwell Central Otago",
@@ -38,7 +38,7 @@ const features = [
 
 const amenities = [
   { title: "Sleeping", desc: "Queen bed + sofa bed" },
-  { title: "BBQ Facilities", desc: "Gas BBQ on the deck for lakeside dinners" },
+  { title: "Ensuite Bathroom", desc: "Rainfall shower with premium toiletries" },
   { title: "Climate Control", desc: "Heat pump for heating and air conditioning" },
   { title: "Free WiFi", desc: "High-speed internet throughout" },
   { title: "Free Parking", desc: "Space for multiple vehicles" },
@@ -52,6 +52,9 @@ const galleryImages = [
   { src: "/images/cottagebedroom.jpeg", alt: "Lakeside Cottage bedroom with mountain views" },
   { src: "/images/cottagebathroom.jpeg", alt: "Lakeside Cottage bathroom with timber vanity" },
   { src: "/images/lakesidecottageinterior.jpeg", alt: "Sitting area with lake views" },
+  { src: "/images/CottageWinterView.jpg", alt: "Lakeside Cottage winter mountain views" },
+  { src: "/images/MilkyWayOntheLake.jpg", alt: "Milkyway on the Lake Dunstan" },
+  { src: "/images/20220425_140215.jpg", alt: "Sitting area with Weber BBQ" },
 ];
 
 const pricingFeatures = [
@@ -104,7 +107,7 @@ export default async function LakesideCottagePage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/vineyard.jpeg"
+          src="/images/HeadingWarm.jpeg"
           alt="Lakeside Cottage with direct Lake Dunstan access, Cromwell Central Otago"
           fill
           priority

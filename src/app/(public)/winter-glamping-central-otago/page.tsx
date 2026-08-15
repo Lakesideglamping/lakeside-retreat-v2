@@ -116,7 +116,7 @@ export default function WinterGlampingPage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/SunSetDome.jpeg"
+          src="/images/IMG_1266-1920x1080.jpeg"
           alt="Luxury glamping domes at Lakeside Retreat with snow-capped mountain views, Central Otago winter"
           fill
           priority

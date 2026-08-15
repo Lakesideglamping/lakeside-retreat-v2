@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/dome-rose",
     images: [
       {
-        url: "/images/galleryrainbow.jpeg",
+        url: "/images/vineyard.jpeg",
         width: 1200,
         height: 630,
         alt: "Dome Rosé private outdoor spa overlooking Central Otago vineyard at dusk",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 const features = [
   { title: "Vineyard Views", desc: "Wake up to rows of vines and mountain backdrops" },
   { title: "Private Saltwater Spa", desc: "Soak under the stars with a glass of local wine" },
-  { title: "Romantic Setting", desc: "Intimate 40sqm space designed for couples" },
+  { title: "Romantic Setting", desc: "Intimate 40sqm dome plus 30sqm outdoor deckspace designed for couples" },
   { title: "Luxury Super King Bed", desc: "Premium bedding for restful nights" },
   { title: "Eco-Powered", desc: "100% renewable energy with backup power" },
   { title: "Wine Trail Access", desc: "30+ wineries within 20 minutes drive" },
@@ -52,6 +52,9 @@ const galleryImages = [
   { src: "/images/IMG_1403.webp", alt: "Dome Rose interior" },
   { src: "/images/IMG_E8726.jpg", alt: "Mountain views from Dome Ros\u00e9 desking" },
   { src: "/images/IMG_8043.jpg", alt: "Dome Rose entrance" },
+  { src: "/images/RoseKitchen.jpg", alt: "Dome Rose Kitchen" },
+  { src: "/images/RoseArialView.jpg", alt: "Dome Ros\u00e9 Arial view " },
+  { src: "/images/Spa.jpeg", alt: "Dome Rose spa" },
 ];
 
 const pricingFeatures = [
@@ -103,7 +106,7 @@ export default async function DomeRosePage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/20211122_185234.jpg"
+          src="/images/vineyard.jpeg"
           alt="Dome Rosé romantic geodesic dome with private outdoor spa and vineyard views"
           fill
           priority
@@ -263,7 +266,7 @@ export default async function DomeRosePage() {
             >
               <div className="relative h-[200px]">
                 <Image
-                  src="/images/gallerydeck.jpeg"
+                  src="/images/Pinotfront.jpeg"
                   alt="Dome Pinot luxury geodesic dome with Lake Dunstan views"
                   fill
                   className="object-cover"
@@ -284,7 +287,7 @@ export default async function DomeRosePage() {
             >
               <div className="relative h-[200px]">
                 <Image
-                  src="/images/vineyardlakeview.jpeg"
+                  src="/images/cottage.jpg"
                   alt="Lakeside Cottage — adults-only pet-friendly lakefront stay"
                   fill
                   className="object-cover"

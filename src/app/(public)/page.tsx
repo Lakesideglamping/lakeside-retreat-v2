@@ -368,7 +368,7 @@ export default async function HomePage() {
           </div>
 
           <div className="text-center">
-            <Button href="/reviews">Read All 416 Reviews</Button>
+            <Button href="/reviews">Read More Reviews</Button>
           </div>
         </div>
       </section>
