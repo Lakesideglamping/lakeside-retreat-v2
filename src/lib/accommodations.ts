@@ -17,10 +17,13 @@ export interface Accommodation {
 }
 
 // Pricing notes (GST-inclusive, cleaning bundled into nightly rate):
-//   - Cottage $365/night base (2 guests) + $50/night per extra adult up to 3
-//   - Dome Rosé $615/night, Dome Pinot $635/night (each sleeps 2)
+//   - Cottage $350/night base (2 guests) + $50/night per extra adult up to 3
+//   - Dome Rosé $599/night, Dome Pinot $650/night (each sleeps 2)
+//   - Cottage only: $25 pet fee, flat per stay (not per pet)
 //   - All three properties strictly 18+, adults only
 //   - Security bond is a separate pre-auth, not a charge
+// These figures mirror basePrice below — update both together, and check
+// the advertised prices on the landing pages match.
 const accommodations: Accommodation[] = [
   {
     id: "dome-pinot",

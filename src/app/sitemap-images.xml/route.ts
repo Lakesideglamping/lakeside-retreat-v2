@@ -53,7 +53,7 @@ const pages: PageImages[] = [
     path: "/dome-rose",
     images: [
       {
-        loc: "/images/dome-rose.jpeg",
+        loc: "/images/RoseArialView.jpg",
         title: "Dome Rosé exterior — romantic glamping dome",
         caption: "Dome Rosé — 40sqm luxury dome with vineyard views",
       },
@@ -66,8 +66,8 @@ const pages: PageImages[] = [
         title: "Dome Rosé interior with super king bed",
       },
       {
-        loc: "/images/rosespa.jpeg",
-        title: "Dome Rosé spa pool at sunset",
+        loc: "/images/RoseKitchen.jpg",
+        title: "Dome Rosé kitchenette and living space",
       },
     ],
   },
@@ -134,8 +134,8 @@ const pages: PageImages[] = [
     path: "/glamping-central-otago",
     images: [
       {
-        loc: "/images/Hottub1000x700.jpeg",
-        title: "Private hot tub at Lakeside Retreat glamping domes",
+        loc: "/images/SpaArialView.jpeg",
+        title: "Private saltwater spa at Lakeside Retreat glamping domes",
       },
       {
         loc: "/images/vineyard.jpeg",
