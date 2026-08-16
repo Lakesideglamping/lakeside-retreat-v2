@@ -30,7 +30,7 @@ const winterHighlights = [
   {
     title: "Private Outdoor Spa in the Snow",
     desc: "There is nothing quite like soaking in a hot saltwater spa while snow sits on the mountain peaks above you. Each dome has its own private outdoor spa — warm water, cold air, extraordinary views.",
-    image: "/images/spa.jpeg",
+    image: "/images/Spa.jpeg",
     alt: "Private outdoor spa at Lakeside Retreat with snow-capped mountain views, Central Otago winter",
   },
   {

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     description:
       "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell.",
     url: "https://lakesideretreat.co.nz/stay",
-    images: [{ url: "/images/WinterVineyard.JPEG", width: 1200, height: 800, alt: "Lakeside Retreat accommodation" }],
+    images: [{ url: "/images/WinterVineyard.jpeg", width: 1200, height: 800, alt: "Lakeside Retreat accommodation" }],
     type: "website",
   },
 };

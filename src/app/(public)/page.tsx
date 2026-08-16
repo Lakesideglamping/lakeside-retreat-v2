@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     description:
       "Adults-only luxury glamping domes and pet-friendly lakeside cottage on Lake Dunstan, Central Otago. Private spas, vineyard views, 4.9\u2605 reviews.",
     url: "https://lakesideretreat.co.nz/",
-    images: [{ url: "/images/IMG_0136.JPG", width: 1200, height: 800, alt: "Lakeside Retreat \u2014 luxury glamping on Lake Dunstan" }],
+    images: [{ url: "/images/IMG_0136.jpg", width: 1200, height: 800, alt: "Lakeside Retreat \u2014 luxury glamping on Lake Dunstan" }],
     type: "website",
   },
 };
@@ -139,7 +139,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/IMG_0136.JPG"
+          src="/images/IMG_0136.jpg"
           alt="Lakeside Retreat glamping domes overlooking Lake Dunstan at sunset"
           fill
           priority
@@ -194,7 +194,7 @@ export default async function HomePage() {
             </div>
           </div>
           <Image
-            src="/images/IMG_0097.JPG"
+            src="/images/IMG_0097.jpg"
             alt="View from the dome deck across the golden vineyard and Lake Dunstan"
             width={1000}
             height={750}

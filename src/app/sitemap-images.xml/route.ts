@@ -8,6 +8,14 @@ interface PageImages {
   images: { loc: string; title: string; caption?: string }[];
 }
 
+// Every entry below must be an image the page actually renders — Google
+// discards image-sitemap entries it cannot find on the URL they are filed
+// under. `sitemap-images.test.ts` enforces this, so add an image to the page
+// before adding it here.
+//
+// Landing pages share a property-card footer (Pinotfront / dome-rose-spa1 /
+// lakeside-cottage-exterior). Those are deliberately not repeated on every
+// page — each entry leads with the imagery distinctive to that URL.
 const pages: PageImages[] = [
   {
     path: "/",
@@ -18,8 +26,16 @@ const pages: PageImages[] = [
         caption: "Lakeside Retreat — luxury glamping domes on Lake Dunstan, Central Otago",
       },
       {
-        loc: "/images/lake-mountains-perfect.jpg",
-        title: "Lake Dunstan with snow-capped Central Otago mountains",
+        loc: "/images/LakeDView.jpeg",
+        title: "Lake Dunstan and the Pisa Range from Lakeside Retreat",
+      },
+      {
+        loc: "/images/galleryrainbow.jpeg",
+        title: "Rainbow over Lake Dunstan from Lakeside Retreat",
+      },
+      {
+        loc: "/images/Pinotfront.jpeg",
+        title: "Dome Pinot exterior with panoramic Lake Dunstan views",
       },
     ],
   },
@@ -32,10 +48,6 @@ const pages: PageImages[] = [
         caption: "Dome Pinot — flagship 50sqm luxury geodesic dome",
       },
       {
-        loc: "/images/gallerydecksitting.jpeg",
-        title: "Dome Pinot private deck overlooking the autumn vineyard and lake",
-      },
-      {
         loc: "/images/pinotinternal.jpeg",
         title: "Dome Pinot interior luxury living space",
       },
@@ -44,8 +56,17 @@ const pages: PageImages[] = [
         title: "View from inside Dome Pinot over the vineyard and Lake Dunstan",
       },
       {
-        loc: "/images/pinotspa.jpeg",
-        title: "Dome Pinot private outdoor spa at night",
+        loc: "/images/PinotKichen.jpg",
+        title: "Dome Pinot kitchenette and dining area",
+      },
+      {
+        loc: "/images/SpaArialView.jpeg",
+        title: "Dome Pinot private saltwater spa from above",
+      },
+      {
+        loc: "/images/DomeMilkyWay.jpg",
+        title: "Milky Way over Dome Pinot — Central Otago dark skies",
+        caption: "Stargazing from the dome under Central Otago's dark skies",
       },
     ],
   },
@@ -59,15 +80,15 @@ const pages: PageImages[] = [
       },
       {
         loc: "/images/dome-rose-spa1.jpeg",
-        title: "Dome Rosé private outdoor spa",
-      },
-      {
-        loc: "/images/dome-rose-interior.jpeg",
-        title: "Dome Rosé interior with super king bed",
+        title: "Dome Rosé private saltwater spa",
       },
       {
         loc: "/images/RoseKitchen.jpg",
         title: "Dome Rosé kitchenette and living space",
+      },
+      {
+        loc: "/images/SkyView.jpeg",
+        title: "Night sky through the Dome Rosé skylight",
       },
     ],
   },
@@ -80,16 +101,29 @@ const pages: PageImages[] = [
         caption: "Lakeside Cottage — adults-only lakefront stay on Lake Dunstan",
       },
       {
-        loc: "/images/cottage.jpg",
-        title: "Lakeside Cottage overlooking Lake Dunstan",
+        loc: "/images/lakesidecottageinterior.jpeg",
+        title: "Lakeside Cottage open-plan living area",
       },
       {
         loc: "/images/cottagebedroom.jpeg",
-        title: "Lakeside Cottage bedroom",
+        title: "Lakeside Cottage queen bedroom",
       },
       {
         loc: "/images/cottagebathroom.jpeg",
         title: "Lakeside Cottage bathroom",
+      },
+      {
+        loc: "/images/cottage-hottub.jpg",
+        title: "Lakeside Cottage wood-fired hot tub overlooking the lake",
+        caption: "Wood-fired hot tub — no chemicals, just lake and sky",
+      },
+      {
+        loc: "/images/CottageWinterView.jpg",
+        title: "Lakeside Cottage in winter with snow on the Pisa Range",
+      },
+      {
+        loc: "/images/MilkyWayOntheLake.jpg",
+        title: "Milky Way over Lake Dunstan from the Lakeside Cottage",
       },
     ],
   },
@@ -101,32 +135,28 @@ const pages: PageImages[] = [
         title: "Glamping domes at sunset over the vineyard",
       },
       {
-        loc: "/images/gallerydeck.jpeg",
-        title: "Dome deck with vineyard views",
-      },
-      {
-        loc: "/images/GallerySwingChair.jpeg",
-        title: "Swing chair on the deck at Lakeside Retreat",
+        loc: "/images/20210618_084416.jpg",
+        title: "Glamping domes with Central Otago mountain views",
       },
       {
         loc: "/images/galleryrainbow.jpeg",
         title: "Rainbow over Lake Dunstan from Lakeside Retreat",
       },
       {
-        loc: "/images/vineyarddomes.jpeg",
-        title: "Glamping domes in the vineyard at Lakeside Retreat",
-      },
-      {
-        loc: "/images/lakeview.jpeg",
-        title: "Lake Dunstan views from Lakeside Retreat",
-      },
-      {
         loc: "/images/domesmountainview.jpeg",
         title: "Domes with Central Otago mountain backdrop",
       },
       {
-        loc: "/images/magical-sunset.jpg",
-        title: "Magical sunset over Lake Dunstan from Lakeside Retreat",
+        loc: "/images/hottub-lakeview.jpg",
+        title: "Wood-fired hot tub with Lake Dunstan views",
+      },
+      {
+        loc: "/images/CottageMountainView.jpeg",
+        title: "Mountain views from the Lakeside Cottage",
+      },
+      {
+        loc: "/images/Spa.jpeg",
+        title: "Private saltwater spa at Lakeside Retreat",
       },
     ],
   },
@@ -134,12 +164,21 @@ const pages: PageImages[] = [
     path: "/glamping-central-otago",
     images: [
       {
+        loc: "/images/domes-vineyard-sunset.jpg",
+        title: "Luxury glamping in Central Otago — domes above the vineyard",
+        caption: "Adults-only luxury glamping on Lake Dunstan, Central Otago",
+      },
+      {
         loc: "/images/SpaArialView.jpeg",
         title: "Private saltwater spa at Lakeside Retreat glamping domes",
       },
       {
-        loc: "/images/vineyard.jpeg",
-        title: "Central Otago vineyard surrounding Lakeside Retreat",
+        loc: "/images/MilkyWay.jpg",
+        title: "Milky Way over the Central Otago glamping domes",
+      },
+      {
+        loc: "/images/springview.jpeg",
+        title: "Spring at Lakeside Retreat, Central Otago",
       },
     ],
   },
@@ -147,12 +186,17 @@ const pages: PageImages[] = [
     path: "/autumn-central-otago",
     images: [
       {
-        loc: "/images/lakeviewautumn.jpeg",
-        title: "Autumn colours on Lake Dunstan, Central Otago",
+        loc: "/images/VineyardAutumn.jpeg",
+        title: "Golden autumn vineyard in Central Otago wine country",
+        caption: "Autumn in Central Otago — vineyards in full colour",
       },
       {
-        loc: "/images/golden-vineyard-autumn.jpg",
-        title: "Golden autumn vineyard in Central Otago wine country",
+        loc: "/images/AutumnSpa.jpg",
+        title: "Private spa surrounded by autumn colour",
+      },
+      {
+        loc: "/images/CycleTrail.jpeg",
+        title: "Lake Dunstan cycle trail in autumn",
       },
     ],
   },
@@ -160,13 +204,21 @@ const pages: PageImages[] = [
     path: "/our-story",
     images: [
       {
-        loc: "/images/ViewfromVineyard.jpeg",
-        title: "View from the vineyard at Lakeside Retreat",
+        loc: "/images/galleryrainbow.jpeg",
+        title: "Rainbow over Lake Dunstan at Lakeside Retreat",
       },
       {
-        loc: "/images/solarpanel.jpeg",
-        title: "Solar panels powering the eco-glamping domes",
-        caption: "100% renewable energy at Lakeside Retreat",
+        loc: "/images/SteveSandy.jpg",
+        title: "Stephen and Sandy, hosts of Lakeside Retreat",
+        caption: "The hosts behind Lakeside Retreat, Cromwell",
+      },
+      {
+        loc: "/images/LakeDunstanCloud.jpeg",
+        title: "Cloud over Lake Dunstan from Lakeside Retreat",
+      },
+      {
+        loc: "/images/IMG_8536.jpg",
+        title: "Ripe grapes in the vineyard at Lakeside Retreat",
       },
     ],
   },
@@ -174,13 +226,21 @@ const pages: PageImages[] = [
     path: "/winter-glamping-central-otago",
     images: [
       {
-        loc: "/images/domesmountainview.jpeg",
+        loc: "/images/IMG_1266-1920x1080.jpeg",
         title: "Winter glamping domes with snow-capped Pisa Range backdrop",
         caption: "Adults-only winter glamping on Lake Dunstan, Central Otago",
       },
       {
-        loc: "/images/dome-rose-spa1.jpeg",
+        loc: "/images/Spa.jpeg",
         title: "Private saltwater spa with winter mountain views",
+      },
+      {
+        loc: "/images/pinotinternal.jpeg",
+        title: "Warm dome interior on a Central Otago winter night",
+      },
+      {
+        loc: "/images/SkyView.jpeg",
+        title: "Winter night sky through the dome skylight",
       },
     ],
   },
@@ -188,9 +248,17 @@ const pages: PageImages[] = [
     path: "/couples-retreat-central-otago",
     images: [
       {
-        loc: "/images/dome-rose-spa1.jpeg",
-        title: "Couples retreat dome with private outdoor spa",
+        loc: "/images/MountainCloud.jpeg",
+        title: "Couples retreat with Central Otago mountain views",
         caption: "Adults-only couples retreat in Central Otago wine country",
+      },
+      {
+        loc: "/images/mtPisa.jpeg",
+        title: "Mount Pisa above Lakeside Retreat",
+      },
+      {
+        loc: "/images/dome-rose-spa1.jpeg",
+        title: "Private saltwater spa for two at Dome Rosé",
       },
     ],
   },
@@ -198,9 +266,13 @@ const pages: PageImages[] = [
     path: "/central-otago-wine-trail",
     images: [
       {
-        loc: "/images/vineyard.jpeg",
+        loc: "/images/20260423090956_0003.jpg",
         title: "Central Otago wine trail — vineyards near Cromwell",
         caption: "30+ cellar doors within 15 minutes of Lakeside Retreat",
+      },
+      {
+        loc: "/images/Pinotfront.jpeg",
+        title: "Lakeside Retreat — a base for the Central Otago wine trail",
       },
     ],
   },
@@ -208,9 +280,13 @@ const pages: PageImages[] = [
     path: "/dog-friendly-accommodation-central-otago",
     images: [
       {
-        loc: "/images/lakeside-cottage-exterior.jpeg",
-        title: "Dog-friendly Lakeside Cottage on Lake Dunstan",
-        caption: "Adults-only pet-friendly lakefront stay in Cromwell",
+        loc: "/images/LakeViewInSpring.jpeg",
+        title: "Dog-friendly lakefront accommodation on Lake Dunstan",
+        caption: "Adults-only pet-friendly lakefront cottage in Cromwell",
+      },
+      {
+        loc: "/images/cottagebedroom.jpeg",
+        title: "Lakeside Cottage bedroom — the dog-friendly stay",
       },
     ],
   },
@@ -218,9 +294,13 @@ const pages: PageImages[] = [
     path: "/otago-rail-trail-accommodation",
     images: [
       {
-        loc: "/images/lakeside-cottage-exterior.jpeg",
-        title: "Otago Rail Trail accommodation — 300m from the trailhead",
+        loc: "/images/LakeDunstanCycleTrail.jpeg",
+        title: "Lake Dunstan cycle trail beside Lakeside Retreat",
         caption: "Adults-only lakefront cottage on the Otago Rail Trail",
+      },
+      {
+        loc: "/images/lakeside-cottage-exterior.jpeg",
+        title: "Otago Rail Trail accommodation — Lakeside Cottage",
       },
     ],
   },
@@ -228,9 +308,13 @@ const pages: PageImages[] = [
     path: "/luxury-accommodation-cromwell",
     images: [
       {
-        loc: "/images/PinotLakeView.jpeg",
-        title: "Luxury accommodation in Cromwell — Lake Dunstan views",
+        loc: "/images/alpenglow-mountains.jpeg",
+        title: "Alpenglow on the mountains above Cromwell",
         caption: "Adults-only luxury glamping and cottage in Cromwell, Central Otago",
+      },
+      {
+        loc: "/images/Pinotfront.jpeg",
+        title: "Luxury accommodation in Cromwell — Dome Pinot",
       },
     ],
   },
@@ -238,8 +322,9 @@ const pages: PageImages[] = [
     path: "/food-dining-central-otago",
     images: [
       {
-        loc: "/images/vineyard.jpeg",
-        title: "Central Otago food and wine — vineyard dining",
+        loc: "/images/Fruits.jpeg",
+        title: "Central Otago stone fruit and produce",
+        caption: "Orchards, cellar doors and dining around Cromwell",
       },
     ],
   },
@@ -247,8 +332,17 @@ const pages: PageImages[] = [
     path: "/cromwell-activities",
     images: [
       {
+        loc: "/images/OldTownCromwell.jpeg",
+        title: "Old Cromwell Town heritage precinct",
+        caption: "Things to do around Cromwell and Lake Dunstan",
+      },
+      {
+        loc: "/images/DunstanCycleTrail.jpeg",
+        title: "Lake Dunstan cycle trail near Cromwell",
+      },
+      {
         loc: "/images/lakeview.jpeg",
-        title: "Cromwell activities — Lake Dunstan, cycling, wine trails",
+        title: "Lake Dunstan views from Lakeside Retreat",
       },
     ],
   },
@@ -256,8 +350,8 @@ const pages: PageImages[] = [
     path: "/wanaka-day-trip",
     images: [
       {
-        loc: "/images/lake-mountains-perfect.jpg",
-        title: "Wanaka day-trip base — Lake Dunstan, 30 minutes from Wanaka",
+        loc: "/images/Wanaka.jpeg",
+        title: "Wanaka day trip — 30 minutes from Lakeside Retreat",
       },
     ],
   },
@@ -265,9 +359,57 @@ const pages: PageImages[] = [
     path: "/weekend-getaway-queenstown",
     images: [
       {
-        loc: "/images/magical-sunset.jpg",
+        loc: "/images/Queenstown.jpeg",
         title: "Weekend getaway from Queenstown — Lakeside Retreat",
         caption: "Adults-only weekend escape 45 minutes from Queenstown",
+      },
+    ],
+  },
+  {
+    path: "/stay",
+    images: [
+      {
+        loc: "/images/WinterVineyard.jpeg",
+        title: "Winter vineyard at Lakeside Retreat, Central Otago",
+        caption: "Three adults-only stays on Lake Dunstan",
+      },
+      {
+        loc: "/images/Pinotfront.jpeg",
+        title: "Dome Pinot — flagship 50sqm luxury dome",
+      },
+      {
+        loc: "/images/dome-rose-spa1.jpeg",
+        title: "Dome Rosé with private saltwater spa",
+      },
+      {
+        loc: "/images/lakeside-cottage-exterior.jpeg",
+        title: "Lakeside Cottage — lakefront, pet friendly",
+      },
+    ],
+  },
+  {
+    path: "/guides",
+    images: [
+      {
+        loc: "/images/lakeview.jpeg",
+        title: "Lake Dunstan views — Central Otago travel guides",
+        caption: "Local guides to Cromwell, Wanaka, Queenstown and the wine trail",
+      },
+      {
+        loc: "/images/lakeviewautumn.jpeg",
+        title: "Autumn colours on Lake Dunstan, Central Otago",
+      },
+      {
+        loc: "/images/OldTownCromwell.jpeg",
+        title: "Old Cromwell Town heritage precinct",
+      },
+      {
+        loc: "/images/Fruits.jpeg",
+        title: "Central Otago food and wine",
+      },
+      {
+        loc: "/images/IMG_8536.jpg",
+        title: "Grapes in the Central Otago vineyards",
       },
     ],
   },
@@ -275,7 +417,7 @@ const pages: PageImages[] = [
     path: "/reviews",
     images: [
       {
-        loc: "/images/domes-vineyard-sunset.jpg",
+        loc: "/images/20210618_084416.jpg",
         title: "Lakeside Retreat guest reviews — 4.9 stars, 416+ reviews",
       },
     ],
