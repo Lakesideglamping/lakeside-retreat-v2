@@ -5,7 +5,10 @@ export default function ReviewsLoading() {
       <section className="relative min-h-[50vh] flex items-center justify-center text-center bg-gray-300 animate-pulse">
         <div className="pt-20 px-5">
           <div className="h-12 bg-gray-400/40 rounded-xl w-64 mx-auto mb-4" />
-          <div className="h-6 bg-gray-400/30 rounded-lg w-80 mx-auto" />
+          {/* w-full max-w-*, not a bare w-*: a fixed 320/384px skeleton is
+              wider than a 375px (or 320px) phone and scrolls the page
+              sideways while it shows. */}
+          <div className="h-6 bg-gray-400/30 rounded-lg w-full max-w-80 mx-auto" />
         </div>
       </section>
 
@@ -26,7 +29,7 @@ export default function ReviewsLoading() {
       <section className="py-20 px-5">
         <div className="max-w-[1200px] mx-auto">
           <div className="h-10 bg-gray-200 rounded-xl w-64 mx-auto mb-4 animate-pulse" />
-          <div className="h-5 bg-gray-100 rounded w-96 mx-auto mb-8 animate-pulse" />
+          <div className="h-5 bg-gray-100 rounded w-full max-w-96 mx-auto mb-8 animate-pulse" />
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="bg-white rounded-2xl p-6 shadow-md animate-pulse">

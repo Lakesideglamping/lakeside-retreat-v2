@@ -42,7 +42,7 @@ export function Footer() {
             href="https://instagram.com/lakesideretreatnz"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block transition-transform hover:scale-110"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center transition-transform hover:scale-110"
           >
             <Image
               src="/images/Newinstagram.png"
@@ -56,7 +56,7 @@ export function Footer() {
             href="https://facebook.com/lakesideretreatnz"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block transition-transform hover:scale-110"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center transition-transform hover:scale-110"
           >
             <Image
               src="/images/facebook-logo.png"
@@ -68,7 +68,7 @@ export function Footer() {
           </a>
           <a
             href="mailto:info@lakesideretreat.co.nz"
-            className="inline-block transition-transform hover:scale-110"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center transition-transform hover:scale-110"
           >
             <Image
               src="/images/email-icon.png"
@@ -87,17 +87,19 @@ export function Footer() {
         </div>
 
         {/* Legal */}
-        <div className="text-center mb-4">
+        {/* flex rather than inline text: the links need a 44px-tall hit area
+            and inline-flex children would drag the "|" off the baseline. */}
+        <div className="mb-4 flex items-center justify-center">
           <Link
             href="/privacy-policy"
-            className="text-white/60 no-underline text-sm mx-2 hover:text-white"
+            className="inline-flex min-h-11 items-center px-3 text-white/60 no-underline text-sm hover:text-white"
           >
             Privacy Policy
           </Link>
           <span className="text-white/30">|</span>
           <Link
             href="/terms"
-            className="text-white/60 no-underline text-sm mx-2 hover:text-white"
+            className="inline-flex min-h-11 items-center px-3 text-white/60 no-underline text-sm hover:text-white"
           >
             Terms &amp; Conditions
           </Link>
@@ -124,11 +126,15 @@ function FooterSection({
       <h3 className="font-body text-lg mb-4 bg-gradient-to-r from-burgundy to-teal-dark bg-clip-text text-transparent">
         {title}
       </h3>
+      {/* min-h-11 (44px) rather than a 20px line with an 8px margin: that
+          gave a 28px tap pitch, tight enough to mis-tap on a phone. Applied
+          at every width — a responsive variant here would hit the Tailwind
+          v4 cascade issue noted in globals.css. */}
       {links.map((link) => (
         <Link
           key={link.href}
           href={link.href}
-          className="block text-white/90 no-underline text-sm mb-2 transition-colors hover:text-white"
+          className="flex min-h-11 items-center text-white/90 no-underline text-sm transition-colors hover:text-white"
         >
           {link.label}
         </Link>
