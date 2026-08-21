@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/couples-retreat-central-otago",
     images: [
       {
-        url: "/images/MountainCloud.jpeg",
+        url: "/images/mtPisa.jpeg",
         width: 1200,
         height: 800,
         alt: "Couples retreat dome with private outdoor spa, Central Otago",

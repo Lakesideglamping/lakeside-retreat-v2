@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/glamping-central-otago",
     images: [
       {
-        url: "/images/domes-vineyard-sunset.jpg",
+        url: "/images/IMG_8536.jpg",
         width: 1200,
         height: 800,
         alt: "Luxury geodesic glamping dome with outdoor spa on Lake Dunstan, Central Otago",
