@@ -17,8 +17,8 @@ export interface Accommodation {
 }
 
 // Pricing notes (GST-inclusive, cleaning bundled into nightly rate):
-//   - Cottage $350/night base (2 guests) + $50/night per extra adult up to 3
-//   - Dome Rosé $599/night, Dome Pinot $650/night (each sleeps 2)
+//   - Cottage $350/night base (2 guests) + $100/night for a third adult
+//   - Dome Rosé $599/night, Dome Pinot $650/night (each strictly 2 guests)
 //   - Cottage only: $25 pet fee, flat per stay (not per pet)
 //   - All three properties strictly 18+, adults only
 //   - Security bond is a separate pre-auth, not a charge
@@ -64,7 +64,7 @@ const accommodations: Accommodation[] = [
     securityDeposit: 300,
     adultsOnly: true,
     minimumAge: 18,
-    extraGuestFee: 50,
+    extraGuestFee: 100,
     petFee: 25,
     amenities: ["Queen bed + sofa bed", "Kitchenette", "Lake views", "Pet friendly"],
     images: ["lakeside-cottage-exterior.jpeg", "cottagebedroom.jpeg"],
