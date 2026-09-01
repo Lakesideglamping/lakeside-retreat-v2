@@ -90,7 +90,7 @@ const pages: PageImages[] = [
         title: "Dome Pinot kitchenette and dining area",
       },
       {
-        loc: "/images/SpaArialView.jpeg",
+        loc: "/images/SpaAerialView.jpeg",
         title: "Dome Pinot private saltwater spa from above",
       },
       {
@@ -122,7 +122,7 @@ const pages: PageImages[] = [
       },
 {
         loc: "/images/domesmountainview.jpeg",
-        title: "Dome Rosé kitchenette and living space",
+        title: "Mt Pisa as backdrop view from the domes",
       },
       {
         loc: "/images/IMG_1403.webp",
@@ -133,12 +133,12 @@ const pages: PageImages[] = [
         title: "Mountain views from Dome Rosé desking",
       },
 {
-        loc: "/images/RoseArialView.jpg",
-        title: "Dome Rosé Arial view",
+        loc: "/images/RoseAerialView.jpg",
+        title: "Dome Rose Aerial View.jpg",
       },
 {
         loc: "/images/Spa.jpeg",
-        title: "Dome Rosé Arial view",
+        title: "Dome Rose outdoor spa with Mt Pisa with snow capped",
       },
     ],
   },
@@ -345,7 +345,7 @@ const pages: PageImages[] = [
         caption: "Adults-only luxury glamping on Lake Dunstan, Central Otago",
       },
       {
-        loc: "/images/SpaArialView.jpeg",
+        loc: "/images/SpaAerialView.jpeg",
         title: "Private saltwater spa at Lakeside Retreat glamping domes",
       },
       {

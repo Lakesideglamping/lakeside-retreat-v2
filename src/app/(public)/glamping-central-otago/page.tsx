@@ -30,7 +30,7 @@ const features = [
   {
     title: "Private Outdoor Spa",
     desc: "Each dome has its own saltwater outdoor spa with uninterrupted Lake Dunstan and mountain views. Perfect for sunrise soaks or stargazing at night.",
-    image: "/images/SpaArialView.jpeg",
+    image: "/images/SpaAerialView.jpeg",
   },
   {
     title: "Stargazing Skylight",

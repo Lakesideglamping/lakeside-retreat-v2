@@ -52,7 +52,7 @@ const galleryImages = [
   { src: "/images/windowview.jpeg", alt: "View from inside Dome Pinot over the vineyard and Lake Dunstan" },
   { src: "/images/GallerySwingChair.jpeg", alt: "View from swing chair over the vineyard and Lake Dunstan" },
   { src: "/images/pinotexternal2.jpeg", alt: "Dome Pinot from the driveway over looking vineyard and Lake Dunstan" },
-  { src: "/images/SpaArialView.jpeg", alt: "Dome Pinot spa arial view" },
+  { src: "/images/SpaAerialView.jpeg", alt: "Dome Pinot spa aerial view" },
   { src: "/images/PinotKichen.jpg", alt: "Dome Pinot kichen over looking vineyard and Lake Dunstan"},
   { src: "/images/DomeMilkyWay.jpg", alt: "Star gazing at night" },
 ];
