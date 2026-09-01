@@ -49,7 +49,7 @@ function readPageSources(page: string): string {
   return combined;
 }
 
-/** [{ page: "/dome-rose", images: ["/images/RoseArialView.jpg", ...] }, ...] */
+/** [{ page: "/dome-rose", images: ["/images/RoseAerialView.jpg", ...] }, ...] */
 function parseSitemap(xml: string) {
   return [...xml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((block) => {
     const body = block[1];

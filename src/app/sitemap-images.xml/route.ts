@@ -287,7 +287,7 @@ const pages: PageImages[] = [
       },
 {
         loc: "/images/DroneViewRose.jpeg",
-        title: "Dome and vineyard arial views",
+        title: "Dome and vineyard aerial views",
       },
 {
         loc: "/images/domes-portrait-lake.jpg",

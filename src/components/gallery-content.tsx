@@ -38,7 +38,7 @@ const galleryItems = [
   { src: "/images/gallerydecksitting.jpeg", alt: "Dome deck overlooking the golden autumn vineyard and Lake Dunstan", title: "Deck Views", categories: ["domes", "amenities"] as Category[] },
   { src: "/images/IMG_E8724.jpg", alt: "Dome lake and mountain views", title: "Dome view", categories: ["domes","views"] as Category[] },
   { src: "/images/gallerydeck.jpeg", alt: "Relaxing on the deck with vineyard views", title: "Your Private Retreat", categories: ["amenities"] as Category[] },
-  { src: "/images/DroneViewRose.jpeg", alt: "Dome and vineyard arial views", title: "Dome Rose' Arial View", categories: ["domes"] as Category[] },
+  { src: "/images/DroneViewRose.jpeg", alt: "Dome and vineyard aerial views", title: "Dome Rose' Aerial View", categories: ["domes"] as Category[] },
   { src: "/images/domes-portrait-lake.jpg", alt: "Both geodesic domes with vineyard rows leading to Lake Dunstan", title: "Vineyard & Lake", categories: ["views", "domes"] as Category[] },
   { src: "/images/WinterVineyard.jpeg", alt: "Winter Vineyard View", title: "Winter Vineyard View", categories: ["views"] as Category[] },
   
