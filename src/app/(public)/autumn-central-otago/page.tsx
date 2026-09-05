@@ -36,7 +36,7 @@ const autumnHighlights = [
   {
     title: "Outdoor Spa in Crisp Autumn Air",
     desc: "There is something especially magical about soaking in a hot saltwater spa as the air turns cool and the leaves change colour around you. Autumn evenings at Lakeside Retreat — when the mountains glow gold and the sky is perfectly clear — are simply unforgettable.",
-    image: "/images/spa.jpeg",
+    image: "/images/AutumnSpa.jpg",
     alt: "Private outdoor spa at Lakeside Retreat with autumn mountain views, Central Otago",
   },
   {

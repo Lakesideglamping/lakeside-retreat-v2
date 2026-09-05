@@ -17,10 +17,10 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/couples-retreat-central-otago",
     images: [
       {
-        url: "/images/MountainCloud.jpeg",
+        url: "/images/mtPisa.jpeg",
         width: 1200,
         height: 800,
-        alt: "Couples retreat dome with private outdoor spa, Central Otago",
+        alt: "The Alpenglow cast a magical light over Mt Pisa",
       },
     ],
     type: "article",
@@ -74,7 +74,7 @@ export default function CouplesRetreatPage() {
       {/* Hero */}
       <HeroBackground
         src="/images/mtPisa.jpeg"
-        alt="Dome Rose private outdoor spa — romantic couples retreat in Central Otago"
+        alt="The Alpenglow cast a magical light over Mt Pisa"
         minHeight="60vh"
         overlayOpacity={0.4}
       >

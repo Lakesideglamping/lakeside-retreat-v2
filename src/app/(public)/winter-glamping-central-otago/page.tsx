@@ -30,7 +30,7 @@ const winterHighlights = [
   {
     title: "Private Outdoor Spa in the Snow",
     desc: "There is nothing quite like soaking in a hot saltwater spa while snow sits on the mountain peaks above you. Each dome has its own private outdoor spa — warm water, cold air, extraordinary views.",
-    image: "/images/spa.jpeg",
+    image: "/images/Spa.jpeg",
     alt: "Private outdoor spa at Lakeside Retreat with snow-capped mountain views, Central Otago winter",
   },
   {
@@ -116,7 +116,7 @@ export default function WinterGlampingPage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/SunSetDome.jpeg"
+          src="/images/IMG_1266-1920x1080.jpeg"
           alt="Luxury glamping domes at Lakeside Retreat with snow-capped mountain views, Central Otago winter"
           fill
           priority

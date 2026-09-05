@@ -62,8 +62,13 @@ services:
         sync: false
       - key: LOG_LEVEL
         value: info
+      # Keep the public site behind the maintenance page. Middleware
+      # redirects every public route to /maintenance and robots.ts blocks
+      # all crawlers, so nothing half-built gets indexed. /admin and /api
+      # stay reachable so the site can be checked before opening it up.
+      # Flip to "false" only when the site is meant to go publicly live.
       - key: MAINTENANCE_MODE
-        value: "false"
+        value: "true"
       - key: ICAL_SECRET
         sync: false
       - key: SENTRY_DSN

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/central-otago-wine-trail",
     images: [
       {
-        url: "/images/vineyard.jpeg",
+        url: "/images/20260423090956_0003.jpg",
         width: 1200,
         height: 800,
         alt: "Central Otago wine trail — vineyards and cellar doors near Cromwell",
@@ -129,7 +129,7 @@ export default function WineTrailPage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/vineyard.jpeg"
+        src="/images/20260423090956_0003.jpg"
         alt="Central Otago vineyard in Pinot Noir country"
         minHeight="60vh"
         overlayOpacity={0.4}

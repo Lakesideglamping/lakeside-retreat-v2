@@ -48,7 +48,7 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="font-display text-2xl mt-10 mb-4">3. Payment Processing</h2>
           <p>
-            Payments are processed through <strong>Stripe</strong> (PCI-DSS Level 1 certified).
+            Payments are processed through <strong>Stripe</strong>.
             Card details are entered directly into Stripe&apos;s secure form &mdash; Lakeside
             Retreat does not store your full card numbers or CVV. Security bond pre-authorisations
             are also processed through Stripe.

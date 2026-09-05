@@ -63,15 +63,11 @@ export default function TermsConditionsPage() {
               </thead>
               <tbody>
                 <tr className="border-b border-gray-200">
-                  <td className="p-3">7+ days before check-in</td>
+                  <td className="p-3">14+ days before check-in</td>
                   <td className="p-3 text-burgundy font-semibold">100% refund</td>
                 </tr>
-                <tr className="border-b border-gray-200">
-                  <td className="p-3">3&ndash;6 days before check-in</td>
-                  <td className="p-3 text-burgundy font-semibold">50% refund</td>
-                </tr>
                 <tr>
-                  <td className="p-3">Less than 3 days / no-show</td>
+                  <td className="p-3">13 or Less days / no-show</td>
                   <td className="p-3 text-burgundy font-semibold">No refund</td>
                 </tr>
               </tbody>
@@ -101,7 +97,7 @@ export default function TermsConditionsPage() {
             <li>
               <strong>Check-out:</strong> 10:00 AM
             </li>
-            <li>Early check-in or late check-out may be available on request.</li>
+            <li>Early check-in and late check-out may be available upon request, subject to availability.</li>
             <li>
               Self-check-in instructions are provided by email prior to arrival.
             </li>
@@ -126,7 +122,7 @@ export default function TermsConditionsPage() {
             Lakeside Cottage (Adults Only &mdash; Pet Friendly)
           </h3>
           <ul>
-            <li>Maximum 3 guests, all aged 18+ (2 base, 1 extra at $50/person/night)</li>
+            <li>Maximum 3 guests, all aged 18+ (2 base, 1 extra at $100/person/night)</li>
             <li>No children or infants permitted</li>
             <li>Well-behaved dogs welcome (maximum 2 dogs, $25 flat pet fee per stay)</li>
             <li>Pets must not be left unattended in the property</li>
@@ -139,7 +135,7 @@ export default function TermsConditionsPage() {
             Strict 18+ Adults-Only Policy (All Properties)
           </h3>
           <p>
-            All three Lakeside Retreat properties are strictly reserved for adult guests
+            Unless prior arrangements have been made, all three Lakeside Retreat properties are strictly reserved for adult guests
             aged 18 years or over. By completing a booking you confirm that every guest
             in your party meets this minimum age requirement. Parties arriving with
             anyone under 18 will be refused check-in and the booking will be cancelled
@@ -149,9 +145,8 @@ export default function TermsConditionsPage() {
           <h2 className="font-display text-2xl mt-10 mb-4">6. Property Rules</h2>
           <ul>
             <li>
-              <strong>No smoking:</strong> All accommodations are strictly
-              non-smoking, including vapes and e-cigarettes. A $500 cleaning fee
-              applies for violations.
+              <strong>No smoking:</strong> Smoking (including vapes and e-cigarettes) is strictly prohibited inside the rooms and all indoor areas. Please smoke only in outdoor areas. A $500 cleaning fee
+              applies for violations. Thank you for helping us maintain a clean and comfortable environment for all guests.
             </li>
             <li>
               <strong>Quiet hours:</strong> 10:00 PM &ndash; 7:00 AM. Please

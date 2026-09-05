@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     description:
       "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell.",
     url: "https://lakesideretreat.co.nz/stay",
-    images: [{ url: "/images/WinterVineyard.JPEG", width: 1200, height: 800, alt: "Lakeside Retreat accommodation" }],
+    images: [{ url: "/images/WinterVineyard.jpeg", width: 1200, height: 800, alt: "Lakeside Retreat accommodation" }],
     type: "website",
   },
 };
@@ -34,6 +34,7 @@ const accommodations = [
       "Stargazing skylight",
       "Kitchenette (induction, fridge, microwave, coffee machine, dishwasher)",
       "Lake & Pisa Range views",
+      "Cycle trail on the door step",
       "Continental breakfast included",
     ],
   },
@@ -50,6 +51,7 @@ const accommodations = [
       "Vineyard & mountain views",
       "Kitchenette (induction, fridge, microwave, coffee machine, dishwasher)",
       "Outdoor dining deck",
+      "Cycle trail on the door step",
       "Continental breakfast included",
     ],
   },
@@ -67,7 +69,8 @@ const accommodations = [
       "Pet friendly ($25 flat fee)",
       "Kitchenette (hotplate, fridge, microwave, coffee machine, dishwasher)",
       "Gas BBQ on the deck",
-      "Heat pump (heating &amp; AC)",
+      "Heat pump (heating & cooling)",
+      "Cycle trail on the door step",
     ],
   },
 ];

@@ -45,7 +45,9 @@ const categories = [
       { name: "Black Rabbit Kitchen & Bar", distance: "20 min", desc: "This is the kind of place where everyone will find something they like, from little bites to full meals for big appetites. Comfort food at its finest." },
       { name: "Moorings Restaurant", distance: "5 min", desc: "Grab a bite at the stylish cafe & wine bar or enjoy a la carte dining with award winning local wines in the Restaurant. Offering breakfast, lunch and dinner, along with pizzas and bar snacks." },
       { name: "Cromwell Heritage Precinct Cafés", distance: "15 min", desc: "The historic stone buildings by the lake house several artisan cafés, a bakery, and gift shops. Perfect for a morning coffee and a stroll by the water." },
-      { name: "Highlands Motorsport Park Café", distance: "12 min", desc: "Open daily — good café food with views of the racetrack. Popular with families and car enthusiasts. Quick and easy." },
+      { name: "Highlands Motorsport Park Café", distance: "13 min", desc: "Open daily — good café food with views of the racetrack. Popular with families and car enthusiasts. Quick and easy." },
+      { name: "Panners Bar & Restaurant", distance: "15 min", desc: "Set amongst the stunning kawarau gorge, serves delicious foods, stone-baked pizzas, local wine and craft beer." },
+      { name: "Cromwell Mall cafe and restaurants", distance: "12 min", desc: "Cromwell Mall house several artisan cafés, bakeries, restaurants and food trucks. Perfect for a coffe stop or a quick bite." },
     ],
   },
   {

@@ -132,5 +132,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|images/|sw\\.js|manifest\\.json).*)"],
+  // robots.txt is exempt so it is still served during maintenance. Without
+  // it the maintenance redirect swallows the request, robots.ts never gets
+  // to return its "disallow: /", and a crawler seeing an unreadable
+  // robots.txt assumes no restrictions — the opposite of the intent.
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|images/|sw\\.js|manifest\\.json|robots\\.txt).*)",
+  ],
 };

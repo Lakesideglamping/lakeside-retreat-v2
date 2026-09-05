@@ -96,7 +96,7 @@ export default function GuidesPage() {
       ]} />
       {/* Hero */}
       <HeroBackground
-        src="/images/20260422155523_0057.JPG"
+        src="/images/20260422155523_0057.jpg"
         alt="Central Otago vineyard near Lakeside Retreat"
         minHeight="50vh"
       >
