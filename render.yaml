@@ -1,10 +1,5 @@
 services:
   - type: web
-# REFERENCE ONLY — not connected to Render.
-# These services were created by hand in the dashboard, so nothing here
-# is applied. The dashboard is the source of truth for all config.
-# Kept as the record of intended env vars and the cron job.
-#=============================================================================
     # Must match the live Render service exactly. It is "lakeside-retreat-v2"
     # — the hostname lakeside-retreat-v2.onrender.com derives from it, and the
     # Stripe and Uplisting webhooks depend on that name staying put.
