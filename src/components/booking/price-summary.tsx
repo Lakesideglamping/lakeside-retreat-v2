@@ -22,7 +22,7 @@ export function PriceSummary({
 }: PriceSummaryProps) {
   if (!accommodation || !checkIn || !checkOut) return null;
 
-  const { lineItems, totalAmount, securityDeposit } = calculatePrice(
+  const { lineItems, totalAmount } = calculatePrice(
     accommodation,
     checkIn,
     checkOut,
@@ -49,18 +49,6 @@ export function PriceSummary({
           </div>
         </div>
 
-        {securityDeposit > 0 && (
-          <div className="border-t border-gray-200 pt-2 mt-2">
-            <div className="flex justify-between text-muted">
-              <span>Security bond (pre-authorisation only)</span>
-              <span>{formatNZD(securityDeposit)}</span>
-            </div>
-            <p className="text-xs text-muted mt-1 italic">
-              Held on your card as a separate pre-authorisation and released
-              after checkout. Not charged unless a claim is made.
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

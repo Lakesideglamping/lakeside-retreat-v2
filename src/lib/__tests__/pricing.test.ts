@@ -11,7 +11,6 @@ const dome: Accommodation = {
   baseGuests: 2,
   basePrice: 635,
   minStay: 1,
-  securityDeposit: 300,
   adultsOnly: true,
   minimumAge: 18,
   amenities: [],
@@ -26,7 +25,6 @@ const cottage: Accommodation = {
   baseGuests: 2,
   basePrice: 365,
   minStay: 2,
-  securityDeposit: 300,
   adultsOnly: true,
   minimumAge: 18,
   extraGuestFee: 50,
@@ -37,7 +35,7 @@ const cottage: Accommodation = {
 
 describe("calculatePrice", () => {
   it("computes nightly rate × nights, excludes deposit, no cleaning line item", () => {
-    const { totalAmount, lineItems, securityDeposit } = calculatePrice(
+    const { totalAmount, lineItems } = calculatePrice(
       dome,
       "2026-06-01",
       "2026-06-03",
@@ -46,7 +44,6 @@ describe("calculatePrice", () => {
     // 2 nights × $635 (no cleaning, no deposit in total)
     expect(totalAmount).toBe(635 * 2);
     expect(lineItems).toHaveLength(1); // nightly only
-    expect(securityDeposit).toBe(300);
     expect(lineItems.find((i) => i.label.toLowerCase().includes("cleaning"))).toBeUndefined();
     expect(lineItems.find((i) => i.label.toLowerCase().includes("security"))).toBeUndefined();
   });
@@ -99,13 +96,12 @@ describe("calculatePrice", () => {
   });
 
   it("returns security deposit separately from the charged total", () => {
-    const { totalAmount, securityDeposit } = calculatePrice(
+    const { totalAmount } = calculatePrice(
       dome,
       "2026-06-01",
       "2026-06-02",
       2
     );
     expect(totalAmount).toBe(635); // 1 night, cleaning bundled, no bond
-    expect(securityDeposit).toBe(300);
   });
 });

@@ -10,10 +10,8 @@ export interface PriceLineItem {
 export interface PriceBreakdown {
   /** Line items that are actually charged to the guest. */
   lineItems: PriceLineItem[];
-  /** Sum of the charged line items (does NOT include the security bond). */
+  /** Sum of the charged line items. */
   totalAmount: number; // NZD dollars
-  /** Refundable security bond held via a separate Stripe pre-authorisation. */
-  securityDeposit: number; // NZD dollars
 }
 
 function daysBetween(checkIn: string, checkOut: string): number {
@@ -72,7 +70,6 @@ export function calculatePrice(
     });
   }
 
-  // Security deposit is a SEPARATE Stripe pre-authorisation, not a charge.
   // It is NOT included in totalAmount so the displayed total matches the
   // amount Stripe actually charges the card.
   const totalAmount = items.reduce((sum, i) => sum + i.total, 0);
@@ -80,7 +77,6 @@ export function calculatePrice(
   return {
     lineItems: items,
     totalAmount,
-    securityDeposit: accommodation.securityDeposit,
   };
 }
 

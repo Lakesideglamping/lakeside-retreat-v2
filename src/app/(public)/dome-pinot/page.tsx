@@ -64,7 +64,6 @@ const pricingFeatures = [
   "No minimum stay — 1 night bookings welcome",
   "Strictly 18+ — adults only",
   "No pets — strictly no animals (the cottage is our pet-friendly option)",
-  "Security Bond: $300 (refundable, released within 7 days of checkout)",
 ];
 
 const guides = [

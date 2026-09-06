@@ -6,7 +6,6 @@ export interface Accommodation {
   baseGuests: number;
   basePrice: number;
   minStay: number;
-  securityDeposit: number;
   adultsOnly: boolean;
   /** Minimum guest age in years. All properties are strictly adults-only (18+). */
   minimumAge: number;
@@ -21,7 +20,6 @@ export interface Accommodation {
 //   - Dome Rosé $599/night, Dome Pinot $650/night (each strictly 2 guests)
 //   - Cottage only: $25 pet fee, flat per stay (not per pet)
 //   - All three properties strictly 18+, adults only
-//   - Security bond is a separate pre-auth, not a charge
 // These figures mirror basePrice below — update both together, and check
 // the advertised prices on the landing pages match.
 const accommodations: Accommodation[] = [
@@ -33,7 +31,6 @@ const accommodations: Accommodation[] = [
     baseGuests: 2,
     basePrice: 650,
     minStay: 1,
-    securityDeposit: 300,
     adultsOnly: true,
     minimumAge: 18,
     amenities: ["Super King bed", "Private spa", "Panoramic views", "Solar powered"],
@@ -47,7 +44,6 @@ const accommodations: Accommodation[] = [
     baseGuests: 2,
     basePrice: 599,
     minStay: 1,
-    securityDeposit: 300,
     adultsOnly: true,
     minimumAge: 18,
     amenities: ["Super King bed", "Outdoor spa", "Mountain views", "Solar powered"],
@@ -61,7 +57,6 @@ const accommodations: Accommodation[] = [
     baseGuests: 2,
     basePrice: 350,
     minStay: 2,
-    securityDeposit: 300,
     adultsOnly: true,
     minimumAge: 18,
     extraGuestFee: 100,

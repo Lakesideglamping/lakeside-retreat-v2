@@ -50,8 +50,7 @@ export default function PrivacyPolicyPage() {
           <p>
             Payments are processed through <strong>Stripe</strong>.
             Card details are entered directly into Stripe&apos;s secure form &mdash; Lakeside
-            Retreat does not store your full card numbers or CVV. Security bond pre-authorisations
-            are also processed through Stripe.
+              Retreat does not store your full card numbers or CVV.
           </p>
 
           <h2 className="font-display text-2xl mt-10 mb-4">4. Google Analytics</h2>

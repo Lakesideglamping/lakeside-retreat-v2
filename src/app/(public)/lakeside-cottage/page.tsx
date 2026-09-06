@@ -65,7 +65,6 @@ const pricingFeatures = [
   "Minimum 2 nights (3 nights peak season)",
   "BBQ and direct lake access included",
   "Strictly 18+ — adults only",
-  "Security Bond: $300 (refundable, released within 7 days of checkout)",
 ];
 
 const guides = [

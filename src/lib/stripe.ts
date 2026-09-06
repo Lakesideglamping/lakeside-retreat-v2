@@ -56,7 +56,6 @@ export async function getSeasonalMultiplier(
 /**
  * Calculate line items for a booking.
  * Pass seasonalMultiplier > 1.0 to apply peak/seasonal pricing to the nightly rate.
- * The security deposit is NOT included — it is a separate off-session PaymentIntent.
  */
 export function calculateLineItems(
   accommodation: Accommodation,
@@ -106,7 +105,6 @@ export function calculateLineItems(
     });
   }
 
-  // Security deposit is NOT a line item — it's a separate off-session
   // PaymentIntent (manual capture) created by the webhook after checkout
   // completes. Keeping it out of the Checkout total avoids the partial-capture
   // trap (once a PI is partial-captured, the remainder can't be captured later).
@@ -205,11 +203,6 @@ export async function createCheckoutSession(
       // off-session deposit hold PaymentIntent against the same card.
       setup_future_usage: "off_session",
     },
-    custom_text: {
-      submit: {
-        message: `A $${acc.securityDeposit} NZD security bond will be pre-authorised on your card separately after booking and released within 7 days of checkout.`,
-      },
-    },
     ...(stripeCouponId ? { discounts: [{ coupon: stripeCouponId }] } : {}),
     line_items: lineItems.map((item, i) => ({
       price_data: {
@@ -236,7 +229,6 @@ export async function createCheckoutSession(
       guestPhone: params.guestPhone || "",
       specialRequests: params.specialRequests || "",
       pets: String(params.pets || 0),
-      securityDeposit: String(acc.securityDeposit),
       seasonalMultiplier: String(multiplier),
       promoCode: params.promoCode || "",
       discountAmountCents: String(params.discountAmountCents || 0),

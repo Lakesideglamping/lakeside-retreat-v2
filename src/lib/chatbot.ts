@@ -22,7 +22,6 @@ interface KnowledgeBase {
   policies: {
     checkIn: { time: string };
     checkOut: { time: string };
-    securityDeposit: { amount: number };
     pets: string;
   };
   faqs: FAQ[];
@@ -273,7 +272,6 @@ ${kb.accommodations
 POLICIES:
 - Check-in: ${kb.policies.checkIn.time} (early check-in often available)
 - Check-out: ${kb.policies.checkOut.time} (late check-out by arrangement)
-- Security deposit: $${kb.policies.securityDeposit.amount} (authorization hold, released 48h after checkout)
 - Pets: ${kb.policies.pets}
 
 DISTANCES:

@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:
-    "Lakeside Retreat terms and conditions covering bookings, cancellation, security bond, property rules, and guest responsibilities.",
+    "Lakeside Retreat terms and conditions covering bookings, cancellation, property rules, and guest responsibilities.",
     
   };
 
@@ -78,17 +78,8 @@ export default function TermsConditionsPage() {
             business days.
           </p>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">3. Security Bond</h2>
-          <p>
-            A $300 NZD security bond is pre-authorised on your card at booking.
-            This is not a charge &mdash; the hold is automatically released within
-            7 days of checkout, provided no damage or excessive cleaning is
-            required. If deductions are necessary, you will be notified with an
-            itemised breakdown.
-          </p>
-
           <h2 className="font-display text-2xl mt-10 mb-4">
-            4. Check-In and Check-Out
+            3. Check-In and Check-Out
           </h2>
           <ul>
             <li>
@@ -104,7 +95,7 @@ export default function TermsConditionsPage() {
           </ul>
 
           <h2 className="font-display text-2xl mt-10 mb-4">
-            5. Accommodation Types and Guest Restrictions
+            4. Accommodation Types and Guest Restrictions
           </h2>
           <h3 className="font-display text-xl mt-6 mb-3">
             Dome Pinot &amp; Dome Rosé (Adults Only)
@@ -142,7 +133,7 @@ export default function TermsConditionsPage() {
             without refund.
           </p>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">6. Property Rules</h2>
+          <h2 className="font-display text-2xl mt-10 mb-4">5. Property Rules</h2>
           <ul>
             <li>
               <strong>No smoking:</strong> Smoking (including vapes and e-cigarettes) is strictly prohibited inside the rooms and all indoor areas. Please smoke only in outdoor areas. A $500 cleaning fee
@@ -172,7 +163,7 @@ export default function TermsConditionsPage() {
             </li>
           </ul>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">7. Maximum Occupancy</h2>
+          <h2 className="font-display text-2xl mt-10 mb-4">6. Maximum Occupancy</h2>
           <p>
             Guest numbers must not exceed the stated maximum for each
             accommodation. Additional guests beyond the booking are not permitted
@@ -181,7 +172,7 @@ export default function TermsConditionsPage() {
           </p>
 
           <h2 className="font-display text-2xl mt-10 mb-4">
-            8. Damage and Liability
+            7. Damage and Liability
           </h2>
           <ul>
             <li>
@@ -189,8 +180,7 @@ export default function TermsConditionsPage() {
               furnishings, or equipment during their stay.
             </li>
             <li>
-              Damage costs exceeding the security bond will be charged to the card
-              on file.
+              Damage costs will be charged to the card on file.
             </li>
             <li>
               Lakeside Retreat is not liable for loss or damage to guests&apos;
@@ -202,7 +192,7 @@ export default function TermsConditionsPage() {
             </li>
           </ul>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">9. Force Majeure</h2>
+          <h2 className="font-display text-2xl mt-10 mb-4">8. Force Majeure</h2>
           <p>
             Lakeside Retreat is not liable for failure to perform obligations due
             to events beyond our reasonable control, including natural disasters,
@@ -210,7 +200,7 @@ export default function TermsConditionsPage() {
             In such cases, we will offer alternative dates or a full refund.
           </p>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">10. Privacy</h2>
+          <h2 className="font-display text-2xl mt-10 mb-4">9. Privacy</h2>
           <p>
             Your personal information is handled in accordance with our{" "}
             <Link href="/privacy-policy" className="text-burgundy">
@@ -220,7 +210,7 @@ export default function TermsConditionsPage() {
           </p>
 
           <h2 className="font-display text-2xl mt-10 mb-4">
-            11. Changes to These Terms
+            10. Changes to These Terms
           </h2>
           <p>
             We may update these terms from time to time. The version in effect at
@@ -228,13 +218,13 @@ export default function TermsConditionsPage() {
             communicated to guests with existing bookings.
           </p>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">12. Governing Law</h2>
+          <h2 className="font-display text-2xl mt-10 mb-4">11. Governing Law</h2>
           <p>
             These terms are governed by the laws of New Zealand. Any disputes will
             be subject to the exclusive jurisdiction of the New Zealand courts.
           </p>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">13. Contact Us</h2>
+          <h2 className="font-display text-2xl mt-10 mb-4">12. Contact Us</h2>
           <p>
             For questions about these terms, contact us at{" "}
             <Link href="mailto:info@lakesideretreat.co.nz" className="text-burgundy">
