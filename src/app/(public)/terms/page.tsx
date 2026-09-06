@@ -80,7 +80,7 @@ export default function TermsConditionsPage() {
 
           <h2 className="font-display text-2xl mt-10 mb-4">3. Security Bond</h2>
           <p>
-            A $300 NZD security bond is pre-authorised on your card at check-in.
+            A $300 NZD security bond is pre-authorised on your card at booking.
             This is not a charge &mdash; the hold is automatically released within
             7 days of checkout, provided no damage or excessive cleaning is
             required. If deductions are necessary, you will be notified with an
