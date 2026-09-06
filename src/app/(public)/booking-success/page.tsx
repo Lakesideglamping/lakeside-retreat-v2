@@ -115,7 +115,6 @@ export default async function BookingSuccessPage({
             <li>&bull; Check your email for your booking confirmation</li>
             <li>&bull; Self-check-in instructions will be sent 2 days before arrival</li>
             <li>&bull; Check-in is from 3:00 PM, check-out by 10:00 AM</li>
-            <li>&bull; A $300 security bond has been pre-authorised and will be released after checkout</li>
           </ul>
         </div>
 

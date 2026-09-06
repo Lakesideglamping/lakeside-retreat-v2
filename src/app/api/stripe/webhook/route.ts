@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import {
   constructWebhookEvent,
-  stripe,
   isDevMode,
   calculateLineItems,
 } from "@/lib/stripe";
@@ -183,95 +182,6 @@ export async function POST(request: Request) {
 
         const bookingId = randomUUID();
 
-        // 1) Attempt the deposit hold BEFORE writing the booking record.
-        //
-        //    Old order: save booking → create deposit PI → update booking.
-        //    Problem:   a crash between steps 1 and 3 left a confirmed booking
-        //               with security_deposit_status "pending" and no PI ID —
-        //               unclaimable and unreleasable.
-        //
-        //    New order: create deposit PI → save booking with final deposit state.
-        //    Result:    the booking row is created exactly once with the correct
-        //               status. The idempotency key on the PI creation means safe
-        //               Stripe retries. If the DB write fails after the PI is
-        //               created, an ORPHANED_DEPOSIT_PI alert fires so it can be
-        //               cancelled manually — a much smaller problem than the reverse.
-        let depositStatus: "held" | "failed_to_hold" | "pending" = "pending";
-        let depositIntentId: string | null = null;
-
-        if (stripe && paymentIntentId) {
-          try {
-            const mainPi =
-              await stripe.paymentIntents.retrieve(paymentIntentId);
-            const paymentMethodId =
-              typeof mainPi.payment_method === "string"
-                ? mainPi.payment_method
-                : mainPi.payment_method?.id;
-            const customerId =
-              typeof session.customer === "string"
-                ? session.customer
-                : session.customer?.id;
-
-            if (!paymentMethodId || !customerId) {
-              throw new Error(
-                "Missing customer or payment_method on checkout session"
-              );
-            }
-
-            // Cross-check deposit amount against server-side accommodation
-            // config to prevent metadata tampering inflating/deflating the hold.
-            const configDeposit = acc?.securityDeposit ?? 300;
-            const metadataDeposit = Number(metadata.securityDeposit || configDeposit);
-            if (Math.abs(metadataDeposit - configDeposit) > 1) {
-              log.error("deposit amount mismatch — using config value", {
-                bookingId,
-                metadataDeposit,
-                configDeposit,
-              });
-            }
-            const depositAmount = configDeposit * 100;
-
-            const depositPi = await stripe.paymentIntents.create(
-              {
-                amount: depositAmount,
-                currency: "nzd",
-                customer: customerId,
-                payment_method: paymentMethodId,
-                capture_method: "manual",
-                confirm: true,
-                off_session: true,
-                description: `Security deposit hold — booking ${bookingId}`,
-                metadata: { bookingId, type: "security_deposit" },
-              },
-              { idempotencyKey: `deposit_${bookingId}` }
-            );
-
-            depositStatus = "held";
-            depositIntentId = depositPi.id;
-            log.info("deposit PI created", {
-              bookingId,
-              depositPiId: depositPi.id,
-              amount: depositAmount / 100,
-            });
-          } catch (depErr) {
-            log.error("deposit hold creation failed", {
-              bookingId,
-              error:
-                depErr instanceof Error ? depErr.message : String(depErr),
-            });
-            depositStatus = "failed_to_hold";
-            const errMsg =
-              depErr instanceof Error
-                ? depErr.message
-                : "Unknown deposit-hold error";
-            sendSystemAlert(
-              "DEPOSIT_HOLD_FAILURE",
-              `Security deposit hold failed for booking ${bookingId}`,
-              `Guest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\nBooking ID: ${bookingId}\nAccommodation: ${metadata.accommodation}\nDates: ${metadata.checkIn} → ${metadata.checkOut}\nAccommodation already paid; deposit NOT held — look up booking for full contact details.\nError: ${errMsg}`
-            ).catch(() => {});
-          }
-        }
-
         // 2) Save booking with its final deposit state in one atomic write.
         let bookingSaved = false;
         try {
@@ -293,43 +203,21 @@ export async function POST(request: Request) {
               stripe_payment_id: paymentIntentId,
               booking_source: "website",
               uplisting_sync_status: "pending",
-              security_deposit_status: depositStatus,
-              // Store the server-side config value, not the (possibly tampered)
-              // metadata value. This is what Stripe actually charged in the
-              // deposit PI above — keeps the DB record honest in mismatch cases.
-              security_deposit_amount: acc?.securityDeposit ?? 300,
-              security_deposit_intent_id: depositIntentId,
-              // Column is TIMESTAMPTZ — pass a Date, not a string. (Was
-              // previously .toISOString() against a TEXT column; converted
-              // in migration 20260516000000_deposit_release_due_to_timestamp.)
-              deposit_release_due: new Date(
-                new Date(metadata.checkOut).getTime() +
-                  2 * 24 * 60 * 60 * 1000
-              ),
+              // No security bond is taken — the field records that explicitly
+              // rather than leaving the schema default of "pending".
+              security_deposit_status: "not_applicable",
             },
           });
           bookingSaved = true;
           log.info("booking saved", {
             bookingId,
-            depositStatus,
             guestEmailMasked: maskEmail(metadata.guestEmail),
           });
         } catch (dbErr) {
           log.error("stripe webhook DB save error", {
             bookingId,
-            depositIntentId,
             error: dbErr instanceof Error ? dbErr.message : String(dbErr),
           });
-          // If a deposit PI was created before the DB write failed, it is now
-          // orphaned — no booking row references it. Alert immediately so it
-          // can be manually cancelled before the 7-day hold expires.
-          if (depositIntentId) {
-            sendSystemAlert(
-              "ORPHANED_DEPOSIT_PI",
-              `Booking DB save failed after deposit PI was created — manual cancellation required`,
-              `Deposit PI: ${depositIntentId}\nBooking ID: ${bookingId}\nGuest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\nAccommodation: ${metadata.accommodation}\nCancel via Stripe dashboard: stripe.com/payments/${depositIntentId}`
-            ).catch(() => {});
-          }
           // Delete the dedup record so Stripe can retry this event and attempt
           // the booking save again. Without this, the dedup record written at
           // the top of the handler would permanently block retries, leaving
@@ -518,7 +406,6 @@ export async function POST(request: Request) {
             guests: Number(metadata.guests) || 1,
             totalAmount: (session.amount_total || 0) / 100,
             bookingId,
-            depositStatus,
           }).catch((err) =>
             log.error("booking confirmation email failed", {
               bookingId,
@@ -596,32 +483,6 @@ export async function POST(request: Request) {
         break;
       }
 
-      case "payment_intent.canceled": {
-        const pi = event.data.object;
-        log.info("payment_intent.canceled — deposit hold released", {
-          paymentIntentId: pi.id,
-        });
-
-        try {
-          await prisma.bookings.updateMany({
-            where: {
-              security_deposit_intent_id: pi.id,
-              security_deposit_status: "held",
-            },
-            data: {
-              security_deposit_status: "released",
-              security_deposit_released_at: new Date(),
-              updated_at: new Date(),
-            },
-          });
-        } catch (dbErr) {
-          log.error("deposit release DB update failed", {
-            paymentIntentId: pi.id,
-            error: dbErr instanceof Error ? dbErr.message : String(dbErr),
-          });
-        }
-        break;
-      }
 
       case "payment_intent.payment_failed": {
         const paymentIntent = event.data.object;

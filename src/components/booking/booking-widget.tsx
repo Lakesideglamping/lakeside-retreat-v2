@@ -138,6 +138,7 @@ export function BookingWidget() {
     const blockedSet = new Set(blockedDates);
     const [ciY, ciM, ciD] = checkIn.split("-").map(Number);
     const [coY, coM, coD] = date.split("-").map(Number);
+    const start = new Date(ciY, ciM - 1, ciD);
     const current = new Date(ciY, ciM - 1, ciD);
     const end = new Date(coY, coM - 1, coD);
     current.setDate(current.getDate() + 1);
@@ -156,9 +157,17 @@ export function BookingWidget() {
       current.setDate(current.getDate() + 1);
     }
 
-    // Validate min stay
+    // Validate min stay.
+    //
+    // Both ends must be parsed the same way. `new Date("2026-12-10")` is
+    // parsed as UTC midnight, while `new Date(y, m, d)` is local midnight —
+    // mixing them left an offset equal to the UTC offset. At UTC+12 that is
+    // exactly 12h and Math.round(0.5) rounded back up, hiding the bug; at
+    // UTC+13 (NZDT, roughly late September to early April) it is 11h and
+    // rounds to zero, so every stay counted one night short and guests were
+    // told to pick an extra night.
     const nights = Math.round(
-      (end.getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24)
+      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
     );
     if (acc && nights < acc.minStay) {
       setDateError(

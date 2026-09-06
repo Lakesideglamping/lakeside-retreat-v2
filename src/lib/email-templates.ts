@@ -136,8 +136,6 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
       ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${bookingId}</p>` : ""}
     </div>
 
-    <p>A <strong>$300 security bond</strong> has been pre-authorised on your card. This is not a charge &mdash; it is automatically released after your stay provided no damage has occurred.</p>
-
     ${domeNotice}
 
     <h3 style="font-size:16px;color:#2d5a5a;">What's Next?</h3>
@@ -191,11 +189,6 @@ export function preArrivalHtml(data: BookingEmailData): string {
       <p style="margin:4px 0;"><strong>WiFi:</strong> Connect to <code>Lakeside_Guest</code></p>
       <p style="margin:4px 0;"><strong>Parking:</strong> Free parking available on-site</p>
       <p style="margin:4px 0;"><strong>Emergency Contact:</strong> <a href="tel:+6421368682" style="color:#2d5a5a;">+64 21 368 682</a></p>
-    </div>
-
-    <div ${alertBox("#17a2b8")}>
-      <h4 style="margin:0 0 6px;">Security Bond</h4>
-      <p style="margin:0;">A <strong>$300 authorisation hold</strong> will be placed on your card as a security bond. This is <em>not</em> a charge &mdash; it is automatically released after your stay, provided no damage has occurred.</p>
     </div>
 
     ${propertyTips}
@@ -281,9 +274,6 @@ export function checkoutThankYouHtml(data: BookingEmailData): string {
     <p>Thank you so much for staying with us at ${name}! We truly hope you had a wonderful time and that Lakeside Retreat felt like a home away from home.</p>
 
     <div ${detailsBox}>
-      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Security Bond</h3>
-      <p style="margin:0;">Your security bond authorisation hold will be automatically released within <strong>7 days</strong>. You don't need to do anything &mdash; it will drop off your statement on its own.</p>
-    </div>
 
     <p>If you enjoyed your stay, we'd love to hear about it! A quick review helps other travellers discover us and means the world to our small owner-run retreat.</p>
 
