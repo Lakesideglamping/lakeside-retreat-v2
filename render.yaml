@@ -1,6 +1,9 @@
 services:
   - type: web
-    name: lakeside-retreat
+    # Must match the live Render service exactly. It is "lakeside-retreat-v2"
+    # — the hostname lakeside-retreat-v2.onrender.com derives from it, and the
+    # Stripe and Uplisting webhooks depend on that name staying put.
+    name: lakeside-retreat-v2
     runtime: node
     plan: starter
     buildCommand: npx prisma generate && npm run check:schema && npx prisma migrate deploy && npm run check:migrations && npm run build
