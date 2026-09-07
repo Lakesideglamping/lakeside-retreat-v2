@@ -61,7 +61,7 @@ const pricingFeatures = [
   "Nightly rate: $350/night (GST incl.)",
   "Cleaning fee: included in your nightly rate",
   "Extra guests: $100/person/night (max 3)",
-  "Pets: $25 flat fee per stay",
+  "Pets: $25 flat fee per stay (max 2)",
   "Minimum 2 nights (3 nights peak season)",
   "BBQ and direct lake access included",
   "Strictly 18+ — adults only",
