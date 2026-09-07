@@ -4,6 +4,7 @@ import {
   firstBlockedNight,
   validateStayRange,
   applyDateClick,
+  initialMonthOffset,
 } from "../date-range";
 
 /**
@@ -141,5 +142,40 @@ describe("applyDateClick", () => {
     expect(next.checkIn).toBe("2026-10-14");
     expect(next.checkOut).toBeNull();
     expect(next.error).toMatch(/unavailable dates/);
+  });
+});
+
+describe("initialMonthOffset", () => {
+  // "Today" is September 2026 — month index 8.
+  const Y = 2026;
+  const M = 8;
+  const MAX = 12;
+
+  it("opens on the current month when nothing is selected", () => {
+    expect(initialMonthOffset(null, Y, M, MAX)).toBe(0);
+  });
+
+  it("opens on the check-in month", () => {
+    expect(initialMonthOffset("2026-09-20", Y, M, MAX)).toBe(0);
+    expect(initialMonthOffset("2026-10-05", Y, M, MAX)).toBe(1);
+    // The reported bug: a date three months out was selected but the
+    // calendar still opened on the current two months, hiding it.
+    expect(initialMonthOffset("2026-12-24", Y, M, MAX)).toBe(3);
+  });
+
+  it("counts correctly across a year boundary", () => {
+    expect(initialMonthOffset("2027-03-10", Y, M, MAX)).toBe(6);
+    expect(initialMonthOffset("2027-01-01", Y, M, MAX)).toBe(4);
+  });
+
+  it("clamps rather than stranding the view outside the pageable range", () => {
+    expect(initialMonthOffset("2027-09-01", Y, M, MAX)).toBe(MAX - 1);
+    expect(initialMonthOffset("2028-05-01", Y, M, MAX)).toBe(MAX - 1);
+    // A past date should never scroll the calendar backwards.
+    expect(initialMonthOffset("2026-01-05", Y, M, MAX)).toBe(0);
+  });
+
+  it("ignores an unparseable value", () => {
+    expect(initialMonthOffset("not-a-date", Y, M, MAX)).toBe(0);
   });
 });

@@ -125,3 +125,26 @@ export function applyDateClick(
 
   return { checkIn, checkOut: date, error: "" };
 }
+
+/**
+ * Which month the calendar should open on.
+ *
+ * Normally the current month, but if a check-in is already selected — say it
+ * arrived as a deep link from a property page — open on that month instead so
+ * the selection is actually visible. Clamped to the same range the Prev/Next
+ * buttons allow, so a far-future date cannot strand the view past the end.
+ */
+export function initialMonthOffset(
+  checkIn: string | null,
+  currentYear: number,
+  currentMonth: number,
+  maxMonthsAhead: number
+): number {
+  if (!checkIn) return 0;
+
+  const [y, m] = checkIn.split("-").map(Number);
+  if (!y || !m) return 0;
+
+  const offset = (y - currentYear) * 12 + (m - 1 - currentMonth);
+  return Math.min(Math.max(offset, 0), maxMonthsAhead - 1);
+}
