@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAll, getById, type Accommodation } from "@/lib/accommodations";
+import { applyDateClick } from "@/lib/date-range";
 import { BookingCalendar } from "./calendar";
 import { PriceSummary } from "./price-summary";
 import { BookingForm } from "./booking-form";
@@ -57,10 +58,17 @@ export function BookingWidget() {
   const [accommodation, setAccommodation] = useState<string>(
     accommodations.find((a) => a.id === preselected)?.id || ""
   );
-  const [checkIn, setCheckIn] = useState<string | null>(() =>
-    parseCheckInParam(searchParams.get("checkIn"))
-  );
-  const [checkOut, setCheckOut] = useState<string | null>(null);
+  // A deep link from a property page carries a complete range. Take check-out
+  // only if check-in survived validation and check-out is genuinely after it —
+  // a half-valid pair would leave the widget mid-selection.
+  const deepLinkCheckIn = parseCheckInParam(searchParams.get("checkIn"));
+  const deepLinkCheckOut = (() => {
+    const co = parseCheckInParam(searchParams.get("checkOut"));
+    return deepLinkCheckIn && co && co > deepLinkCheckIn ? co : null;
+  })();
+
+  const [checkIn, setCheckIn] = useState<string | null>(deepLinkCheckIn);
+  const [checkOut, setCheckOut] = useState<string | null>(deepLinkCheckOut);
   const [guests, setGuests] = useState(2);
   const [pets, setPets] = useState(0);
   const [step, setStep] = useState<Step>(1);
@@ -162,68 +170,19 @@ export function BookingWidget() {
 
   function handleDateSelect(date: string) {
     setAvailability("idle");
-    setDateError("");
 
-    if (!checkIn || (checkIn && checkOut)) {
-      // Start new selection
-      setCheckIn(date);
-      setCheckOut(null);
-      return;
-    }
-
-    // Second click = check-out
-    if (date <= checkIn) {
-      // Clicked before check-in, restart
-      setCheckIn(date);
-      setCheckOut(null);
-      return;
-    }
-
-    // Validate: no blocked dates in range.
-    // Parse YYYY-MM-DD into a local-midnight Date (not UTC) so the string
-    // we re-derive below stays in the same timezone as the calendar buttons.
-    const blockedSet = new Set(blockedDates);
-    const [ciY, ciM, ciD] = checkIn.split("-").map(Number);
-    const [coY, coM, coD] = date.split("-").map(Number);
-    const start = new Date(ciY, ciM - 1, ciD);
-    const current = new Date(ciY, ciM - 1, ciD);
-    const end = new Date(coY, coM - 1, coD);
-    current.setDate(current.getDate() + 1);
-    while (current < end) {
-      const dateStr = `${current.getFullYear()}-${String(
-        current.getMonth() + 1
-      ).padStart(2, "0")}-${String(current.getDate()).padStart(2, "0")}`;
-      if (blockedSet.has(dateStr)) {
-        setDateError(
-          "Your selected range includes unavailable dates. Please choose different dates."
-        );
-        setCheckIn(date);
-        setCheckOut(null);
-        return;
-      }
-      current.setDate(current.getDate() + 1);
-    }
-
-    // Validate min stay.
-    //
-    // Both ends must be parsed the same way. `new Date("2026-12-10")` is
-    // parsed as UTC midnight, while `new Date(y, m, d)` is local midnight —
-    // mixing them left an offset equal to the UTC offset. At UTC+12 that is
-    // exactly 12h and Math.round(0.5) rounded back up, hiding the bug; at
-    // UTC+13 (NZDT, roughly late September to early April) it is 11h and
-    // rounds to zero, so every stay counted one night short and guests were
-    // told to pick an extra night.
-    const nights = Math.round(
-      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+    // Selection and validation live in lib/date-range so this calendar and
+    // the one on the property pages behave identically.
+    const next = applyDateClick(
+      date,
+      checkIn,
+      checkOut,
+      blockedDates,
+      acc?.minStay ?? 1
     );
-    if (acc && nights < acc.minStay) {
-      setDateError(
-        `Minimum stay is ${acc.minStay} night${acc.minStay > 1 ? "s" : ""}. Please select a later check-out date.`
-      );
-      return;
-    }
-
-    setCheckOut(date);
+    setCheckIn(next.checkIn);
+    setCheckOut(next.checkOut);
+    setDateError(next.error);
   }
 
   async function checkAvailabilityAndContinue() {
