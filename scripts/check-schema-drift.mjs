@@ -86,9 +86,30 @@ try {
   const status = err.status;
   if (status === 2) {
     console.error(
-      "[check-schema-drift] DRIFT DETECTED — schema.prisma has changes not reflected in any migration.\n" +
-        "Run: npx prisma migrate dev --name <short_description>"
+      "[check-schema-drift] DRIFT DETECTED — schema.prisma has changes not reflected in any migration."
     );
+
+    // Show what actually differs. Without this the failure says only that
+    // something drifted, which is not enough to act on — the SQL below is
+    // exactly what a new migration would need to contain.
+    try {
+      const sql = execSync(
+        `npx prisma migrate diff ` +
+          `--from-migrations ${MIGRATIONS_DIR} ` +
+          `--to-schema ${SCHEMA_PATH} ` +
+          `--script`,
+        { stdio: ["ignore", "pipe", "pipe"] }
+      ).toString();
+      console.error("\n--- SQL needed to close the gap ---\n" + sql.trim() + "\n");
+    } catch (diffErr) {
+      console.error(
+        "  (could not render the diff: " +
+          (diffErr instanceof Error ? diffErr.message : String(diffErr)) +
+          ")"
+      );
+    }
+
+    console.error("Fix: npx prisma migrate dev --name <short_description>");
     process.exit(1);
   }
   console.error("[check-schema-drift] tooling error:", err.message);
