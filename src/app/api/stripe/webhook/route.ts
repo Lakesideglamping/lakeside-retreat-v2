@@ -251,18 +251,41 @@ export async function POST(request: Request) {
               })
               .catch(() => {});
 
-            sendSystemAlert(
-              "DOUBLE_BOOKING_REFUND_REQUIRED",
-              `Guest charged for unavailable dates — refund needed`,
-              `Two guests booked the same dates and both paid. The first booking succeeded; this one was correctly rejected by the database.\n\n` +
-                `REFUND THIS PAYMENT: ${paymentIntentId}\n\n` +
-                `Guest: ${metadata.guestName} (${maskEmail(metadata.guestEmail)})\n` +
-                `Phone: ${metadata.guestPhone ?? "not supplied"}\n` +
-                `Accommodation: ${metadata.accommodation}\n` +
-                `Dates: ${metadata.checkIn} → ${metadata.checkOut}\n` +
-                `Stripe session: ${session.id}\n\n` +
-                `The guest has NOT been told. Contact them, refund, and offer alternative dates.`
-            ).catch(() => {});
+            // Awaited, unlike every other alert here. This is the one that
+            // means a guest has money taken for nothing, and it is the only
+            // record of who they are — no booking row was written. Losing it
+            // to a fire-and-forget send would leave the charge sitting there
+            // with nobody aware. Deliberately unmasked for the same reason:
+            // this goes to the owner's own inbox and is what the refund and
+            // the apology are sent from.
+            try {
+              await sendSystemAlert(
+                "DOUBLE_BOOKING_REFUND_REQUIRED",
+                `Guest charged for unavailable dates — refund needed`,
+                `Two guests booked the same dates and both paid. The first booking succeeded; this one was correctly rejected by the database.\n\n` +
+                  `REFUND THIS PAYMENT: ${paymentIntentId}\n\n` +
+                  `Guest: ${metadata.guestName} <${metadata.guestEmail}>\n` +
+                  `Phone: ${metadata.guestPhone ?? "not supplied"}\n` +
+                  `Accommodation: ${metadata.accommodation}\n` +
+                  `Dates: ${metadata.checkIn} → ${metadata.checkOut}\n` +
+                  `Stripe session: ${session.id}\n\n` +
+                  `The guest has NOT been told. Contact them, refund, and offer alternative dates.`
+              );
+            } catch (alertErr) {
+              // Last resort: if the email cannot go out, make sure the details
+              // are in the logs rather than lost entirely.
+              log.error("DOUBLE BOOKING — ALERT FAILED TO SEND, REFUND MANUALLY", {
+                paymentIntentId,
+                sessionId: session.id,
+                guestEmail: metadata.guestEmail,
+                guestPhone: metadata.guestPhone,
+                accommodation: metadata.accommodation,
+                checkIn: metadata.checkIn,
+                checkOut: metadata.checkOut,
+                alertError:
+                  alertErr instanceof Error ? alertErr.message : String(alertErr),
+              });
+            }
 
             // 200 so Stripe stops retrying a permanently impossible write.
             return NextResponse.json({ received: true, doubleBooking: true });
