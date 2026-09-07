@@ -348,7 +348,7 @@ export type BookingsGroupByOutputType = {
   deposit_release_due: Date | null
   booking_source: string | null
   uplisting_sync_status: string | null
-  uplisting_sync_retries: number | null
+  uplisting_sync_retries: number
   security_deposit_intent_id: string | null
   security_deposit_status: string | null
   security_deposit_amount: runtime.Decimal | null
@@ -401,7 +401,7 @@ export type bookingsWhereInput = {
   deposit_release_due?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
   booking_source?: Prisma.StringNullableFilter<"bookings"> | string | null
   uplisting_sync_status?: Prisma.StringNullableFilter<"bookings"> | string | null
-  uplisting_sync_retries?: Prisma.IntNullableFilter<"bookings"> | number | null
+  uplisting_sync_retries?: Prisma.IntFilter<"bookings"> | number
   security_deposit_intent_id?: Prisma.StringNullableFilter<"bookings"> | string | null
   security_deposit_status?: Prisma.StringNullableFilter<"bookings"> | string | null
   security_deposit_amount?: Prisma.DecimalNullableFilter<"bookings"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -431,7 +431,7 @@ export type bookingsOrderByWithRelationInput = {
   deposit_release_due?: Prisma.SortOrderInput | Prisma.SortOrder
   booking_source?: Prisma.SortOrderInput | Prisma.SortOrder
   uplisting_sync_status?: Prisma.SortOrderInput | Prisma.SortOrder
-  uplisting_sync_retries?: Prisma.SortOrderInput | Prisma.SortOrder
+  uplisting_sync_retries?: Prisma.SortOrder
   security_deposit_intent_id?: Prisma.SortOrderInput | Prisma.SortOrder
   security_deposit_status?: Prisma.SortOrderInput | Prisma.SortOrder
   security_deposit_amount?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -465,7 +465,7 @@ export type bookingsWhereUniqueInput = Prisma.AtLeast<{
   deposit_release_due?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
   booking_source?: Prisma.StringNullableFilter<"bookings"> | string | null
   uplisting_sync_status?: Prisma.StringNullableFilter<"bookings"> | string | null
-  uplisting_sync_retries?: Prisma.IntNullableFilter<"bookings"> | number | null
+  uplisting_sync_retries?: Prisma.IntFilter<"bookings"> | number
   security_deposit_intent_id?: Prisma.StringNullableFilter<"bookings"> | string | null
   security_deposit_status?: Prisma.StringNullableFilter<"bookings"> | string | null
   security_deposit_amount?: Prisma.DecimalNullableFilter<"bookings"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -495,7 +495,7 @@ export type bookingsOrderByWithAggregationInput = {
   deposit_release_due?: Prisma.SortOrderInput | Prisma.SortOrder
   booking_source?: Prisma.SortOrderInput | Prisma.SortOrder
   uplisting_sync_status?: Prisma.SortOrderInput | Prisma.SortOrder
-  uplisting_sync_retries?: Prisma.SortOrderInput | Prisma.SortOrder
+  uplisting_sync_retries?: Prisma.SortOrder
   security_deposit_intent_id?: Prisma.SortOrderInput | Prisma.SortOrder
   security_deposit_status?: Prisma.SortOrderInput | Prisma.SortOrder
   security_deposit_amount?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -533,7 +533,7 @@ export type bookingsScalarWhereWithAggregatesInput = {
   deposit_release_due?: Prisma.DateTimeNullableWithAggregatesFilter<"bookings"> | Date | string | null
   booking_source?: Prisma.StringNullableWithAggregatesFilter<"bookings"> | string | null
   uplisting_sync_status?: Prisma.StringNullableWithAggregatesFilter<"bookings"> | string | null
-  uplisting_sync_retries?: Prisma.IntNullableWithAggregatesFilter<"bookings"> | number | null
+  uplisting_sync_retries?: Prisma.IntWithAggregatesFilter<"bookings"> | number
   security_deposit_intent_id?: Prisma.StringNullableWithAggregatesFilter<"bookings"> | string | null
   security_deposit_status?: Prisma.StringNullableWithAggregatesFilter<"bookings"> | string | null
   security_deposit_amount?: Prisma.DecimalNullableWithAggregatesFilter<"bookings"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -563,7 +563,7 @@ export type bookingsCreateInput = {
   deposit_release_due?: Date | string | null
   booking_source?: string | null
   uplisting_sync_status?: string | null
-  uplisting_sync_retries?: number | null
+  uplisting_sync_retries?: number
   security_deposit_intent_id?: string | null
   security_deposit_status?: string | null
   security_deposit_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -593,7 +593,7 @@ export type bookingsUncheckedCreateInput = {
   deposit_release_due?: Date | string | null
   booking_source?: string | null
   uplisting_sync_status?: string | null
-  uplisting_sync_retries?: number | null
+  uplisting_sync_retries?: number
   security_deposit_intent_id?: string | null
   security_deposit_status?: string | null
   security_deposit_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -623,7 +623,7 @@ export type bookingsUpdateInput = {
   deposit_release_due?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   booking_source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uplisting_sync_retries?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  uplisting_sync_retries?: Prisma.IntFieldUpdateOperationsInput | number
   security_deposit_intent_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   security_deposit_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   security_deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -653,7 +653,7 @@ export type bookingsUncheckedUpdateInput = {
   deposit_release_due?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   booking_source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uplisting_sync_retries?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  uplisting_sync_retries?: Prisma.IntFieldUpdateOperationsInput | number
   security_deposit_intent_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   security_deposit_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   security_deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -683,7 +683,7 @@ export type bookingsCreateManyInput = {
   deposit_release_due?: Date | string | null
   booking_source?: string | null
   uplisting_sync_status?: string | null
-  uplisting_sync_retries?: number | null
+  uplisting_sync_retries?: number
   security_deposit_intent_id?: string | null
   security_deposit_status?: string | null
   security_deposit_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -713,7 +713,7 @@ export type bookingsUpdateManyMutationInput = {
   deposit_release_due?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   booking_source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uplisting_sync_retries?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  uplisting_sync_retries?: Prisma.IntFieldUpdateOperationsInput | number
   security_deposit_intent_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   security_deposit_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   security_deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -743,7 +743,7 @@ export type bookingsUncheckedUpdateManyInput = {
   deposit_release_due?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   booking_source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uplisting_sync_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uplisting_sync_retries?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  uplisting_sync_retries?: Prisma.IntFieldUpdateOperationsInput | number
   security_deposit_intent_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   security_deposit_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   security_deposit_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1024,7 +1024,7 @@ export type $bookingsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     deposit_release_due: Date | null
     booking_source: string | null
     uplisting_sync_status: string | null
-    uplisting_sync_retries: number | null
+    uplisting_sync_retries: number
     security_deposit_intent_id: string | null
     security_deposit_status: string | null
     security_deposit_amount: runtime.Decimal | null

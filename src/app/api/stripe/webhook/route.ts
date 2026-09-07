@@ -12,6 +12,7 @@ import {
   sendSystemAlert,
 } from "@/lib/email";
 import { syncBooking } from "@/lib/uplisting";
+import { isDuplicateBookingError } from "@/lib/booking-errors";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { randomUUID } from "crypto";
@@ -39,6 +40,7 @@ function extractPaymentIntentId(
   }
   return null;
 }
+
 
 export async function POST(request: Request) {
   // In production, a missing STRIPE_SECRET_KEY must be a hard failure — not a
@@ -214,6 +216,81 @@ export async function POST(request: Request) {
             guestEmailMasked: maskEmail(metadata.guestEmail),
           });
         } catch (dbErr) {
+          // A clash on idx_bookings_unique_website_dates is NOT transient.
+          // Two guests passed the availability check and both paid; the
+          // partial unique index let the first booking through and stopped
+          // this one. Retrying can never succeed — the dates are taken.
+          //
+          // Treated as a normal DB error it would delete the dedup record,
+          // Stripe would retry for days, and every attempt would fail
+          // identically while writing another failure row and firing another
+          // alert. Meanwhile the guest sits charged with no booking.
+          //
+          // So: keep the dedup record (stop the retries), record it distinctly,
+          // alert for an immediate refund, and return 200 so Stripe stops.
+          if (isDuplicateBookingError(dbErr)) {
+            log.error("stripe webhook double-booking blocked", {
+              bookingId,
+              accommodation: metadata.accommodation,
+              checkIn: metadata.checkIn,
+              checkOut: metadata.checkOut,
+            });
+
+            await prisma.failed_webhook_events
+              .create({
+                data: {
+                  event_id: event.id,
+                  event_type: event.type,
+                  stripe_session_id: session.id,
+                  stripe_payment_id: paymentIntentId,
+                  booking_id: bookingId,
+                  event_data: JSON.stringify(metadata),
+                  error_message:
+                    "DOUBLE_BOOKING: dates already taken by another website booking — refund required",
+                },
+              })
+              .catch(() => {});
+
+            // Awaited, unlike every other alert here. This is the one that
+            // means a guest has money taken for nothing, and it is the only
+            // record of who they are — no booking row was written. Losing it
+            // to a fire-and-forget send would leave the charge sitting there
+            // with nobody aware. Deliberately unmasked for the same reason:
+            // this goes to the owner's own inbox and is what the refund and
+            // the apology are sent from.
+            try {
+              await sendSystemAlert(
+                "DOUBLE_BOOKING_REFUND_REQUIRED",
+                `Guest charged for unavailable dates — refund needed`,
+                `Two guests booked the same dates and both paid. The first booking succeeded; this one was correctly rejected by the database.\n\n` +
+                  `REFUND THIS PAYMENT: ${paymentIntentId}\n\n` +
+                  `Guest: ${metadata.guestName} <${metadata.guestEmail}>\n` +
+                  `Phone: ${metadata.guestPhone ?? "not supplied"}\n` +
+                  `Accommodation: ${metadata.accommodation}\n` +
+                  `Dates: ${metadata.checkIn} → ${metadata.checkOut}\n` +
+                  `Stripe session: ${session.id}\n\n` +
+                  `The guest has NOT been told. Contact them, refund, and offer alternative dates.`
+              );
+            } catch (alertErr) {
+              // Last resort: if the email cannot go out, make sure the details
+              // are in the logs rather than lost entirely.
+              log.error("DOUBLE BOOKING — ALERT FAILED TO SEND, REFUND MANUALLY", {
+                paymentIntentId,
+                sessionId: session.id,
+                guestEmail: metadata.guestEmail,
+                guestPhone: metadata.guestPhone,
+                accommodation: metadata.accommodation,
+                checkIn: metadata.checkIn,
+                checkOut: metadata.checkOut,
+                alertError:
+                  alertErr instanceof Error ? alertErr.message : String(alertErr),
+              });
+            }
+
+            // 200 so Stripe stops retrying a permanently impossible write.
+            return NextResponse.json({ received: true, doubleBooking: true });
+          }
+
           log.error("stripe webhook DB save error", {
             bookingId,
             error: dbErr instanceof Error ? dbErr.message : String(dbErr),
