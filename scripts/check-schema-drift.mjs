@@ -42,14 +42,41 @@ if (migrationFiles.length === 0) {
   process.exit(1);
 }
 
-// Use `prisma migrate diff` with --exit-code: it exits 0 if no diff, 2 if
-// there IS a diff. We invert that to a PASS/FAIL.
+// Replaying a migrations directory needs a shadow database of the same
+// provider. Prisma 7 takes it from `datasource.shadowDatabaseUrl` in
+// prisma.config.ts, which reads SHADOW_DATABASE_URL — there is no CLI flag
+// any more.
+const shadowUrl = process.env.SHADOW_DATABASE_URL;
+
+if (!shadowUrl) {
+  console.error(
+    "[check-schema-drift] SHADOW_DATABASE_URL is not set.\n" +
+      "  This check replays prisma/migrations into a throwaway PostgreSQL\n" +
+      "  database and diffs the result against prisma/schema.prisma.\n" +
+      "  CI provides one via a postgres service container."
+  );
+  process.exit(2);
+}
+
+// Prisma DROPS AND RECREATES the shadow database's schema. Pointing it at a
+// real database would destroy it, so refuse outright rather than trust the
+// caller to have set the right value.
+if (process.env.DATABASE_URL && shadowUrl === process.env.DATABASE_URL) {
+  console.error(
+    "[check-schema-drift] REFUSING TO RUN: SHADOW_DATABASE_URL is identical to\n" +
+      "  DATABASE_URL. Prisma wipes the shadow database — this would destroy\n" +
+      "  the real one. Point SHADOW_DATABASE_URL at a disposable database."
+  );
+  process.exit(2);
+}
+
+// `prisma migrate diff --exit-code` exits 0 when there is no diff and 2 when
+// there is. We invert that into a PASS/FAIL.
 try {
   execSync(
     `npx prisma migrate diff ` +
       `--from-migrations ${MIGRATIONS_DIR} ` +
-      `--to-schema-datamodel ${SCHEMA_PATH} ` +
-      `--shadow-database-url "file:./_drift-check.db" ` +
+      `--to-schema ${SCHEMA_PATH} ` +
       `--exit-code`,
     { stdio: ["ignore", "pipe", "pipe"] }
   );

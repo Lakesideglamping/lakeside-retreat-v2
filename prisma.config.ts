@@ -10,5 +10,12 @@ export default defineConfig({
   },
   datasource: {
     url: process.env["DATABASE_URL"],
+    // Only used by `prisma migrate diff --from-migrations` (scripts/
+    // check-schema-drift.mjs), which replays the migrations directory into a
+    // throwaway database. Prisma DROPS AND RECREATES whatever this points at,
+    // so it must never be a real database — CI supplies a disposable postgres
+    // service container. Undefined everywhere else, which is correct: no other
+    // command needs it.
+    shadowDatabaseUrl: process.env["SHADOW_DATABASE_URL"],
   },
 });
