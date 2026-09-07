@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAll, getById, type Accommodation } from "@/lib/accommodations";
 import { BookingCalendar } from "./calendar";
@@ -19,6 +19,37 @@ type AvailabilityStatus =
 
 const accommodations = getAll();
 
+/**
+ * Accept a `?checkIn=` deep link from a property page's availability calendar.
+ *
+ * Anything unusable is dropped rather than trusted: a URL is user-editable, so
+ * this rejects malformed values, impossible calendar dates like 2026-02-31,
+ * and dates in the past. Blocked dates are not checked here — /api/blocked-dates
+ * has not loaded yet at this point, and the calendar re-validates on selection
+ * and again at checkout.
+ */
+function parseCheckInParam(raw: string | null): string | null {
+  if (!raw || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null;
+
+  const [y, m, d] = raw.split("-").map(Number);
+  const parsed = new Date(y, m - 1, d);
+  // Round-trip guards against overflow: new Date(2026, 1, 31) silently
+  // becomes 3 March rather than failing.
+  if (
+    parsed.getFullYear() !== y ||
+    parsed.getMonth() !== m - 1 ||
+    parsed.getDate() !== d
+  ) {
+    return null;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (parsed < today) return null;
+
+  return raw;
+}
+
 export function BookingWidget() {
   const searchParams = useSearchParams();
   const preselected = searchParams.get("a") || "";
@@ -26,7 +57,9 @@ export function BookingWidget() {
   const [accommodation, setAccommodation] = useState<string>(
     accommodations.find((a) => a.id === preselected)?.id || ""
   );
-  const [checkIn, setCheckIn] = useState<string | null>(null);
+  const [checkIn, setCheckIn] = useState<string | null>(() =>
+    parseCheckInParam(searchParams.get("checkIn"))
+  );
   const [checkOut, setCheckOut] = useState<string | null>(null);
   const [guests, setGuests] = useState(2);
   const [pets, setPets] = useState(0);
@@ -79,16 +112,30 @@ export function BookingWidget() {
     }
   }, []);
 
+  // Tracks the accommodation this effect last ran for, so the first run can
+  // be told apart from a genuine switch.
+  const lastAccommodation = useRef<string | null>(null);
+
   useEffect(() => {
-    if (accommodation) {
-      fetchBlocked(accommodation);
-      // Reset dates when accommodation changes
+    if (!accommodation) return;
+    fetchBlocked(accommodation);
+
+    // Clear dates only when the guest switches property. This effect also
+    // runs on mount — when ?a= preselects an accommodation — and clearing
+    // unconditionally there wiped a ?checkIn= deep link immediately after
+    // useState had applied it.
+    const isSwitch =
+      lastAccommodation.current !== null &&
+      lastAccommodation.current !== accommodation;
+    if (isSwitch) {
       setCheckIn(null);
       setCheckOut(null);
-      setAvailability("idle");
-      setDateError("");
-      setSeasonalMultiplier(1.0);
     }
+    lastAccommodation.current = accommodation;
+
+    setAvailability("idle");
+    setDateError("");
+    setSeasonalMultiplier(1.0);
   }, [accommodation, fetchBlocked]);
 
   // Fetch seasonal multiplier whenever accommodation + dates are both set
