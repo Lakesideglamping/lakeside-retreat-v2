@@ -442,6 +442,7 @@ export type bookingsOrderByWithRelationInput = {
 
 export type bookingsWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  accommodation_check_in_check_out?: Prisma.bookingsAccommodationCheck_inCheck_outCompoundUniqueInput
   AND?: Prisma.bookingsWhereInput | Prisma.bookingsWhereInput[]
   OR?: Prisma.bookingsWhereInput[]
   NOT?: Prisma.bookingsWhereInput | Prisma.bookingsWhereInput[]
@@ -471,7 +472,7 @@ export type bookingsWhereUniqueInput = Prisma.AtLeast<{
   security_deposit_released_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
   security_deposit_claimed_amount?: Prisma.DecimalNullableFilter<"bookings"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
-}, "id">
+}, "id" | "accommodation_check_in_check_out">
 
 export type bookingsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -749,6 +750,12 @@ export type bookingsUncheckedUpdateManyInput = {
   security_deposit_released_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   security_deposit_claimed_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type bookingsAccommodationCheck_inCheck_outCompoundUniqueInput = {
+  accommodation: string
+  check_in: Date | string
+  check_out: Date | string
 }
 
 export type bookingsCountOrderByAggregateInput = {

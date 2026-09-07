@@ -83,7 +83,13 @@ model bookings {
   // Prevent duplicate website bookings for the same accommodation + dates.
   // OTA bookings (airbnb, booking.com, etc.) are exempt. Cancelled bookings
   // (deleted_at IS NOT NULL) are also exempt so guests can rebook after cancellation.
-  @@index([accommodation, check_in, check_out], map: "idx_bookings_unique_website_dates", where: raw("booking_source = 'website' AND deleted_at IS NULL"))
+  //
+  // @@unique, not @@index: the database has this as a UNIQUE index and that
+  // uniqueness IS the double-booking guard. It was declared here as a plain
+  // index, so the schema understated the database — rebuilding from this file
+  // would have produced a non-unique index and silently dropped the
+  // protection. The migration is correct; this line was not.
+  @@unique([accommodation, check_in, check_out], map: "idx_bookings_unique_website_dates", where: raw("booking_source = 'website' AND deleted_at IS NULL"))
 }
 
 model contact_messages {
