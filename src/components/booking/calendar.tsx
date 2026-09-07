@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 
+import { initialMonthOffset } from "@/lib/date-range";
+
 // How far ahead guests can page. 12 months matches typical short-stay
 // rental booking windows and avoids pagination into indefinite future
 // months where we have no calendar data anyway.
@@ -197,7 +199,14 @@ export function BookingCalendar({
   // Offset in months from the current month. 0 = current+next visible.
   // Each Prev/Next click shifts by 1 so guests can page forward to find
   // availability without losing their selection.
-  const [monthOffset, setMonthOffset] = useState(0);
+  //
+  // Starts on the check-in month rather than always at 0. A date deep-linked
+  // from a property page can be well beyond the two months shown by default,
+  // and opening on the current month left the selection applied but scrolled
+  // out of sight — the booking page looked like it had lost the dates.
+  const [monthOffset, setMonthOffset] = useState(() =>
+    initialMonthOffset(checkIn, currentYear, currentMonth, MAX_MONTHS_AHEAD)
+  );
 
   const blockedSet = useMemo(
     () => new Set(blockedDates),

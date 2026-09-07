@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAll, getById, type Accommodation } from "@/lib/accommodations";
+import { applyDateClick } from "@/lib/date-range";
 import { BookingCalendar } from "./calendar";
 import { PriceSummary } from "./price-summary";
 import { BookingForm } from "./booking-form";
@@ -19,6 +20,37 @@ type AvailabilityStatus =
 
 const accommodations = getAll();
 
+/**
+ * Accept a `?checkIn=` deep link from a property page's availability calendar.
+ *
+ * Anything unusable is dropped rather than trusted: a URL is user-editable, so
+ * this rejects malformed values, impossible calendar dates like 2026-02-31,
+ * and dates in the past. Blocked dates are not checked here — /api/blocked-dates
+ * has not loaded yet at this point, and the calendar re-validates on selection
+ * and again at checkout.
+ */
+function parseCheckInParam(raw: string | null): string | null {
+  if (!raw || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null;
+
+  const [y, m, d] = raw.split("-").map(Number);
+  const parsed = new Date(y, m - 1, d);
+  // Round-trip guards against overflow: new Date(2026, 1, 31) silently
+  // becomes 3 March rather than failing.
+  if (
+    parsed.getFullYear() !== y ||
+    parsed.getMonth() !== m - 1 ||
+    parsed.getDate() !== d
+  ) {
+    return null;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (parsed < today) return null;
+
+  return raw;
+}
+
 export function BookingWidget() {
   const searchParams = useSearchParams();
   const preselected = searchParams.get("a") || "";
@@ -26,8 +58,17 @@ export function BookingWidget() {
   const [accommodation, setAccommodation] = useState<string>(
     accommodations.find((a) => a.id === preselected)?.id || ""
   );
-  const [checkIn, setCheckIn] = useState<string | null>(null);
-  const [checkOut, setCheckOut] = useState<string | null>(null);
+  // A deep link from a property page carries a complete range. Take check-out
+  // only if check-in survived validation and check-out is genuinely after it —
+  // a half-valid pair would leave the widget mid-selection.
+  const deepLinkCheckIn = parseCheckInParam(searchParams.get("checkIn"));
+  const deepLinkCheckOut = (() => {
+    const co = parseCheckInParam(searchParams.get("checkOut"));
+    return deepLinkCheckIn && co && co > deepLinkCheckIn ? co : null;
+  })();
+
+  const [checkIn, setCheckIn] = useState<string | null>(deepLinkCheckIn);
+  const [checkOut, setCheckOut] = useState<string | null>(deepLinkCheckOut);
   const [guests, setGuests] = useState(2);
   const [pets, setPets] = useState(0);
   const [step, setStep] = useState<Step>(1);
@@ -79,16 +120,30 @@ export function BookingWidget() {
     }
   }, []);
 
+  // Tracks the accommodation this effect last ran for, so the first run can
+  // be told apart from a genuine switch.
+  const lastAccommodation = useRef<string | null>(null);
+
   useEffect(() => {
-    if (accommodation) {
-      fetchBlocked(accommodation);
-      // Reset dates when accommodation changes
+    if (!accommodation) return;
+    fetchBlocked(accommodation);
+
+    // Clear dates only when the guest switches property. This effect also
+    // runs on mount — when ?a= preselects an accommodation — and clearing
+    // unconditionally there wiped a ?checkIn= deep link immediately after
+    // useState had applied it.
+    const isSwitch =
+      lastAccommodation.current !== null &&
+      lastAccommodation.current !== accommodation;
+    if (isSwitch) {
       setCheckIn(null);
       setCheckOut(null);
-      setAvailability("idle");
-      setDateError("");
-      setSeasonalMultiplier(1.0);
     }
+    lastAccommodation.current = accommodation;
+
+    setAvailability("idle");
+    setDateError("");
+    setSeasonalMultiplier(1.0);
   }, [accommodation, fetchBlocked]);
 
   // Fetch seasonal multiplier whenever accommodation + dates are both set
@@ -115,68 +170,19 @@ export function BookingWidget() {
 
   function handleDateSelect(date: string) {
     setAvailability("idle");
-    setDateError("");
 
-    if (!checkIn || (checkIn && checkOut)) {
-      // Start new selection
-      setCheckIn(date);
-      setCheckOut(null);
-      return;
-    }
-
-    // Second click = check-out
-    if (date <= checkIn) {
-      // Clicked before check-in, restart
-      setCheckIn(date);
-      setCheckOut(null);
-      return;
-    }
-
-    // Validate: no blocked dates in range.
-    // Parse YYYY-MM-DD into a local-midnight Date (not UTC) so the string
-    // we re-derive below stays in the same timezone as the calendar buttons.
-    const blockedSet = new Set(blockedDates);
-    const [ciY, ciM, ciD] = checkIn.split("-").map(Number);
-    const [coY, coM, coD] = date.split("-").map(Number);
-    const start = new Date(ciY, ciM - 1, ciD);
-    const current = new Date(ciY, ciM - 1, ciD);
-    const end = new Date(coY, coM - 1, coD);
-    current.setDate(current.getDate() + 1);
-    while (current < end) {
-      const dateStr = `${current.getFullYear()}-${String(
-        current.getMonth() + 1
-      ).padStart(2, "0")}-${String(current.getDate()).padStart(2, "0")}`;
-      if (blockedSet.has(dateStr)) {
-        setDateError(
-          "Your selected range includes unavailable dates. Please choose different dates."
-        );
-        setCheckIn(date);
-        setCheckOut(null);
-        return;
-      }
-      current.setDate(current.getDate() + 1);
-    }
-
-    // Validate min stay.
-    //
-    // Both ends must be parsed the same way. `new Date("2026-12-10")` is
-    // parsed as UTC midnight, while `new Date(y, m, d)` is local midnight —
-    // mixing them left an offset equal to the UTC offset. At UTC+12 that is
-    // exactly 12h and Math.round(0.5) rounded back up, hiding the bug; at
-    // UTC+13 (NZDT, roughly late September to early April) it is 11h and
-    // rounds to zero, so every stay counted one night short and guests were
-    // told to pick an extra night.
-    const nights = Math.round(
-      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+    // Selection and validation live in lib/date-range so this calendar and
+    // the one on the property pages behave identically.
+    const next = applyDateClick(
+      date,
+      checkIn,
+      checkOut,
+      blockedDates,
+      acc?.minStay ?? 1
     );
-    if (acc && nights < acc.minStay) {
-      setDateError(
-        `Minimum stay is ${acc.minStay} night${acc.minStay > 1 ? "s" : ""}. Please select a later check-out date.`
-      );
-      return;
-    }
-
-    setCheckOut(date);
+    setCheckIn(next.checkIn);
+    setCheckOut(next.checkOut);
+    setDateError(next.error);
   }
 
   async function checkAvailabilityAndContinue() {
