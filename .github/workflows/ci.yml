@@ -45,3 +45,52 @@ jobs:
           CSRF_SECRET: "ci-csrf-secret"
           TOTP_ENCRYPTION_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
           NEXT_PUBLIC_BASE_URL: "http://localhost:3000"
+
+  # Fails if prisma/schema.prisma has changes no migration captures — the
+  # regression guard for the "migrate deploy silently no-ops" incident.
+  #
+  # Separate job, not part of the matrix above: it needs a PostgreSQL service
+  # and there is no reason to stand one up twice for two Node versions.
+  #
+  # It works by replaying prisma/migrations into the throwaway `shadow`
+  # database and diffing the result against schema.prisma. Prisma DROPS AND
+  # RECREATES that database, which is why it must never point at a real one —
+  # the script refuses to run if SHADOW_DATABASE_URL equals DATABASE_URL.
+  schema-drift:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: shadow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check schema matches migrations
+        run: npm run check:schema
+        env:
+          # Points at the always-present `postgres` database, deliberately a
+          # different one from the shadow so the safety check has something
+          # meaningful to compare and Prisma can resolve the datasource.
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
+          SHADOW_DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/shadow"
