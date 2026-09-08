@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { initialMonthOffset } from "@/lib/date-range";
+import { initialMonthOffset, nzToday } from "@/lib/date-range";
 
 // How far ahead guests can page. 12 months matches typical short-stay
 // rental booking windows and avoids pagination into indefinite future
@@ -191,10 +191,13 @@ export function BookingCalendar({
   minStay,
   loading,
 }: CalendarProps) {
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth();
-  const todayStr = toLocalDateString(now);
+  // "Today" is today in New Zealand, where the property is — not in the
+  // viewer's timezone. A guest in Los Angeles is up to a day behind Cromwell,
+  // and using their clock offered nights here that had already passed.
+  const todayStr = nzToday();
+  const [nzY, nzM] = todayStr.split("-").map(Number);
+  const currentYear = nzY;
+  const currentMonth = nzM - 1;
 
   // Offset in months from the current month. 0 = current+next visible.
   // Each Prev/Next click shifts by 1 so guests can page forward to find

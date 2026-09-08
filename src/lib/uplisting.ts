@@ -27,20 +27,10 @@ export function isConfigured(): boolean {
 // Reads stay enabled so the booking UI behaves realistically in dev.
 const isLocalEnv = process.env.NODE_ENV !== "production";
 
-/**
- * Format a Date as YYYY-MM-DD in the Pacific/Auckland timezone.
- * Using `toISOString().split("T")[0]` converts to UTC first — for a NZ-based
- * business on a server running UTC, that can be off by one day.
- */
-export function nzDateString(date: Date = new Date()): string {
-  // en-CA gives ISO-style YYYY-MM-DD output.
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Pacific/Auckland",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
-}
+// nzDateString now lives in lib/date-range with the other date helpers,
+// re-exported here so existing callers and tests keep working.
+import { nzDateString } from "./date-range";
+export { nzDateString };
 
 /**
  * Returns the UTC `Date` instants for [start, nextDayStart) of the NZ day

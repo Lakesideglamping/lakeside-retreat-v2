@@ -4,6 +4,7 @@ import { getById } from "@/lib/accommodations";
 import { createCheckoutSession, calculateLineItems, getSeasonalMultiplier } from "@/lib/stripe";
 import { checkAvailability } from "@/lib/uplisting";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { isPastInNZ } from "@/lib/date-range";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 
@@ -68,10 +69,13 @@ export async function POST(request: Request) {
     // Validate dates
     const checkIn = new Date(data.checkIn);
     const checkOut = new Date(data.checkOut);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
-    if (checkIn < today) {
+    // "Today" means today in New Zealand, where the property is — not on the
+    // server. Render runs UTC, 12–13 hours behind, so comparing against the
+    // server's midnight accepted already-past dates every NZ morning from
+    // midnight until midday: at 08:00 on 9 September in Cromwell the server
+    // still believed it was the 8th and let the 8th through.
+    if (isPastInNZ(data.checkIn)) {
       return NextResponse.json(
         { error: "Check-in date must be today or later" },
         { status: 400 }
