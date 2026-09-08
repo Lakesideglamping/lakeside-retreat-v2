@@ -6,7 +6,17 @@ services:
     name: lakeside-retreat-v2
     runtime: node
     plan: starter
-    buildCommand: npx prisma generate && npm run check:schema && npx prisma migrate deploy && npm run check:migrations && npm run build
+    # npm ci first: Render only runs its default install when no custom build
+    # command is set. Without it a cache-cleared build has no node_modules and
+    # the first npx crashes with "Cannot read properties of null (edgesOut)".
+    #
+    # No prisma generate — the client is committed (see .gitignore). No
+    # check:schema — that needs a throwaway database and runs in CI instead.
+    #
+    # NODE_OPTIONS stays attached to npm run build: a VAR=x prefix applies only
+    # to the command it precedes, so moving it earlier would drop the memory
+    # cap on the build itself, which is what it exists to protect.
+    buildCommand: npm ci && npx prisma migrate deploy && npm run check:migrations && NODE_OPTIONS=--max-old-space-size=460 npm run build
     startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
