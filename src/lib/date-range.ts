@@ -163,3 +163,39 @@ export function addDays(date: string, days: number): string {
   d.setDate(d.getDate() + days);
   return toDateString(d);
 }
+
+/**
+ * Format a moment as YYYY-MM-DD in New Zealand time.
+ *
+ * The property is in Cromwell, so "today" always means today in New Zealand —
+ * never the server's today, nor the viewer's. Those differ for a large part of
+ * each day: Render runs UTC, which is 12–13 hours behind, so from NZ midnight
+ * until midday the server still believes it is yesterday.
+ *
+ * Use this for any moment-to-date conversion. Pure calendar arithmetic on date
+ * strings (see addDays) needs no timezone and must not use this.
+ */
+export function nzDateString(date: Date = new Date()): string {
+  // en-CA formats as ISO-style YYYY-MM-DD.
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Pacific/Auckland",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
+/** Today's date in New Zealand, as YYYY-MM-DD. */
+export function nzToday(): string {
+  return nzDateString(new Date());
+}
+
+/**
+ * True when a date string is before today in New Zealand.
+ *
+ * Compares strings, not Dates: YYYY-MM-DD sorts lexicographically, so this
+ * avoids re-introducing a timezone at the point of comparison.
+ */
+export function isPastInNZ(date: string): boolean {
+  return date < nzToday();
+}

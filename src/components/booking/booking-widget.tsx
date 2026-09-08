@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { getAll, getById, type Accommodation } from "@/lib/accommodations";
-import { applyDateClick } from "@/lib/date-range";
+import { applyDateClick, isPastInNZ } from "@/lib/date-range";
 import { BookingCalendar } from "./calendar";
 import { PriceSummary } from "./price-summary";
 import { BookingForm } from "./booking-form";
@@ -44,9 +44,9 @@ function parseCheckInParam(raw: string | null): string | null {
     return null;
   }
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  if (parsed < today) return null;
+  // Past relative to New Zealand, not the viewer. A guest in a timezone
+  // behind NZ could otherwise arrive on a link for a night already gone.
+  if (isPastInNZ(raw)) return null;
 
   return raw;
 }
