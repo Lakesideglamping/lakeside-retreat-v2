@@ -22,7 +22,13 @@ type Booking = {
   deleted_at: Date | null;
 };
 
-const MAX_ABANDONED_REMINDERS = 3;
+// One reminder, not three. There is no cooldown between sends — the guard is
+// purely this count — so the hourly cron would deliver all three within three
+// hours. That reads as pestering rather than a nudge, and a guest who did not
+// finish a booking is unlikely to be persuaded by the third email in an
+// afternoon. Raising this again would need a "wait N days since the last one"
+// check first.
+const MAX_ABANDONED_REMINDERS = 1;
 
 // --- Query helpers ---
 
