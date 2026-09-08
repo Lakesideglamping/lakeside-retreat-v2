@@ -389,7 +389,7 @@ export function BookingWidget() {
                       +
                     </button>
                     <span className="text-sm text-muted">
-                      (${acc.petFee} flat fee per stay max 2)
+                      (${acc.petFee} flat fee per stay, max 2)
                     </span>
                   </div>
                 </div>
