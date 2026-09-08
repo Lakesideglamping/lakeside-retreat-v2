@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { addDays } from "@/lib/date-range";
 import { adminGet, adminDelete } from "@/lib/admin-api";
 import { BlockDatesForm } from "./block-dates-form";
 import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
@@ -74,12 +75,6 @@ const SOURCE_STYLES: Record<string, { bg: string; border: string; text: string; 
   "uplisting":   { bg: "#ede9fe", border: "#8b5cf6", text: "#5b21b6", label: "Uplisting" },
   "manual":      { bg: "#f3f4f6", border: "#9ca3af", text: "#374151", label: "Manual" },
 };
-
-function addDays(dateStr: string, days: number): string {
-  const d = new Date(dateStr);
-  d.setDate(d.getDate() + days);
-  return d.toISOString().split("T")[0];
-}
 
 function daysBetween(a: string, b: string): number {
   return Math.round((new Date(b).getTime() - new Date(a).getTime()) / 86400000);

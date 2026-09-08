@@ -5,6 +5,7 @@ import {
   validateStayRange,
   applyDateClick,
   initialMonthOffset,
+  addDays,
 } from "../date-range";
 
 /**
@@ -177,5 +178,49 @@ describe("initialMonthOffset", () => {
 
   it("ignores an unparseable value", () => {
     expect(initialMonthOffset("not-a-date", Y, M, MAX)).toBe(0);
+  });
+});
+
+describe("addDays", () => {
+  /**
+   * The admin calendar built dates with new Date(str) + setDate() +
+   * toISOString(): a UTC parse, local arithmetic, then a UTC readback. It
+   * worked all year except the day NZ clocks go forward, when advancing from
+   * 2026-09-26 returned 2026-09-26 again — 12:00 local on the 27th is 23:00
+   * UTC on the 26th. One day a year the calendar would render a booking
+   * short and split a blocked range in two.
+   */
+  it("advances across the spring-forward boundary", () => {
+    expect(addDays("2026-09-26", 1)).toBe("2026-09-27");
+    expect(addDays("2026-09-27", 1)).toBe("2026-09-28");
+  });
+
+  it("advances across the autumn fall-back boundary", () => {
+    expect(addDays("2027-04-03", 1)).toBe("2027-04-04");
+    expect(addDays("2027-04-04", 1)).toBe("2027-04-05");
+  });
+
+  it("handles ordinary days in both NZST and NZDT", () => {
+    expect(addDays("2026-06-10", 1)).toBe("2026-06-11");
+    expect(addDays("2026-12-10", 1)).toBe("2026-12-11");
+  });
+
+  it("crosses month and year boundaries", () => {
+    expect(addDays("2026-01-31", 1)).toBe("2026-02-01");
+    expect(addDays("2026-12-31", 1)).toBe("2027-01-01");
+    expect(addDays("2028-02-28", 1)).toBe("2028-02-29"); // leap year
+  });
+
+  it("goes backwards too", () => {
+    expect(addDays("2026-09-27", -1)).toBe("2026-09-26");
+    expect(addDays("2026-01-01", -1)).toBe("2025-12-31");
+  });
+
+  it("stays consistent over a long run spanning both transitions", () => {
+    let cur = "2026-09-01";
+    for (let i = 0; i < 250; i++) cur = addDays(cur, 1);
+    // 250 days from 1 Sept 2026, crossing both DST changes.
+    expect(cur).toBe(addDays("2026-09-01", 250));
+    expect(nightsBetween("2026-09-01", cur)).toBe(250);
   });
 });

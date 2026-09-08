@@ -148,3 +148,18 @@ export function initialMonthOffset(
   const offset = (y - currentYear) * 12 + (m - 1 - currentMonth);
   return Math.min(Math.max(offset, 0), maxMonthsAhead - 1);
 }
+
+/**
+ * A date N days later, staying in local time throughout.
+ *
+ * The naive version — `new Date(str)` then setDate() then toISOString() —
+ * mixes a UTC parse with local arithmetic and a UTC readback. It works most of
+ * the year and silently fails on the day NZ clocks go forward: advancing from
+ * 2026-09-26 returned 2026-09-26 again, because 12:00 local on the 27th is
+ * 23:00 UTC on the 26th.
+ */
+export function addDays(date: string, days: number): string {
+  const d = toLocalMidnight(date);
+  d.setDate(d.getDate() + days);
+  return toDateString(d);
+}

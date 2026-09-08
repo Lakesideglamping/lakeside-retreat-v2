@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { CalendarView } from "@/components/admin/calendar/calendar-view";
 import { fetchBlockedDates } from "@/lib/uplisting";
 import { logger } from "@/lib/logger";
+import { addDays } from "@/lib/date-range";
 
 const PROPERTIES = ["dome-pinot", "dome-rose", "lakeside-cottage"] as const;
 
@@ -13,9 +14,11 @@ function groupConsecutiveDates(dates: string[]): Array<{ from: string; to: strin
   let rangeEnd = sorted[0];
   for (let i = 1; i < sorted.length; i++) {
     const curr = sorted[i];
-    const next = new Date(rangeEnd);
-    next.setDate(next.getDate() + 1);
-    if (next.toISOString().split("T")[0] === curr) {
+    // addDays keeps everything in local time. Doing this inline with
+    // new Date(str) + setDate() + toISOString() mixes a UTC parse with local
+    // arithmetic, and on the day NZ clocks go forward it fails to advance —
+    // which would split one blocked range into two on that date.
+    if (addDays(rangeEnd, 1) === curr) {
       rangeEnd = curr;
     } else {
       ranges.push({ from: rangeStart, to: rangeEnd });
