@@ -8,8 +8,16 @@
 #   22:00 UTC  -> 10:00 NZST / 11:00 NZDT  -> review-request (+ thank-you)
 #   00:00 UTC  -> 12:00 NZST / 13:00 NZDT  -> during-stay
 #   03:00 UTC  -> 15:00 NZST / 16:00 NZDT  -> reconcile-calendar
-# abandoned-checkout and retry-uplisting-sync run every tick; both are
-# idempotent and time-sensitive.
+# retry-uplisting-sync runs every tick — it is idempotent and time-sensitive,
+# since an unsynced booking is a double-booking risk until it lands.
+#
+# abandoned-checkout is deliberately absent. Nothing records an abandoned
+# checkout: booking rows are only written after payment succeeds, and the
+# webhook does not handle checkout.session.expired. The job fell back to
+# querying payment_status = 'pending', which in practice only ever matches
+# manual bookings paid offline — so it emailed a guest whose stay had
+# finished five months earlier. Restoring it needs that expired-session
+# handler first.
 
 set -u
 
@@ -34,7 +42,6 @@ call() {
 hour="$(date -u +%H)"
 echo "Cron tick at UTC hour ${hour}"
 
-call /api/cron/abandoned-checkout
 call /api/cron/retry-uplisting-sync
 
 case "$hour" in
