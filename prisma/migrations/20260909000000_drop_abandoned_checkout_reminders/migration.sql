@@ -1,0 +1,22 @@
+-- Drop abandoned_checkout_reminders.
+--
+-- The feature it backed has been removed (see the cron, endpoint, admin UI
+-- and email-template removals that precede this migration). Nothing in the
+-- application ever recorded a genuine abandoned checkout: booking rows are
+-- only written after payment succeeds, and the Stripe webhook does not
+-- handle checkout.session.expired. The job fell back to querying
+-- payment_status = 'pending', which in practice only matched manual
+-- bookings paid offline — and so emailed a guest five months after their
+-- stay had ended.
+--
+-- The table held a single row at the time of this migration: a manual
+-- capping record added to stop that guest receiving further reminders.
+-- With the cron gone, that record has no remaining purpose.
+--
+-- Deliberately NOT dropped: email_sends rows with template =
+-- 'abandoned_checkout'. Those are the historical record of what was
+-- actually sent, and the admin booking detail view still labels them.
+-- No foreign keys reference this table, so the drop is self-contained.
+--
+-- Idempotent, so a re-run against an already-migrated database is a no-op.
+DROP TABLE IF EXISTS "abandoned_checkout_reminders";

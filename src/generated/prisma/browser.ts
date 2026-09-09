@@ -18,11 +18,6 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
- * Model abandoned_checkout_reminders
- * 
- */
-export type abandoned_checkout_reminders = Prisma.abandoned_checkout_remindersModel
-/**
  * Model audit_logs
  * 
  */

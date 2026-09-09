@@ -384,7 +384,6 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  abandoned_checkout_reminders: 'abandoned_checkout_reminders',
   audit_logs: 'audit_logs',
   bookings: 'bookings',
   contact_messages: 'contact_messages',
@@ -418,84 +417,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "abandoned_checkout_reminders" | "audit_logs" | "bookings" | "contact_messages" | "email_sends" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "seasonal_rates" | "social_content_drafts" | "system_settings" | "token_blacklist" | "rate_limits" | "login_attempts" | "blocked_dates" | "promo_codes"
+    modelProps: "audit_logs" | "bookings" | "contact_messages" | "email_sends" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "seasonal_rates" | "social_content_drafts" | "system_settings" | "token_blacklist" | "rate_limits" | "login_attempts" | "blocked_dates" | "promo_codes"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
-    abandoned_checkout_reminders: {
-      payload: Prisma.$abandoned_checkout_remindersPayload<ExtArgs>
-      fields: Prisma.abandoned_checkout_remindersFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.abandoned_checkout_remindersFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.abandoned_checkout_remindersFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload>
-        }
-        findFirst: {
-          args: Prisma.abandoned_checkout_remindersFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.abandoned_checkout_remindersFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload>
-        }
-        findMany: {
-          args: Prisma.abandoned_checkout_remindersFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload>[]
-        }
-        create: {
-          args: Prisma.abandoned_checkout_remindersCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload>
-        }
-        createMany: {
-          args: Prisma.abandoned_checkout_remindersCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.abandoned_checkout_remindersCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload>[]
-        }
-        delete: {
-          args: Prisma.abandoned_checkout_remindersDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload>
-        }
-        update: {
-          args: Prisma.abandoned_checkout_remindersUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload>
-        }
-        deleteMany: {
-          args: Prisma.abandoned_checkout_remindersDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.abandoned_checkout_remindersUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.abandoned_checkout_remindersUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload>[]
-        }
-        upsert: {
-          args: Prisma.abandoned_checkout_remindersUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$abandoned_checkout_remindersPayload>
-        }
-        aggregate: {
-          args: Prisma.Abandoned_checkout_remindersAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAbandoned_checkout_reminders>
-        }
-        groupBy: {
-          args: Prisma.abandoned_checkout_remindersGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Abandoned_checkout_remindersGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.abandoned_checkout_remindersCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Abandoned_checkout_remindersCountAggregateOutputType> | number
-        }
-      }
-    }
     audit_logs: {
       payload: Prisma.$audit_logsPayload<ExtArgs>
       fields: Prisma.audit_logsFieldRefs
@@ -1867,23 +1792,6 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const Abandoned_checkout_remindersScalarFieldEnum = {
-  id: 'id',
-  booking_id: 'booking_id',
-  guest_email: 'guest_email',
-  guest_name: 'guest_name',
-  accommodation: 'accommodation',
-  check_in: 'check_in',
-  check_out: 'check_out',
-  reminder_count: 'reminder_count',
-  last_reminder_sent_at: 'last_reminder_sent_at',
-  last_error: 'last_error',
-  created_at: 'created_at'
-} as const
-
-export type Abandoned_checkout_remindersScalarFieldEnum = (typeof Abandoned_checkout_remindersScalarFieldEnum)[keyof typeof Abandoned_checkout_remindersScalarFieldEnum]
-
-
 export const Audit_logsScalarFieldEnum = {
   id: 'id',
   admin_user: 'admin_user',
@@ -2347,7 +2255,6 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
-  abandoned_checkout_reminders?: Prisma.abandoned_checkout_remindersOmit
   audit_logs?: Prisma.audit_logsOmit
   bookings?: Prisma.bookingsOmit
   contact_messages?: Prisma.contact_messagesOmit

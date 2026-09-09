@@ -8,7 +8,6 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/abandoned_checkout_reminders'
 export type * from './models/audit_logs'
 export type * from './models/bookings'
 export type * from './models/contact_messages'

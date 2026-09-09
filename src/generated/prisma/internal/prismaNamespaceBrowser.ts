@@ -51,7 +51,6 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  abandoned_checkout_reminders: 'abandoned_checkout_reminders',
   audit_logs: 'audit_logs',
   bookings: 'bookings',
   contact_messages: 'contact_messages',
@@ -86,23 +85,6 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
-
-
-export const Abandoned_checkout_remindersScalarFieldEnum = {
-  id: 'id',
-  booking_id: 'booking_id',
-  guest_email: 'guest_email',
-  guest_name: 'guest_name',
-  accommodation: 'accommodation',
-  check_in: 'check_in',
-  check_out: 'check_out',
-  reminder_count: 'reminder_count',
-  last_reminder_sent_at: 'last_reminder_sent_at',
-  last_error: 'last_error',
-  created_at: 'created_at'
-} as const
-
-export type Abandoned_checkout_remindersScalarFieldEnum = (typeof Abandoned_checkout_remindersScalarFieldEnum)[keyof typeof Abandoned_checkout_remindersScalarFieldEnum]
 
 
 export const Audit_logsScalarFieldEnum = {

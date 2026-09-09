@@ -31,8 +31,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Abandoned_checkout_reminders
- * const abandoned_checkout_reminders = await prisma.abandoned_checkout_reminders.findMany()
+ * // Fetch zero or more Audit_logs
+ * const audit_logs = await prisma.audit_logs.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -41,11 +41,6 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
-/**
- * Model abandoned_checkout_reminders
- * 
- */
-export type abandoned_checkout_reminders = Prisma.abandoned_checkout_remindersModel
 /**
  * Model audit_logs
  * 

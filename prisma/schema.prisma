@@ -8,23 +8,6 @@ datasource db {
   provider = "postgresql"
 }
 
-model abandoned_checkout_reminders {
-  id                    Int      @id @default(autoincrement())
-  booking_id            String   @unique
-  guest_email           String
-  guest_name            String?
-  accommodation         String?
-  check_in              String?
-  check_out             String?
-  reminder_count        Int?     @default(0)
-  last_reminder_sent_at String?
-  last_error            String?
-  created_at            String?  @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  // Cron query: WHERE reminder_count < 3 AND last_reminder_sent_at < now()-7d
-  @@index([reminder_count, last_reminder_sent_at], map: "idx_abandoned_reminder_count_sent_at")
-}
-
 model audit_logs {
   id         Int       @id @default(autoincrement())
   admin_user String
