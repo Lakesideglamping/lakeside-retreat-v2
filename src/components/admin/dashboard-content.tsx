@@ -49,7 +49,6 @@ interface Notifications {
   pendingBookings: number;
   recentMessages: number;
   failedWebhooks: number;
-  abandonedCheckouts: number;
   pendingReviews: number;
 }
 
@@ -124,7 +123,6 @@ export function DashboardContent({
     notifications.pendingBookings > 0 ||
     notifications.recentMessages > 0 ||
     notifications.failedWebhooks > 0 ||
-    notifications.abandonedCheckouts > 0 ||
     notifications.pendingReviews > 0;
 
   return (
@@ -163,12 +161,6 @@ export function DashboardContent({
               <Link href="/admin/messages" className="font-semibold underline">
                 View messages →
               </Link>
-            </Alert>
-          )}
-          {notifications.abandonedCheckouts > 0 && (
-            <Alert variant="warning" title="Abandoned Checkouts">
-              {notifications.abandonedCheckouts} abandoned checkout(s) may need
-              follow-up reminders.
             </Alert>
           )}
           {notifications.pendingReviews > 0 && (

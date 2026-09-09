@@ -10,23 +10,8 @@ import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
 import { Alert } from "@/components/admin/ui/alert";
 
 interface Stats {
-  abandonedCheckouts: number;
   reviewRequests: number;
   socialDrafts: number;
-}
-
-interface AbandonedCheckout {
-  id: number;
-  booking_id: string;
-  guest_email: string;
-  guest_name: string | null;
-  accommodation: string | null;
-  check_in: string | null;
-  check_out: string | null;
-  reminder_count: number | null;
-  last_reminder_sent_at: string | null;
-  last_error: string | null;
-  created_at: string | null;
 }
 
 interface ReviewRequest {
@@ -57,10 +42,14 @@ interface SocialDraft {
 }
 
 const tabs = [
-  { key: "abandoned", label: "Abandoned Checkouts" },
   { key: "reviews", label: "Review Requests" },
   { key: "social", label: "Social Content" },
 ];
+
+// Derived rather than written out, so removing a tab can never leave the
+// default pointing at a tab that no longer exists — which renders the page
+// with no table at all, and no error to say why.
+const DEFAULT_TAB = tabs[0].key;
 
 const socialStatusVariant: Record<string, "success" | "warning" | "default"> = {
   published: "success",
@@ -93,18 +82,14 @@ interface MarketingContentProps {
    */
   initialData?: {
     stats: Stats;
-    checkouts: AbandonedCheckout[];
     reviewRequests: ReviewRequest[];
     socialDrafts: SocialDraft[];
   };
 }
 
 export function MarketingContent({ initialData }: MarketingContentProps = {}) {
-  const [activeTab, setActiveTab] = useState("abandoned");
+  const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
   const [stats, setStats] = useState<Stats | null>(initialData?.stats ?? null);
-  const [checkouts, setCheckouts] = useState<AbandonedCheckout[]>(
-    initialData?.checkouts ?? []
-  );
   const [reviewRequests, setReviewRequests] = useState<ReviewRequest[]>(
     initialData?.reviewRequests ?? []
   );
@@ -121,13 +106,6 @@ export function MarketingContent({ initialData }: MarketingContentProps = {}) {
     } catch {
       // Stats are non-critical
     }
-  }, []);
-
-  const fetchCheckouts = useCallback(async () => {
-    const data = await adminGet<{ checkouts: AbandonedCheckout[] }>(
-      "/api/admin/marketing/abandoned-checkouts"
-    );
-    setCheckouts(data.checkouts);
   }, []);
 
   const fetchReviewRequests = useCallback(async () => {
@@ -150,7 +128,6 @@ export function MarketingContent({ initialData }: MarketingContentProps = {}) {
     try {
       await Promise.all([
         fetchStats(),
-        fetchCheckouts(),
         fetchReviewRequests(),
         fetchSocialDrafts(),
       ]);
@@ -159,7 +136,7 @@ export function MarketingContent({ initialData }: MarketingContentProps = {}) {
     } finally {
       setLoading(false);
     }
-  }, [fetchStats, fetchCheckouts, fetchReviewRequests, fetchSocialDrafts]);
+  }, [fetchStats, fetchReviewRequests, fetchSocialDrafts]);
 
   useEffect(() => {
     // Skip the initial fetch when the server has already seeded state.
@@ -174,32 +151,6 @@ export function MarketingContent({ initialData }: MarketingContentProps = {}) {
       </div>
     );
   }
-
-  const abandonedColumns = [
-    { key: "guest_name", header: "Guest", sortable: true },
-    { key: "guest_email", header: "Email", sortable: true },
-    {
-      key: "accommodation",
-      header: "Accommodation",
-      render: (v: unknown) => (v as string) ?? "-",
-    },
-    {
-      key: "check_in",
-      header: "Check-in",
-      render: (v: unknown) => formatDate(v as string | null),
-    },
-    {
-      key: "reminder_count",
-      header: "Reminders",
-      render: (v: unknown) => String(v ?? 0),
-    },
-    {
-      key: "created_at",
-      header: "Created",
-      render: (v: unknown) => formatDate(v as string | null),
-      sortable: true,
-    },
-  ];
 
   const reviewColumns = [
     { key: "guest_name", header: "Guest", sortable: true },
@@ -274,7 +225,7 @@ export function MarketingContent({ initialData }: MarketingContentProps = {}) {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Marketing</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Read-only dashboard of checkout reminders, review requests, and social drafts tracked by automated jobs
+          Read-only dashboard of review requests and social drafts tracked by automated jobs
         </p>
       </div>
 
@@ -285,16 +236,7 @@ export function MarketingContent({ initialData }: MarketingContentProps = {}) {
       )}
 
       {stats && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Card
-            title="Abandoned Checkouts"
-            value={stats.abandonedCheckouts}
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-              </svg>
-            }
-          />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Card
             title="Review Requests"
             value={stats.reviewRequests}
@@ -317,14 +259,6 @@ export function MarketingContent({ initialData }: MarketingContentProps = {}) {
       )}
 
       <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-
-      {activeTab === "abandoned" && (
-        <DataTable
-          columns={abandonedColumns}
-          data={checkouts as unknown as Record<string, unknown>[]}
-          emptyMessage="No abandoned checkouts found"
-        />
-      )}
 
       {activeTab === "reviews" && (
         <DataTable

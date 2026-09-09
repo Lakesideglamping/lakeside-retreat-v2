@@ -51,7 +51,6 @@ export default async function AdminDashboardPage() {
     propertyRevenuePrevMonth,
     failedWebhooks,
     sevenDayBooked,
-    abandonedCheckouts,
     pendingReviews,
   ] = await Promise.all([
     prisma.bookings.count({
@@ -178,9 +177,7 @@ export default async function AdminDashboardPage() {
         AND check_in < ${sevenDaysOut}::date
         AND check_out > ${today}::date
     `,
-    // Folded in from the deleted /admin/notifications page — these are
-    // the two alerts the dashboard didn't already track.
-    prisma.abandoned_checkout_reminders.count(),
+    // Folded in from the deleted /admin/notifications page.
     prisma.review_requests.count({ where: { status: "pending" } }),
   ]);
 
@@ -229,7 +226,6 @@ export default async function AdminDashboardPage() {
     pendingBookings,
     recentMessages,
     failedWebhooks,
-    abandonedCheckouts,
     pendingReviews,
   };
 

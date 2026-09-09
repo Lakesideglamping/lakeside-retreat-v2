@@ -9,7 +9,6 @@ import {
   duringStayHtml,
   checkoutThankYouHtml,
   checkoutReviewReminderHtml,
-  abandonedCheckoutHtml,
   paymentFailureHtml,
   cancellationHtml,
   paymentNotificationHtml,
@@ -297,30 +296,6 @@ export async function sendCheckoutReviewReminder(
     html: checkoutReviewReminderHtml(booking),
   }, { template: "checkout_review_reminder", bookingId: booking.booking_id });
   logger.info(`Review reminder email sent to ${booking.guest_email}`);
-}
-
-export async function sendAbandonedCheckoutReminder(
-  booking: TemplateBookingData & { reminderNumber?: number }
-): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("Email not configured - abandoned checkout reminder skipped");
-    return;
-  }
-
-  const name = formatAccommodationName(booking.accommodation);
-  const subject =
-    booking.reminderNumber && booking.reminderNumber > 1
-      ? `Your ${name} stay is still available`
-      : `Your ${name} booking is waiting`;
-
-  await sendAndLog(transporter, {
-    from: fromAddress(),
-    to: booking.guest_email,
-    subject,
-    html: abandonedCheckoutHtml(booking),
-  }, { template: "abandoned_checkout", bookingId: booking.booking_id });
-  logger.info(`Abandoned checkout reminder sent to ${booking.guest_email}`);
 }
 
 export async function sendPaymentFailureNotification(
