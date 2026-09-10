@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { availabilityCheckSchema } from "@/lib/validations";
 import { checkAvailability } from "@/lib/uplisting";
+import { isPastInNZ } from "@/lib/date-range";
 import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
@@ -17,19 +18,22 @@ export async function POST(request: Request) {
 
     const { accommodation, checkIn, checkOut } = result.data;
 
-    // Basic date validation
-    const start = new Date(checkIn);
-    const end = new Date(checkOut);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (start < today) {
+    // "Today" means today in New Zealand, where the property is — not on the
+    // server. Render runs UTC, 12–13 hours behind, so comparing against the
+    // server's midnight accepted already-past dates every NZ morning from
+    // midnight until midday: at 08:00 on 9 September in Cromwell the server
+    // still believed it was the 8th and let the 8th through. Same fix as
+    // create-session, which this endpoint front-runs.
+    if (isPastInNZ(checkIn)) {
       return NextResponse.json(
         { error: "Check-in date must be today or later" },
         { status: 400 }
       );
     }
-    if (end <= start) {
+    // Both are validated YYYY-MM-DD, which sorts lexicographically in
+    // calendar order — so comparing the strings avoids re-introducing a
+    // timezone at the point of comparison.
+    if (checkOut <= checkIn) {
       return NextResponse.json(
         { error: "Check-out must be after check-in" },
         { status: 400 }
