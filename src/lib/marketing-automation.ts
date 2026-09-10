@@ -21,6 +21,45 @@ type Booking = {
   deleted_at: Date | null;
 };
 
+/**
+ * Booking sources we may email guests about.
+ *
+ * Guests who booked through an OTA belong to that channel, not to us:
+ *
+ *   - Airbnb sends no usable address. Every airbnb row we hold has an empty
+ *     guest_email, so a send fails, and because sendAndLog rethrows it would
+ *     abort the whole cron run — silencing the legitimate emails behind it.
+ *   - Booking.com supplies a @guest.booking.com relay. Mail routed there is
+ *     read by Booking.com, and our templates carry a direct phone number and
+ *     a WhatsApp link — off-platform contact they strip, and repeated
+ *     attempts can earn the property a warning.
+ *   - Both channels already run their own guest messaging, so ours would be
+ *     duplicate contact at best.
+ *
+ * Uplisting cannot cover the gap for direct bookings: its Connect API is
+ * read-only for reservations, so a website booking reaches it as a blocked
+ * calendar range with the guest's details in a free-text `reason` — there is
+ * no guest record for it to message. We are the only sender direct guests
+ * have, which is exactly why these four emails still exist.
+ *
+ * An allow-list rather than a deny-list, deliberately: the Uplisting webhook
+ * maps unrecognised channels to `channel:<source>`, so a deny-list would
+ * quietly start emailing guests from any newly connected channel. This fails
+ * closed instead.
+ */
+export const DIRECT_BOOKING_SOURCES = ["website", "manual"];
+
+/**
+ * Shared `where` fragment: a direct booking we can actually reach.
+ *
+ * The guest_email check is not paranoia — 53 of the rows we hold have no
+ * address at all. One of those in a batch is enough to end the run.
+ */
+const directBookingWhere = {
+  booking_source: { in: DIRECT_BOOKING_SOURCES },
+  guest_email: { contains: "@" },
+};
+
 // --- Query helpers ---
 
 /**
@@ -41,6 +80,7 @@ export async function findReviewCandidates(): Promise<Booking[]> {
       payment_status: { in: ["paid", "paid_external"] },
       status: "confirmed",
       deleted_at: null,
+      ...directBookingWhere,
     },
   });
 
@@ -71,6 +111,7 @@ export async function findPreArrivalBookings(): Promise<Booking[]> {
       payment_status: { in: ["paid", "paid_external"] },
       status: "confirmed",
       deleted_at: null,
+      ...directBookingWhere,
     },
   });
 
@@ -92,6 +133,7 @@ export async function findDuringStayBookings(): Promise<Booking[]> {
       payment_status: { in: ["paid", "paid_external"] },
       status: "confirmed",
       deleted_at: null,
+      ...directBookingWhere,
     },
   });
 
@@ -186,10 +228,14 @@ export async function findReviewFollowUpCandidates(): Promise<
   });
   if (pending.length === 0) return [];
 
+  // Gated here too, not just in findReviewCandidates. Rows written before the
+  // gate existed would otherwise still receive a follow-up, and this query is
+  // driven by review_requests rather than by that finder.
   const bookings = await prisma.bookings.findMany({
     where: {
       id: { in: pending.map((p) => p.booking_id) },
       deleted_at: null,
+      ...directBookingWhere,
     },
   });
   const bookingMap = new Map(bookings.map((b) => [b.id, b]));
