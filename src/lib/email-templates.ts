@@ -120,7 +120,7 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
 
   return layout("Booking Confirmed", `
     <p>Dear ${guestName},</p>
-    <p>It is our pleasure to welcome you to Lakeside Retreat – located in a boutique vineyard, at the shore of beautifully Lake Dunstan.</p>
+    <p>It is our pleasure to welcome you to Lakeside Retreat – located in a boutique vineyard, at the shore of beautiful Lake Dunstan.</p>
     
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Your reservation Details:</h3>
@@ -154,7 +154,7 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
  <h5 style="font-size:16px;color:#2d5a5a;">Check-In / Check-Out</h5> 
 <p> Dome check-in time is from 3:00pm. Check-out time is 10:00am.  Early check-in and late check-out can be arranged, subject to availability and an additional charge. Please check with us to confirm. </p> 
 
- <h3 style="font-size:16px;color:#2d5a5a;">Parking</h3> 
+ <h5 style="font-size:16px;color:#2d5a5a;">Parking</h5> 
 <p> Free parking is available at the front of the dome. </p> 
 
  <h5 style="font-size:16px;color:#2d5a5a;">Driving Directions</h5> 
@@ -171,10 +171,7 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
 <p> Should you require any additional help or information during your stay with us, please do not hesitate to contact Steve or Sandy: </p> <p> Phone: <a href="tel:+6421368682">021 368 682</a> </p> <p> Email: <a href="mailto:info@lakesideretreat.co.nz">info@lakesideretreat.co.nz</a> </p> <p> We sincerely thank you for choosing Lakeside Glamping. We hope that you have a comfortable and pleasant stay! </p> 
 
 
-<p> Kind regards, </p> 
-
-
-<p> Steve and Sandy<br> Lakeside Retreat </p>
+${signOff}
     
    
   `);
@@ -190,9 +187,9 @@ export function bookingConfirmationCottageHtml(data: BookingEmailData): string {
   const totalPrice = escapeHtml(data.total_price);
   const bookingId = escapeHtml(data.booking_id);
 
-  return layout("Booking Confirmed Cottage", `
+  return layout("Booking Confirmed", `
     <p>Dear ${guestName},</p>
-    <p>It is our pleasure to welcome you to Lakeside Retreat – located in a boutique vineyard, at the shore of beautifully Lake Dunstan.</p>
+    <p>It is our pleasure to welcome you to Lakeside Retreat – located in a boutique vineyard, at the shore of beautiful Lake Dunstan.</p>
     
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Your reservation Details:</h3>
@@ -225,7 +222,7 @@ export function bookingConfirmationCottageHtml(data: BookingEmailData): string {
  <h5 style="font-size:16px;color:#2d5a5a;">Check-In / Check-Out</h5> 
 <p> Cottage check-in time is from 3:00pm. Check-out time is 10:00am.  Early check-in and late check-out can be arranged, subject to availability and an additional charge. Please check with us to confirm. </p>
 
- <h3 style="font-size:16px;color:#2d5a5a;">Parking</h3>
+ <h5 style="font-size:16px;color:#2d5a5a;">Parking</h5>
 <p> Free parking is available at the front of the cottage. </p>
 
  <h5 style="font-size:16px;color:#2d5a5a;">Driving Directions</h5>
@@ -242,10 +239,7 @@ export function bookingConfirmationCottageHtml(data: BookingEmailData): string {
 <p> Should you require any additional help or information during your stay with us, please do not hesitate to contact Steve or Sandy: </p> <p> Phone: <a href="tel:+6421368682">021 368 682</a> </p> <p> Email: <a href="mailto:info@lakesideretreat.co.nz">info@lakesideretreat.co.nz</a> </p> <p> We sincerely thank you for choosing Lakeside Glamping. We hope that you have a comfortable and pleasant stay! </p> 
 
 
-<p> Kind regards, </p> 
-
-
-<p> Steve and Sandy<br> Lakeside Retreat </p>
+${signOff}
     
    
   `);
