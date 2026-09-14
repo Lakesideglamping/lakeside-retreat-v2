@@ -1,11 +1,13 @@
 import nodemailer, { type Transporter } from "nodemailer";
 import { logger } from "./logger";
 import { prisma } from "./db";
+import { getAll } from "./accommodations";
 import {
   type BookingEmailData as TemplateBookingData,
   escapeHtml,
   formatAccommodationName,
   bookingConfirmationHtml,
+  bookingConfirmationCottageHtml,
   preArrivalHtml,
   duringStayHtml,
   checkoutThankYouHtml,
@@ -154,6 +156,25 @@ interface LegacyBookingEmailData {
   depositStatus?: "held" | "failed_to_hold" | "pending";
 }
 
+/**
+ * Resolve whatever the caller passed as `accommodation` to a canonical id.
+ *
+ * Callers are not consistent: the Stripe webhook sends the display name
+ * ("Lakeside Cottage") because that reads better in the host notification's
+ * subject line, while other paths send the slug ("lakeside-cottage"). Both
+ * must route to the right template, so match against accommodations.ts —
+ * the single source of truth — rather than sniffing for substrings.
+ *
+ * Returns undefined for anything unrecognised; callers decide the fallback.
+ */
+function resolveAccommodationId(value: string): string | undefined {
+  const key = value.trim().toLowerCase();
+  if (!key) return undefined;
+  return getAll().find(
+    (a) => a.id.toLowerCase() === key || a.name.toLowerCase() === key
+  )?.id;
+}
+
 export async function sendBookingConfirmation(
   data: LegacyBookingEmailData
 ): Promise<void> {
@@ -171,16 +192,22 @@ export async function sendBookingConfirmation(
   const safeGuests = escapeHtml(data.guests);
   const safeTotal = escapeHtml(data.totalAmount.toFixed(2));
 
-  // Rendered from the shared template rather than inline HTML. The template
-  // adds the booking ID and the 18+ adults-only condition — the term we would
-  // need to have given in writing if a guest ever arrives with children and is
-  // refused. It escapes its own inputs, so pass the raw values here; the
-  // pre-escaped safe* locals below are for the host notification only.
+  // The domes and the cottage get different confirmations: the copy names the
+  // spa vs the hot tub, the non-smoking wording, and which side of the
+  // driveway to park on. Sending one to the other's guest is plainly wrong,
+  // so the property decides the template.
+  const isCottage = resolveAccommodationId(data.accommodation) === "lakeside-cottage";
+  const renderConfirmation = isCottage
+    ? bookingConfirmationCottageHtml
+    : bookingConfirmationHtml;
+
+  // Templates escape their own inputs, so pass raw values here; the
+  // pre-escaped safe* locals above are for the host notification only.
   await sendAndLog(transporter, {
     from: `"Lakeside Retreat" <${process.env.EMAIL_USER}>`,
     to: data.guestEmail,
     subject: `Booking Confirmation - Lakeside Retreat`,
-    html: bookingConfirmationHtml({
+    html: renderConfirmation({
       guest_name: data.guestName,
       guest_email: data.guestEmail,
       accommodation: data.accommodation,

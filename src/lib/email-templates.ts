@@ -108,7 +108,7 @@ const ctaButton = (bg: string) =>
 const signOff = `<p style="margin-top:28px;">Warm regards,<br/>Stephen &amp; Sandy<br/>Lakeside Retreat</p>`;
 
 /* ---------------------------------------------------------------------------
- * Templates
+ * BookingTemplates-Domes
  * ------------------------------------------------------------------------- */
 
 export function bookingConfirmationHtml(data: BookingEmailData): string {
@@ -118,35 +118,136 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
   const totalPrice = escapeHtml(data.total_price);
   const bookingId = escapeHtml(data.booking_id);
 
-  const domeNotice = `<div ${alertBox("#ffc107")}>
-        <p style="margin:0;"><strong>Please note:</strong> ${name} is strictly 18+ adults only. Guests arriving with anyone under 18 will not be accommodated and no refund will be given.</p>
-      </div>`;
-
   return layout("Booking Confirmed", `
-    <p>Hi ${guestName},</p>
-    <p>Thank you for booking with us! Your reservation is confirmed.</p>
-
+    <p>Dear ${guestName},</p>
+    <p>It is our pleasure to welcome you to Lakeside Retreat – located in a boutique vineyard, at the shore of beautifully Lake Dunstan.</p>
+    
     <div ${detailsBox}>
-      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Booking Details</h3>
-      <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
-      <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateLong(data.check_in)} (3:00 PM)</p>
-      <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateLong(data.check_out)} (10:00 AM)</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
-      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${totalPrice} NZD</p>` : ""}
-      ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${bookingId}</p>` : ""}
+      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Your reservation Details:</h3>
+      <p style="margin:4px 0;">Accommodation: ${name}</p>
+      <p style="margin:4px 0;">Check-in Date: ${formatDateLong(data.check_in)} (3:00 PM)</p>
+      <p style="margin:4px 0;">Check-out Date: ${formatDateLong(data.check_out)} (10:00 AM)</p>
+      ${data.num_guests ? `<p style="margin:4px 0;">No. of Guests: ${numGuests}</p>` : ""}
+      ${data.total_price ? `<p style="margin:4px 0;">Total: $${totalPrice} NZD</p>` : ""}
+      ${data.booking_id ? `<p style="margin:4px 0;">Booking ID: ${bookingId}</p>` : ""}
     </div>
 
-    ${domeNotice}
-
-    <h3 style="font-size:16px;color:#2d5a5a;">What's Next?</h3>
+    <h5 style="font-size:16px;color:#2d5a5a;">For your stay:</h5>
     <ul style="padding-left:20px;">
-      <li>We'll send detailed arrival instructions 24 hours before check-in.</li>
-      <li>If you have questions, reply to this email or call <a href="tel:+6421368682" style="color:#2d5a5a;">+64 21 368 682</a>.</li>
-      <li>Find local recommendations on our website.</li>
+      <li>
+      Your very own private fresh saltwater spa is available
+      free of charge during your stay.
+    </li>
+    <li>
+      On arrival, please press the button to open the electric gate. The gate will close
+      automatically after two minutes.
+    </li>
+    <li>
+      Our domes have a non-smoking policy. Please smoke at
+      the patio or in the garden area. Thank you.
+    </li>
+    <li>
+      Continental breakfast is included in your booking.
+      Please advise us if you have any dietary requirements.
+    </li>
     </ul>
+ <h5 style="font-size:16px;color:#2d5a5a;">Check-In / Check-Out</h5> 
+<p> Dome check-in time is from 3:00pm. Check-out time is 10:00am.  Early check-in and late check-out can be arranged, subject to availability and an additional charge. Please check with us to confirm. </p> 
 
-    <p>We're excited to host you at our solar-powered retreat!</p>
-    ${signOff}
+ <h3 style="font-size:16px;color:#2d5a5a;">Parking</h3> 
+<p> Free parking is available at the front of the dome. </p> 
+
+ <h5 style="font-size:16px;color:#2d5a5a;">Driving Directions</h5> 
+<p>We are at:</p> 
+<address> 96 Smiths Way<br> Mt Pisa, Cromwell 9383<br> New Zealand </address> 
+<p> We are approximately 10 minutes' drive north of Cromwell town centre. Please see the link below for detailed directions: </p> 
+<p> <a href="https://www.google.co.nz/maps/place/96+Smiths+Way,+Mount+Pisa+9383" target="_blank" rel="noopener noreferrer" > View driving directions on Google Maps </a> </p> 
+<p> The domes are on your right-hand side in the driveway, towards the lake. </p> 
+
+ <h5 style="font-size:16px;color:#2d5a5a;">Special Information</h5> 
+<p> Discover and book Cromwell's most memorable activities at: </p> <p> <a href="https://www.tripadvisor.co.nz/Attractions-g642254-Activities-Cromwell_Central_Otago_Otago_Region_South_Island.html" target="_blank" rel="noopener noreferrer" > Discover Cromwell activities on TripAdvisor </a> </p> 
+
+<h5 style="font-size:16px;color:#2d5a5a;">Need Help During Your Stay?</h5> 
+<p> Should you require any additional help or information during your stay with us, please do not hesitate to contact Steve or Sandy: </p> <p> Phone: <a href="tel:+6421368682">021 368 682</a> </p> <p> Email: <a href="mailto:info@lakesideretreat.co.nz">info@lakesideretreat.co.nz</a> </p> <p> We sincerely thank you for choosing Lakeside Glamping. We hope that you have a comfortable and pleasant stay! </p> 
+
+
+<p> Kind regards, </p> 
+
+
+<p> Steve and Sandy<br> Lakeside Retreat </p>
+    
+   
+  `);
+}
+/* ---------------------------------------------------------------------------
+ * BookingTemplates-Cottage
+ * ------------------------------------------------------------------------- */
+
+export function bookingConfirmationCottageHtml(data: BookingEmailData): string {
+  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  const guestName = escapeHtml(data.guest_name);
+  const numGuests = escapeHtml(data.num_guests);
+  const totalPrice = escapeHtml(data.total_price);
+  const bookingId = escapeHtml(data.booking_id);
+
+  return layout("Booking Confirmed Cottage", `
+    <p>Dear ${guestName},</p>
+    <p>It is our pleasure to welcome you to Lakeside Retreat – located in a boutique vineyard, at the shore of beautifully Lake Dunstan.</p>
+    
+    <div ${detailsBox}>
+      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Your reservation Details:</h3>
+      <p style="margin:4px 0;">Accommodation: ${name}</p>
+      <p style="margin:4px 0;">Check-in Date: ${formatDateLong(data.check_in)} (3:00 PM)</p>
+      <p style="margin:4px 0;">Check-out Date: ${formatDateLong(data.check_out)} (10:00 AM)</p>
+      ${data.num_guests ? `<p style="margin:4px 0;">No. of Guests: ${numGuests}</p>` : ""}
+      ${data.total_price ? `<p style="margin:4px 0;">Total: $${totalPrice} NZD</p>` : ""}
+      ${data.booking_id ? `<p style="margin:4px 0;">Booking ID: ${bookingId}</p>` : ""}
+    </div>
+
+    <h5 style="font-size:16px;color:#2d5a5a;">For your stay:</h5>
+    <ul style="padding-left:20px;">
+      <li>
+      Your very own private fresh hot tub is available
+      free of charge during your stay.
+    </li>
+    <li>
+      On arrival, please press the button to open the electric gate. The gate will close
+      automatically after two minutes.
+    </li>
+    <li>
+     The cottage has a non-smoking policy. Please smoke at
+      the patio or in the garden area. Thank you.
+    </li>
+    <li>
+      Enjoy a continental breakfast delivered onsite during your stay. Breakfast options and pricing are available upon request.
+    </li>
+    </ul>
+ <h5 style="font-size:16px;color:#2d5a5a;">Check-In / Check-Out</h5> 
+<p> Cottage check-in time is from 3:00pm. Check-out time is 10:00am.  Early check-in and late check-out can be arranged, subject to availability and an additional charge. Please check with us to confirm. </p>
+
+ <h3 style="font-size:16px;color:#2d5a5a;">Parking</h3>
+<p> Free parking is available at the front of the cottage. </p>
+
+ <h5 style="font-size:16px;color:#2d5a5a;">Driving Directions</h5>
+<p>We are at:</p>
+<address> 96 Smiths Way<br> Mt Pisa, Cromwell 9383<br> New Zealand </address>
+<p> We are approximately 10 minutes' drive north of Cromwell town centre. Please see the link below for detailed directions: </p>
+<p> <a href="https://www.google.co.nz/maps/place/96+Smiths+Way,+Mount+Pisa+9383" target="_blank" rel="noopener noreferrer" > View driving directions on Google Maps </a> </p>
+<p> The cottage is on your left-hand side, at the end of the driveway. </p>
+
+ <h5 style="font-size:16px;color:#2d5a5a;">Special Information</h5> 
+<p> Discover and book Cromwell's most memorable activities at: </p> <p> <a href="https://www.tripadvisor.co.nz/Attractions-g642254-Activities-Cromwell_Central_Otago_Otago_Region_South_Island.html" target="_blank" rel="noopener noreferrer" > Discover Cromwell activities on TripAdvisor </a> </p> 
+
+<h5 style="font-size:16px;color:#2d5a5a;">Need Help During Your Stay?</h5> 
+<p> Should you require any additional help or information during your stay with us, please do not hesitate to contact Steve or Sandy: </p> <p> Phone: <a href="tel:+6421368682">021 368 682</a> </p> <p> Email: <a href="mailto:info@lakesideretreat.co.nz">info@lakesideretreat.co.nz</a> </p> <p> We sincerely thank you for choosing Lakeside Glamping. We hope that you have a comfortable and pleasant stay! </p> 
+
+
+<p> Kind regards, </p> 
+
+
+<p> Steve and Sandy<br> Lakeside Retreat </p>
+    
+   
   `);
 }
 

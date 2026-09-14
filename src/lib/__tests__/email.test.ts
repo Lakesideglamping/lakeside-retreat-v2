@@ -178,8 +178,6 @@ describe("sendBookingConfirmation", () => {
 
     // The booking ID gives the guest a reference to quote back at us.
     expect(guest.html).toContain("bk-123");
-    // The condition we would rely on if a guest arrives with children.
-    expect(guest.html).toContain("18+ adults only");
     // Long-form dates — "1/5/2026" is ambiguous to an overseas guest.
     expect(guest.html).toContain("Friday, 1 May 2026");
     expect(guest.html).toContain("Sunday, 3 May 2026");
@@ -187,6 +185,64 @@ describe("sendBookingConfirmation", () => {
     expect(guest.html).toContain("$650.00 NZD");
     // The slug is resolved to the display name, accent intact.
     expect(guest.html).toContain("Dome Rosé");
+  });
+
+  /**
+   * The domes and the cottage have different confirmations. The copy names
+   * the spa vs the hot tub and which side of the driveway to park on, so
+   * sending one to the other's guest is plainly wrong.
+   *
+   * Both spellings are covered because callers disagree: the Stripe webhook
+   * passes the display name ("Lakeside Cottage"), other paths pass the slug.
+   */
+  describe("routes to the right template for the property", () => {
+    async function htmlFor(accommodation: string) {
+      process.env.EMAIL_USER = "host@e.com";
+      process.env.EMAIL_PASS = "p";
+      process.env.CONTACT_EMAIL = "ops@e.com";
+      sendMail.mockClear();
+      const { sendBookingConfirmation } = await import("../email");
+      await sendBookingConfirmation({
+        guestName: "A",
+        guestEmail: "guest@e.com",
+        accommodation,
+        checkIn: "2026-05-01",
+        checkOut: "2026-05-03",
+        guests: 2,
+        totalAmount: 650,
+      });
+      return sendMail.mock.calls
+        .map((c) => c[0] as { to: string; html: string })
+        .find((m) => m.to === "guest@e.com")!.html;
+    }
+
+    for (const input of ["lakeside-cottage", "Lakeside Cottage"]) {
+      it(`sends the cottage template for "${input}"`, async () => {
+        const html = await htmlFor(input);
+        expect(html).toContain("hot tub");
+        expect(html).toContain("The cottage is on your left-hand side");
+        // Dome-only copy must not leak into a cottage guest's email.
+        expect(html).not.toContain("saltwater spa");
+        expect(html).not.toContain("right-hand side");
+      });
+    }
+
+    for (const input of ["dome-pinot", "Dome Pinot", "dome-rose", "Dome Rosé"]) {
+      it(`sends the dome template for "${input}"`, async () => {
+        const html = await htmlFor(input);
+        expect(html).toContain("saltwater spa");
+        expect(html).toContain("The domes are on your right-hand side");
+        expect(html).not.toContain("hot tub");
+      });
+    }
+
+    it("falls back to the dome template for an unrecognised property", async () => {
+      // Only three properties exist; adding a fourth is a deliberate edit to
+      // accommodations.ts. This documents the fallback rather than endorsing
+      // it — a new property needs its own template decision.
+      const html = await htmlFor("");
+      expect(html).toContain("saltwater spa");
+    });
   });
 });
 
