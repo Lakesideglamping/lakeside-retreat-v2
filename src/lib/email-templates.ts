@@ -129,8 +129,8 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Booking Details</h3>
       <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
-      <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateNZ(data.check_in)} (3:00 PM)</p>
-      <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateNZ(data.check_out)} (10:00 AM)</p>
+      <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateLong(data.check_in)} (3:00 PM)</p>
+      <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateLong(data.check_out)} (10:00 AM)</p>
       ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
       ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${totalPrice} NZD</p>` : ""}
       ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${bookingId}</p>` : ""}

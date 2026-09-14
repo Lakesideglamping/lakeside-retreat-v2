@@ -5,6 +5,7 @@ import {
   type BookingEmailData as TemplateBookingData,
   escapeHtml,
   formatAccommodationName,
+  bookingConfirmationHtml,
   preArrivalHtml,
   duringStayHtml,
   checkoutThankYouHtml,
@@ -170,28 +171,27 @@ export async function sendBookingConfirmation(
   const safeGuests = escapeHtml(data.guests);
   const safeTotal = escapeHtml(data.totalAmount.toFixed(2));
 
+  // Rendered from the shared template rather than inline HTML. The template
+  // adds the booking ID and the 18+ adults-only condition — the term we would
+  // need to have given in writing if a guest ever arrives with children and is
+  // refused. It escapes its own inputs, so pass the raw values here; the
+  // pre-escaped safe* locals below are for the host notification only.
   await sendAndLog(transporter, {
     from: `"Lakeside Retreat" <${process.env.EMAIL_USER}>`,
     to: data.guestEmail,
     subject: `Booking Confirmation - Lakeside Retreat`,
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px;">
-        <h2 style="color: #2d5a5a;">Booking Confirmed!</h2>
-        <p>Hi ${safeGuestName},</p>
-        <p>Your booking at Lakeside Retreat has been confirmed.</p>
-        <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Accommodation</td><td style="padding: 8px;">${safeAccommodation}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Check-in</td><td style="padding: 8px;">${safeCheckIn} (3:00 PM)</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Check-out</td><td style="padding: 8px;">${safeCheckOut} (10:00 AM)</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Guests</td><td style="padding: 8px;">${safeGuests}</td></tr>
-          <tr><td style="padding: 8px; font-weight: bold; color: #753742;">Total</td><td style="padding: 8px;">$${safeTotal} NZD</td></tr>
-        </table>
-        <p>Self-check-in instructions will be sent closer to your arrival date.</p>
-        <p style="margin-top: 24px; color: #64748b; font-size: 12px;">
-          Lakeside Retreat &middot; 96 Smiths Way, Mount Pisa, Cromwell 9383, New Zealand
-        </p>
-      </div>
-    `,
+    html: bookingConfirmationHtml({
+      guest_name: data.guestName,
+      guest_email: data.guestEmail,
+      accommodation: data.accommodation,
+      check_in: data.checkIn,
+      check_out: data.checkOut,
+      num_guests: data.guests,
+      // toFixed(2) keeps the trailing cents the template would otherwise drop,
+      // so $650 renders as $650.00 rather than $650.
+      total_price: data.totalAmount.toFixed(2),
+      booking_id: data.bookingId,
+    }),
   }, { template: "booking_confirmation_guest", bookingId: data.bookingId });
 
   // Also notify the host
