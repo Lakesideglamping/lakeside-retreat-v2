@@ -105,7 +105,11 @@ const alertBox = (borderColor: string) =>
   `style="padding:14px 18px;border-radius:6px;margin:20px 0;border-left:4px solid ${borderColor};background-color:#fffdf7;"`;
 const ctaButton = (bg: string) =>
   `style="display:inline-block;background-color:${bg};color:#ffffff;padding:12px 28px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;"`;
-const signOff = `<p style="margin-top:28px;">Warm regards,<br/>Stephen &amp; Sandy<br/>Lakeside Retreat</p>`;
+// Shared by every outbound template, so this is the one place the hosts are
+// named at sign-off. "Steve and Sandy" matches how the body text addresses
+// guests ("contact Steve or Sandy"). Note the public site still says
+// "Stephen & Sandy" throughout, so emails and website differ deliberately.
+const signOff = `<p style="margin-top:28px;">Warm regards,<br/>Steve and Sandy<br/>Lakeside Retreat</p>`;
 
 /* ---------------------------------------------------------------------------
  * BookingTemplates-Domes
@@ -168,7 +172,7 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
 <p> Discover and book Cromwell's most memorable activities at: </p> <p> <a href="https://www.tripadvisor.co.nz/Attractions-g642254-Activities-Cromwell_Central_Otago_Otago_Region_South_Island.html" target="_blank" rel="noopener noreferrer" > Discover Cromwell activities on TripAdvisor </a> </p> 
 
 <h5 style="font-size:16px;color:#2d5a5a;">Need Help During Your Stay?</h5> 
-<p> Should you require any additional help or information during your stay with us, please do not hesitate to contact Steve or Sandy: </p> <p> Phone: <a href="tel:+6421368682">021 368 682</a> </p> <p> Email: <a href="mailto:info@lakesideretreat.co.nz">info@lakesideretreat.co.nz</a> </p> <p> We sincerely thank you for choosing Lakeside Glamping. We hope that you have a comfortable and pleasant stay! </p> 
+<p> Should you require any additional help or information during your stay with us, please do not hesitate to contact Steve or Sandy: </p> <p> Phone: <a href="tel:+6421368682">021 368 682</a> </p> <p> Email: <a href="mailto:info@lakesideretreat.co.nz">info@lakesideretreat.co.nz</a> </p> <p> We sincerely thank you for choosing Lakeside Retreat. We hope that you have a comfortable and pleasant stay! </p> 
 
 
 ${signOff}
@@ -236,7 +240,7 @@ export function bookingConfirmationCottageHtml(data: BookingEmailData): string {
 <p> Discover and book Cromwell's most memorable activities at: </p> <p> <a href="https://www.tripadvisor.co.nz/Attractions-g642254-Activities-Cromwell_Central_Otago_Otago_Region_South_Island.html" target="_blank" rel="noopener noreferrer" > Discover Cromwell activities on TripAdvisor </a> </p> 
 
 <h5 style="font-size:16px;color:#2d5a5a;">Need Help During Your Stay?</h5> 
-<p> Should you require any additional help or information during your stay with us, please do not hesitate to contact Steve or Sandy: </p> <p> Phone: <a href="tel:+6421368682">021 368 682</a> </p> <p> Email: <a href="mailto:info@lakesideretreat.co.nz">info@lakesideretreat.co.nz</a> </p> <p> We sincerely thank you for choosing Lakeside Glamping. We hope that you have a comfortable and pleasant stay! </p> 
+<p> Should you require any additional help or information during your stay with us, please do not hesitate to contact Steve or Sandy: </p> <p> Phone: <a href="tel:+6421368682">021 368 682</a> </p> <p> Email: <a href="mailto:info@lakesideretreat.co.nz">info@lakesideretreat.co.nz</a> </p> <p> We sincerely thank you for choosing Lakeside Retreat. We hope that you have a comfortable and pleasant stay! </p> 
 
 
 ${signOff}
