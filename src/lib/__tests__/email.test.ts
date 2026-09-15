@@ -236,6 +236,40 @@ describe("sendBookingConfirmation", () => {
       });
     }
 
+    /**
+     * Totals always render to the cent.
+     *
+     * Callers pass three different shapes — the crons a JS number, the refund
+     * webhook a stringified Prisma Decimal, the confirmation an already
+     * formatted string — so the formatting lives in the template. "$650"
+     * on a receipt reads like a typo.
+     */
+    it.each([
+      [650, "$650.00 NZD"],
+      [1198.5, "$1198.50 NZD"],
+      [0.5, "$0.50 NZD"],
+      [1198.567, "$1198.57 NZD"],
+    ])("renders a total of %s as %s", async (amount, expected) => {
+      process.env.EMAIL_USER = "host@e.com";
+      process.env.EMAIL_PASS = "p";
+      process.env.CONTACT_EMAIL = "ops@e.com";
+      sendMail.mockClear();
+      const { sendBookingConfirmation } = await import("../email");
+      await sendBookingConfirmation({
+        guestName: "A",
+        guestEmail: "guest@e.com",
+        accommodation: "dome-pinot",
+        checkIn: "2026-05-01",
+        checkOut: "2026-05-03",
+        guests: 2,
+        totalAmount: amount as number,
+      });
+      const guest = sendMail.mock.calls
+        .map((c) => c[0] as { to: string; html: string })
+        .find((m) => m.to === "guest@e.com")!;
+      expect(guest.html).toContain(expected);
+    });
+
     it("falls back to the dome template for an unrecognised property", async () => {
       // Only three properties exist; adding a fourth is a deliberate edit to
       // accommodations.ts. This documents the fallback rather than endorsing
@@ -243,6 +277,55 @@ describe("sendBookingConfirmation", () => {
       const html = await htmlFor("");
       expect(html).toContain("saltwater spa");
     });
+  });
+});
+
+/**
+ * Formatting lives in the template, not the call site.
+ *
+ * These go straight to the templates with the raw shapes callers actually
+ * pass — the refund webhook stringifies a Prisma Decimal, the crons pass a
+ * JS number — neither of which is pre-formatted. If the toFixed ever moves
+ * back to the callers, these fail while the sender-level tests would not.
+ */
+describe("totals render to the cent whatever the caller passes", () => {
+  const base = {
+    guest_name: "A",
+    guest_email: "a@e.com",
+    accommodation: "dome-pinot",
+    check_in: "2026-05-01",
+    check_out: "2026-05-03",
+  };
+
+  it.each([
+    [650, "$650.00 NZD"],
+    ["650", "$650.00 NZD"],
+    ["860.5", "$860.50 NZD"],
+    [1198.567, "$1198.57 NZD"],
+    [0, ""], // falsy — the template omits the line entirely
+  ])("cancellation renders %s as '%s'", async (input, expected) => {
+    const { cancellationHtml } = await import("../email-templates");
+    const html = cancellationHtml({
+      ...base,
+      total_price: input as number | string,
+      refundEligible: true,
+    });
+    if (expected === "") {
+      expect(html).not.toContain("NZD");
+    } else {
+      expect(html).toContain(expected as string);
+    }
+  });
+
+  it("passes a non-numeric value through rather than rendering NaN", async () => {
+    const { cancellationHtml } = await import("../email-templates");
+    const html = cancellationHtml({
+      ...base,
+      total_price: "on request",
+      refundEligible: true,
+    });
+    expect(html).toContain("on request");
+    expect(html).not.toContain("NaN");
   });
 });
 

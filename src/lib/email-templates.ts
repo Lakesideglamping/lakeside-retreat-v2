@@ -43,6 +43,24 @@ export function formatAccommodationName(slug: string): string {
   );
 }
 
+/**
+ * Money, always to the cent.
+ *
+ * Callers disagree on shape: the crons pass a JS number (650), the refund
+ * webhook stringifies a Prisma Decimal, and the booking confirmation passes
+ * an already-formatted string. Formatting here rather than at each call site
+ * means no future caller can put "$650" in front of a guest instead of
+ * "$650.00" — a price missing its cents reads like a typo on a receipt.
+ *
+ * Anything non-numeric is passed through untouched rather than rendered as
+ * NaN, so a malformed value degrades to the raw text instead of nonsense.
+ */
+function formatPrice(value: number | string | undefined): string {
+  if (value === null || value === undefined || value === "") return "";
+  const n = typeof value === "number" ? value : Number(String(value).trim());
+  return Number.isFinite(n) ? n.toFixed(2) : String(value);
+}
+
 function formatDateNZ(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-NZ");
 }
@@ -109,7 +127,7 @@ const ctaButton = (bg: string) =>
 // named at sign-off. "Steve and Sandy" matches the body text ("contact Steve
 // or Sandy") and the public site, which was brought into line separately.
 // Guest review text is the exception and says whatever the guest wrote.
-const signOff = `<p style="margin-top:28px;">Warm regards,<br/>Steve and Sandy<br/>Lakeside Retreat</p>`;
+const signOff = `<p style="margin-top:28px;"><br>Warm regards,<br><br><br/>Steve and Sandy<br/>Lakeside Retreat</p>`;
 
 /* ---------------------------------------------------------------------------
  * BookingTemplates-Domes
@@ -119,7 +137,7 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
   const name = escapeHtml(formatAccommodationName(data.accommodation));
   const guestName = escapeHtml(data.guest_name);
   const numGuests = escapeHtml(data.num_guests);
-  const totalPrice = escapeHtml(data.total_price);
+  const totalPrice = escapeHtml(formatPrice(data.total_price));
   const bookingId = escapeHtml(data.booking_id);
 
   return layout("Booking Confirmed", `
@@ -188,7 +206,7 @@ export function bookingConfirmationCottageHtml(data: BookingEmailData): string {
   const name = escapeHtml(formatAccommodationName(data.accommodation));
   const guestName = escapeHtml(data.guest_name);
   const numGuests = escapeHtml(data.num_guests);
-  const totalPrice = escapeHtml(data.total_price);
+  const totalPrice = escapeHtml(formatPrice(data.total_price));
   const bookingId = escapeHtml(data.booking_id);
 
   return layout("Booking Confirmed", `
@@ -394,7 +412,7 @@ export function paymentFailureHtml(data: BookingEmailData): string {
   const name = escapeHtml(formatAccommodationName(data.accommodation));
   const guestName = escapeHtml(data.guest_name);
   const numGuests = escapeHtml(data.num_guests);
-  const totalPrice = escapeHtml(data.total_price);
+  const totalPrice = escapeHtml(formatPrice(data.total_price));
   const idSlice = escapeHtml(data.booking_id ? data.booking_id.slice(0, 8) : "");
 
   return layout("Payment Issue", `
@@ -433,13 +451,13 @@ export function cancellationHtml(
   const name = escapeHtml(formatAccommodationName(data.accommodation));
   const guestName = escapeHtml(data.guest_name);
   const numGuests = escapeHtml(data.num_guests);
-  const totalPrice = escapeHtml(data.total_price);
+  const totalPrice = escapeHtml(formatPrice(data.total_price));
   const bookingId = escapeHtml(data.booking_id);
 
   const refundBlock = data.refundEligible
     ? `<div style="padding:14px 18px;border-radius:6px;margin:20px 0;border-left:4px solid #28a745;background-color:#f0fff0;">
         <h4 style="margin:0 0 6px;">Refund Information</h4>
-        <p style="margin:0;">Since you cancelled more than 14 days before your arrival date, you are eligible for a <strong>full refund</strong>. Your refund is being processed and should appear on your statement within 5&ndash;10 business days.</p>
+        <p style="margin:0;">Since your cancellation was made more than 14 days before your scheduled arrival date, you are eligible for a full refund. Your refund is now being processed and should appear on your original payment method within 5&ndash;10 business days, depending on your bank or card provider.</p>
       </div>`
     : `<div style="padding:14px 18px;border-radius:6px;margin:20px 0;border-left:4px solid #dc3545;background-color:#fff5f5;">
         <h4 style="margin:0 0 6px;">Refund Information</h4>
@@ -448,29 +466,29 @@ export function cancellationHtml(
 
   return layout("Booking Cancelled", `
     <p>Hi ${guestName},</p>
-    <p>This email confirms that your booking has been cancelled. We're sorry to see you go!</p>
+    <p>This email confirms that your booking has been cancelled. We’re sorry to see you go, but we hope to have the pleasure of welcoming you to Lakeside Retreat another time.</p>
 
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Cancelled Booking Details</h3>
-      <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
-      <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateNZ(data.check_in)}</p>
-      <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateNZ(data.check_out)}</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
-      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${totalPrice} NZD</p>` : ""}
-      ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${bookingId}</p>` : ""}
+      <p style="margin:4px 0;">Accommodation: ${name}</p>
+      <p style="margin:4px 0;">Check-in: ${formatDateNZ(data.check_in)}</p>
+      <p style="margin:4px 0;">Check-out: ${formatDateNZ(data.check_out)}</p>
+      ${data.num_guests ? `<p style="margin:4px 0;">Guests: ${numGuests}</p>` : ""}
+      ${data.total_price ? `<p style="margin:4px 0;">Total: $${totalPrice} NZD</p>` : ""}
+      ${data.booking_id ? `<p style="margin:4px 0;">Booking ID: ${bookingId}</p>` : ""}
     </div>
 
     <div ${alertBox("#17a2b8")}>
       <h4 style="margin:0 0 6px;">Cancellation Policy</h4>
-      <p style="margin:0;">Cancellations 14+ days before arrival receive a full refund. Cancellations within 14 days are non-refundable.</p>
+      <p style="margin:0;">Cancellations made 14 or more days before arrival are eligible for a full refund. Cancellations made within 14 days of arrival are non-refundable.</p>
     </div>
 
     ${refundBlock}
 
-    <p>We'd love to welcome you another time. If your plans change, you're always welcome to rebook:</p>
+    <p>Thank you for choosing Lakeside Retreat. We would be delighted to welcome you back on another occasion. Should your plans change, we hope you’ll consider staying with us in the future. It would be our pleasure to host you and share another memorable stay.</p>
 
     <div style="text-align:center;margin:28px 0;">
-      <a href="https://lakesideretreat.co.nz/stay" ${ctaButton("#2d5a5a")}>Book Again</a>
+  	<a href="https://lakesideretreat.co.nz/stay" ${ctaButton("#2d5a5a")}>    Book Again </a>
     </div>
 
     <p>If you have any questions about your cancellation or refund, please don't hesitate to get in touch.</p>
