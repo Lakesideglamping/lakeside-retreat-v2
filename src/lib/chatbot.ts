@@ -250,7 +250,7 @@ function buildSystemPrompt(kb: KnowledgeBase): string {
 IMPORTANT RULES:
 1. Only answer questions about Lakeside Retreat and its services
 2. Never invent prices, policies, or information not provided below
-3. If unsure, suggest contacting Stephen & Sandy at ${kb.business.contact.phone} or ${kb.business.contact.email}
+3. If unsure, suggest contacting Steve and Sandy at ${kb.business.contact.phone} or ${kb.business.contact.email}
 4. Be friendly, helpful, and concise
 5. Encourage bookings when appropriate
 

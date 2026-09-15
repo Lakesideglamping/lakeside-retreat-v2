@@ -184,7 +184,7 @@ export default function FoodDiningPage() {
       {/* Tips callout */}
       <section className="py-16 px-5 bg-burgundy text-white">
         <div className="max-w-[800px] mx-auto text-center">
-          <h2 className="font-display text-3xl mb-6">Stephen &amp; Sandy&apos;s Tips</h2>
+          <h2 className="font-display text-3xl mb-6">Steve and Sandy&apos;s Tips</h2>
           <div className="grid sm:grid-cols-2 gap-4 text-left">
             {[
               { tip: "Book winery restaurants ahead", detail: "Carrick and Mt Difficulty book out fast in summer and autumn — reserve before you arrive." },

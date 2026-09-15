@@ -7,12 +7,12 @@ import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/lib/
 export const metadata: Metadata = {
   title: "About Lakeside Retreat | Sustainable Luxury Accommodation, Central Otago",
   description:
-    "Meet Stephen and Sandy, hosts of Central Otago's premier sustainably powered retreat on Lake Dunstan. Our story of building luxury glamping domes and a lakeside cottage.",
+    "Meet Steve and Sandy, hosts of Central Otago's premier sustainably powered retreat on Lake Dunstan. Our story of building luxury glamping domes and a lakeside cottage.",
   alternates: { canonical: "/our-story" },
   openGraph: {
     title: "About Lakeside Retreat | Our Story",
     description:
-      "Meet Stephen and Sandy, hosts of Central Otago's premier sustainably powered retreat on Lake Dunstan.",
+      "Meet Steve and Sandy, hosts of Central Otago's premier sustainably powered retreat on Lake Dunstan.",
     url: "https://lakesideretreat.co.nz/our-story",
     images: [{ url: "/images/galleryrainbow.jpeg", width: 1200, height: 800, alt: "Lakeside Retreat \u2014 solar powered" }],
     type: "website",
@@ -64,7 +64,7 @@ export default function OurStoryPage() {
           <div>
             <h2 className="font-display text-4xl mb-6">The day we found it</h2>
             <p className="text-lg leading-8 text-muted mb-4">
-              We&apos;re Stephen and Sandy. In 2021 we stood on a dusty paddock
+              We&apos;re Steve and Sandy. In 2021 we stood on a dusty paddock
               above Lake Dunstan, watched the light move across the Pisa Range,
               and knew we&apos;d be staying. Everything you see here &mdash;
               the domes, the vines, the solar array humming quietly in the sun
@@ -135,7 +135,7 @@ export default function OurStoryPage() {
               lake to still be in your head a week later.
             </p>
             <p className="text-lg text-muted italic">
-              Stephen &amp; Sandy
+              Steve and Sandy
             </p>
           </div>
           <Image

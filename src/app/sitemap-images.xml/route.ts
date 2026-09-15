@@ -390,7 +390,7 @@ const pages: PageImages[] = [
       },
       {
         loc: "/images/SteveSandy.jpg",
-        title: "Stephen and Sandy, hosts of Lakeside Retreat",
+        title: "Steve and Sandy, hosts of Lakeside Retreat",
         caption: "The hosts behind Lakeside Retreat, Cromwell",
       },
       {

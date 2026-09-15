@@ -147,7 +147,7 @@ export default function GuidesPage() {
         <div className="max-w-[1200px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-4">Travel Guides</h2>
           <p className="text-center text-muted text-lg mb-12">
-            Expert tips and recommendations from Stephen &amp; Sandy
+            Expert tips and recommendations from Steve and Sandy
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {guides.map((g) => (

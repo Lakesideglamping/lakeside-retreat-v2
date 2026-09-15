@@ -17,7 +17,7 @@
       "email": "info@lakesideretreat.co.nz",
       "whatsapp": "https://wa.me/6421368682"
     },
-    "hosts": "Stephen & Sandy",
+    "hosts": "Steve and Sandy",
     "features": {
       "solar_system": "16.72kW commercial-grade solar array with 38 x 440W Helios Panels",
       "battery": "16kWh Signergy battery storage",
@@ -118,7 +118,7 @@
   "faqs": [
     {
       "question": "What's included in my stay?",
-      "answer": "Dome guests receive: Continental breakfast, private spa access, stovetop cooking & Weber BBQ, 55\" OLED TV, air conditioning, free WiFi, and parking. Cottage guests receive: Complete cooking facilities with outdoor BBQ, wood-fired hot tub, garage parking, washing machine, pet-friendly accommodation, and direct lake access. All guests enjoy: Access to 16.72kW solar system tours, cycle trail maps, local winery recommendations, and Stephen & Sandy's personal hosting.",
+      "answer": "Dome guests receive: Continental breakfast, private spa access, stovetop cooking & Weber BBQ, 55\" OLED TV, air conditioning, free WiFi, and parking. Cottage guests receive: Complete cooking facilities with outdoor BBQ, wood-fired hot tub, garage parking, washing machine, pet-friendly accommodation, and direct lake access. All guests enjoy: Access to 16.72kW solar system tours, cycle trail maps, local winery recommendations, and Steve and Sandy's personal hosting.",
       "keywords": ["included", "amenities", "breakfast", "spa", "wifi", "parking"]
     },
     {
@@ -128,7 +128,7 @@
     },
     {
       "question": "What are your check-in and check-out times?",
-      "answer": "Check-in: 3:00 PM (early check-in often available). Check-out: 11:00 AM (late check-out by arrangement). Self check-in: Digital codes provided for flexible arrival. Hosts available: Stephen & Sandy live on-property for immediate assistance. We provide detailed arrival instructions and local recommendations 48 hours before your stay.",
+      "answer": "Check-in: 3:00 PM (early check-in often available). Check-out: 11:00 AM (late check-out by arrangement). Self check-in: Digital codes provided for flexible arrival. Hosts available: Steve and Sandy live on-property for immediate assistance. We provide detailed arrival instructions and local recommendations 48 hours before your stay.",
       "keywords": ["check-in", "checkout", "check-out", "arrival", "time", "early", "late"]
     },
     {
@@ -197,7 +197,7 @@
     },
     "contact_human": {
       "patterns": ["speak to someone", "talk to human", "real person", "contact", "call", "phone", "email"],
-      "response": "Of course! You can reach Stephen & Sandy directly: Phone/WhatsApp: +64-21-368-682, Email: info@lakesideretreat.co.nz. They live on-property and are always happy to help with any questions or special requests."
+      "response": "Of course! You can reach Steve and Sandy directly: Phone/WhatsApp: +64-21-368-682, Email: info@lakesideretreat.co.nz. They live on-property and are always happy to help with any questions or special requests."
     },
     "thanks": {
       "patterns": ["thank", "thanks", "cheers", "appreciate"],
@@ -209,6 +209,6 @@
     }
   },
   "fallback": {
-    "response": "I'm not sure I understand that question. I can help you with information about our accommodations, pricing, location, amenities, check-in/out times, and local activities. You can also contact Stephen & Sandy directly at +64-21-368-682 or info@lakesideretreat.co.nz for personalized assistance."
+    "response": "I'm not sure I understand that question. I can help you with information about our accommodations, pricing, location, amenities, check-in/out times, and local activities. You can also contact Steve and Sandy directly at +64-21-368-682 or info@lakesideretreat.co.nz for personalized assistance."
   }
 }

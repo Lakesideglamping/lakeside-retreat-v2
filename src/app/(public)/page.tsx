@@ -129,7 +129,7 @@ export default async function HomePage() {
           { question: "Is Lakeside Retreat close to the Otago Rail Trail?", answer: "The Otago Rail Trail (New Zealand's original Great Ride) is just 200 metres from Lakeside Retreat. You can walk from your accommodation to the trail start. The Cromwell to Clyde section is flat and spectacular — ideal for cyclists of all fitness levels." },
           { question: "What is the minimum stay at Lakeside Retreat?", answer: "Our luxury domes (Dome Pinot and Dome Ros\u00e9) have a 1-night minimum stay, though 2+ nights is recommended to fully experience the retreat. The Lakeside Cottage has a 2-night minimum stay (3 nights in peak season)." },
           { question: "What's the cancellation policy?", answer: "Full refund if cancelled 14+ days before check-in. No refund within 13 days." },
-          { question: "Why book direct instead of Airbnb?", answer: "Booking direct saves you 12-18% in service fees that platforms charge. You get the same luxury stay at a lower price with direct host communication and the ability to discuss special requests with Stephen and Sandy." },
+          { question: "Why book direct instead of Airbnb?", answer: "Booking direct saves you 12-18% in service fees that platforms charge. You get the same luxury stay at a lower price with direct host communication and the ability to discuss special requests with Steve and Sandy." },
           // JSON-LD answers must be plain strings (this array is serialized
           // into Google structured data — JSX links can't go here). The
           // visible FAQ section below has the clickable-link version.
@@ -389,7 +389,7 @@ export default async function HomePage() {
               In 2021, a wrong turn down a dusty Central Otago road led us to a piece of paradise on Lake Dunstan. Since then, we&apos;ve welcomed guests from 20+ countries to share the magic of this place.
             </p>
             <p className="text-lg leading-8 text-muted mb-8">
-              We&apos;re Stephen &amp; Sandy — your hosts, neighbours, and local guides. Come and be part of our story.
+              We&apos;re Steve and Sandy — your hosts, neighbours, and local guides. Come and be part of our story.
             </p>
             <Button href="/our-story">Read Our Story</Button>
           </div>

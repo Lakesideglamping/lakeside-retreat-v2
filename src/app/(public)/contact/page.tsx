@@ -7,7 +7,7 @@ import { JsonLd, createContactPageSchema, createBreadcrumbSchema } from "@/lib/s
 export const metadata: Metadata = {
   title: "Contact Lakeside Retreat | Cromwell, Central Otago",
   description:
-    "Get in touch with Lakeside Retreat in Cromwell, Central Otago. Enquiries, availability, and bookings for luxury glamping domes and lakeside cottage. Call or email Stephen & Sandy.",
+    "Get in touch with Lakeside Retreat in Cromwell, Central Otago. Enquiries, availability, and bookings for luxury glamping domes and lakeside cottage. Call or email Steve and Sandy.",
   alternates: { canonical: "/contact" },
   openGraph: {
     title: "Contact Lakeside Retreat",
@@ -44,7 +44,7 @@ export default function ContactPage() {
       >
         <h1 className="font-display text-5xl text-white mb-4">Contact Us</h1>
         <p className="text-xl opacity-95">
-          Ask us anything. Stephen and Sandy reply personally.
+          Ask us anything. Steve and Sandy reply personally.
         </p>
       </HeroBackground>
 
@@ -72,7 +72,7 @@ export default function ContactPage() {
               <h4 className="font-display text-lg mb-2">Book Direct for Best Rates</h4>
               <p className="text-muted text-sm m-0">
                 When you book directly with us, you&apos;ll get the best available rates plus
-                personal service from your hosts Stephen and Sandy.
+                personal service from your hosts Steve and Sandy.
               </p>
             </div>
           </div>

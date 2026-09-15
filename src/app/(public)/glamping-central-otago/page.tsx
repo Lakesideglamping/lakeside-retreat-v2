@@ -346,7 +346,7 @@ export default function GlampingCentralOtagoPage() {
             <Button href="/book?a=dome-rose">Book Dome Ros&eacute;</Button>
           </div>
           <p className="text-sm text-muted mt-6">
-            Questions? <Link href="/contact" className="text-burgundy no-underline hover:underline">Contact Stephen &amp; Sandy</Link>
+            Questions? <Link href="/contact" className="text-burgundy no-underline hover:underline">Contact Steve and Sandy</Link>
           </p>
         </div>
       </section>

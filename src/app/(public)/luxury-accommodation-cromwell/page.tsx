@@ -58,7 +58,7 @@ export default function LuxuryAccommodationCromwellPage() {
         createFaqSchema([
           { question: "What is the most luxurious accommodation in Cromwell?", answer: "Lakeside Retreat at Mount Pisa is widely regarded as Cromwell's most luxurious accommodation. With a 4.9/5 rating from 416+ guests, the property features two adults-only geodesic domes with private outdoor spas and a lakeside cottage — all with panoramic Lake Dunstan views and positioned in the heart of Central Otago wine country." },
           { question: "Is there luxury accommodation near Queenstown?", answer: "Lakeside Retreat is 45 minutes from Queenstown and offers a genuine luxury escape from the crowds. Luxury geodesic domes with private spas, stargazing skylights, and vineyard views — at better value than equivalent Queenstown properties." },
-          { question: "What makes Lakeside Retreat a luxury property?", answer: "Every detail at Lakeside Retreat is curated for luxury: premium hotel-quality linens, private saltwater outdoor spas, continental breakfast included, panoramic mountain and lake views, self-catering kitchenettes, heated bathrooms, and personal service from hosts Stephen and Sandy. The geodesic domes are architecturally unique and unlike anything else in Central Otago." },
+          { question: "What makes Lakeside Retreat a luxury property?", answer: "Every detail at Lakeside Retreat is curated for luxury: premium hotel-quality linens, private saltwater outdoor spas, continental breakfast included, panoramic mountain and lake views, self-catering kitchenettes, heated bathrooms, and personal service from hosts Steve and Sandy. The geodesic domes are architecturally unique and unlike anything else in Central Otago." },
         ]),
       ]} />
 
@@ -126,7 +126,7 @@ export default function LuxuryAccommodationCromwellPage() {
             </p>
             <p className="text-lg leading-8 text-muted mb-6">
               Every stay includes premium hotel-quality linens, self-catering kitchenettes,
-              heated bathrooms, and personal host service from Stephen and Sandy. The domes
+              heated bathrooms, and personal host service from Steve and Sandy. The domes
               also include continental breakfast and private outdoor saltwater spas.
             </p>
             <p className="text-muted text-sm italic">
@@ -258,7 +258,7 @@ export default function LuxuryAccommodationCromwellPage() {
           </p>
           <Button href="/book">Book Direct — Best Rate Guaranteed</Button>
           <p className="text-sm text-muted mt-6">
-            <Link href="/contact" className="text-burgundy no-underline hover:underline">Contact Stephen &amp; Sandy</Link> with any questions
+            <Link href="/contact" className="text-burgundy no-underline hover:underline">Contact Steve and Sandy</Link> with any questions
           </p>
         </div>
       </section>

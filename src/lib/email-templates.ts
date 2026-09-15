@@ -106,9 +106,9 @@ const alertBox = (borderColor: string) =>
 const ctaButton = (bg: string) =>
   `style="display:inline-block;background-color:${bg};color:#ffffff;padding:12px 28px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;"`;
 // Shared by every outbound template, so this is the one place the hosts are
-// named at sign-off. "Steve and Sandy" matches how the body text addresses
-// guests ("contact Steve or Sandy"). Note the public site still says
-// "Stephen & Sandy" throughout, so emails and website differ deliberately.
+// named at sign-off. "Steve and Sandy" matches the body text ("contact Steve
+// or Sandy") and the public site, which was brought into line separately.
+// Guest review text is the exception and says whatever the guest wrote.
 const signOff = `<p style="margin-top:28px;">Warm regards,<br/>Steve and Sandy<br/>Lakeside Retreat</p>`;
 
 /* ---------------------------------------------------------------------------

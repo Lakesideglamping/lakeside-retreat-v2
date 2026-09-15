@@ -106,7 +106,7 @@ export function createOrganizationSchema() {
     url: BASE_URL,
     logo: `${BASE_URL}/images/logormbg.png`,
     foundingDate: "2019",
-    founder: { "@type": "Person", name: "Stephen & Sandy" },
+    founder: { "@type": "Person", name: "Steve and Sandy" },
     description:
       "Luxury glamping and lakefront accommodation specialists in Central Otago's wine country on Lake Dunstan",
     contactPoint: {
