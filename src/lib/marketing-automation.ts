@@ -181,61 +181,64 @@ export async function findPreArrivalBookings(): Promise<Booking[]> {
 // --- Processing functions ---
 
 /**
- * Send a review request email and create a review_requests entry.
+ * Send the post-stay review email and record it in review_requests.
+ *
+ * Throws on failure rather than swallowing, so the caller can count it and
+ * alert. It used to catch-and-log, which meant a failed send left the cron
+ * reporting success while the guest silently got nothing — and because the
+ * finder only looks at a single day's departures, that guest is never picked
+ * up again. A miss here is permanent, so it has to be visible.
+ *
+ * Returns which of the two non-failure outcomes happened, so the caller can
+ * count sends without counting skips.
  */
-export async function processReviewRequest(booking: Booking): Promise<void> {
-  try {
-    // Check if a request already exists
-    const existing = await prisma.review_requests.findUnique({
-      where: { booking_id: booking.id },
-    });
+export async function processReviewRequest(
+  booking: Booking
+): Promise<"sent" | "skipped"> {
+  // Check if a request already exists. findReviewCandidates already excludes
+  // these, so this is a second line of defence against a concurrent run.
+  const existing = await prisma.review_requests.findUnique({
+    where: { booking_id: booking.id },
+  });
 
-    if (existing) {
-      logger.info("Review request already exists for booking, skipping", {
-        bookingId: booking.id,
-      });
-      return;
-    }
-
-    logger.info("Sending review request email", {
-      bookingId: booking.id,
-      guestEmail: booking.guest_email,
-    });
-
-    await sendCheckoutReviewReminder({
-      guest_name: booking.guest_name,
-      guest_email: booking.guest_email,
-      accommodation: booking.accommodation,
-      check_in: booking.check_in.toISOString(),
-      check_out: booking.check_out.toISOString(),
-      num_guests: booking.guests,
-      total_price: booking.total_price ? String(booking.total_price) : undefined,
-      booking_id: booking.id,
-    });
-
-    const now = new Date().toISOString();
-
-    await prisma.review_requests.create({
-      data: {
-        booking_id: booking.id,
-        guest_email: booking.guest_email,
-        guest_name: booking.guest_name,
-        accommodation: booking.accommodation,
-        check_out: booking.check_out.toISOString(),
-        request_count: 1,
-        last_request_sent_at: now,
-        status: "sent",
-      },
-    });
-
-    logger.info("Review request sent and recorded", {
+  if (existing) {
+    logger.info("Review request already exists for booking, skipping", {
       bookingId: booking.id,
     });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    logger.error("Failed to process review request", {
-      bookingId: booking.id,
-      error: message,
-    });
+    return "skipped";
   }
+
+  logger.info("Sending review request email", {
+    bookingId: booking.id,
+    guestEmail: booking.guest_email,
+  });
+
+  await sendCheckoutReviewReminder({
+    guest_name: booking.guest_name,
+    guest_email: booking.guest_email,
+    accommodation: booking.accommodation,
+    check_in: booking.check_in.toISOString(),
+    check_out: booking.check_out.toISOString(),
+    num_guests: booking.guests,
+    total_price: booking.total_price ? String(booking.total_price) : undefined,
+    booking_id: booking.id,
+  });
+
+  const now = new Date().toISOString();
+
+  await prisma.review_requests.create({
+    data: {
+      booking_id: booking.id,
+      guest_email: booking.guest_email,
+      guest_name: booking.guest_name,
+      accommodation: booking.accommodation,
+      check_out: booking.check_out.toISOString(),
+      request_count: 1,
+      last_request_sent_at: now,
+      status: "sent",
+    },
+  });
+
+  logger.info("Review request sent and recorded", { bookingId: booking.id });
+  return "sent";
 }
