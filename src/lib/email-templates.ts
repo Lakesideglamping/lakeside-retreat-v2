@@ -336,24 +336,27 @@ export function preArrivalHtml(data: BookingEmailData): string {
 }
 
 export function checkoutReviewReminderHtml(data: BookingEmailData): string {
-  const name = escapeHtml(formatAccommodationName(data.accommodation));
+  // No accommodation name: the rewritten copy thanks the guest for their stay
+  // without naming the property, so formatAccommodationName is not needed here.
   const guestName = escapeHtml(data.guest_name);
   const googleReviewUrl = "https://g.page/r/lakeside-retreat-cromwell/review?utm_source=email&utm_medium=review_reminder";
-  const airbnbUrl = "https://www.airbnb.co.nz/users/show/lakesideretreat";
-
+  
   return layout("How was your stay?", `
     <p>Hi ${guestName},</p>
-    <p>It's been a week since you stayed with us at ${name} — we hope your trip home was smooth and that you've been telling everyone about the lake views.</p>
+    <p>Thank you for choosing Lakeside Retreat. It has been a pleasure to welcome you, and we hope your stay was peaceful, restorative, and a memorable part of your time in Central Otago.</p>
 
-    <p>If you haven't already, would you mind taking 60 seconds to leave us a review? Honest feedback helps other travellers find us, and as an owner-run retreat it genuinely makes our week.</p>
+    <p>If there was anything during your stay that fell short of expectations, we would be most grateful to hear from you directly. Simply reply to this message — we value your feedback and would welcome the opportunity to make things right.</p>
+
+    <p>Should you have enjoyed your time with us, we would be honoured if you would share a few words about your experience in a review. Your thoughtful feedback is sincerely appreciated and means a great deal to us.</p>
 
     <div style="text-align:center;margin:24px 0;">
       <a href="${googleReviewUrl}" ${ctaButton("#4285f4")} style="display:inline-block;background-color:#4285f4;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;margin:4px;">Review on Google</a>
-      <a href="${airbnbUrl}" ${ctaButton("#ff5a5f")} style="display:inline-block;background-color:#ff5a5f;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;margin:4px;">Review on Airbnb</a>
-    </div>
+      </div>
 
-    <p>If you've already left one — thank you, truly. Please ignore this!</p>
-    <p>And if anything about your stay wasn't quite right, just hit reply and let us know. We'd much rather hear it directly so we can put it right.</p>
+<p>As you continue your travels, we wish you a beautiful journey ahead, filled with wonderful places, unforgettable moments, and safe travels.</p>
+
+    <p>It has been our pleasure to host you, and we hope our paths cross again at Lakeside Retreat.</p>
+
     ${signOff}
   `);
 }
@@ -362,19 +365,15 @@ export function checkoutThankYouHtml(data: BookingEmailData): string {
   const name = escapeHtml(formatAccommodationName(data.accommodation));
   const guestName = escapeHtml(data.guest_name);
   const googleReviewUrl = "https://g.page/r/lakeside-retreat-cromwell/review";
-  const airbnbUrl = "https://www.airbnb.co.nz/users/show/lakesideretreat";
 
   return layout("Thank You for Your Stay!", `
     <p>Hi ${guestName},</p>
     <p>Thank you so much for staying with us at ${name}! We truly hope you had a wonderful time and that Lakeside Retreat felt like a home away from home.</p>
 
-    <div ${detailsBox}>
-
     <p>If you enjoyed your stay, we'd love to hear about it! A quick review helps other travellers discover us and means the world to our small owner-run retreat.</p>
 
     <div style="text-align:center;margin:24px 0;">
       <a href="${googleReviewUrl}" ${ctaButton("#4285f4")} style="display:inline-block;background-color:#4285f4;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;margin:4px;">Review on Google</a>
-      <a href="${airbnbUrl}" ${ctaButton("#ff5a5f")} style="display:inline-block;background-color:#ff5a5f;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;margin:4px;">Review on Airbnb</a>
     </div>
 
     <div ${alertBox("#2d5a5a")}>
