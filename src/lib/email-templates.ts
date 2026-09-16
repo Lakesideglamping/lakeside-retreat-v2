@@ -350,7 +350,7 @@ export function checkoutReviewReminderHtml(data: BookingEmailData): string {
     <p>Should you have enjoyed your time with us, we would be honoured if you would share a few words about your experience in a review. Your thoughtful feedback is sincerely appreciated and means a great deal to us.</p>
 
     <div style="text-align:center;margin:24px 0;">
-      <a href="${googleReviewUrl}" ${ctaButton("#4285f4")} style="display:inline-block;background-color:#4285f4;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;margin:4px;">Review on Google</a>
+      <a href="${googleReviewUrl}" ${ctaButton("#4285f4")}>Review on Google</a>
       </div>
 
 <p>As you continue your travels, we wish you a beautiful journey ahead, filled with wonderful places, unforgettable moments, and safe travels.</p>
