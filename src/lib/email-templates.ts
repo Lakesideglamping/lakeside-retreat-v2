@@ -361,30 +361,6 @@ export function checkoutReviewReminderHtml(data: BookingEmailData): string {
   `);
 }
 
-export function checkoutThankYouHtml(data: BookingEmailData): string {
-  const name = escapeHtml(formatAccommodationName(data.accommodation));
-  const guestName = escapeHtml(data.guest_name);
-  const googleReviewUrl = "https://g.page/r/lakeside-retreat-cromwell/review";
-
-  return layout("Thank You for Your Stay!", `
-    <p>Hi ${guestName},</p>
-    <p>Thank you so much for staying with us at ${name}! We truly hope you had a wonderful time and that Lakeside Retreat felt like a home away from home.</p>
-
-    <p>If you enjoyed your stay, we'd love to hear about it! A quick review helps other travellers discover us and means the world to our small owner-run retreat.</p>
-
-    <div style="text-align:center;margin:24px 0;">
-      <a href="${googleReviewUrl}" ${ctaButton("#4285f4")} style="display:inline-block;background-color:#4285f4;color:#ffffff;padding:12px 24px;text-decoration:none;border-radius:5px;font-family:Georgia,serif;font-size:15px;margin:4px;">Review on Google</a>
-    </div>
-
-    <div ${alertBox("#2d5a5a")}>
-      <p style="margin:0;"><strong>Book direct next time and save 18%!</strong> When you book through our website at <a href="https://lakesideretreat.co.nz" style="color:#2d5a5a;">lakesideretreat.co.nz</a>, you skip the platform fees and get the best possible rate. We'd love to welcome you back!</p>
-    </div>
-
-    <p>Thank you again for choosing Lakeside Retreat. We hope to see you again soon!</p>
-    ${signOff}
-  `);
-}
-
 export function paymentFailureHtml(data: BookingEmailData): string {
   const name = escapeHtml(formatAccommodationName(data.accommodation));
   const guestName = escapeHtml(data.guest_name);

@@ -25,7 +25,6 @@ vi.mock("../logger", () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
 vi.mock("../email", () => ({
-  sendCheckoutThankYou: vi.fn(),
   sendCheckoutReviewReminder: vi.fn(),
 }));
 

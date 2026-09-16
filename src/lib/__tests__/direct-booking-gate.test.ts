@@ -27,7 +27,6 @@ vi.mock("../logger", () => ({
 }));
 
 vi.mock("../email", () => ({
-  sendCheckoutThankYou: vi.fn(),
   sendCheckoutReviewReminder: vi.fn(),
 }));
 
@@ -80,27 +79,4 @@ describe("every guest-email finder gates on booking source", () => {
       expect(where.status).toBe("confirmed");
     });
   }
-});
-
-describe("the review follow-up is gated independently", () => {
-  it("re-checks the source rather than trusting review_requests", async () => {
-    // review_requests rows written before the gate existed would otherwise
-    // still earn an OTA guest a second email.
-    vi.resetModules();
-    vi.doMock("../db", () => ({
-      prisma: {
-        bookings: { findMany: (args: unknown) => findMany(args) },
-        review_requests: {
-          findMany: async () => [{ id: 1, booking_id: "legacy-ota-row" }],
-        },
-      },
-    }));
-
-    const mod = await import("../marketing-automation");
-    await mod.findReviewFollowUpCandidates();
-
-    const where = whereOf();
-    expect(where.booking_source).toEqual({ in: mod.DIRECT_BOOKING_SOURCES });
-    expect(where.guest_email).toEqual({ contains: "@" });
-  });
 });

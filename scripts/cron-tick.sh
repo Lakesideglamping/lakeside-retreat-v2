@@ -5,7 +5,7 @@
 # NZ Standard Time is UTC+12 (NZDT is UTC+13). We pick UTC slots that land at
 # reasonable NZ hours year-round:
 #   20:00 UTC  -> 08:00 NZST / 09:00 NZDT  -> pre-arrival
-#   22:00 UTC  -> 10:00 NZST / 11:00 NZDT  -> review-request (+ thank-you)
+#   04:00 UTC  -> 16:00 NZST / 17:00 NZDT  -> review-request
 #   03:00 UTC  -> 15:00 NZST / 16:00 NZDT  -> reconcile-calendar
 #
 # during-stay was removed. It fired at 00:00 UTC, which is midday in Cromwell
@@ -59,7 +59,7 @@ call /api/cron/retry-uplisting-sync
 
 case "$hour" in
   20) call /api/cron/pre-arrival ;;
-  22) call /api/cron/review-request ;;
+  04) call /api/cron/review-request ;;
   # Read-only Uplisting reachability check — it fetches blocked dates and
   # logs the counts, writing nothing. Its value is the CRON_FAILURE alert
   # when Uplisting is unreachable, so once a day is plenty.

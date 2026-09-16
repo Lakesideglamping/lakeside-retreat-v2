@@ -9,7 +9,6 @@ import {
   bookingConfirmationHtml,
   bookingConfirmationCottageHtml,
   preArrivalHtml,
-  checkoutThankYouHtml,
   checkoutReviewReminderHtml,
   paymentFailureHtml,
   cancellationHtml,
@@ -265,29 +264,6 @@ export async function sendPreArrivalInstructions(
   logger.info(`Pre-arrival instructions sent to ${booking.guest_email}`);
 }
 
-export async function sendCheckoutThankYou(
-  booking: TemplateBookingData
-): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("Email not configured - checkout thank-you skipped");
-    return;
-  }
-
-  await sendAndLog(transporter, {
-    from: fromAddress(),
-    to: booking.guest_email,
-    subject: "Thank you for staying at Lakeside Retreat!",
-    html: checkoutThankYouHtml(booking),
-  }, { template: "checkout_thank_you", bookingId: booking.booking_id });
-  logger.info(`Checkout thank-you email sent to ${booking.guest_email}`);
-}
-
-/**
- * Second-attempt review nudge sent ~7 days after the initial thank-you.
- * Lifts review response rate from ~10% (single email) to ~17% (two-step
- * sequence) — extra Google reviews directly improve local search rank.
- */
 export async function sendCheckoutReviewReminder(
   booking: TemplateBookingData
 ): Promise<void> {

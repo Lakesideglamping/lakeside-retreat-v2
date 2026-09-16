@@ -2,7 +2,6 @@ import { prisma } from "./db";
 import { logger } from "./logger";
 import { nzToday, addDays } from "./date-range";
 import {
-  sendCheckoutThankYou,
   sendCheckoutReviewReminder,
 } from "./email";
 
@@ -65,15 +64,26 @@ const directBookingWhere = {
 // --- Query helpers ---
 
 /**
- * Find bookings that checked out 2 days ago and have not yet received
- * a review request email.
+ * Find bookings that checked out today and have not yet been asked for a
+ * review.
+ *
+ * Sent on departure day rather than two days later. The cron fires at 04:00
+ * UTC — 16:00 in Cromwell, six hours after the 10am check-out — so the stay
+ * is fresh and the guest is likely still travelling, which is when the note
+ * reads as a farewell rather than a marketing follow-up.
+ *
+ * Counted in New Zealand, not on the server. At 04:00 UTC the two happen to
+ * agree, but only because of the hour chosen; anchoring to NZ means moving
+ * the slot later cannot silently start targeting the wrong day.
+ *
+ * check_out is a DATE column and a DATE compares as that day at 00:00 UTC, so
+ * the bounds are built with Date.UTC from the NZ date.
  */
 export async function findReviewCandidates(): Promise<Booking[]> {
-  const twoDaysAgo = new Date();
-  twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-  const startOfDay = new Date(twoDaysAgo.getFullYear(), twoDaysAgo.getMonth(), twoDaysAgo.getDate());
-  const endOfDay = new Date(startOfDay);
-  endOfDay.setDate(endOfDay.getDate() + 1);
+  const today = nzToday();
+  const [y, m, d] = today.split("-").map(Number);
+  const startOfDay = new Date(Date.UTC(y, m - 1, d));
+  const endOfDay = new Date(Date.UTC(y, m - 1, d + 1));
 
   // Get all bookings that checked out on that day
   const bookings = await prisma.bookings.findMany({
@@ -192,7 +202,7 @@ export async function processReviewRequest(booking: Booking): Promise<void> {
       guestEmail: booking.guest_email,
     });
 
-    await sendCheckoutThankYou({
+    await sendCheckoutReviewReminder({
       guest_name: booking.guest_name,
       guest_email: booking.guest_email,
       accommodation: booking.accommodation,
@@ -224,90 +234,6 @@ export async function processReviewRequest(booking: Booking): Promise<void> {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     logger.error("Failed to process review request", {
-      bookingId: booking.id,
-      error: message,
-    });
-  }
-}
-
-// --- Review follow-up (7-day reminder) ---
-
-/**
- * Bookings that received their first review request ≥7 days ago and
- * haven't been nudged a second time. One follow-up only — we don't want
- * to harass guests, and diminishing returns past two attempts.
- */
-export async function findReviewFollowUpCandidates(): Promise<
-  { booking: Booking; reviewRequestId: number }[]
-> {
-  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-
-  // request_count = 1 means "initial sent, no follow-up yet". The cron will
-  // bump it to 2 after sending the reminder, which excludes that row from
-  // any future tick.
-  const pending = await prisma.review_requests.findMany({
-    where: {
-      request_count: 1,
-      last_request_sent_at: { lt: sevenDaysAgo },
-      status: "sent",
-    },
-    select: { id: true, booking_id: true },
-    take: 50,
-  });
-  if (pending.length === 0) return [];
-
-  // Gated here too, not just in findReviewCandidates. Rows written before the
-  // gate existed would otherwise still receive a follow-up, and this query is
-  // driven by review_requests rather than by that finder.
-  const bookings = await prisma.bookings.findMany({
-    where: {
-      id: { in: pending.map((p) => p.booking_id) },
-      deleted_at: null,
-      ...directBookingWhere,
-    },
-  });
-  const bookingMap = new Map(bookings.map((b) => [b.id, b]));
-
-  return pending
-    .map((p) => {
-      const b = bookingMap.get(p.booking_id);
-      return b ? { booking: b as unknown as Booking, reviewRequestId: p.id } : null;
-    })
-    .filter((x): x is { booking: Booking; reviewRequestId: number } => x !== null);
-}
-
-/**
- * Send a follow-up review email and bump the row's request_count so we
- * never send a third nudge.
- */
-export async function processReviewFollowUp(
-  candidate: { booking: Booking; reviewRequestId: number }
-): Promise<void> {
-  const { booking, reviewRequestId } = candidate;
-  try {
-    await sendCheckoutReviewReminder({
-      guest_name: booking.guest_name,
-      guest_email: booking.guest_email,
-      accommodation: booking.accommodation,
-      check_in: booking.check_in.toISOString(),
-      check_out: booking.check_out.toISOString(),
-      num_guests: booking.guests,
-      total_price: booking.total_price ? String(booking.total_price) : undefined,
-      booking_id: booking.id,
-    });
-
-    await prisma.review_requests.update({
-      where: { id: reviewRequestId },
-      data: {
-        request_count: 2,
-        last_request_sent_at: new Date().toISOString(),
-      },
-    });
-
-    logger.info("Review follow-up sent", { bookingId: booking.id });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    logger.error("Failed to process review follow-up", {
       bookingId: booking.id,
       error: message,
     });

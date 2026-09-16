@@ -3,7 +3,7 @@ import {
   bookingConfirmationHtml,
   bookingConfirmationCottageHtml,
   preArrivalHtml,
-  checkoutThankYouHtml,
+  checkoutReviewReminderHtml,
   paymentFailureHtml,
   cancellationHtml,
   paymentNotificationHtml,
@@ -65,11 +65,12 @@ const templates: TemplateDef[] = [
     html: () => preArrivalHtml(sampleBooking),
   },
   {
-    id: "checkout_thank_you",
-    label: "Checkout thank-you",
-    description: "Thank-you note and review request on departure day.",
-    whenSent: "Check-out day (cron)",
-    html: () => checkoutThankYouHtml(sampleBooking),
+    id: "checkout_review_reminder",
+    label: "Post-stay thank-you & review",
+    description:
+      "Farewell note on departure day, with a gentle review ask and an invitation to reply directly if anything fell short.",
+    whenSent: "Check-out day, 6 hours after check-out (cron)",
+    html: () => checkoutReviewReminderHtml(sampleBooking),
   },
   {
     id: "cancellation_refund",

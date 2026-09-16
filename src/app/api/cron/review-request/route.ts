@@ -4,9 +4,7 @@ import { logger } from "@/lib/logger";
 import { sendSystemAlert } from "@/lib/email";
 import {
   findReviewCandidates,
-  findReviewFollowUpCandidates,
   processReviewRequest,
-  processReviewFollowUp,
 } from "@/lib/marketing-automation";
 
 export async function POST(request: Request) {
@@ -15,7 +13,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    // First-pass review requests (~2 days post-checkout)
+    // Post-stay thank-you and review ask, on departure day.
     const initial = await findReviewCandidates();
     let sent = 0;
     for (const booking of initial) {
@@ -23,23 +21,12 @@ export async function POST(request: Request) {
       sent++;
     }
 
-    // Second nudge (~7 days after first email, only once per booking).
-    // Lifts review response rate from ~10% to ~17% — directly feeds
-    // Google review velocity which is a real local-SEO ranking signal.
-    const followUps = await findReviewFollowUpCandidates();
-    let followUpsSent = 0;
-    for (const candidate of followUps) {
-      await processReviewFollowUp(candidate);
-      followUpsSent++;
-    }
-
     logger.info("Review request processing completed", {
       job: "review-request",
       sent,
-      followUpsSent,
     });
 
-    return NextResponse.json({ success: true, sent, followUpsSent });
+    return NextResponse.json({ success: true, sent });
   } catch (error) {
     logger.error("Review request processing failed", {
       job: "review-request",

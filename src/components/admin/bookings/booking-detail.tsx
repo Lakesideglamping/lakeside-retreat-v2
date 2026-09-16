@@ -67,7 +67,7 @@ const emailTemplateLabels: Record<string, string> = {
   booking_confirmation_guest: "Booking confirmation (guest)",
   booking_confirmation_host: "Booking notification (host)",
   pre_arrival: "Pre-arrival instructions",
-  checkout_thank_you: "Checkout thank-you",
+  checkout_review_reminder: "Post-stay thank-you & review",
   abandoned_checkout: "Abandoned checkout reminder",
   payment_failure: "Payment failure notice",
   cancellation: "Cancellation confirmation",
