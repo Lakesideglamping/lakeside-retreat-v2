@@ -4,10 +4,19 @@
 #
 # NZ Standard Time is UTC+12 (NZDT is UTC+13). We pick UTC slots that land at
 # reasonable NZ hours year-round:
-#   21:00 UTC  -> 09:00 NZST / 10:00 NZDT  -> pre-arrival
+#   20:00 UTC  -> 08:00 NZST / 09:00 NZDT  -> pre-arrival
 #   22:00 UTC  -> 10:00 NZST / 11:00 NZDT  -> review-request (+ thank-you)
 #   00:00 UTC  -> 12:00 NZST / 13:00 NZDT  -> during-stay
 #   03:00 UTC  -> 15:00 NZST / 16:00 NZDT  -> reconcile-calendar
+#
+# No single UTC hour is 08:00 in NZ all year, because the offset moves between
+# +12 and +13. 20:00 UTC is 08:00 in winter and 09:00 in summer; the
+# alternative, 19:00 UTC, would be 07:00 in winter. Landing slightly later in
+# summer is the better miss of the two.
+#
+# Pre-arrival is sent three days before check-in — see PRE_ARRIVAL_LEAD_DAYS
+# in lib/marketing-automation.ts. That constant and this slot decide between
+# them when a guest hears from us, so the email's wording must match both.
 # retry-uplisting-sync runs every tick — it is idempotent and time-sensitive,
 # since an unsynced booking is a double-booking risk until it lands.
 #
@@ -45,7 +54,7 @@ echo "Cron tick at UTC hour ${hour}"
 call /api/cron/retry-uplisting-sync
 
 case "$hour" in
-  21) call /api/cron/pre-arrival ;;
+  20) call /api/cron/pre-arrival ;;
   22) call /api/cron/review-request ;;
   00) call /api/cron/during-stay ;;
   # Read-only Uplisting reachability check — it fetches blocked dates and

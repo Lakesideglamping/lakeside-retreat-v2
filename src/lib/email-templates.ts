@@ -288,31 +288,41 @@ export function preArrivalHtml(data: BookingEmailData): string {
     </div>`;
   }
 
-  return layout("Your Stay Starts Tomorrow!", `
+  return layout("Your Stay Starts Soon", `
     <p>Hi ${guestName},</p>
-    <p>We're excited to welcome you tomorrow! Here's everything you need for a smooth arrival.</p>
-
+    <p>We can't wait to welcome you to our unique and tranquil dome in our boutique vineyard for a one-of-a-kind experience.</p>
+    <p>As we prepare for your upcoming stay, here are a few details to ensure a smooth and enjoyable experience:</p>
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Arrival Details</h3>
-      <p style="margin:4px 0;"><strong>Address:</strong> 96 Smiths Way, Mount Pisa, Cromwell</p>
-      <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateLong(data.check_in)} from 3:00 PM</p>
-      <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateLong(data.check_out)} by 10:00 AM</p>
-      <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
+      <p style="margin:4px 0;">Our Address is: <br>96 Smiths Way,<br> Mount Pisa,<br> Cromwell</p>
+      <p style="margin:4px 0;"><br>Check-in: ${formatDateLong(data.check_in)} from 3:00 PM</p>
+      <p style="margin:4px 0;">Check-out: ${formatDateLong(data.check_out)} by 10:00 AM</p>
+      <p style="margin:4px 0;">You have booked: ${name}</p>
+      ${data.num_guests ? `<p style="margin:4px 0;">Guests: ${numGuests}</p>` : ""}
     </div>
 
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Property Essentials</h3>
-      <p style="margin:4px 0;"><strong>WiFi:</strong> Connect to <code>Lakeside_Guest</code></p>
-      <p style="margin:4px 0;"><strong>Parking:</strong> Free parking available on-site</p>
-      <p style="margin:4px 0;"><strong>Emergency Contact:</strong> <a href="tel:+6421368682" style="color:#2d5a5a;">+64 21 368 682</a></p>
+      <p style="margin:4px 0;"><strong>Parking:</strong><br> Complimentary onsite parking is available for your convenience throughout your stay.</p>
+      <p style="margin:4px 0;"><strong>Self Checkin:</strong> <br>On arrival, your key will be waiting on the benchtop, with the door unlocked for your convenience. Once you’re settled in, we’ll pop by to warmly welcome you and ensure everything is just right for your stay.<br></p>
+      <p style="margin:4px 0;" class="weather-message"><strong>Weather Forecast:</strong><br>
+  For your weather forecast in Cromwell, please
+  <a
+    href="https://www.accuweather.com/en/nz/cromwell/249913/weather-forecast/249913"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    view the latest forecast here
+  </a>
+  at your convenience.
+</p>
     </div>
 
     ${propertyTips}
 
     <div ${detailsBox}>
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Explore the Area</h3>
-      <p style="margin:4px 0;">Central Otago has incredible dining, wineries, and scenery. Ask us for our favourites when you arrive &mdash; we love sharing our local picks.</p>
+      <p style="margin:4px 0;">Central Otago has incredible dining, wineries, and scenery. Explore our website or simply ask us for our favourites when you arrive — we’re always delighted to share our local recommendations.</p>
     </div>
 
     <div style="text-align:center;margin:28px 0;">

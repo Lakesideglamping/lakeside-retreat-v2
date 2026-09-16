@@ -1,5 +1,6 @@
 import { prisma } from "./db";
 import { logger } from "./logger";
+import { nzToday, addDays } from "./date-range";
 import {
   sendCheckoutThankYou,
   sendCheckoutReviewReminder,
@@ -96,14 +97,28 @@ export async function findReviewCandidates(): Promise<Booking[]> {
 }
 
 /**
- * Find bookings checking in tomorrow (for pre-arrival emails).
+ * How far ahead of check-in the arrival instructions go out.
+ *
+ * Three days gives a guest time to act on them — plan the drive, check the
+ * forecast, ask a question and get an answer before they set off. The cron
+ * that calls this runs once a day, so this is also the only thing deciding
+ * when the email lands; the template's wording must stay in step with it.
+ */
+const PRE_ARRIVAL_LEAD_DAYS = 3;
+
+/**
+ * Find bookings checking in PRE_ARRIVAL_LEAD_DAYS from now (pre-arrival).
  */
 export async function findPreArrivalBookings(): Promise<Booking[]> {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const startOfDay = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate());
-  const endOfDay = new Date(startOfDay);
-  endOfDay.setDate(endOfDay.getDate() + 1);
+  // Three days out, counted in New Zealand. The old version used the server's
+  // own date, which on Render is UTC — 12–13 hours behind Cromwell — so for
+  // half of every day it targeted the wrong calendar day. check_in is a DATE
+  // column, and a DATE compares as that day at 00:00 UTC, so the bounds are
+  // built with Date.UTC from the NZ date rather than from local time.
+  const target = addDays(nzToday(), PRE_ARRIVAL_LEAD_DAYS);
+  const [y, m, d] = target.split("-").map(Number);
+  const startOfDay = new Date(Date.UTC(y, m - 1, d));
+  const endOfDay = new Date(Date.UTC(y, m - 1, d + 1));
 
   const bookings = await prisma.bookings.findMany({
     where: {
