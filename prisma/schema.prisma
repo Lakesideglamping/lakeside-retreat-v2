@@ -148,7 +148,20 @@ model review_requests {
   status               String? @default("pending")
   created_at           String? @default(dbgenerated("CURRENT_TIMESTAMP"))
 
-  // Cron query: WHERE status = 'pending' AND last_request_sent_at < now()-7d
+  // One row per booking we have asked for a review. Written once, when the
+  // email goes out, and read two ways: as the dedup key (booking_id is unique,
+  // so "have we already asked?" is one lookup) and by the admin Marketing page,
+  // which lists and counts these rows.
+  //
+  // request_count is vestigial. It tracked a two-email sequence — 1 after the
+  // thank-you, 2 after a 7-day follow-up — and nothing bumps it past 1 now
+  // that the post-stay email is a single send on departure day.
+  //
+  // The index is still earned by its FIRST column: the admin dashboard counts
+  // rows WHERE status = 'pending', and Postgres uses a composite index on its
+  // leading column alone (verified via EXPLAIN — Index Only Scan). The second
+  // column is what is vestigial; the 7-day query that needed
+  // last_request_sent_at went with the follow-up.
   @@index([status, last_request_sent_at], map: "idx_review_requests_status_sent_at")
 }
 
