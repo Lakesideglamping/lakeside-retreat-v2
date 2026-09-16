@@ -20,6 +20,7 @@ type Booking = {
   payment_status: string | null;
   notes: string | null;
   deleted_at: Date | null;
+  created_at: Date | null;
 };
 
 /**
@@ -107,6 +108,25 @@ export async function findReviewCandidates(): Promise<Booking[]> {
 const PRE_ARRIVAL_LEAD_DAYS = 3;
 
 /**
+ * A booking made inside this window of its own arrival gets no pre-arrival
+ * email.
+ *
+ * Someone who books two days out does not need "your stay starts soon" — they
+ * know, they just booked, and the confirmation already carries the address and
+ * the check-in time. Sending it anyway reads as a system talking to itself.
+ *
+ * Under the current schedule this is belt-and-braces: the cron only looks at
+ * check-ins three days out, so a late booking is already past that window and
+ * would never be picked up. It is enforced explicitly so that widening the
+ * window, adding a catch-up run, or backfilling cannot quietly start mailing
+ * guests who booked yesterday.
+ *
+ * Measured to the start of the arrival day, not the 3pm check-in, so it is the
+ * arrival date the guest booked against.
+ */
+const MIN_BOOKING_LEAD_MS = 72 * 60 * 60 * 1000;
+
+/**
  * Find bookings checking in PRE_ARRIVAL_LEAD_DAYS from now (pre-arrival).
  */
 export async function findPreArrivalBookings(): Promise<Booking[]> {
@@ -130,7 +150,22 @@ export async function findPreArrivalBookings(): Promise<Booking[]> {
     },
   });
 
-  return bookings as unknown as Booking[];
+  // Skip anyone who booked inside the lead time. Postgres can compare two
+  // columns but Prisma's `where` cannot, and the set here is one day's
+  // arrivals, so it is filtered in memory.
+  const eligible = (bookings as unknown as Booking[]).filter((b) => {
+    if (!b.created_at) return true; // no timestamp — don't silently drop them
+    const leadMs = b.check_in.getTime() - b.created_at.getTime();
+    if (leadMs >= MIN_BOOKING_LEAD_MS) return true;
+    logger.info("Pre-arrival skipped — booked inside the lead time", {
+      job: "pre-arrival",
+      bookingId: b.id,
+      hoursBeforeArrival: Math.round(leadMs / (60 * 60 * 1000)),
+    });
+    return false;
+  });
+
+  return eligible;
 }
 
 /**

@@ -105,3 +105,71 @@ describe("pre-arrival targets check-in three NZ days ahead", () => {
     expect(where.deleted_at).toBeNull();
   });
 });
+
+/**
+ * A guest who books two days out does not need "your stay starts soon" —
+ * they know, they just booked. The confirmation already gave them the
+ * address and the check-in time.
+ */
+describe("pre-arrival skips bookings made inside the 72-hour lead", () => {
+  const arrival = new Date("2026-09-13T00:00:00Z"); // the targeted NZ day
+
+  function booking(createdAt: Date | null, id = "b1") {
+    return {
+      id,
+      guest_name: "A",
+      guest_email: "a@e.com",
+      guest_phone: null,
+      accommodation: "dome-pinot",
+      check_in: arrival,
+      check_out: new Date("2026-09-15T00:00:00Z"),
+      guests: 2,
+      total_price: 650,
+      status: "confirmed",
+      payment_status: "paid",
+      notes: null,
+      deleted_at: null,
+      created_at: createdAt,
+    };
+  }
+
+  /** Hours before the arrival day a booking was created. */
+  const madeHoursBefore = (h: number) =>
+    new Date(arrival.getTime() - h * 60 * 60 * 1000);
+
+  it.each([
+    [96, true, "four days ahead"],
+    [73, true, "just over the line"],
+    [72, true, "exactly 72 hours — inclusive"],
+    [71, false, "just inside"],
+    [24, false, "the day before"],
+    [1, false, "an hour before"],
+  ])("%s hours before arrival -> included=%s (%s)", async (hours, included) => {
+    freezeAt("2026-09-09T20:00:00Z");
+    findMany.mockResolvedValue([booking(madeHoursBefore(hours as number))]);
+    const { findPreArrivalBookings } = await import("../marketing-automation");
+    const result = await findPreArrivalBookings();
+    expect(result.length).toBe(included ? 1 : 0);
+  });
+
+  it("keeps a booking with no created_at rather than silently dropping it", async () => {
+    // Older rows predate the column default. Losing a real guest's arrival
+    // instructions is worse than sending one we could have skipped.
+    freezeAt("2026-09-09T20:00:00Z");
+    findMany.mockResolvedValue([booking(null)]);
+    const { findPreArrivalBookings } = await import("../marketing-automation");
+    expect((await findPreArrivalBookings()).length).toBe(1);
+  });
+
+  it("filters per booking, not all-or-nothing", async () => {
+    freezeAt("2026-09-09T20:00:00Z");
+    findMany.mockResolvedValue([
+      booking(madeHoursBefore(200), "early"),
+      booking(madeHoursBefore(10), "late"),
+      booking(madeHoursBefore(80), "alsoEarly"),
+    ]);
+    const { findPreArrivalBookings } = await import("../marketing-automation");
+    const ids = (await findPreArrivalBookings()).map((b) => b.id);
+    expect(ids).toEqual(["early", "alsoEarly"]);
+  });
+});
