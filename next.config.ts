@@ -93,5 +93,24 @@ export default withSentryConfig(nextConfig, {
   silent: !process.env.CI,
   widenClientFileUpload: true,
   disableLogger: true,
-  tunnelRoute: "/monitoring",
+  // tunnelRoute is deliberately NOT set.
+  //
+  // It routes every browser Sentry event through our own server at
+  // /monitoring, which then forwards it to ingest.us.sentry.io. That dodges ad
+  // blockers, but it makes visitor traffic drive outbound connections from the
+  // web service — and Render cannot reach Sentry's ingest host: IPv6 is
+  // ENETUNREACH and IPv4 hangs until ETIMEDOUT, which takes minutes.
+  //
+  // It took the site down within an hour of going public. While maintenance
+  // mode was on, every visitor got a 12-byte redirect and the browser SDK
+  // never ran. The moment real pages started rendering, each page view queued
+  // envelopes that each became a multi-minute hanging socket on a 512MB
+  // instance. They accumulated faster than they timed out: first slow pages,
+  // then nothing served at all.
+  //
+  // Without the tunnel the browser talks to Sentry directly. If that is
+  // blocked the failure stays in the visitor's browser, where it is harmless,
+  // instead of consuming server capacity. Do not re-enable it unless Render's
+  // egress to Sentry is confirmed working AND the proxy is given a short
+  // timeout, because the failure mode is a full outage, not lost telemetry.
 });
