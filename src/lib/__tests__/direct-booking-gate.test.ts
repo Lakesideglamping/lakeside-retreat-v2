@@ -59,7 +59,6 @@ describe("DIRECT_BOOKING_SOURCES", () => {
 describe("every guest-email finder gates on booking source", () => {
   const finders = [
     "findPreArrivalBookings",
-    "findDuringStayBookings",
     "findReviewCandidates",
   ] as const;
 

@@ -60,12 +60,13 @@ interface EmailSendEntry {
 
 // Labels for rows already in email_log — a historical record, not a list of
 // templates we still send. abandoned_checkout stays: the feature is gone, but
-// past sends are still in the log and would otherwise display as a raw key.
+// six past sends are still in the log and would otherwise display as a raw key.
+// during_stay is absent for the opposite reason — it was removed having never
+// sent once, so there is nothing historical to label.
 const emailTemplateLabels: Record<string, string> = {
   booking_confirmation_guest: "Booking confirmation (guest)",
   booking_confirmation_host: "Booking notification (host)",
   pre_arrival: "Pre-arrival instructions",
-  during_stay: "Mid-stay check-in",
   checkout_thank_you: "Checkout thank-you",
   abandoned_checkout: "Abandoned checkout reminder",
   payment_failure: "Payment failure notice",

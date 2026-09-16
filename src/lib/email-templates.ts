@@ -335,38 +335,6 @@ export function preArrivalHtml(data: BookingEmailData): string {
   `);
 }
 
-export function duringStayHtml(data: BookingEmailData): string {
-  const name = escapeHtml(formatAccommodationName(data.accommodation));
-  const guestName = escapeHtml(data.guest_name);
-
-  return layout("Welcome to Lakeside Retreat!", `
-    <p>Hi ${guestName},</p>
-    <p>We hope you've settled in and are enjoying your stay at ${name}! We just wanted to check in and make sure everything is perfect.</p>
-
-    <div ${detailsBox}>
-      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">A Few Reminders</h3>
-      <p style="margin:4px 0;"><strong>Your Spa or Hot Tub:</strong> Make the most of it &mdash; the saltwater spa (domes) or wood-fired cedar tub (cottage) is a wonderful way to unwind after a day exploring Central Otago.</p>
-      <p style="margin:4px 0;"><strong>WiFi:</strong> Connect to <code>Lakeside_Guest</code> &mdash; the password is in your welcome guide.</p>
-      <p style="margin:4px 0;"><strong>Emergency Contact:</strong> <a href="tel:+6421368682" style="color:#2d5a5a;">+64 21 368 682</a></p>
-    </div>
-
-    <p>If anything isn't quite right or you need anything at all, please don't hesitate to reach out. We're just a message away!</p>
-
-    <div style="text-align:center;margin:28px 0;">
-      <a href="https://wa.me/6421368682" ${ctaButton("#25D366")}>Message Us on WhatsApp</a>
-    </div>
-
-    <p>Enjoy your evening!</p>
-    ${signOff}
-  `);
-}
-
-/**
- * Gentle reminder sent ~7 days after the initial thank-you when no
- * review has been left. Shorter than the first email, no security-bond
- * recap, leads with the Google CTA — Google reviews lift local search
- * ranking which is the real off-page SEO lever for a small NZ property.
- */
 export function checkoutReviewReminderHtml(data: BookingEmailData): string {
   const name = escapeHtml(formatAccommodationName(data.accommodation));
   const guestName = escapeHtml(data.guest_name);

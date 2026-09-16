@@ -9,7 +9,6 @@ import {
   bookingConfirmationHtml,
   bookingConfirmationCottageHtml,
   preArrivalHtml,
-  duringStayHtml,
   checkoutThankYouHtml,
   checkoutReviewReminderHtml,
   paymentFailureHtml,
@@ -264,24 +263,6 @@ export async function sendPreArrivalInstructions(
     html: preArrivalHtml(booking),
   }, { template: "pre_arrival", bookingId: booking.booking_id });
   logger.info(`Pre-arrival instructions sent to ${booking.guest_email}`);
-}
-
-export async function sendDuringStayCheckin(
-  booking: TemplateBookingData
-): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("Email not configured - during-stay check-in skipped");
-    return;
-  }
-
-  await sendAndLog(transporter, {
-    from: fromAddress(),
-    to: booking.guest_email,
-    subject: "Welcome to Lakeside Retreat - We hope you're settling in!",
-    html: duringStayHtml(booking),
-  }, { template: "during_stay", bookingId: booking.booking_id });
-  logger.info(`During-stay check-in email sent to ${booking.guest_email}`);
 }
 
 export async function sendCheckoutThankYou(

@@ -168,28 +168,6 @@ export async function findPreArrivalBookings(): Promise<Booking[]> {
   return eligible;
 }
 
-/**
- * Find bookings that checked in today (for during-stay welcome emails).
- */
-export async function findDuringStayBookings(): Promise<Booking[]> {
-  const today = new Date();
-  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const endOfDay = new Date(startOfDay);
-  endOfDay.setDate(endOfDay.getDate() + 1);
-
-  const bookings = await prisma.bookings.findMany({
-    where: {
-      check_in: { gte: startOfDay, lt: endOfDay },
-      payment_status: { in: ["paid", "paid_external"] },
-      status: "confirmed",
-      deleted_at: null,
-      ...directBookingWhere,
-    },
-  });
-
-  return bookings as unknown as Booking[];
-}
-
 // --- Processing functions ---
 
 /**

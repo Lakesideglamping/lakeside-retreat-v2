@@ -6,8 +6,12 @@
 # reasonable NZ hours year-round:
 #   20:00 UTC  -> 08:00 NZST / 09:00 NZDT  -> pre-arrival
 #   22:00 UTC  -> 10:00 NZST / 11:00 NZDT  -> review-request (+ thank-you)
-#   00:00 UTC  -> 12:00 NZST / 13:00 NZDT  -> during-stay
 #   03:00 UTC  -> 15:00 NZST / 16:00 NZDT  -> reconcile-calendar
+#
+# during-stay was removed. It fired at 00:00 UTC, which is midday in Cromwell
+# on the arrival day — three hours before the 3pm check-in — while telling the
+# guest "we hope you've settled in" and "enjoy your evening". It had also never
+# sent a single email.
 #
 # No single UTC hour is 08:00 in NZ all year, because the offset moves between
 # +12 and +13. 20:00 UTC is 08:00 in winter and 09:00 in summer; the
@@ -56,7 +60,6 @@ call /api/cron/retry-uplisting-sync
 case "$hour" in
   20) call /api/cron/pre-arrival ;;
   22) call /api/cron/review-request ;;
-  00) call /api/cron/during-stay ;;
   # Read-only Uplisting reachability check — it fetches blocked dates and
   # logs the counts, writing nothing. Its value is the CRON_FAILURE alert
   # when Uplisting is unreachable, so once a day is plenty.

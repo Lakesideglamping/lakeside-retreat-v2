@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   bookingConfirmationHtml,
   preArrivalHtml,
-  duringStayHtml,
   checkoutThankYouHtml,
   paymentFailureHtml,
   cancellationHtml,
@@ -48,13 +47,6 @@ const templates: TemplateDef[] = [
     description: "Check-in code, directions, and what to bring.",
     whenSent: "~3 days before check-in (cron)",
     html: () => preArrivalHtml(sampleBooking),
-  },
-  {
-    id: "during_stay",
-    label: "Mid-stay check-in",
-    description: "Quick hello partway through the stay to catch any issues.",
-    whenSent: "Morning of day 2 of stay (cron)",
-    html: () => duringStayHtml(sampleBooking),
   },
   {
     id: "checkout_thank_you",
