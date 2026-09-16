@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   bookingConfirmationHtml,
+  bookingConfirmationCottageHtml,
   preArrivalHtml,
   checkoutThankYouHtml,
   paymentFailureHtml,
@@ -36,10 +37,25 @@ type TemplateDef = {
 const templates: TemplateDef[] = [
   {
     id: "booking_confirmation",
-    label: "Booking confirmation (guest)",
-    description: "Sent to the guest immediately after successful payment.",
-    whenSent: "Stripe checkout succeeds",
+    label: "Booking confirmation — domes",
+    description:
+      "Sent to the guest immediately after successful payment. Names the saltwater spa and the dome smoking policy.",
+    whenSent: "Stripe checkout succeeds (Dome Pinot / Dome Rosé)",
     html: () => bookingConfirmationHtml(sampleBooking),
+  },
+  {
+    id: "booking_confirmation_cottage",
+    label: "Booking confirmation — cottage",
+    description:
+      "The cottage version of the same email. Names the hot tub rather than the spa, and the other side of the driveway.",
+    whenSent: "Stripe checkout succeeds (Lakeside Cottage)",
+    // Rendered with the cottage slug, not the shared sample's dome-pinot —
+    // otherwise the cottage template would preview saying "Dome Pinot".
+    html: () =>
+      bookingConfirmationCottageHtml({
+        ...sampleBooking,
+        accommodation: "lakeside-cottage",
+      }),
   },
   {
     id: "pre_arrival",
