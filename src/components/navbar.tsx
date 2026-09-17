@@ -29,15 +29,15 @@ const allLinks = [
 ];
 
 /**
- * Routes where the bar follows you down the page.
+ * The homepage is the only page whose hero carries the burgundy wordmark.
  *
- * Elsewhere the nav stays as it was: absolute at the top, scrolling away for
- * good. That is the problem this solves — /lakeside-cottage is 11,700px on a
- * phone, so reaching the menu mid-page means scrolling back roughly fourteen
- * screens — but it is enabled on the homepage alone for now, to be looked at
- * before it reaches the rest of the site. Widening it is adding paths here.
+ * Everywhere else the logo is white from the top, because those heroes are
+ * darker or more heavily overlaid and burgundy disappears into them — most
+ * visibly on the cottage's sunset, where it is barely readable today. The
+ * homepage hero is bright enough that burgundy still reads, and it is the
+ * page most people arrive on, so it keeps the full-colour mark.
  */
-const REVEAL_ON_SCROLL_ROUTES = ["/"];
+const BURGUNDY_LOGO_ROUTES = ["/"];
 
 /** Past this many pixels the bar may hide. Below it, always shown. */
 const HIDE_AFTER_PX = 140;
@@ -46,29 +46,50 @@ const HIDE_AFTER_PX = 140;
 const DIRECTION_THRESHOLD_PX = 8;
 
 /**
- * The wordmark, in burgundy over the hero and white once the dark bar is out.
+ * The wordmark.
  *
- * Both files are rendered and cross-faded rather than swapping one src. A src
- * swap shows nothing for the moment the new file is fetched, which on a phone
- * reads as the logo blinking out mid-scroll.
+ * White on every page except the homepage hero, which keeps the burgundy mark
+ * until the dark bar slides in under it.
  *
  * logormbg-white.png is the same 441x178 canvas as the burgundy original with
  * its RGB painted white and alpha untouched — same artwork, same framing — so
- * the two sit exactly on top of each other with nothing shifting.
+ * the two sit exactly on top of each other with nothing shifting. It is not
+ * the email's logo-white.png, which is cropped tight to the mark.
  *
- * The white copy is only mounted where a dark bar can appear. Everywhere else
- * the markup is the single burgundy image it has always been, with no extra
- * request.
+ * Only the homepage needs both files; every other page renders one image and
+ * never requests the other.
  */
 function NavLogo({
   heightClass,
   showWhite,
+  crossfade,
 }: {
   heightClass: string;
-  /** undefined on pages with no dark bar — the white copy is not mounted at all. */
-  showWhite?: boolean;
+  showWhite: boolean;
+  /**
+   * True only where the colour actually changes — the homepage, burgundy over
+   * the hero and white once the bar is out. Elsewhere the logo is white the
+   * whole way down, so a single image is rendered and the other file is never
+   * requested.
+   */
+  crossfade: boolean;
 }) {
-  const shared = `${heightClass} w-auto transition-opacity duration-300 motion-reduce:transition-none`;
+  const shared = `${heightClass} w-auto`;
+
+  if (!crossfade) {
+    return (
+      <Image
+        src={showWhite ? "/images/logormbg-white.png" : "/images/logormbg.png"}
+        alt="Lakeside Retreat"
+        width={441}
+        height={178}
+        className={shared}
+        priority
+      />
+    );
+  }
+
+  const fading = `${shared} transition-opacity duration-300 motion-reduce:transition-none`;
 
   return (
     <span className="relative inline-flex">
@@ -77,21 +98,23 @@ function NavLogo({
         alt="Lakeside Retreat"
         width={441}
         height={178}
-        className={`${shared} ${showWhite ? "opacity-0" : "opacity-100"}`}
+        className={`${fading} ${showWhite ? "opacity-0" : "opacity-100"}`}
         priority
       />
-      {showWhite !== undefined && (
-        <Image
-          src="/images/logormbg-white.png"
-          alt=""
-          aria-hidden="true"
-          width={441}
-          height={178}
-          className={`${shared} absolute left-0 top-0 ${
-            showWhite ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      )}
+      {/* Stacked and cross-faded rather than swapping one src: a swap shows
+          nothing while the new file is fetched, which mid-scroll on a phone
+          reads as the logo blinking out. aria-hidden so the name is announced
+          once, by the burgundy copy above. */}
+      <Image
+        src="/images/logormbg-white.png"
+        alt=""
+        aria-hidden="true"
+        width={441}
+        height={178}
+        className={`${fading} absolute left-0 top-0 ${
+          showWhite ? "opacity-100" : "opacity-0"
+        }`}
+      />
     </span>
   );
 }
@@ -100,15 +123,14 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
-  const revealOnScroll = REVEAL_ON_SCROLL_ROUTES.includes(pathname);
+  // The bar now follows you on every page. Only the hero logo colour differs.
+  const burgundyHero = BURGUNDY_LOGO_ROUTES.includes(pathname);
 
   // "scrolled" drives the background; "hidden" slides the bar out of view.
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    if (!revealOnScroll) return;
-
     let lastY = window.scrollY;
     let frame = 0;
 
@@ -138,10 +160,14 @@ export function Navbar() {
       window.removeEventListener("scroll", onScroll);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, [revealOnScroll]);
+  }, []);
 
   // An open menu pins the bar, so the hamburger cannot scroll away mid-gesture.
   const barHidden = hidden && !mobileOpen;
+
+  // White everywhere except the homepage hero, and white there too once the
+  // dark bar is out from under it.
+  const showWhiteLogo = !burgundyHero || scrolled;
 
   // Lock the page behind the overlay. Without this the body scrolls under
   // the open menu, which on iOS leaves you somewhere unexpected after the
@@ -163,14 +189,16 @@ export function Navbar() {
   return (
     <>
       {/*
-        Two layouts from one element.
+        Fixed, sliding out on the way down and back in on the way up.
 
-        Without reveal-on-scroll it is absolute, exactly as before — no layout
-        shift, no behaviour change on any page but the homepage.
+        It was absolute, which meant it scrolled away for good: on
+        /lakeside-cottage — 11,700px on a phone, some fourteen screens — the
+        menu could only be reached by scrolling all the way back to the top.
 
-        With it, the bar is fixed and slides out on the way down, back in on
-        the way up. The background only appears once scrolled, so at the top of
-        the hero it still looks like the transparent bar it has always been.
+        The background appears only once scrolled past HIDE_AFTER_PX, so at the
+        top of a hero the bar still looks like the transparent one it has
+        always been. Fixed and absolute are both out of flow, so nothing in the
+        page shifted when this changed.
 
         Translucent dark rather than cream, because the nav text is white and
         the top strip of the hero photos is sky: four of the six measure over
@@ -180,16 +208,10 @@ export function Navbar() {
       */}
       <nav
         className={[
-          "top-0 left-0 right-0 px-8 py-4",
-          // z-index belongs to each branch, not the base: two z- classes on one
-          // element leaves the winner to stylesheet order rather than intent.
-          revealOnScroll
-            ? "fixed z-40 transition-transform duration-300 motion-reduce:transition-none"
-            : "absolute z-10",
-          revealOnScroll && barHidden ? "-translate-y-full" : "translate-y-0",
-          revealOnScroll && scrolled
-            ? "bg-navy/80 backdrop-blur-md shadow-lg shadow-black/10"
-            : "",
+          "fixed top-0 left-0 right-0 z-40 px-8 py-4",
+          "transition-transform duration-300 motion-reduce:transition-none",
+          barHidden ? "-translate-y-full" : "translate-y-0",
+          scrolled ? "bg-navy/80 backdrop-blur-md shadow-lg shadow-black/10" : "",
         ].join(" ")}
       >
         <div className="max-w-[1200px] mx-auto flex justify-center items-center">
@@ -208,7 +230,7 @@ export function Navbar() {
             ))}
 
             <Link href="/" className="mx-4 inline-flex">
-              <NavLogo heightClass="h-12" showWhite={revealOnScroll ? scrolled : undefined} />
+              <NavLogo heightClass="h-12" showWhite={showWhiteLogo} crossfade={burgundyHero} />
             </Link>
 
             {rightLinks.map((link) => (
@@ -227,7 +249,7 @@ export function Navbar() {
           {/* Mobile header */}
           <div className="flex md:hidden justify-between items-center w-full">
             <Link href="/" className="inline-flex">
-              <NavLogo heightClass="h-10" showWhite={revealOnScroll ? scrolled : undefined} />
+              <NavLogo heightClass="h-10" showWhite={showWhiteLogo} crossfade={burgundyHero} />
             </Link>
             {/* -mr-2 pulls the enlarged hit area back so the glyph stays
                 optically aligned with the edge it had at 22px wide. */}
