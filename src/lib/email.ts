@@ -338,6 +338,57 @@ export async function sendSystemAlert(
   logger.info(`System alert sent: ${alertType}`);
 }
 
+/**
+ * Send one rendered template to the host address, to prove delivery.
+ *
+ * testEmailConfiguration below only opens an SMTP connection — useful, but it
+ * says nothing about whether a message arrives or how it looks once a mail
+ * client has had its way with the HTML. This actually sends.
+ *
+ * Always to contactTo(), never to an address supplied by the caller: an admin
+ * endpoint that emails arbitrary recipients is an open relay wearing a badge.
+ *
+ * Logged under a "test_" prefix so a test send can never be mistaken for a
+ * real one when reading email_sends, and bookingId is null because no booking
+ * is involved.
+ */
+export async function sendTestEmail(
+  templateId: string,
+  subject: string,
+  html: string
+): Promise<{ success: boolean; message: string; recipient?: string }> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    return {
+      success: false,
+      message: "Email not configured (missing EMAIL_USER or EMAIL_PASS)",
+    };
+  }
+
+  const recipient = contactTo();
+  if (!recipient) {
+    return {
+      success: false,
+      message: "No recipient configured (set CONTACT_EMAIL or EMAIL_USER)",
+    };
+  }
+
+  try {
+    await sendAndLog(transporter, {
+      from: fromAddress(),
+      to: recipient,
+      subject: `[TEST] ${subject}`,
+      html,
+    }, { template: `test_${templateId}`, bookingId: null });
+    logger.info("Test email sent", { templateId, recipient });
+    return { success: true, message: `Test email sent to ${recipient}`, recipient };
+  } catch (error) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    logger.error("Test email failed", { templateId, error: errMsg });
+    return { success: false, message: `Send failed: ${errMsg}` };
+  }
+}
+
 export async function testEmailConfiguration(): Promise<{
   success: boolean;
   message: string;

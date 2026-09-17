@@ -1,116 +1,13 @@
 import Link from "next/link";
-import {
-  bookingConfirmationHtml,
-  bookingConfirmationCottageHtml,
-  preArrivalHtml,
-  checkoutReviewReminderHtml,
-  paymentFailureHtml,
-  cancellationHtml,
-  systemAlertHtml,
-  type BookingEmailData,
-} from "@/lib/email-templates";
-
-// Sample booking used to render every template with realistic-looking data.
-// Not tied to any real booking — purely for the admin preview.
-const sampleBooking: BookingEmailData = {
-  guest_name: "Sarah Johnson",
-  guest_email: "sarah@example.com",
-  accommodation: "dome-pinot",
-  check_in: "2026-05-12",
-  check_out: "2026-05-15",
-  num_guests: 2,
-  total_price: 1280,
-  booking_id: "BK-2026-00042",
-  special_requests: "Celebrating our 5th anniversary — any chance of a late checkout?",
-};
-
-type TemplateDef = {
-  id: string;
-  label: string;
-  description: string;
-  whenSent: string;
-  html: () => string;
-};
-
-const templates: TemplateDef[] = [
-  {
-    id: "booking_confirmation",
-    label: "Booking confirmation — domes",
-    description:
-      "Sent to the guest immediately after successful payment. Names the saltwater spa and the dome smoking policy.",
-    whenSent: "Stripe checkout succeeds (Dome Pinot / Dome Rosé)",
-    html: () => bookingConfirmationHtml(sampleBooking),
-  },
-  {
-    id: "booking_confirmation_cottage",
-    label: "Booking confirmation — cottage",
-    description:
-      "The cottage version of the same email. Names the hot tub rather than the spa, and the other side of the driveway.",
-    whenSent: "Stripe checkout succeeds (Lakeside Cottage)",
-    // Rendered with the cottage slug, not the shared sample's dome-pinot —
-    // otherwise the cottage template would preview saying "Dome Pinot".
-    html: () =>
-      bookingConfirmationCottageHtml({
-        ...sampleBooking,
-        accommodation: "lakeside-cottage",
-      }),
-  },
-  {
-    id: "pre_arrival",
-    label: "Pre-arrival instructions",
-    description: "Check-in code, directions, and what to bring.",
-    whenSent: "~3 days before check-in (cron)",
-    html: () => preArrivalHtml(sampleBooking),
-  },
-  {
-    id: "checkout_review_reminder",
-    label: "Post-stay thank-you & review",
-    description:
-      "Farewell note on departure day, with a gentle review ask and an invitation to reply directly if anything fell short.",
-    whenSent: "Check-out day, 6 hours after check-out (cron)",
-    html: () => checkoutReviewReminderHtml(sampleBooking),
-  },
-  {
-    id: "cancellation_refund",
-    label: "Cancellation — refund eligible",
-    description: "Sent when a guest cancels 14+ days out.",
-    whenSent: "Stripe refund event or manual cancel",
-    html: () => cancellationHtml({ ...sampleBooking, refundEligible: true }),
-  },
-  {
-    id: "cancellation_no_refund",
-    label: "Cancellation — non-refundable",
-    description: "Sent when a guest cancels within 14 days of arrival.",
-    whenSent: "Manual cancel within 14 days",
-    html: () => cancellationHtml({ ...sampleBooking, refundEligible: false }),
-  },
-  {
-    id: "payment_failure",
-    label: "Payment failure notice",
-    description: "Sent when a scheduled payment fails.",
-    whenSent: "Stripe payment_intent.payment_failed",
-    html: () => paymentFailureHtml(sampleBooking),
-  },
-  {
-    id: "system_alert",
-    label: "System alert (host)",
-    description: "Internal alert for monitoring failures.",
-    whenSent: "Uplisting sync failure, webhook replay, etc.",
-    html: () =>
-      systemAlertHtml({
-        alertType: "error",
-        message: "Uplisting sync failed for booking BK-2026-00042",
-        details: "Double-booking risk — block dates manually until resolved.",
-      }),
-  },
-];
+import { emailPreviews, sampleBooking } from "@/lib/email-previews";
+import { TestSendButton } from "@/components/admin/emails/test-send-button";
 
 type PageProps = { searchParams: Promise<{ template?: string }> };
 
 export default async function AdminEmailsPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const selectedId = params.template ?? templates[0].id;
-  const selected = templates.find((t) => t.id === selectedId) ?? templates[0];
+  const selectedId = params.template ?? emailPreviews[0].id;
+  const selected = emailPreviews.find((t) => t.id === selectedId) ?? emailPreviews[0];
 
   return (
     <div className="space-y-6">
@@ -128,7 +25,7 @@ export default async function AdminEmailsPage({ searchParams }: PageProps) {
         {/* Template list */}
         <aside className="rounded-xl border border-gray-200 bg-white p-3">
           <ul className="space-y-1">
-            {templates.map((t) => {
+            {emailPreviews.map((t) => {
               const active = t.id === selected.id;
               return (
                 <li key={t.id}>
@@ -169,6 +66,14 @@ export default async function AdminEmailsPage({ searchParams }: PageProps) {
                 <dd className="text-gray-800">{sampleBooking.guest_email}</dd>
               </div>
             </dl>
+
+            <div className="mt-4 border-t border-gray-100 pt-4">
+              <TestSendButton templateId={selected.id} />
+              <p className="mt-2 text-xs text-gray-500">
+                Sends this template to your own address, so you can see how it
+                renders in a real mail client. Subject is prefixed [TEST].
+              </p>
+            </div>
           </div>
 
           <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
