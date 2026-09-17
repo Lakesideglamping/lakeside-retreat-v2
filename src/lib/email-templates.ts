@@ -92,24 +92,25 @@ function layout(title: string, body: string): string {
 <tr><td align="center" style="padding:24px 16px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
 
-<!-- Header -->
+<!-- Header. The logo sits inside the teal, under the title.
+     It uses logo-white.png, not the burgundy logormbg.png: the mark is a
+     single dark colour on transparency, so on #2d5a5a it would be all but
+     invisible. The white file is that same PNG with its RGB painted white
+     and its alpha untouched, so the shape and antialiased edges are
+     identical — it is the same logo, not a redrawn one.
+
+     Absolute src because a mail client has no origin to resolve "/images/..."
+     against. width/height as HTML attributes because Outlook ignores CSS
+     sizing and would render it at its natural 441px, overflowing the 600px
+     shell. alt carries the brand name for the many clients that block images
+     by default — for that first view the alt text IS the header. -->
 <tr><td style="background-color:#2d5a5a;padding:28px 32px;text-align:center;border-radius:8px 8px 0 0;">
   <h1 style="margin:0;font-size:24px;color:#ffffff;font-family:Georgia,serif;">${safeTitle}</h1>
+  <img src="https://lakesideretreat.co.nz/images/logo-white.png" alt="Lakeside Retreat" width="170" height="69" style="display:block;margin:14px auto 0;border:0;max-width:170px;height:auto;" />
 </td></tr>
 
-<!-- Logo. On its own light band rather than inside the teal header: the mark
-     is dark burgundy on transparency, so on #2d5a5a it is all but invisible.
-     Absolute src because a mail client has no site to resolve a relative path
-     against, width/height as attributes because Outlook ignores CSS sizing,
-     and alt text carrying the brand name for the many clients that block
-     images by default — where the alt is all the recipient sees. -->
-<tr><td style="background-color:#ffffff;padding:22px 32px 6px;text-align:center;border-left:1px solid #e8e4df;border-right:1px solid #e8e4df;">
-  <img src="https://lakesideretreat.co.nz/images/logormbg.png" alt="Lakeside Retreat" width="200" height="81" style="display:block;margin:0 auto;border:0;max-width:200px;height:auto;" />
-</td></tr>
-
-<!-- Body. Reduced top padding because the logo band above already supplies
-     the gap; a full 32px on top of it leaves the greeting stranded. -->
-<tr><td style="background-color:#ffffff;padding:14px 32px 32px;border-left:1px solid #e8e4df;border-right:1px solid #e8e4df;">
+<!-- Body -->
+<tr><td style="background-color:#ffffff;padding:32px;border-left:1px solid #e8e4df;border-right:1px solid #e8e4df;">
 ${body}
 </td></tr>
 
