@@ -28,9 +28,69 @@ const allLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
+/**
+ * Routes where the bar follows you down the page.
+ *
+ * Elsewhere the nav stays as it was: absolute at the top, scrolling away for
+ * good. That is the problem this solves — /lakeside-cottage is 11,700px on a
+ * phone, so reaching the menu mid-page means scrolling back roughly fourteen
+ * screens — but it is enabled on the homepage alone for now, to be looked at
+ * before it reaches the rest of the site. Widening it is adding paths here.
+ */
+const REVEAL_ON_SCROLL_ROUTES = ["/"];
+
+/** Past this many pixels the bar may hide. Below it, always shown. */
+const HIDE_AFTER_PX = 140;
+
+/** Ignore scroll jitter smaller than this, so the bar does not flicker. */
+const DIRECTION_THRESHOLD_PX = 8;
+
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+
+  const revealOnScroll = REVEAL_ON_SCROLL_ROUTES.includes(pathname);
+
+  // "scrolled" drives the background; "hidden" slides the bar out of view.
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    if (!revealOnScroll) return;
+
+    let lastY = window.scrollY;
+    let frame = 0;
+
+    const onScroll = () => {
+      // Coalesce to one update per frame: scroll fires far faster than the
+      // browser paints, and setState per event is wasted work on a phone.
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const y = window.scrollY;
+        const delta = y - lastY;
+
+        setScrolled(y > HIDE_AFTER_PX);
+
+        if (Math.abs(delta) >= DIRECTION_THRESHOLD_PX) {
+          // Near the top there is nothing to hide from, and an open menu must
+          // never have the bar slide out from under its close button.
+          setHidden(y > HIDE_AFTER_PX && delta > 0);
+          lastY = y;
+        }
+      });
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [revealOnScroll]);
+
+  // An open menu pins the bar, so the hamburger cannot scroll away mid-gesture.
+  const barHidden = hidden && !mobileOpen;
 
   // Lock the page behind the overlay. Without this the body scrolls under
   // the open menu, which on iOS leaves you somewhere unexpected after the
@@ -51,7 +111,36 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="absolute top-0 left-0 right-0 z-10 px-8 py-4">
+      {/*
+        Two layouts from one element.
+
+        Without reveal-on-scroll it is absolute, exactly as before — no layout
+        shift, no behaviour change on any page but the homepage.
+
+        With it, the bar is fixed and slides out on the way down, back in on
+        the way up. The background only appears once scrolled, so at the top of
+        the hero it still looks like the transparent bar it has always been.
+
+        Translucent dark rather than cream, because the nav text is white and
+        the top strip of the hero photos is sky: four of the six measure over
+        150/255 there, one as high as 223. A dark scrim is what makes white
+        text legible over bright sky — cream would need the text to flip, and
+        would vanish into the cream page background further down.
+      */}
+      <nav
+        className={[
+          "top-0 left-0 right-0 px-8 py-4",
+          // z-index belongs to each branch, not the base: two z- classes on one
+          // element leaves the winner to stylesheet order rather than intent.
+          revealOnScroll
+            ? "fixed z-40 transition-transform duration-300 motion-reduce:transition-none"
+            : "absolute z-10",
+          revealOnScroll && barHidden ? "-translate-y-full" : "translate-y-0",
+          revealOnScroll && scrolled
+            ? "bg-navy/80 backdrop-blur-md shadow-lg shadow-black/10"
+            : "",
+        ].join(" ")}
+      >
         <div className="max-w-[1200px] mx-auto flex justify-center items-center">
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
