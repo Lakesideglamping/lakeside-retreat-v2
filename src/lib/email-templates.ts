@@ -95,11 +95,21 @@ function layout(title: string, body: string): string {
 <!-- Header -->
 <tr><td style="background-color:#2d5a5a;padding:28px 32px;text-align:center;border-radius:8px 8px 0 0;">
   <h1 style="margin:0;font-size:24px;color:#ffffff;font-family:Georgia,serif;">${safeTitle}</h1>
-  <p style="margin:6px 0 0;font-size:14px;color:#c8dede;font-family:Georgia,serif;">Lakeside Retreat</p>
 </td></tr>
 
-<!-- Body -->
-<tr><td style="background-color:#ffffff;padding:32px;border-left:1px solid #e8e4df;border-right:1px solid #e8e4df;">
+<!-- Logo. On its own light band rather than inside the teal header: the mark
+     is dark burgundy on transparency, so on #2d5a5a it is all but invisible.
+     Absolute src because a mail client has no site to resolve a relative path
+     against, width/height as attributes because Outlook ignores CSS sizing,
+     and alt text carrying the brand name for the many clients that block
+     images by default — where the alt is all the recipient sees. -->
+<tr><td style="background-color:#ffffff;padding:22px 32px 6px;text-align:center;border-left:1px solid #e8e4df;border-right:1px solid #e8e4df;">
+  <img src="https://lakesideretreat.co.nz/images/logormbg.png" alt="Lakeside Retreat" width="200" height="81" style="display:block;margin:0 auto;border:0;max-width:200px;height:auto;" />
+</td></tr>
+
+<!-- Body. Reduced top padding because the logo band above already supplies
+     the gap; a full 32px on top of it leaves the greeting stranded. -->
+<tr><td style="background-color:#ffffff;padding:14px 32px 32px;border-left:1px solid #e8e4df;border-right:1px solid #e8e4df;">
 ${body}
 </td></tr>
 
