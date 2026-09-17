@@ -45,6 +45,57 @@ const HIDE_AFTER_PX = 140;
 /** Ignore scroll jitter smaller than this, so the bar does not flicker. */
 const DIRECTION_THRESHOLD_PX = 8;
 
+/**
+ * The wordmark, in burgundy over the hero and white once the dark bar is out.
+ *
+ * Both files are rendered and cross-faded rather than swapping one src. A src
+ * swap shows nothing for the moment the new file is fetched, which on a phone
+ * reads as the logo blinking out mid-scroll.
+ *
+ * logormbg-white.png is the same 441x178 canvas as the burgundy original with
+ * its RGB painted white and alpha untouched — same artwork, same framing — so
+ * the two sit exactly on top of each other with nothing shifting.
+ *
+ * The white copy is only mounted where a dark bar can appear. Everywhere else
+ * the markup is the single burgundy image it has always been, with no extra
+ * request.
+ */
+function NavLogo({
+  heightClass,
+  showWhite,
+}: {
+  heightClass: string;
+  /** undefined on pages with no dark bar — the white copy is not mounted at all. */
+  showWhite?: boolean;
+}) {
+  const shared = `${heightClass} w-auto transition-opacity duration-300 motion-reduce:transition-none`;
+
+  return (
+    <span className="relative inline-flex">
+      <Image
+        src="/images/logormbg.png"
+        alt="Lakeside Retreat"
+        width={441}
+        height={178}
+        className={`${shared} ${showWhite ? "opacity-0" : "opacity-100"}`}
+        priority
+      />
+      {showWhite !== undefined && (
+        <Image
+          src="/images/logormbg-white.png"
+          alt=""
+          aria-hidden="true"
+          width={441}
+          height={178}
+          className={`${shared} absolute left-0 top-0 ${
+            showWhite ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      )}
+    </span>
+  );
+}
+
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -157,14 +208,7 @@ export function Navbar() {
             ))}
 
             <Link href="/" className="mx-4 inline-flex">
-              <Image
-                src="/images/logormbg.png"
-                alt="Lakeside Retreat"
-                width={441}
-                height={178}
-                className="h-12 w-auto"
-                priority
-              />
+              <NavLogo heightClass="h-12" showWhite={revealOnScroll ? scrolled : undefined} />
             </Link>
 
             {rightLinks.map((link) => (
@@ -183,14 +227,7 @@ export function Navbar() {
           {/* Mobile header */}
           <div className="flex md:hidden justify-between items-center w-full">
             <Link href="/" className="inline-flex">
-              <Image
-                src="/images/logormbg.png"
-                alt="Lakeside Retreat"
-                width={441}
-                height={178}
-                className="h-10 w-auto"
-                priority
-              />
+              <NavLogo heightClass="h-10" showWhite={revealOnScroll ? scrolled : undefined} />
             </Link>
             {/* -mr-2 pulls the enlarged hit area back so the glyph stays
                 optically aligned with the edge it had at 22px wide. */}
