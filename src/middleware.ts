@@ -29,7 +29,15 @@ function buildCspHeader(nonce: string): string {
     "img-src 'self' data: blob: https:",
     "font-src 'self' data: https://fonts.gstatic.com",
     "connect-src 'self' https://api.stripe.com https://*.stripe.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://*.ingest.us.sentry.io",
-    "frame-src https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
+    // www.google.com is here for the embedded map on /contact. Without it the
+    // iframe is blocked and the map renders as an empty box — no error, no
+    // broken-image icon, just nothing, with the violation only in the console.
+    //
+    // The canonical /maps/embed?pb=... URL is used deliberately rather than
+    // maps.google.com/maps?...&output=embed: that older form 302s to
+    // www.google.com, and CSP checks every navigation in a frame, so it would
+    // need both hosts allowed. One URL, one host, no redirect.
+    "frame-src https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com https://www.google.com",
     "form-action 'self' https://checkout.stripe.com",
     "frame-ancestors 'none'",
     "object-src 'none'",

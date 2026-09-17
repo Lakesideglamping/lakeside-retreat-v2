@@ -86,11 +86,15 @@ export default function ContactPage() {
 
         {/* Map */}
         <div className="max-w-[1200px] mx-auto mt-16">
+          {/* Google's canonical embed URL. Keeps the responsive classes rather
+              than the width/height attributes Google's snippet ships with —
+              those are a fixed 600x450 and would break the layout on a phone. */}
           <iframe
-            src="https://maps.google.com/maps?q=-44.947962,169.2659199&z=14&output=embed"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2823.7887635365296!2d169.26591987675795!3d-44.94796197107016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa82ad2797295e4e9%3A0x7a0b7850e16c8aee!2s96%20Smiths%20Way%2C%20Cromwell%2C%20Mount%20Pisa%209383%2C%20New%20Zealand!5e0!3m2!1sen!2sau!4v1789638265926!5m2!1sen!2sau"
             className="w-full h-[400px] rounded-xl border-0"
             loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
             title="Lakeside Retreat location on Google Maps"
           />
         </div>
