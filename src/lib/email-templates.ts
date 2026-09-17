@@ -95,18 +95,22 @@ function layout(title: string, body: string): string {
 <!-- Header. The logo sits inside the teal, under the title.
      It uses logo-white.png, not the burgundy logormbg.png: the mark is a
      single dark colour on transparency, so on #2d5a5a it would be all but
-     invisible. The white file is that same PNG with its RGB painted white
-     and its alpha untouched, so the shape and antialiased edges are
-     identical — it is the same logo, not a redrawn one.
+     invisible. The white file is that same artwork with its RGB painted white
+     and its alpha untouched, so the antialiased edges are identical.
+
+     It is also cropped to the mark. The original canvas is 56% transparent
+     padding — 66px of empty space above the artwork alone — which no margin
+     value can close, because the gap is inside the image. Cropping to
+     337x84 is what actually tucks the logo under the title.
 
      Absolute src because a mail client has no origin to resolve "/images/..."
      against. width/height as HTML attributes because Outlook ignores CSS
-     sizing and would render it at its natural 441px, overflowing the 600px
-     shell. alt carries the brand name for the many clients that block images
-     by default — for that first view the alt text IS the header. -->
+     sizing and would render the file at its natural size, overflowing the
+     600px shell. alt carries the brand name for the many clients that block
+     images by default — for that first view the alt text IS the header. -->
 <tr><td style="background-color:#2d5a5a;padding:28px 32px;text-align:center;border-radius:8px 8px 0 0;">
   <h1 style="margin:0;font-size:24px;color:#ffffff;font-family:Georgia,serif;">${safeTitle}</h1>
-  <img src="https://lakesideretreat.co.nz/images/logo-white.png" alt="Lakeside Retreat" width="170" height="69" style="display:block;margin:14px auto 0;border:0;max-width:170px;height:auto;" />
+  <img src="https://lakesideretreat.co.nz/images/logo-white.png" alt="Lakeside Retreat" width="150" height="37" style="display:block;margin:8px auto 0;border:0;max-width:150px;height:auto;" />
 </td></tr>
 
 <!-- Body -->
