@@ -6,7 +6,6 @@ import {
   checkoutReviewReminderHtml,
   paymentFailureHtml,
   cancellationHtml,
-  paymentNotificationHtml,
   systemAlertHtml,
   type BookingEmailData,
 } from "@/lib/email-templates";
@@ -91,18 +90,6 @@ const templates: TemplateDef[] = [
     description: "Sent when a scheduled payment fails.",
     whenSent: "Stripe payment_intent.payment_failed",
     html: () => paymentFailureHtml(sampleBooking),
-  },
-  {
-    id: "payment_notification",
-    label: "Payment notification (host)",
-    description: "Internal notification to the owner when a payment lands.",
-    whenSent: "Stripe payment succeeds",
-    html: () =>
-      paymentNotificationHtml({
-        ...sampleBooking,
-        paymentAmount: "1280.00",
-        paymentMethod: "Visa ending 4242",
-      }),
   },
   {
     id: "system_alert",

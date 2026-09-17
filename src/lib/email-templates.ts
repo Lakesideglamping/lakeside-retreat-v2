@@ -464,36 +464,6 @@ export function cancellationHtml(
   `);
 }
 
-export function paymentNotificationHtml(
-  data: BookingEmailData & { paymentAmount: string; paymentMethod: string }
-): string {
-  const name = escapeHtml(formatAccommodationName(data.accommodation));
-  const guestName = escapeHtml(data.guest_name);
-  const guestEmail = escapeHtml(data.guest_email);
-  const paymentAmount = escapeHtml(data.paymentAmount);
-  const paymentMethod = escapeHtml(data.paymentMethod);
-  const bookingId = escapeHtml(data.booking_id);
-
-  return layout("Payment Confirmed", `
-    <div style="background-color:#f0fff0;padding:16px 20px;border-radius:6px;margin:0 0 20px;">
-      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Payment Details</h3>
-      <p style="margin:4px 0;"><strong>Amount:</strong> $${paymentAmount} NZD</p>
-      <p style="margin:4px 0;"><strong>Payment Method:</strong> ${paymentMethod}</p>
-      <p style="margin:4px 0;"><strong>Status:</strong> Completed</p>
-    </div>
-
-    <div ${detailsBox}>
-      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Booking Details</h3>
-      <p style="margin:4px 0;"><strong>Guest:</strong> ${guestName} (${guestEmail})</p>
-      <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
-      <p style="margin:4px 0;"><strong>Dates:</strong> ${formatDateNZ(data.check_in)} to ${formatDateNZ(data.check_out)}</p>
-      ${data.booking_id ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${bookingId}</p>` : ""}
-    </div>
-
-    <p>Booking is now fully confirmed and paid.</p>
-  `);
-}
-
 export function systemAlertHtml(data: {
   alertType: string;
   message: string;

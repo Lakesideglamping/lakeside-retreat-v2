@@ -12,7 +12,6 @@ import {
   checkoutReviewReminderHtml,
   paymentFailureHtml,
   cancellationHtml,
-  paymentNotificationHtml,
   systemAlertHtml,
 } from "./email-templates";
 
@@ -317,25 +316,6 @@ export async function sendCancellationConfirmation(
     html: cancellationHtml(booking),
   }, { template: "cancellation", bookingId: booking.booking_id });
   logger.info(`Cancellation confirmation sent to ${booking.guest_email}`);
-}
-
-export async function sendPaymentNotification(
-  booking: TemplateBookingData & { paymentAmount: string; paymentMethod: string }
-): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("Email not configured - payment notification skipped");
-    return;
-  }
-
-  const name = formatAccommodationName(booking.accommodation);
-  await sendAndLog(transporter, {
-    from: fromAddress(),
-    to: contactTo(),
-    subject: `Payment Received - ${booking.guest_name} (${name})`,
-    html: paymentNotificationHtml(booking),
-  }, { template: "payment_notification", bookingId: booking.booking_id });
-  logger.info("Payment notification sent to admin");
 }
 
 export async function sendSystemAlert(
