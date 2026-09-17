@@ -8,7 +8,6 @@ import {
   cancellationHtml,
   paymentNotificationHtml,
   systemAlertHtml,
-  contactConfirmationHtml,
   type BookingEmailData,
 } from "@/lib/email-templates";
 
@@ -103,18 +102,6 @@ const templates: TemplateDef[] = [
         ...sampleBooking,
         paymentAmount: "1280.00",
         paymentMethod: "Visa ending 4242",
-      }),
-  },
-  {
-    id: "contact_confirmation",
-    label: "Contact form acknowledgement",
-    description: "Auto-reply to guests who submit the contact form.",
-    whenSent: "Contact form submission",
-    html: () =>
-      contactConfirmationHtml({
-        name: sampleBooking.guest_name,
-        email: sampleBooking.guest_email,
-        message: "Hi! Do you allow dogs in the cottage? Planning a 4-night trip in June.",
       }),
   },
   {

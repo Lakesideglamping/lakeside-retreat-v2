@@ -531,30 +531,3 @@ export function systemAlertHtml(data: {
     <p style="color:#8a8694;font-size:13px;">This is an automated alert from the Lakeside Retreat monitoring system.</p>
   `);
 }
-
-export function contactConfirmationHtml(data: {
-  name: string;
-  email: string;
-  message: string;
-}): string {
-  const guestName = escapeHtml(data.name);
-  const message = escapeHtml(data.message);
-
-  return layout("We've Received Your Message", `
-    <p>Hi ${guestName},</p>
-    <p>Thank you for getting in touch! We've received your message and will get back to you as soon as possible &mdash; usually within 24 hours.</p>
-
-    <div ${detailsBox}>
-      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Your Message</h3>
-      <p style="margin:4px 0;white-space:pre-wrap;">${message}</p>
-    </div>
-
-    <p>If you need an urgent response, you can reach us directly:</p>
-    <ul style="padding-left:20px;">
-      <li>Phone: <a href="tel:+6421368682" style="color:#2d5a5a;">+64 21 368 682</a></li>
-      <li>WhatsApp: <a href="https://wa.me/6421368682" style="color:#2d5a5a;">Message us</a></li>
-    </ul>
-
-    ${signOff}
-  `);
-}
