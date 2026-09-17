@@ -107,6 +107,44 @@ describe("send mode", () => {
   });
 });
 
+/**
+ * Every failure must carry an `error` field, not just `message`.
+ *
+ * handleResponse in admin-api throws `new Error(data.error ?? "Request failed
+ * (status)")`. A body with only `message` therefore reaches the button as
+ * "Request failed (502)" — losing the reason, which is the only part worth
+ * showing. This is easy to reintroduce, so it is asserted per failure path.
+ */
+describe("failures explain themselves to the client", () => {
+  it.each([
+    [
+      "unknown template",
+      async () => post({ templateId: "nope" }),
+      "Unknown template",
+    ],
+    [
+      "send failure",
+      async () => {
+        sendTestEmail.mockResolvedValue({ success: false, message: "Send failed: 535" });
+        return post({ templateId: "pre_arrival" });
+      },
+      "535",
+    ],
+    [
+      "rate limited",
+      async () => {
+        checkRateLimit.mockResolvedValue({ success: false });
+        return post({ templateId: "pre_arrival" });
+      },
+      "wait an hour",
+    ],
+  ])("%s carries the reason in `error`", async (_label, run, expected) => {
+    const { body } = await run();
+    expect(body.error, "non-2xx bodies need an `error` field").toBeDefined();
+    expect(body.error).toContain(expected);
+  });
+});
+
 describe("guards", () => {
   it("rate limits, and does not send when limited", async () => {
     checkRateLimit.mockResolvedValue({ success: false });
