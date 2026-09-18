@@ -13,6 +13,35 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
 
+  // On-demand image optimisation is the most expensive thing this service does,
+  // and on a 512MB instance it is what takes it down. Every distinct width is a
+  // separate sharp decode and re-encode, allocated natively, outside the Node
+  // heap — and next/image writes one URL per configured width into every srcset
+  // it renders, so a crawler walking the site multiplies images by widths.
+  //
+  // 2048 and 3840 are dropped from Next's defaults. They are by a wide margin
+  // the two most expensive encodes — 3840 is four times the pixels of 1920 —
+  // and they serve 4K desktops, which is not who books a glamping stay. A 4K
+  // screen now gets the 1920 variant scaled up, which on a photographic hero
+  // behind a dark overlay is not a difference anyone can see.
+  //
+  // Nothing here starts downscaling work that was previously skipped: every
+  // source image is already 1920px or narrower (largest: 1920x1440).
+  //
+  // Deliberately NOT setting formats to include AVIF. AVIF encodes cost
+  // markedly more CPU and memory than WebP, and this instance has already run
+  // out of both twice. Revisit only behind a CDN or on a larger instance.
+  images: {
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    // Render's Starter tier has no persistent disk, so the optimised-image
+    // cache is wiped on every deploy. This TTL therefore buys browser and CDN
+    // caching rather than server-side reuse. 30 days rather than a year
+    // because images here do get overwritten in place under the same filename
+    // (logo-white.png twice in one week), and a year-long max-age would strand
+    // visitors on a stale copy with no way to bust it.
+    minimumCacheTTL: 2592000,
+  },
+
   async headers() {
     // Content-Security-Policy is set per-request by middleware.ts so each
     // response gets a fresh script nonce + strict-dynamic. Keep other
