@@ -74,8 +74,20 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Prevent caching on health check endpoint
+        // Prevent caching on the health check endpoints. Listed explicitly
+        // rather than as /api/health/:path* — a pattern that has to match both
+        // the bare path and its children is exactly the kind of thing that
+        // silently stops matching one of them.
         source: "/api/health",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
+          },
+        ],
+      },
+      {
+        source: "/api/health/detail",
         headers: [
           {
             key: "Cache-Control",
