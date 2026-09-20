@@ -51,7 +51,7 @@ const guides = [
   {
     category: "Cycling",
     title: "Central Otago Cycle Trails: Accommodation & Guide",
-    image: "/images/CycleTrail.jpeg",
+    image: "/images/CycleTrail.jpg",
     excerpt: "Stay 200m from the trailhead. Everything you need to know about NZ's original Great Ride.",
     href: "/otago-rail-trail-accommodation",
   },

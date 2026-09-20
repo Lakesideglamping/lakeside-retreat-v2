@@ -256,7 +256,7 @@ export default async function HomePage() {
             <Button href="/guides">Explore Local Area</Button>
           </div>
           <Image
-            src="/images/LakeDView.jpeg"
+            src="/images/LakeDView.jpg"
             alt="Lake Dunstan location and surrounding Central Otago wine country"
             width={1920}
             height={1440}

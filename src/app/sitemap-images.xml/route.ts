@@ -31,7 +31,7 @@ const pages: PageImages[] = [
       },
 
       {
-        loc: "/images/LakeDView.jpeg",
+        loc: "/images/LakeDView.jpg",
         title: "Lake Dunstan location and surrounding Central Otago wine country",
       },
       {
@@ -376,7 +376,7 @@ const pages: PageImages[] = [
         title: "Private spa surrounded by autumn colour",
       },
       {
-        loc: "/images/CycleTrail.jpeg",
+        loc: "/images/CycleTrail.jpg",
         title: "Lake Dunstan cycle trail in autumn",
       },
     ],
@@ -595,7 +595,7 @@ const pages: PageImages[] = [
         title: "Dog-Friendly Accommodation in Central Otago",
       },
 {
-        loc: "/images/CycleTrail.jpeg",
+        loc: "/images/CycleTrail.jpg",
         title: "Central Otago Cycle Trails: Accommodation & Guide",
       },
 {

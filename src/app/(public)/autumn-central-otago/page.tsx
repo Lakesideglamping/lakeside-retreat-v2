@@ -42,7 +42,7 @@ const autumnHighlights = [
   {
     title: "Best Cycling Conditions of the Year",
     desc: "The Otago cycle trails are at its finest in autumn. Cooler temperatures make for comfortable riding, the trees along the trail turn brilliant gold, and the crowds of summer have gone. The Lake Dunstan Cycle Trail (Cromwell to Clyde section) starts just 200m from the retreat.",
-    image: "/images/CycleTrail.jpeg",
+    image: "/images/CycleTrail.jpg",
     alt: "Autumn cycling conditions on Cromwell",
   },
 ];
