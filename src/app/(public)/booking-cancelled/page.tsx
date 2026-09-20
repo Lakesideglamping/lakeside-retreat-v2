@@ -18,7 +18,16 @@ export default function BookingCancelledPage() {
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
           <Button href="/stay">View Accommodation</Button>
-          <Button href="/contact" variant="outline">
+          {/*
+            outline-dark, not outline. The "outline" variant is white border on
+            white text, which only works over a dark hero — the three property
+            pages use it correctly that way, inside a bg-black/30 overlay. This
+            page has no hero: it sits on the plain cream background, where white
+            on cream left the button all but invisible. Same variant as "Meet
+            Your Hosts" on the homepage, which is the same shape of secondary
+            action on the same background.
+          */}
+          <Button href="/contact" variant="outline-dark">
             Contact Us
           </Button>
         </div>
