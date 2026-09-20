@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Accommodation } from "@/lib/accommodations";
 import { calculatePrice, formatNZD } from "@/lib/pricing";
 import { SubmitButton } from "@/components/ui/submit-button";
@@ -38,6 +38,17 @@ export function BookingForm({
   onBack,
   seasonalMultiplier = 1.0,
 }: BookingFormProps) {
+  /**
+   * This component mounts exactly when step 2 begins — the widget renders it
+   * conditionally — so mounting is the moment to move focus, and no step
+   * prop needs threading down to know that.
+   */
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    headingRef.current?.focus({ preventScroll: true });
+  }, []);
+
   const [form, setForm] = useState<FormFields>({
     guestName: "",
     guestEmail: "",
@@ -213,7 +224,25 @@ export function BookingForm({
 
       {/* Guest details form */}
       <form onSubmit={handleSubmit} className="space-y-5">
-        <h3 className="font-display text-xl text-burgundy">Your Details</h3>
+        {/*
+          tabIndex={-1} makes this focusable by script without adding it to the
+          tab order. On arriving at step 2, focus was still on the Continue
+          button that had just been unmounted, so it fell back to <body>: a
+          screen reader announced nothing, and a keyboard user had to tab from
+          the top of the page again. Focusing the heading announces the new
+          step and puts the next Tab on the first field.
+
+          preventScroll because the widget already scrolls itself to the step
+          indicator above this heading; without it the two fight and the page
+          jumps twice.
+        */}
+        <h3
+          ref={headingRef}
+          tabIndex={-1}
+          className="font-display text-xl text-burgundy outline-none"
+        >
+          Your Details
+        </h3>
 
         {status === "error" && errorMessage && (
           <div

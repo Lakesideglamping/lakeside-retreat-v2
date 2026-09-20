@@ -231,10 +231,51 @@ export function BookingWidget() {
   const canContinue =
     accommodation && checkIn && checkOut && availability !== "checking";
 
+  /**
+   * Bring the top of the widget back into view when the step changes.
+   *
+   * Changing step swaps which branch renders, but the browser keeps scrollY
+   * exactly where it was. By the time someone clicks Continue they have
+   * scrolled past the accommodation cards, the calendar and the price summary,
+   * so step 2 — which is shorter — appeared already scrolled to its bottom.
+   * Going back had the same problem in reverse.
+   *
+   * Skipping the first render matters: without the guard this fires on mount
+   * and drags a visitor down to the widget the moment they land on /book,
+   * past the hero they arrived on.
+   */
+  const stepTopRef = useRef<HTMLDivElement>(null);
+  const hasRenderedOnce = useRef(false);
+
+  useEffect(() => {
+    if (!hasRenderedOnce.current) {
+      hasRenderedOnce.current = true;
+      return;
+    }
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    stepTopRef.current?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  }, [step]);
+
   return (
     <div className="max-w-[900px] mx-auto">
       {/* Step indicator */}
-      <div className="flex items-center justify-center gap-4 mb-10">
+      {/*
+        scroll-mt-24 keeps this clear of the navbar. The bar is fixed and 80px
+        tall, and it un-hides on an upward scroll — which is exactly the
+        direction this scroll travels — so without the margin the step
+        indicator lands underneath it every time.
+      */}
+      <div
+        ref={stepTopRef}
+        className="flex items-center justify-center gap-4 mb-10 scroll-mt-24"
+      >
         <StepIndicator num={1} label="Select Dates" active={step === 1} />
         <div className="w-12 h-px bg-gray-300" />
         <StepIndicator num={2} label="Your Details" active={step === 2} />
