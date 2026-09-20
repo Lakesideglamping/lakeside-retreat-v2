@@ -51,7 +51,7 @@ const galleryImages = [
   { src: "/images/lakeview.jpeg", alt: "Lake Dunstan views from Lakeside Cottage" },
   { src: "/images/cottagebedroom.jpeg", alt: "Lakeside Cottage bedroom with mountain views" },
   { src: "/images/cottagebathroom.jpeg", alt: "Lakeside Cottage bathroom with timber vanity" },
-  { src: "/images/lakesidecottageinterior.jpeg", alt: "Sitting area with lake views" },
+  { src: "/images/lakesidecottageinterior.jpg", alt: "Sitting area with lake views" },
   { src: "/images/CottageWinterView.jpg", alt: "Lakeside Cottage winter mountain views" },
   { src: "/images/MilkyWayOntheLake.jpg", alt: "Milkyway on the Lake Dunstan" },
   { src: "/images/20220425_140215.jpg", alt: "Sitting area with Weber BBQ" },

@@ -30,14 +30,14 @@ const guides = [
   {
     category: "Seasonal",
     title: "Winter Glamping in Central Otago",
-    image: "/images/IMG_1266-1920x1080.jpeg",
+    image: "/images/IMG_1266-1920x1080.jpg",
     excerpt: "Soak in a private outdoor spa with snow on the mountains. Ski Cardrona by day, stargaze by night.",
     href: "/winter-glamping-central-otago",
   },
   {
     category: "Seasonal",
     title: "Autumn in Central Otago: Harvest Season Guide",
-    image: "/images/lakeviewautumn.jpeg",
+    image: "/images/lakeviewautumn.jpg",
     excerpt: "Golden vineyards, pinot noir harvest, and crisp spa evenings. March–May is Central Otago at its most beautiful.",
     href: "/autumn-central-otago",
   },

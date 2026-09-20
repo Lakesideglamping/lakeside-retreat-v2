@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     url: "https://lakesideretreat.co.nz/winter-glamping-central-otago",
     images: [
       {
-        url: "/images/IMG_1266-1920x1080.jpeg",
+        url: "/images/IMG_1266-1920x1080.jpg",
         width: 1200,
         height: 800,
         alt: "Winter glamping dome with outdoor spa and snow-capped Pisa Range views",
@@ -95,7 +95,7 @@ export default function WinterGlampingPage() {
           title: "Winter Glamping Central Otago | Cosy Domes, Outdoor Spas & Snow Views",
           description: "Winter glamping on Lake Dunstan — soak in your private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes, stargazing, and skiing nearby.",
           path: "/winter-glamping-central-otago",
-          image: "IMG_1266-1920x1080.jpeg",
+          image: "IMG_1266-1920x1080.jpg",
           datePublished: "2025-06-01",
           dateModified: "2026-03-01",
         }),
@@ -116,7 +116,7 @@ export default function WinterGlampingPage() {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
         <Image
-          src="/images/IMG_1266-1920x1080.jpeg"
+          src="/images/IMG_1266-1920x1080.jpg"
           alt="Luxury glamping domes at Lakeside Retreat with snow-capped mountain views, Central Otago winter"
           fill
           priority

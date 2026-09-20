@@ -82,7 +82,7 @@ const pages: PageImages[] = [
         title: "View from swing chair over the vineyard and Lake Dunstan",
       },
 {
-        loc: "/images/pinotexternal2.jpeg",
+        loc: "/images/pinotexternal2.jpg",
         title: "Dome Pinot from the driveway over looking vineyard and Lake Dunstan",
       },
       {
@@ -125,7 +125,7 @@ const pages: PageImages[] = [
         title: "Mt Pisa as backdrop view from the domes",
       },
       {
-        loc: "/images/IMG_1403.webp",
+        loc: "/images/IMG_1403.jpg",
         title: "Dome Rose Luxury interior",
       },
 {
@@ -159,7 +159,7 @@ const pages: PageImages[] = [
         title: "Lake Dunstan views from Lakeside Cottage",
       },
       {
-        loc: "/images/lakesidecottageinterior.jpeg",
+        loc: "/images/lakesidecottageinterior.jpg",
         title: "Sitting area with lake views",
       },
       {
@@ -210,7 +210,7 @@ const pages: PageImages[] = [
         title: "Lakeside Cottage bedroom with mountain views",
       },
  {
-        loc: "/images/lakesidecottageinterior.jpeg",
+        loc: "/images/lakesidecottageinterior.jpg",
         title: "Lakeside Cottage sitting room",
       },
 {
@@ -234,7 +234,7 @@ const pages: PageImages[] = [
         title: "Dome Rosé nestled in golden autumn vineyard by the lake",
       },
 {
-        loc: "/images/IMG_1266-1920x1080.jpeg",
+        loc: "/images/IMG_1266-1920x1080.jpg",
         title: "Both domes in winter vineyard with snow-capped mountains",
       },
  {
@@ -286,7 +286,7 @@ const pages: PageImages[] = [
         title: "Relaxing on the deck with vineyard views",
       },
 {
-        loc: "/images/DroneViewRose.jpeg",
+        loc: "/images/DroneViewRose.jpg",
         title: "Dome and vineyard aerial views",
       },
 {
@@ -368,7 +368,7 @@ const pages: PageImages[] = [
       },
 
       {
-        loc: "/images/VineyardAutumn.jpeg",
+        loc: "/images/VineyardAutumn.jpg",
         title: "Golden autumn vineyard in Central Otago wine country",
        },
       {
@@ -407,7 +407,7 @@ const pages: PageImages[] = [
     path: "/winter-glamping-central-otago",
     images: [
       {
-        loc: "/images/IMG_1266-1920x1080.jpeg",
+        loc: "/images/IMG_1266-1920x1080.jpg",
         title: "Winter glamping domes with snow-capped Pisa Range backdrop",
         caption: "Adults-only winter glamping on Lake Dunstan, Central Otago",
       },
@@ -571,7 +571,7 @@ const pages: PageImages[] = [
         caption: "Local guides to Cromwell, Wanaka, Queenstown and the wine trail",
       },
       {
-        loc: "/images/lakeviewautumn.jpeg",
+        loc: "/images/lakeviewautumn.jpg",
         title: "Autumn colours on Lake Dunstan, Central Otago",
       },
       {
@@ -587,7 +587,7 @@ const pages: PageImages[] = [
         title: "Grapes in the Central Otago vineyards",
       },
 {
-        loc: "/images/IMG_1266-1920x1080.jpeg",
+        loc: "/images/IMG_1266-1920x1080.jpg",
         title: "Winter Glamping in Central Otago",
       },
 {

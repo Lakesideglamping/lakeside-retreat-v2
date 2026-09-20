@@ -49,7 +49,7 @@ const galleryImages = [
   { src: "/images/dome-rose-spa1.jpeg", alt: "Dome Ros\u00e9 with private outdoor spa" },
   { src: "/images/domesmountainview.jpeg", alt: "Mt Pisa as backdrop view from the domes" },
   { src: "/images/SkyView.jpeg", alt: "Vineyard views surrounding Dome Ros\u00e9" },
-  { src: "/images/IMG_1403.webp", alt: "Dome Rose interior" },
+  { src: "/images/IMG_1403.jpg", alt: "Dome Rose interior" },
   { src: "/images/IMG_E8726.jpg", alt: "Mountain views from Dome Ros\u00e9 desking" },
   { src: "/images/IMG_8043.jpg", alt: "Dome Rose entrance" },
   { src: "/images/RoseKitchen.jpg", alt: "Dome Rose Kitchen" },

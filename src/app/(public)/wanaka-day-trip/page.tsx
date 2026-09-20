@@ -116,7 +116,7 @@ export default function WanakaDayTripPage() {
           title: "Wanaka Day Trip Guide from Lakeside Retreat",
           description: "That Wanaka Tree, Roy's Peak, Rippon Vineyard, Puzzling World — a full Wanaka day trip guide from your Central Otago base.",
           path: "/wanaka-day-trip",
-          image: "lakeviewautumn.jpeg",
+          image: "lakeviewautumn.jpg",
           datePublished: "2025-06-01",
         }),
         createBreadcrumbSchema([

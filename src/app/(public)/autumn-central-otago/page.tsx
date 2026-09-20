@@ -30,7 +30,7 @@ const autumnHighlights = [
   {
     title: "Golden Vineyards at Harvest",
     desc: "March and April bring Central Otago's pinot noir harvest — the vines turn gold and amber, cellar doors buzz with activity, and the landscape looks like a painting. With 30+ wineries within 15 minutes, you're perfectly placed to experience it.",
-    image: "/images/VineyardAutumn.jpeg",
+    image: "/images/VineyardAutumn.jpg",
     alt: "Golden autumn vineyards in Central Otago during pinot noir harvest season",
   },
   {
@@ -95,7 +95,7 @@ export default function AutumnCentralOtagoPage() {
           title: "Autumn in Central Otago | Golden Vineyards & Harvest Season Accommodation",
           description: "Central Otago in autumn — golden vineyards, pinot noir harvest, crisp spa evenings, and world-class cycling on the Otago Rail Trail.",
           path: "/autumn-central-otago",
-          image: "VineyardAutumn.jpeg",
+          image: "VineyardAutumn.jpg",
           datePublished: "2026-03-01",
           dateModified: "2026-03-14",
         }),

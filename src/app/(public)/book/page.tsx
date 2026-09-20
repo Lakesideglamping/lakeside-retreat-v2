@@ -30,7 +30,7 @@ export default function BookPage() {
       {/* Hero */}
       <section className="relative min-h-[40vh] flex items-center justify-center text-center text-white">
         <Image
-          src="/images/LakeDunstan.jpeg"
+          src="/images/LakeDunstan.jpg"
           alt="Glamping domes at sunset overlooking Lake Dunstan"
           fill
           priority
