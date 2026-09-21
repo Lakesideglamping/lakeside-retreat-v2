@@ -59,7 +59,7 @@ const regions = [
       { name: "The Cloudy Bay Shed", note: "It's much more than a cellar door—it's a premium wine, food, and scenery experience", url: "https://www.cloudybay.com/en-nz/" },
       { name: "Rockburn Winery", note: "One of Central Otago's most respected wineries, renowned for producing elegant, award-winning Pinot Noir", url: "https://www.rockburn.co.nz" },
       { name: "Wild Earth Wines", note: "Creating dishes expertly matched with award winning wines, and served in a rustic way", url: "https://www.wildearthwines.co.nz/cellar-door" },
-      { name: "Domain Road Vineyard", note: "Family-run, textured Pinot Noir", url: "https://www.domainroadvineyard.co.nz" },
+      { name: "Domain Road Vineyard", note: "Family-run, textured Pinot Noir", url: "https://www.domainroad.co.nz/" },
     ],
   },
   {
@@ -88,7 +88,7 @@ const regions = [
     distance: "40-50 minutes from Lakeside Retreat",
     desc: "The oldest commercial wine-growing area in Central Otago, with a harsh continental climate producing distinctive, food-friendly styles.",
     wineries: [
-      { name: "Two Paddocks", note: "Owned by actor Sam Neill — Pinot Noir and Riesling, tastings in Clyde", url: "https://www.twopaddocks.co.nz" },
+      { name: "Two Paddocks", note: "Owned by actor Sam Neill — Pinot Noir and Riesling, tastings in Clyde", url: "https://www.twopaddocks.com/" },
       { name: "Three Miners", note: "15.5 ha vineyardsituated in Earnscleugh Valley, appointments recommended", url: "https://threeminers.com/" },
       { name: "Monte Christo", note: "The Paris family making wine since 1864", url: "https://www.montechristowinery.co.nz" },
     ],
