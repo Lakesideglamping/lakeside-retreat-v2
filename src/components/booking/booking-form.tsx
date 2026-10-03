@@ -343,7 +343,7 @@ export function BookingForm({
         </div>
 
         <div>
-          {/* Direct-booking incentive: one tap applies the standing 5% code,
+          {/* Direct-booking incentive: one tap applies the standing 10% code,
               making the direct site cheaper than Airbnb/Booking.com. */}
           {promoCode.trim().toUpperCase() !== "BOOKDIRECT" && (
             <button
@@ -352,7 +352,7 @@ export function BookingForm({
               className="mb-3 flex w-full items-center justify-between gap-3 rounded-lg border border-burgundy/30 bg-burgundy/5 px-4 py-3 text-left transition-colors hover:bg-burgundy/10"
             >
               <span className="text-sm text-body">
-                <span className="font-semibold text-burgundy">Book direct &amp; save 5%</span>
+                <span className="font-semibold text-burgundy">Book direct &amp; save 10%</span>
                 <span className="block text-xs text-muted">
                   Cheaper than Airbnb &amp; Booking.com — tap to apply code BOOKDIRECT
                 </span>
@@ -378,7 +378,7 @@ export function BookingForm({
           />
           {promoCode.trim().toUpperCase() === "BOOKDIRECT" && (
             <p className="mt-1.5 text-xs font-medium text-green-700">
-              &#10003; 5% direct-booking discount will be applied at checkout
+              &#10003; 10% direct-booking discount will be applied at checkout
             </p>
           )}
         </div>

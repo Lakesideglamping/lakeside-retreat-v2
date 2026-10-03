@@ -187,7 +187,24 @@ export async function createCheckoutSession(
           : "Promotional discount",
       },
       {
-        idempotencyKey: `coupon_${params.accommodation}_${params.checkIn}_${params.promoCode ?? "discount"}`,
+        // The amount belongs in the key.
+        //
+        // This was keyed on accommodation + check-in + code alone, but the
+        // amount also depends on check-out, guests, pets, the seasonal
+        // multiplier and the code's own discount_value — none of which were in
+        // the key. Two visitors eyeing the same dome from the same date for
+        // different lengths of stay therefore produced one key and two
+        // amounts, and Stripe rejects a reused key whose parameters differ.
+        // The second visitor got "Failed to create payment session" and could
+        // not book for up to 24 hours, with nothing in our logs naming the
+        // cause. Abandoned checkouts make that collision ordinary rather than
+        // rare, and it bites hardest on the dates people actually want.
+        //
+        // amount_off is the only parameter here that varies, so including it
+        // makes the key vary exactly when the request does — while a genuine
+        // retry (a double-click, a refresh) still resolves to the same key and
+        // reuses the existing coupon, which is what the key is for.
+        idempotencyKey: `coupon_${params.accommodation}_${params.checkIn}_${params.promoCode ?? "discount"}_${params.discountAmountCents}`,
       }
     );
     stripeCouponId = coupon.id;
