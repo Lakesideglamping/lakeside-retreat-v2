@@ -165,10 +165,7 @@ export default async function HomePage() {
           <p className="text-xl md:text-2xl mb-8 opacity-95 font-light tracking-wide">
             Wake to the lake. Dine in the vines. Sleep beneath the stars.
           </p>
-          <Button href="/book">Book Your Escape</Button>
-          <p className="text-white/85 text-sm mt-5">
-            From <span className="font-semibold text-white">$350/night</span> &middot; Free cancellation 14+ days before
-          </p>
+          <Button href="/book">Book Direct & Save 10%</Button>
         </div>
       </section>
 
