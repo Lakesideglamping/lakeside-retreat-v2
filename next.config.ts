@@ -13,25 +13,38 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
 
-  // On-demand image optimisation is the most expensive thing this service does,
-  // and on a 512MB instance it is what takes it down. Every distinct width is a
-  // separate sharp decode and re-encode, allocated natively, outside the Node
-  // heap — and next/image writes one URL per configured width into every srcset
-  // it renders, so a crawler walking the site multiplies images by widths.
+  // On-demand image optimisation is the most expensive thing this service does.
+  // Every distinct width is a separate sharp decode and re-encode, allocated
+  // natively, outside the Node heap — and next/image writes one URL per
+  // configured width into every srcset it renders, so a crawler walking the
+  // site multiplies images by widths. That is what exhausted the old 512MB
+  // instance; robots.txt now keeps crawlers off /_next/image entirely.
   //
   // 2048 and 3840 are dropped from Next's defaults. They are by a wide margin
   // the two most expensive encodes — 3840 is four times the pixels of 1920 —
   // and they serve 4K desktops, which is not who books a glamping stay. A 4K
-  // screen now gets the 1920 variant scaled up, which on a photographic hero
+  // screen gets the 1920 variant scaled up, which on a photographic hero
   // behind a dark overlay is not a difference anyone can see.
   //
   // Nothing here starts downscaling work that was previously skipped: every
   // source image is already 1920px or narrower (largest: 1920x1440).
-  //
-  // Deliberately NOT setting formats to include AVIF. AVIF encodes cost
-  // markedly more CPU and memory than WebP, and this instance has already run
-  // out of both twice. Revisit only behind a CDN or on a larger instance.
   images: {
+    // AVIF first, WebP second: Next picks the first format the browser's Accept
+    // header allows, so modern browsers get AVIF and the rest fall back.
+    // Typically 25-35% smaller than WebP at the same quality, which matters
+    // disproportionately here because every byte crosses the Pacific from
+    // Oregon.
+    //
+    // This was deliberately off until 2026-10-03. AVIF encoding costs markedly
+    // more CPU and memory than WebP, and the 512MB instance had already been
+    // OOM-killed twice; adding it would have made the next kill likelier. The
+    // move to the 2GB plan removed that constraint — the same workload went
+    // from ~90% memory to ~20%, with double the CPU.
+    //
+    // The cost that remains is latency on a cold cache: an AVIF encode is
+    // slower than WebP, so the first request for each variant after a restart
+    // takes longer. That is a warming concern, not a stability one.
+    formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     // Render's Starter tier has no persistent disk, so the optimised-image
     // cache is wiped on every deploy. This TTL therefore buys browser and CDN
