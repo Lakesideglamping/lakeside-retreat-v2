@@ -14,7 +14,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "check:schema": "node scripts/check-schema-drift.mjs",
-    "check:migrations": "node scripts/check-migrations-applied.mjs"
+    "check:migrations": "node scripts/check-migrations-applied.mjs",
+    "warm:images": "node scripts/warm-image-cache.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.7.0",
