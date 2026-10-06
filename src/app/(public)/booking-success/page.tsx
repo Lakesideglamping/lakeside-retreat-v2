@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { retrieveCheckoutSession } from "@/lib/stripe";
 import { Button } from "@/components/ui/button";
+import { TrackPurchase } from "@/components/analytics/track-purchase";
 
 export const metadata: Metadata = {
   title: "Booking Confirmed",
@@ -23,6 +24,12 @@ function formatDate(dateStr: string): string {
   });
 }
 
+function nightsBetween(checkIn: string, checkOut: string): number | undefined {
+  const ms = Date.parse(checkOut) - Date.parse(checkIn);
+  const nights = Math.round(ms / 86_400_000);
+  return Number.isFinite(nights) && nights > 0 ? nights : undefined;
+}
+
 export default async function BookingSuccessPage({
   searchParams,
 }: {
@@ -41,6 +48,9 @@ export default async function BookingSuccessPage({
   let checkOut = "";
   let guests = "";
   let verified = false;
+  // Amount actually charged, after any promo or direct-booking discount.
+  let amountPaid: number | null = null;
+  let currency = "NZD";
 
   try {
     const session = await retrieveCheckoutSession(session_id);
@@ -54,6 +64,10 @@ export default async function BookingSuccessPage({
       checkIn       = meta.checkIn        ?? "";
       checkOut      = meta.checkOut       ?? "";
       guests        = meta.guests         ?? "";
+      if (typeof session.amount_total === "number") {
+        amountPaid = session.amount_total / 100;
+        currency = (session.currency ?? "nzd").toUpperCase();
+      }
     } else {
       // Payment not completed — send to cancelled
       redirect("/booking-cancelled");
@@ -65,6 +79,16 @@ export default async function BookingSuccessPage({
 
   return (
     <section className="min-h-[70vh] flex items-center justify-center px-5 pt-24 pb-20">
+      {verified && amountPaid !== null && (
+        <TrackPurchase
+          transactionId={session_id}
+          accommodationId={accommodation || "unknown"}
+          accommodationName={ACCOMMODATION_LABELS[accommodation] ?? (accommodation || "Booking")}
+          value={amountPaid}
+          currency={currency}
+          nights={nightsBetween(checkIn, checkOut)}
+        />
+      )}
       <div className="max-w-[600px] mx-auto text-center">
         <div className="text-5xl mb-6 text-burgundy">&#10003;</div>
         <h1 className="font-display text-4xl mb-4">Booking Confirmed!</h1>

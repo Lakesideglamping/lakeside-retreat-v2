@@ -54,7 +54,7 @@ export default function PrivacyPolicyPage() {
               Retreat does not store your full card numbers or CVV.
           </p>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">4. Google Analytics</h2>
+          <h2 className="font-display text-2xl mt-10 mb-4">4. Analytics and Advertising</h2>
           <p>
             We use Google Analytics to understand how visitors use our website. This collects
             aggregated, anonymised data including pages visited, geographic location (country/region),
@@ -70,10 +70,28 @@ export default function PrivacyPolicyPage() {
             .
           </p>
 
+          <p>
+            We also use the <strong>Meta Pixel</strong> (Facebook and Instagram) to measure
+            how well our advertising works and to show our ads to people who have visited our
+            website. Meta receives information such as the pages you view and whether a booking
+            was completed, including its value. It does not receive your name, email or payment
+            details from us. You can manage this in your{" "}
+            <a
+              href="https://www.facebook.com/adpreferences/ad_settings"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-burgundy"
+            >
+              Facebook ad settings
+            </a>
+            .
+          </p>
+
           <h2 className="font-display text-2xl mt-10 mb-4">5. Cookies</h2>
           <p>
-            We use essential cookies for website functionality and analytics cookies for Google
-            Analytics. You can control cookies through your browser preferences.
+            We use essential cookies for website functionality, analytics cookies for Google
+            Analytics, and advertising cookies for the Meta Pixel. You can control cookies through
+            your browser preferences.
           </p>
 
           <h2 className="font-display text-2xl mt-10 mb-4">6. Data Sharing</h2>
@@ -83,6 +101,7 @@ export default function PrivacyPolicyPage() {
           <ul>
             <li>Stripe (payment processing)</li>
             <li>Google (anonymised analytics)</li>
+            <li>Meta (advertising measurement)</li>
             <li>Legal authorities (if required by law)</li>
           </ul>
 

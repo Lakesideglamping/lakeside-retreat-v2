@@ -24,11 +24,16 @@ const JWT_SECRET_BYTES = new TextEncoder().encode(process.env.JWT_SECRET);
 function buildCspHeader(nonce: string): string {
   return [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' https://js.stripe.com`,
+    // The analytics hosts only matter to pre-CSP3 browsers: under
+    // 'strict-dynamic' host lists are ignored and gtag.js / fbevents.js are
+    // trusted because the nonced bootstrap in AnalyticsScripts injects them.
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com https://connect.facebook.net`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data: https://fonts.gstatic.com",
-    "connect-src 'self' https://api.stripe.com https://*.stripe.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://*.ingest.us.sentry.io",
+    // GA4 beacons go to *.google-analytics.com / *.analytics.google.com
+    // (region-prefixed hosts included); the Meta Pixel posts to facebook.com.
+    "connect-src 'self' https://api.stripe.com https://*.stripe.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://*.ingest.us.sentry.io https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.facebook.com https://connect.facebook.net",
     // www.google.com is here for the embedded map on /contact. Without it the
     // iframe is blocked and the map renders as an empty box — no error, no
     // broken-image icon, just nothing, with the violation only in the console.
