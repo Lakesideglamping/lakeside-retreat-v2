@@ -1,56 +1,101 @@
 /**
- * Visitor analytics: Google Analytics 4 and the Meta (Facebook/Instagram) Pixel.
+ * Visitor analytics: Umami (visitor counts) and the Meta (Facebook/Instagram)
+ * Pixel (ad measurement).
  *
- * Both are off unless their ID is set in the environment, so a deploy without
- * the variables ships no third-party tracking at all:
+ * Both are off unless configured, so a deploy without the variables ships no
+ * third-party tracking at all:
  *
- *   GA_MEASUREMENT_ID  e.g. G-ABC123XYZ   (GA4 → Admin → Data streams)
- *   META_PIXEL_ID      e.g. 123456789012345 (Meta Events Manager)
+ *   UMAMI_WEBSITE_ID  the website's UUID (Umami → Settings → Websites → Edit)
+ *   UMAMI_SCRIPT_URL  optional; defaults to Umami Cloud. Set it to
+ *                     https://<your-host>/script.js for a self-hosted Umami.
+ *   META_PIXEL_ID     e.g. 123456789012345 (Meta Events Manager)
  *
- * They are read at request time by a server component, not baked in at build
- * like NEXT_PUBLIC_* variables, so changing one on Render takes effect on the
- * next restart without a rebuild.
+ * They are read at request time by a server component (and by middleware for
+ * the CSP), not baked in at build like NEXT_PUBLIC_* variables, so changing
+ * one on Render takes effect on the next restart without a rebuild.
  *
- * The IDs are interpolated into inline <script> bodies, so each is checked
- * against its exact format first. Anything else is treated as unset rather
- * than escaped — a malformed ID would not track anything anyway.
+ * Each value ends up in an HTML attribute, an inline <script> body or the CSP
+ * header, so it is checked against its exact format first. Anything else is
+ * treated as unset rather than escaped — a malformed value would not track
+ * anything anyway.
  */
 
-const GA_ID_PATTERN = /^G-[A-Z0-9]{4,20}$/;
+const UMAMI_CLOUD_SCRIPT_URL = "https://cloud.umami.is/script.js";
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const META_PIXEL_ID_PATTERN = /^\d{6,20}$/;
 
-export interface AnalyticsIds {
-  gaId: string | null;
+// Umami Cloud serves the script from cloud.umami.is but its tracker posts
+// events to a separate collection host.
+const UMAMI_CLOUD_CONNECT_ORIGINS = [
+  "https://cloud.umami.is",
+  "https://api-gateway.umami.dev",
+];
+
+export interface UmamiConfig {
+  websiteId: string;
+  scriptUrl: string;
+}
+
+export interface AnalyticsConfig {
+  umami: UmamiConfig | null;
   metaPixelId: string | null;
 }
 
-export function getAnalyticsIds(
+/** An https URL to a .js file, with no query, fragment or credentials. */
+function parseScriptUrl(raw: string | undefined): string | null {
+  if (!raw?.trim()) return UMAMI_CLOUD_SCRIPT_URL;
+  try {
+    const url = new URL(raw.trim());
+    if (
+      url.protocol !== "https:" ||
+      url.username ||
+      url.password ||
+      url.search ||
+      url.hash ||
+      !url.pathname.endsWith(".js")
+    ) {
+      return null;
+    }
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
+export function getAnalyticsConfig(
   env: Record<string, string | undefined> = process.env
-): AnalyticsIds {
-  const ga = env.GA_MEASUREMENT_ID?.trim().toUpperCase();
+): AnalyticsConfig {
+  const websiteId = env.UMAMI_WEBSITE_ID?.trim().toLowerCase();
+  const scriptUrl = parseScriptUrl(env.UMAMI_SCRIPT_URL);
   const meta = env.META_PIXEL_ID?.trim();
   return {
-    gaId: ga && GA_ID_PATTERN.test(ga) ? ga : null,
+    umami:
+      websiteId && UUID_PATTERN.test(websiteId) && scriptUrl
+        ? { websiteId, scriptUrl }
+        : null,
     metaPixelId: meta && META_PIXEL_ID_PATTERN.test(meta) ? meta : null,
   };
 }
 
 /**
- * Google's standard gtag bootstrap, written as one inline script so it can
- * carry the CSP nonce. The external gtag.js it injects is then trusted via
- * 'strict-dynamic'. GA4's enhanced measurement records client-side route
- * changes as page views, so nothing extra is needed for Next navigation.
+ * Origins the Umami tracker sends events to, for CSP connect-src. A
+ * self-hosted tracker posts back to its own origin.
  */
-export function gaBootstrapScript(gaId: string): string {
-  return [
-    `(function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=${gaId}';document.head.appendChild(s);})();`,
-    `window.dataLayer=window.dataLayer||[];`,
-    `function gtag(){dataLayer.push(arguments);}`,
-    `window.gtag=gtag;`,
-    `gtag('js',new Date());`,
-    `gtag('config','${gaId}');`,
-  ].join("");
+export function umamiConnectOrigins(umami: UmamiConfig | null): string[] {
+  if (!umami) return [];
+  if (umami.scriptUrl === UMAMI_CLOUD_SCRIPT_URL) {
+    return UMAMI_CLOUD_CONNECT_ORIGINS;
+  }
+  return [new URL(umami.scriptUrl).origin];
 }
+
+/**
+ * Only the live domain is counted, so local development, Render preview URLs
+ * and anyone copying the page do not inflate the numbers.
+ */
+export const UMAMI_TRACKED_DOMAINS =
+  "lakesideretreat.co.nz,www.lakesideretreat.co.nz";
 
 /** Meta's standard Pixel base code, with the initial PageView. */
 export function metaPixelBootstrapScript(pixelId: string): string {
@@ -65,16 +110,35 @@ export function metaPixelBootstrapScript(pixelId: string): string {
 
 // ---------------------------------------------------------------------------
 // Client-side event helpers. Safe to call when either tracker is absent
-// (unset ID, ad blocker, script still loading): they do nothing.
+// (not configured, ad blocker, script still loading): they do nothing.
 // ---------------------------------------------------------------------------
 
-type Gtag = (...args: unknown[]) => void;
+type Umami = { track: (name: string, data?: Record<string, unknown>) => void };
 type Fbq = (...args: unknown[]) => void;
 
-function trackers(): { gtag?: Gtag; fbq?: Fbq } {
-  if (typeof window === "undefined") return {};
-  const w = window as unknown as { gtag?: Gtag; fbq?: Fbq };
-  return { gtag: w.gtag, fbq: w.fbq };
+function getUmami(): Umami | undefined {
+  if (typeof window === "undefined") return undefined;
+  return (window as unknown as { umami?: Umami }).umami;
+}
+
+function getFbq(): Fbq | undefined {
+  if (typeof window === "undefined") return undefined;
+  return (window as unknown as { fbq?: Fbq }).fbq;
+}
+
+/**
+ * The Umami script is deferred, so an event raised during hydration can beat
+ * it. Retry briefly rather than drop it; give up quietly if it never loads
+ * (blocked, or not configured).
+ */
+function withUmami(fn: (umami: Umami) => void, attemptsLeft = 20): void {
+  const umami = getUmami();
+  if (umami) {
+    fn(umami);
+    return;
+  }
+  if (typeof window === "undefined" || attemptsLeft <= 0) return;
+  window.setTimeout(() => withUmami(fn, attemptsLeft - 1), 250);
 }
 
 export interface BookingEventDetails {
@@ -85,25 +149,15 @@ export interface BookingEventDetails {
   nights?: number;
 }
 
-function gaItems(d: BookingEventDetails) {
-  return [
-    {
-      item_id: d.accommodationId,
-      item_name: d.accommodationName,
-      quantity: d.nights ?? 1,
-    },
-  ];
-}
-
 /** Guest pressed "continue to payment" on the booking form. */
 export function trackBeginCheckout(d: BookingEventDetails): void {
-  const { gtag, fbq } = trackers();
-  gtag?.("event", "begin_checkout", {
-    currency: d.currency,
+  // No retry here: the page navigates to Stripe immediately after.
+  getUmami()?.track("checkout-started", {
+    accommodation: d.accommodationName,
     value: d.value,
-    items: gaItems(d),
+    currency: d.currency,
   });
-  fbq?.("track", "InitiateCheckout", {
+  getFbq()?.("track", "InitiateCheckout", {
     currency: d.currency,
     value: d.value,
     content_ids: [d.accommodationId],
@@ -112,20 +166,22 @@ export function trackBeginCheckout(d: BookingEventDetails): void {
 }
 
 /**
- * A paid booking. transactionId (the Stripe Checkout session id) lets GA4
- * and Meta drop duplicates if the success page is reloaded.
+ * A paid booking. Umami's revenue report reads the `revenue` and `currency`
+ * properties. transactionId (the Stripe Checkout session id) lets Meta drop
+ * duplicates if the success page is reloaded.
  */
 export function trackPurchase(
   d: BookingEventDetails & { transactionId: string }
 ): void {
-  const { gtag, fbq } = trackers();
-  gtag?.("event", "purchase", {
-    transaction_id: d.transactionId,
-    currency: d.currency,
-    value: d.value,
-    items: gaItems(d),
-  });
-  fbq?.(
+  withUmami((umami) =>
+    umami.track("booking", {
+      accommodation: d.accommodationName,
+      nights: d.nights,
+      revenue: d.value,
+      currency: d.currency,
+    })
+  );
+  getFbq()?.(
     "track",
     "Purchase",
     {
@@ -140,5 +196,5 @@ export function trackPurchase(
 
 /** Meta only counts the first page load; client navigations need this. */
 export function trackMetaPageView(): void {
-  trackers().fbq?.("track", "PageView");
+  getFbq()?.("track", "PageView");
 }

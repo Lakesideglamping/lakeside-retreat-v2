@@ -89,7 +89,7 @@ services:
       - key: NEXT_PUBLIC_SENTRY_DSN
         sync: false
       # Visitor analytics. Unset = no tracking scripts. See lib/analytics.ts.
-      - key: GA_MEASUREMENT_ID
+      - key: UMAMI_WEBSITE_ID
         sync: false
       - key: META_PIXEL_ID
         sync: false

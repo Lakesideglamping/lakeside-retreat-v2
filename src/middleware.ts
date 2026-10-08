@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { getAnalyticsConfig, umamiConnectOrigins } from "@/lib/analytics";
 
 const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE === "true";
 const IS_PROD = process.env.NODE_ENV === "production";
@@ -13,6 +14,20 @@ if (!process.env.JWT_SECRET) {
 }
 const JWT_SECRET_BYTES = new TextEncoder().encode(process.env.JWT_SECRET);
 
+// Analytics hosts for the CSP, from the same config that decides whether the
+// trackers load at all (lib/analytics.ts). Unconfigured trackers add nothing.
+const ANALYTICS = getAnalyticsConfig();
+const ANALYTICS_SCRIPT_ORIGINS = [
+  ...(ANALYTICS.umami ? [new URL(ANALYTICS.umami.scriptUrl).origin] : []),
+  ...(ANALYTICS.metaPixelId ? ["https://connect.facebook.net"] : []),
+].join(" ");
+const ANALYTICS_CONNECT_ORIGINS = [
+  ...umamiConnectOrigins(ANALYTICS.umami),
+  ...(ANALYTICS.metaPixelId
+    ? ["https://www.facebook.com", "https://connect.facebook.net"]
+    : []),
+].join(" ");
+
 /**
  * Build a per-request CSP header with a unique script nonce. Modern
  * (CSP3) browsers see 'strict-dynamic' and ignore 'unsafe-inline',
@@ -24,16 +39,16 @@ const JWT_SECRET_BYTES = new TextEncoder().encode(process.env.JWT_SECRET);
 function buildCspHeader(nonce: string): string {
   return [
     "default-src 'self'",
-    // The analytics hosts only matter to pre-CSP3 browsers: under
-    // 'strict-dynamic' host lists are ignored and gtag.js / fbevents.js are
-    // trusted because the nonced bootstrap in AnalyticsScripts injects them.
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com https://connect.facebook.net`,
+    // The Umami script tag carries the nonce, so 'strict-dynamic' admits it;
+    // the analytics hosts listed here only matter to pre-CSP3 browsers. The
+    // Meta fbevents.js is trusted because the nonced Pixel bootstrap injects it.
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-inline' https://js.stripe.com ${ANALYTICS_SCRIPT_ORIGINS}`.trimEnd(),
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data: https://fonts.gstatic.com",
-    // GA4 beacons go to *.google-analytics.com / *.analytics.google.com
-    // (region-prefixed hosts included); the Meta Pixel posts to facebook.com.
-    "connect-src 'self' https://api.stripe.com https://*.stripe.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://*.ingest.us.sentry.io https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.facebook.com https://connect.facebook.net",
+    // Umami posts events to its collection host; the Meta Pixel posts to
+    // facebook.com.
+    `connect-src 'self' https://api.stripe.com https://*.stripe.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://*.ingest.us.sentry.io ${ANALYTICS_CONNECT_ORIGINS}`.trimEnd(),
     // www.google.com is here for the embedded map on /contact. Without it the
     // iframe is blocked and the map renders as an empty box — no error, no
     // broken-image icon, just nothing, with the violation only in the console.

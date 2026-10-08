@@ -5,8 +5,9 @@ import { trackPurchase, type BookingEventDetails } from "@/lib/analytics";
 
 /**
  * Fires the purchase conversion once per Stripe session. The sessionStorage
- * guard stops a reload from re-sending it; GA4 and Meta also deduplicate on
- * the transaction id, so a missing guard (private mode) is not double-counted.
+ * guard stops a reload from re-sending it. Meta also deduplicates on the
+ * transaction id; Umami does not, so where storage is blocked a reload can
+ * count one booking twice there.
  */
 export function TrackPurchase(
   props: BookingEventDetails & { transactionId: string }

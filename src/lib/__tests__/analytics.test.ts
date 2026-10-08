@@ -1,49 +1,87 @@
 import { describe, it, expect } from "vitest";
 import {
-  getAnalyticsIds,
-  gaBootstrapScript,
+  getAnalyticsConfig,
   metaPixelBootstrapScript,
+  umamiConnectOrigins,
 } from "@/lib/analytics";
 
-describe("getAnalyticsIds", () => {
+const WEBSITE_ID = "94db1cb1-74f4-4a40-ad6c-962362670409";
+
+describe("getAnalyticsConfig", () => {
   it("returns nulls when nothing is configured", () => {
-    expect(getAnalyticsIds({})).toEqual({ gaId: null, metaPixelId: null });
+    expect(getAnalyticsConfig({})).toEqual({ umami: null, metaPixelId: null });
   });
 
-  it("accepts well-formed IDs, trimming whitespace", () => {
+  it("defaults Umami to the cloud script and normalises the ID", () => {
     expect(
-      getAnalyticsIds({
-        GA_MEASUREMENT_ID: " g-abc123xyz ",
+      getAnalyticsConfig({
+        UMAMI_WEBSITE_ID: ` ${WEBSITE_ID.toUpperCase()} `,
         META_PIXEL_ID: " 123456789012345\n",
       })
-    ).toEqual({ gaId: "G-ABC123XYZ", metaPixelId: "123456789012345" });
+    ).toEqual({
+      umami: {
+        websiteId: WEBSITE_ID,
+        scriptUrl: "https://cloud.umami.is/script.js",
+      },
+      metaPixelId: "123456789012345",
+    });
   });
 
+  it("accepts a self-hosted https script URL", () => {
+    expect(
+      getAnalyticsConfig({
+        UMAMI_WEBSITE_ID: WEBSITE_ID,
+        UMAMI_SCRIPT_URL: "https://stats.example.com/script.js",
+      }).umami?.scriptUrl
+    ).toBe("https://stats.example.com/script.js");
+  });
+
+  it.each([
+    "http://stats.example.com/script.js",
+    "https://stats.example.com/script.js?x=1",
+    "https://user:pw@stats.example.com/script.js",
+    "https://stats.example.com/",
+    "javascript:alert(1)",
+    "not a url",
+  ])("disables Umami for an unsafe script URL: %s", (url) => {
+    expect(
+      getAnalyticsConfig({ UMAMI_WEBSITE_ID: WEBSITE_ID, UMAMI_SCRIPT_URL: url })
+        .umami
+    ).toBeNull();
+  });
+
+  // The values land in HTML attributes, an inline <script> body and the CSP
+  // header, so anything malformed must be rejected, not passed through.
   it("treats malformed IDs as unset", () => {
     expect(
-      getAnalyticsIds({ GA_MEASUREMENT_ID: "UA-1234-1", META_PIXEL_ID: "abc" })
-    ).toEqual({ gaId: null, metaPixelId: null });
-  });
-
-  // The IDs land inside inline <script> bodies, so anything that could break
-  // out of the string literal must be rejected, not passed through.
-  it("rejects IDs that would inject script", () => {
-    expect(
-      getAnalyticsIds({
-        GA_MEASUREMENT_ID: "G-ABC');alert(1);//",
+      getAnalyticsConfig({
+        UMAMI_WEBSITE_ID: `${WEBSITE_ID}" onload="alert(1)`,
         META_PIXEL_ID: "123456');alert(1);//",
       })
-    ).toEqual({ gaId: null, metaPixelId: null });
+    ).toEqual({ umami: null, metaPixelId: null });
   });
 });
 
-describe("bootstrap scripts", () => {
-  it("configures GA with the given ID", () => {
-    const js = gaBootstrapScript("G-ABC123XYZ");
-    expect(js).toContain("gtag/js?id=G-ABC123XYZ");
-    expect(js).toContain("gtag('config','G-ABC123XYZ')");
+describe("umamiConnectOrigins", () => {
+  it("is empty when Umami is off", () => {
+    expect(umamiConnectOrigins(null)).toEqual([]);
   });
 
+  it("allows Umami Cloud's collection host", () => {
+    const { umami } = getAnalyticsConfig({ UMAMI_WEBSITE_ID: WEBSITE_ID });
+    expect(umamiConnectOrigins(umami)).toContain("https://api-gateway.umami.dev");
+  });
+
+  it("allows only the self-hosted origin otherwise", () => {
+    const { umami } = getAnalyticsConfig({
+      UMAMI_WEBSITE_ID: WEBSITE_ID,
+      UMAMI_SCRIPT_URL: "https://stats.example.com/umami/script.js",
+    });
+    expect(umamiConnectOrigins(umami)).toEqual(["https://stats.example.com"]);
+  });
+});
+
+describe("metaPixelBootstrapScript", () => {
   it("initialises the Pixel and sends the first PageView", () => {
     const js = metaPixelBootstrapScript("123456789012345");
     expect(js).toContain("fbq('init','123456789012345')");

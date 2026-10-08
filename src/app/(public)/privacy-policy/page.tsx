@@ -56,20 +56,12 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="font-display text-2xl mt-10 mb-4">4. Analytics and Advertising</h2>
           <p>
-            We use Google Analytics to understand how visitors use our website. This collects
-            aggregated, anonymised data including pages visited, geographic location (country/region),
-            browser type, and usage statistics. You can opt out via the{" "}
-            <a
-              href="https://tools.google.com/dlpage/gaoptout"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-burgundy"
-            >
-              Google Analytics Opt-out Browser Add-on
-            </a>
-            .
+            We use <strong>Umami</strong> to understand how visitors use our website. It counts
+            visits, pages viewed, how visitors found us (for example a search engine or social
+            media), and general location (country), browser and device type. Umami does not use
+            cookies or store your IP address, and it never receives your name or email. Booking
+            events record the property and the amount paid, not who booked.
           </p>
-
           <p>
             We also use the <strong>Meta Pixel</strong> (Facebook and Instagram) to measure
             how well our advertising works and to show our ads to people who have visited our
@@ -89,9 +81,9 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="font-display text-2xl mt-10 mb-4">5. Cookies</h2>
           <p>
-            We use essential cookies for website functionality, analytics cookies for Google
-            Analytics, and advertising cookies for the Meta Pixel. You can control cookies through
-            your browser preferences.
+            We use essential cookies for website functionality and advertising cookies for the
+            Meta Pixel. Our visitor statistics (Umami) do not use cookies. You can control
+            cookies through your browser preferences.
           </p>
 
           <h2 className="font-display text-2xl mt-10 mb-4">6. Data Sharing</h2>
@@ -100,7 +92,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul>
             <li>Stripe (payment processing)</li>
-            <li>Google (anonymised analytics)</li>
+            <li>Umami (anonymous visitor statistics)</li>
             <li>Meta (advertising measurement)</li>
             <li>Legal authorities (if required by law)</li>
           </ul>
@@ -109,7 +101,7 @@ export default function PrivacyPolicyPage() {
           <ul>
             <li>Booking records: up to 7 years (NZ tax law)</li>
             <li>Enquiry correspondence: up to 2 years</li>
-            <li>Analytics data: anonymised after 14 months by Google</li>
+            <li>Visitor statistics: anonymous, kept in aggregate</li>
           </ul>
           <p>You can request deletion, subject to our legal obligations.</p>
 
