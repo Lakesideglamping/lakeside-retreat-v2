@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import type { Accommodation } from "@/lib/accommodations";
 import { calculatePrice, formatNZD } from "@/lib/pricing";
 import { SubmitButton } from "@/components/ui/submit-button";
+import { trackBeginCheckout } from "@/lib/analytics";
 
 interface BookingFormProps {
   accommodation: Accommodation;
@@ -154,7 +155,13 @@ export function BookingForm({
 
       // Redirect to Stripe Checkout
       if (data.url) {
-        window.location.href = data.url;
+        trackBeginCheckout({
+          accommodationId: accommodation.id,
+          accommodationName: accommodation.name,
+          value: totalAmount,
+          currency: "NZD",
+        });
+        window.location.assign(data.url);
       } else {
         setStatus("error");
         setErrorMessage("Unable to create payment session. Please try again.");

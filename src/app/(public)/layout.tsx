@@ -2,6 +2,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { StickyBookBar } from "@/components/sticky-book-bar";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
+import { AnalyticsScripts } from "@/components/analytics/analytics-scripts";
 
 export default function PublicLayout({
   children,
@@ -21,6 +22,7 @@ export default function PublicLayout({
       <Footer />
       <StickyBookBar />
       <WhatsAppFloat />
+      <AnalyticsScripts />
     </>
   );
 }
