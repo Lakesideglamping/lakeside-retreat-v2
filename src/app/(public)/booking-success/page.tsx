@@ -51,6 +51,8 @@ export default async function BookingSuccessPage({
   // Amount actually charged, after any promo or direct-booking discount.
   let amountPaid: number | null = null;
   let currency = "NZD";
+  // Stripe answered and says this checkout was never paid.
+  let paymentIncomplete = false;
 
   try {
     const session = await retrieveCheckoutSession(session_id);
@@ -68,13 +70,21 @@ export default async function BookingSuccessPage({
         amountPaid = session.amount_total / 100;
         currency = (session.currency ?? "nzd").toUpperCase();
       }
-    } else {
-      // Payment not completed — send to cancelled
-      redirect("/booking-cancelled");
+    } else if (session) {
+      paymentIncomplete = true;
     }
+    // No session at all (unknown id, or Stripe unreachable) falls through to
+    // the generic confirmation: the webhook may already have processed a
+    // successful payment, and telling a paying guest their booking failed is
+    // worse than a page without details.
   } catch {
-    // Invalid session_id — just show generic confirmation
-    // (webhook may have already processed it successfully)
+    // Same as above — generic confirmation.
+  }
+
+  // Outside the try: redirect() works by throwing, and the catch above used to
+  // swallow it, so an unpaid checkout was shown "Booking Confirmed!".
+  if (paymentIncomplete) {
+    redirect("/booking-cancelled");
   }
 
   return (
