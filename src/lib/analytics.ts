@@ -26,9 +26,12 @@ const UUID_PATTERN =
 const META_PIXEL_ID_PATTERN = /^\d{6,20}$/;
 
 // Umami Cloud serves the script from cloud.umami.is but its tracker posts
-// events to a separate collection host.
+// events to a separate collection host, gateway.umami.is (seen in a CSP
+// violation on the live site). api-gateway.umami.dev is an older collection
+// host, kept in case the cloud script falls back to it.
 const UMAMI_CLOUD_CONNECT_ORIGINS = [
   "https://cloud.umami.is",
+  "https://gateway.umami.is",
   "https://api-gateway.umami.dev",
 ];
 
