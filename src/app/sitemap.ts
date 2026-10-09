@@ -9,9 +9,33 @@ import { execFileSync } from "node:child_process";
 //
 // Falls back to a baseline string if git is unavailable (e.g. running
 // outside a checkout, or a brand-new uncommitted page).
+//
+// In a shallow clone the dates are omitted instead. Render builds from a
+// shallow clone, where the only commit left is the one being deployed, so
+// `git log -1 -- <file>` returned the deploy date for every page: every
+// page claimed to change on every deploy, which is exactly the false signal
+// this was written to avoid. Google treats lastmod as optional and ignores
+// it once it proves unreliable, so no date beats a wrong one.
 const BUILD_FALLBACK = "2026-05-01";
 
-function lastCommitDate(relPath: string): string {
+let shallowCheckout: boolean | undefined;
+function isShallowCheckout(): boolean {
+  if (shallowCheckout === undefined) {
+    try {
+      shallowCheckout =
+        execFileSync("git", ["rev-parse", "--is-shallow-repository"], {
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "ignore"],
+        }).trim() === "true";
+    } catch {
+      shallowCheckout = false;
+    }
+  }
+  return shallowCheckout;
+}
+
+function lastCommitDate(relPath: string): string | undefined {
+  if (isShallowCheckout()) return undefined;
   try {
     const out = execFileSync(
       "git",
