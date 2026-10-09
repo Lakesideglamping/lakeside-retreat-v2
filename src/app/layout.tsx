@@ -55,6 +55,11 @@ export const metadata: Metadata = {
       "Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell.",
     images: [OG_IMAGE.url],
   },
+  // Bing Webmaster Tools ownership check. Must stay in place: Bing re-checks
+  // it periodically and drops the site if it disappears.
+  verification: {
+    other: { "msvalidate.01": "81E38D4F269A1DDB01E62EB1BDE93FA9" },
+  },
 };
 
 export default async function RootLayout({
