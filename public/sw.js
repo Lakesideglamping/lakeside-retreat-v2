@@ -45,30 +45,27 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // For HTML requests (navigation), always use network-first
-    // This ensures fresh CSP headers and content are always served
+    // Leave page loads (HTML) to the browser. HTML is never cached, so the
+    // worker has no offline copy to offer. It used to fall back to
+    // caches.match('/'), which always resolved to undefined, and handing
+    // undefined to respondWith() turned every failed page load into
+    // "TypeError: Failed to convert value to 'Response'" instead of the
+    // browser's normal offline page.
     if (event.request.mode === 'navigate' ||
         event.request.destination === 'document' ||
         event.request.url.endsWith('/') ||
         event.request.url.endsWith('.html')) {
-        event.respondWith(
-            fetch(event.request)
-                .catch(() => {
-                    // Only fall back to cache if network fails
-                    return caches.match('/');
-                })
-        );
         return;
     }
 
-    // For other requests (images, scripts, etc.), use cache-first
+    // For other requests (images, scripts, etc.), use cache-first. If both
+    // the cache and the network fail, answer with a proper network error
+    // rather than undefined (or an HTML page standing in for an image).
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
                 return response || fetch(event.request);
             })
-            .catch(() => {
-                return caches.match('/');
-            })
+            .catch(() => Response.error())
     );
 });
