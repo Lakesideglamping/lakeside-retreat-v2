@@ -69,7 +69,7 @@ describe("umamiConnectOrigins", () => {
 
   it("allows Umami Cloud's collection host", () => {
     const { umami } = getAnalyticsConfig({ UMAMI_WEBSITE_ID: WEBSITE_ID });
-    expect(umamiConnectOrigins(umami)).toContain("https://api-gateway.umami.dev");
+    expect(umamiConnectOrigins(umami)).toContain("https://gateway.umami.is");
   });
 
   it("allows only the self-hosted origin otherwise", () => {
