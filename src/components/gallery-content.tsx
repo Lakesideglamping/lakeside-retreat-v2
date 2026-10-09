@@ -42,7 +42,7 @@ const galleryItems = [
   { src: "/images/domes-portrait-lake.jpg", alt: "Both geodesic domes with vineyard rows leading to Lake Dunstan", title: "Vineyard & Lake", categories: ["views", "domes"] as Category[] },
   { src: "/images/WinterVineyard.jpeg", alt: "Winter Vineyard View", title: "Winter Vineyard View", categories: ["views"] as Category[] },
   
-  { src: "/images/LakeDunstanReflaction.jpeg", alt: "Lake Dunstan Reflaction", title: "Lake Dunstan Reflaction", categories: ["views"] as Category[] },
+  { src: "/images/LakeDunstanReflaction.jpeg", alt: "Lake Dunstan Reflection", title: "Lake Dunstan Reflection", categories: ["views"] as Category[] },
   { src: "/images/20220110_081038.jpg", alt: "Lake Dunstan", title: "Lake Dunstan", categories: ["views"] as Category[] },
   { src: "/images/LakeDunstanCloud.jpeg", alt: "Lake Dunstan Cloud", title: "Lake Dunstan Cloud", categories: ["views"] as Category[] },
   { src: "/images/MilkyWayOntheLake.jpg", alt: "Milkyway over Lake Dunstan", title: "Star Gazing", categories: ["views", "domes", "cottage"] as Category[] },

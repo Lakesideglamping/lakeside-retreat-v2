@@ -130,11 +130,11 @@ const pages: PageImages[] = [
       },
 {
         loc: "/images/IMG_E8726.jpg",
-        title: "Mountain views from Dome Rosé desking",
+        title: "Mountain views from Dome Rosé decking",
       },
 {
         loc: "/images/RoseAerialView.jpg",
-        title: "Dome Rose Aerial View.jpg",
+        title: "Dome Rosé aerial view over the vineyard",
       },
 {
         loc: "/images/Spa.jpeg",
@@ -299,7 +299,7 @@ const pages: PageImages[] = [
       },
 {
         loc: "/images/LakeDunstanReflaction.jpeg",
-        title: "Lake Dunstan Reflaction",
+        title: "Lake Dunstan Reflection",
       },
 {
         loc: "/images/20220110_081038.jpg",
