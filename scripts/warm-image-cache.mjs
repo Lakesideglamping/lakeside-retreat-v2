@@ -47,6 +47,7 @@
  */
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
+import { execSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -122,11 +123,19 @@ async function main() {
 
   const widths = readDeviceSizes();
   const heroNames = readHeroImages();
-  const imagesDir = join(ROOT, "public", "images");
-
+  // Warm what is DEPLOYED, not what is on disk. The live site is built from
+  // git, so an untracked file in public/images does not exist in production
+  // and warming it is a guaranteed 404 — reported as a failure, obscuring any
+  // real one. This bit when fifty " - Copy" duplicates appeared locally: 139
+  // files on disk, 89 actually deployed.
+  //
   // Only formats next/image actually optimises. Favicons live here too and are
   // never served through the optimiser, so warming them is wasted work.
-  const all = readdirSync(imagesDir).filter(
+  const tracked = execSync("git ls-files public/images", { cwd: ROOT, encoding: "utf8" })
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((p) => p.replace(/^public\/images\//, ""));
+  const all = tracked.filter(
     (f) => /\.(jpe?g|png|webp)$/i.test(f) && !/favicon|apple-touch-icon/i.test(f)
   );
   const heroes = all.filter((f) => heroNames.has(f));
