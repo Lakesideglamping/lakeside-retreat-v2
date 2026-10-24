@@ -75,10 +75,26 @@ export default async function RootLayout({
     <html lang="en-NZ" className={`${fraunces.variable} ${inter.variable}`}>
       <body className="antialiased">
         {children}
+        {/*
+          The empty .catch() is deliberate — do not remove it.
+
+          Service-worker registration is expected to fail in ordinary
+          situations: private windows, older browsers, locked-down devices,
+          and headless crawlers that stub navigator.serviceWorker.register to
+          reject. None of those are faults in this site; the worker is pure
+          progressive enhancement (it caches one logo file), and the page is
+          identical without it.
+
+          Uncaught, each such failure became an unhandled promise rejection,
+          which Sentry reports as a high-priority error — JAVASCRIPT-NEXTJS-6
+          was a bot on Chrome 129/Linux doing exactly this. Logging it would
+          only move the noise from Sentry to the console. The right response to
+          "the worker could not install" is to carry on.
+        */}
         <script
           nonce={nonce}
           dangerouslySetInnerHTML={{
-            __html: `if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js')})}`,
+            __html: `if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{})})}`,
           }}
         />
       </body>
