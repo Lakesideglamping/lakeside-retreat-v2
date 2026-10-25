@@ -178,7 +178,7 @@
     },
     {
       "question": "What is the security deposit?",
-      "answer": "We require a $350 NZD security deposit as an authorization hold on your card. This is NOT charged - it's just a hold that is automatically released 48 hours after checkout, assuming no damage to the property.",
+      "answer": "We require a $300 NZD security deposit as an authorization hold on your card. This is NOT charged - it's just a hold that is automatically released 48 hours after checkout, assuming no damage to the property.",
       "keywords": ["deposit", "security", "bond", "hold", "charge"]
     }
   ],
