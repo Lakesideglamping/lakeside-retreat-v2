@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { fromRate } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
   title: "Central Otago Cycle Trails Accommodation | Luxury Stay 200m from the Trail",
   description:
-    "Luxury accommodation for Central Otago Cycle Trails cyclists — just 200m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $350/night.",
+    `Luxury accommodation for Central Otago Cycle Trails cyclists — just 200m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. ${fromRate("lakeside-cottage")}.`,
 
   alternates: { canonical: "/otago-rail-trail-accommodation" },
   openGraph: {
     title: "Central Otago Cycle Trails Accommodation | Luxury Stay 200m from the Trail",
-    description: "Luxury accommodation for Central Otago Cycle Trails cyclists — just 200m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. $350/night.",
+    description: `Luxury accommodation for Central Otago Cycle Trails cyclists — just 200m from the Lake Dunstan Trail at Cromwell. Geodesic domes with private spas and a lakeside cottage. ${fromRate("lakeside-cottage")}.`,
     url: "https://lakesideretreat.co.nz/otago-rail-trail-accommodation",
     images: [
       {
@@ -96,7 +97,7 @@ export default function OtagoRailTrailAccommodationPage() {
           { name: "Otago Cycle Trails Accommodation", path: "/otago-cycle-trail-accommodation" },
         ]),
         createFaqSchema([
-          { question: "What is the best accommodation for the Otago Cycle Trails?", answer: "Lakeside Retreat at Mount Pisa is perfectly located for the Lake Dunstan Trail — just 200m from the trailhead. Cyclists stay in luxury geodesic domes or a lakeside cottage, with bike storage, early breakfast, laundry facilities, and a private outdoor spa for post-ride recovery. $350/night." },
+          { question: "What is the best accommodation for the Otago Cycle Trails?", answer: `Lakeside Retreat at Mount Pisa is perfectly located for the Lake Dunstan Trail — just 200m from the trailhead. Cyclists stay in luxury geodesic domes or a lakeside cottage, with bike storage, early breakfast, laundry facilities, and a private outdoor spa for post-ride recovery. ${fromRate("lakeside-cottage")}.` },
           { question: "Where does the Lake Dustan Cycle Trail start?", answer: "The Lake Dustan Cycle Trail runs between Clyde and Cromwell (55km). The Cromwell to Clyde section is the most popular starting point and is just 200 metres from Lakeside Retreat." },
           { question: "How many days does the Otago Rail Trail take?", answer: "The full Otago Rail Trail takes 4–5 days to complete at a relaxed pace. Many cyclists do just the Cromwell to Clyde section (2–3 hours) as a day ride. Lakeside Retreat is ideal as a base for the first 1–2 days or as the final night before completing the trail." },
           { question: "Is the Central Otago Cycle Trails suitable for beginners?", answer: "Yes — the Central Otago Cycle Trails is graded as an easy to moderate ride with most sections being flat or gently undulating on a well-maintained gravel surface. The Cromwell to Clyde section is grade 1-2 and follows Lake Dunstan — ideal for first-time trail riders." },
@@ -216,7 +217,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
                 badge: "Adults Only",
-                price: "$650/night",
+                price: fromRate("dome-pinot"),
                 notes: "Private spa, stargazing skylight, breakfast included",
               },
               {
@@ -224,7 +225,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
                 badge: "Adults Only",
-                price: "$599/night",
+                price: fromRate("dome-rose"),
                 notes: "Private spa, vineyard views, kitchenette",
               },
               {
@@ -232,7 +233,7 @@ export default function OtagoRailTrailAccommodationPage() {
                 image: "/images/lakeside-cottage-exterior.jpeg",
                 title: "Lakeside Cottage",
                 badge: "Adults-Only · Pet Friendly",
-                price: "$350/night",
+                price: fromRate("lakeside-cottage"),
                 notes: "Queen + sofa bed, sleeps 3, wood-fired hot tub, direct lake access",
               },
             ].map((acc) => (

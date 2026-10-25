@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
+import { fromRate } from "@/lib/advertised-rates";
 
 const fraunces = Fraunces({
   variable: "--font-playfair",
@@ -36,8 +37,7 @@ export const metadata: Metadata = {
     // Guarded by src/app/__tests__/page-titles.test.ts.
     template: "%s | Lakeside Retreat",
   },
-  description:
-    "Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell. Saltwater spas in the domes, wood-fired hot tub at the cottage, stargazing skylights, vineyard views. Adults-only. Book direct — from $350/night.",
+  description: `Luxury glamping domes and lakefront cottage on Lake Dunstan, Cromwell. Saltwater spas in the domes, wood-fired hot tub at the cottage, stargazing skylights, vineyard views. Adults-only. Book direct — ${fromRate("lakeside-cottage")}.`,
   metadataBase: new URL("https://lakesideretreat.co.nz"),
   icons: {
     icon: "/images/favicon-16x16.png",

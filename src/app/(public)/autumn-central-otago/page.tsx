@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { fromRate } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
   title: "Autumn in Central Otago | Golden Vineyards & Harvest Season Accommodation",
   description:
-    "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — $350/night.",
+    `Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — ${fromRate("lakeside-cottage")}.`,
 
   alternates: { canonical: "/autumn-central-otago" },
   openGraph: {
     title: "Autumn in Central Otago | Golden Vineyards & Harvest Season Accommodation",
-    description: "Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — $350/night.",
+    description: `Central Otago in autumn (March–May) is breathtaking — golden vineyards, pinot noir harvest, crisp spa evenings, and the best cycling of the year. Stay at Lakeside Retreat — ${fromRate("lakeside-cottage")}.`,
     url: "https://lakesideretreat.co.nz/autumn-central-otago",
     images: [
       {
@@ -278,7 +279,7 @@ export default function AutumnCentralOtagoPage() {
                 bookHref: "/book?a=dome-pinot",
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
-                price: "$650/night",
+                price: fromRate("dome-pinot"),
                 autumn: ["Private outdoor spa for cool evenings", "Stargazing skylight — clear autumn skies", "Panoramic vineyard & lake views", "Continental breakfast included"],
               },
               {
@@ -286,7 +287,7 @@ export default function AutumnCentralOtagoPage() {
                 bookHref: "/book?a=dome-rose",
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
-                price: "$599/night",
+                price: fromRate("dome-rose"),
                 autumn: ["Private outdoor spa", "Vineyard & mountain views", "Luxury super king bed", "Outdoor dining deck — perfect in autumn"],
               },
               {
@@ -294,7 +295,7 @@ export default function AutumnCentralOtagoPage() {
                 bookHref: "/book?a=lakeside-cottage",
                 image: "/images/cottage.jpg",
                 title: "Lakeside Cottage",
-                price: "$350/night",
+                price: fromRate("lakeside-cottage"),
                 autumn: ["Sleeps 3", "Wood-fired hot tub", "Dog-friendly", "Direct lake access"],
               },
             ].map((dome) => (

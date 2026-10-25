@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { fromRate } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
   title: "Glamping Central Otago | Luxury Geodesic Domes on Lake Dunstan",
   description:
-    "Central Otago's premier glamping experience. Two luxury geodesic domes with private outdoor spas, stargazing skylights, vineyard views, and continental breakfast. From $599/night.",
+    `Central Otago's premier glamping experience. Two luxury geodesic domes with private outdoor spas, stargazing skylights, vineyard views, and continental breakfast. Domes ${fromRate("dome-rose")}.`,
   alternates: { canonical: "/glamping-central-otago" },
   openGraph: {
     title: "Glamping Central Otago | Luxury Geodesic Domes on Lake Dunstan",
     description:
-      "Luxury geodesic domes with private saltwater spas, stargazing skylights, and vineyard views on Lake Dunstan. Adults-only glamping — from $599/night.",
+      `Luxury geodesic domes with private saltwater spas, stargazing skylights, and vineyard views on Lake Dunstan. Adults-only glamping — ${fromRate("dome-rose")}.`,
     url: "https://lakesideretreat.co.nz/glamping-central-otago",
     images: [
       {
@@ -61,7 +62,7 @@ const domes = [
     slug: "dome-pinot",
     name: "Dome Pinot",
     size: "50sqm",
-    price: "$650/night",
+    price: fromRate("dome-pinot"),
     image: "/images/Pinotfront.jpeg",
     tagline: "Larger of the two domes with panoramic Lake Dunstan views, stargazing skylight, private saltwater spa, and continental breakfast included.",
     highlights: ["50sqm geodesic dome", "Stargazing skylight above bed", "Private saltwater outdoor spa", "Lake & Pisa Range views", "Kitchenette", "Continental breakfast"],
@@ -70,7 +71,7 @@ const domes = [
     slug: "dome-rose",
     name: "Dome Rosé",
     size: "40sqm",
-    price: "$599/night",
+    price: fromRate("dome-rose"),
     image: "/images/dome-rose-spa1.jpeg",
     tagline: "Intimate retreat with vineyard and mountain views, private outdoor spa, luxury super king bed, and outdoor dining deck.",
     highlights: ["40sqm geodesic dome", "Private saltwater outdoor spa", "Vineyard & mountain views", "Luxury super king bed", "Outdoor dining deck", "Kitchenette"],
@@ -94,7 +95,7 @@ export default function GlampingCentralOtagoPage() {
         ]),
         createFaqSchema([
           { question: "What is glamping in Central Otago like?", answer: "Glamping in Central Otago combines luxury accommodation with stunning natural surroundings. At Lakeside Retreat, our geodesic domes offer private outdoor spas, stargazing skylights, panoramic Lake Dunstan views, and vineyard scenery — far more comfortable than traditional camping but deeply connected to the landscape." },
-          { question: "How much does glamping in Central Otago cost?", answer: "Lakeside Retreat's luxury glamping domes start at $599/night (Dome Rosé) and $650/night (Dome Pinot), including continental breakfast. Our Lakeside Cottage is $350/night and sleeps up to 3 guests." },
+          { question: "How much does glamping in Central Otago cost?", answer: `Lakeside Retreat's luxury glamping domes start ${fromRate("dome-rose")} (Dome Rosé) and ${fromRate("dome-pinot")} (Dome Pinot), including continental breakfast. Our Lakeside Cottage is ${fromRate("lakeside-cottage")} and sleeps up to 3 guests.` },
           { question: "Where is the best glamping in New Zealand?", answer: "Central Otago is widely regarded as one of New Zealand's best glamping regions thanks to its dramatic landscapes, world-class wineries, and dark skies. Lakeside Retreat on Lake Dunstan offers a combination of private spas, stargazing, vineyard access, and the Otago cycle trails — making it one of NZ's top-rated glamping experiences." },
           { question: "Is glamping suitable for couples?", answer: "Absolutely. Both of our glamping domes are adults-only and designed specifically for couples — private outdoor spas, stargazing skylights, premium bedding, and complete seclusion. Many guests use Lakeside Retreat for anniversary trips, honeymoons, and romantic getaways." },
         ]),

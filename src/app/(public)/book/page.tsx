@@ -77,7 +77,7 @@ export default function BookPage() {
             <div className="bg-cream rounded-xl p-4">
               <p className="text-2xl mb-1">&#128176;</p>
               <p className="font-semibold text-body">Best Price</p>
-              <p className="text-xs text-muted">Save vs. Airbnb</p>
+              <p className="text-xs text-muted">10% off with code BOOKDIRECT</p>
             </div>
             <div className="bg-cream rounded-xl p-4">
               <p className="text-2xl mb-1">&#10003;</p>

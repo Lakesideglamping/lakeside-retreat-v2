@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { fromRate } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
   title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
   description:
-    "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $350/night.",
+    `Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. ${fromRate("lakeside-cottage")}.`,
 
   alternates: { canonical: "/luxury-accommodation-cromwell" },
   openGraph: {
     title: "Luxury Accommodation Cromwell | Lake Dunstan Domes & Cottage",
-    description: "Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. $350/night.",
+    description: `Cromwell's most luxurious accommodation on Lake Dunstan. Geodesic glamping domes with private spas and an adults-only lakefront cottage. 4.9★ rated. ${fromRate("lakeside-cottage")}.`,
     url: "https://lakesideretreat.co.nz/luxury-accommodation-cromwell",
     images: [
       {
@@ -182,7 +183,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
                 badge: "Adults Only",
-                price: "$650/night",
+                price: fromRate("dome-pinot"),
                 size: "50sqm",
                 desc: "Larger dome with stargazing skylight, panoramic lake views, private saltwater spa, and continental breakfast.",
               },
@@ -192,7 +193,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
                 badge: "Adults Only",
-                price: "$599/night",
+                price: fromRate("dome-rose"),
                 size: "40sqm",
                 desc: "Intimate retreat with vineyard and mountain views, private outdoor spa, luxury super king bed.",
               },
@@ -202,7 +203,7 @@ export default function LuxuryAccommodationCromwellPage() {
                 image: "/images/lakeside-cottage-exterior.jpeg",
                 title: "Lakeside Cottage",
                 badge: "Adults-Only · Pet Friendly",
-                price: "$350/night",
+                price: fromRate("lakeside-cottage"),
                 size: "Sleeps 3",
                 desc: "Self-contained cottage with direct lake access, wood-fired hot tub, BBQ, kitchenette, and dog-friendly.",
               },
@@ -253,8 +254,8 @@ export default function LuxuryAccommodationCromwellPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Direct &amp; Save</h2>
           <p className="text-lg text-muted mb-6">
-            Booking directly with us saves you 12–18% compared to Airbnb and Booking.com fees.
-            Same luxury stay, best price, direct host communication.
+            Book direct and take 10% off with code BOOKDIRECT — a better price than Airbnb
+            or Booking.com for the same luxury stay, with your hosts a message away.
           </p>
           <Button href="/book">Book Direct — Best Rate Guaranteed</Button>
           <p className="text-sm text-muted mt-6">

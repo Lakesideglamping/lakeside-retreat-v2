@@ -4,16 +4,17 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createPropertySchema, createBreadcrumbSchema, createFaqSchema, fetchReviewStats } from "@/lib/structured-data";
 import { PropertyAvailability } from "@/components/booking/property-availability";
+import { fromRate, fromDollars } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
-  title: "Dome Pinot | Geodesic Dome Accommodation NZ | $650/night",
+  title: `Dome Pinot | Geodesic Dome Accommodation NZ | ${fromRate("dome-pinot")}`,
   description:
-    "Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct — $650/night.",
+    `Dome Pinot — our flagship 50sqm luxury glamping dome in Cromwell, Central Otago. Private spa, stargazing roof, panoramic Lake Dunstan views. The ultimate romantic getaway. Book direct — ${fromRate("dome-pinot")}.`,
   alternates: { canonical: '/dome-pinot' },
   openGraph: {
     title: "Dome Pinot | Luxury Geodesic Dome — Lake Dunstan, Central Otago",
     description:
-      "50sqm luxury glamping dome with private outdoor spa, stargazing skylight, and panoramic Lake Dunstan views. Adults-only escape — $650/night.",
+      `50sqm luxury glamping dome with private outdoor spa, stargazing skylight, and panoramic Lake Dunstan views. Adults-only escape — ${fromRate("dome-pinot")}.`,
     url: "https://lakesideretreat.co.nz/dome-pinot",
     images: [
       {
@@ -58,7 +59,7 @@ const galleryImages = [
 ];
 
 const pricingFeatures = [
-  "Nightly rate: $650/night (GST incl.)",
+  `Nightly rate: ${fromRate("dome-pinot")} (GST incl.)`,
   "Cleaning fee: included in your nightly rate",
   "Continental breakfast: included",
   "No minimum stay — 1 night bookings welcome",
@@ -122,8 +123,8 @@ export default async function DomePinotPage() {
             Our flagship. The lake from the bed. The Milky Way through the roof.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button href="/book?a=dome-pinot" ariaLabel="Book Dome Pinot now — $650 per night">
-              Book Now — $650/night
+            <Button href="/book?a=dome-pinot" ariaLabel={`Book Dome Pinot now — ${fromRate("dome-pinot")}`}>
+              Book Now — {fromRate("dome-pinot")}
             </Button>
             <Button href="#gallery" variant="outline">
               View Gallery
@@ -226,8 +227,8 @@ export default async function DomePinotPage() {
         <div className="max-w-[500px] mx-auto">
           <h2 className="font-display text-4xl text-center mb-8">Pricing</h2>
           <div className="bg-cream rounded-3xl p-10 text-center shadow-xl">
-            <div className="text-5xl font-bold text-burgundy mb-1">$650</div>
-            <p className="text-muted mb-1">per night (2 guests)</p>
+            <div className="text-5xl font-bold text-burgundy mb-1">from {fromDollars("dome-pinot")}</div>
+            <p className="text-muted mb-1">per night (2 guests) &middot; rates vary by season</p>
             <p className="text-sm text-teal font-semibold mb-6">GST and cleaning included — no hidden fees</p>
             <ul className="text-left space-y-3 mb-6">
               {pricingFeatures.map((f) => (
@@ -279,7 +280,7 @@ export default async function DomePinotPage() {
                 <p className="text-muted text-sm mb-3">
                   40sqm romantic dome with outdoor spa and vineyard views. Perfect for couples.
                 </p>
-                <p className="text-burgundy font-semibold">$599/night &rarr;</p>
+                <p className="text-burgundy font-semibold">{fromRate("dome-rose")} &rarr;</p>
               </div>
             </Link>
             <Link
@@ -300,7 +301,7 @@ export default async function DomePinotPage() {
                 <p className="text-muted text-sm mb-3">
                   Adults-only lakefront cottage with wood-fired hot tub. Sleeps up to 3, pets friendly.
                 </p>
-                <p className="text-burgundy font-semibold">$350/night &rarr;</p>
+                <p className="text-burgundy font-semibold">{fromRate("lakeside-cottage")} &rarr;</p>
               </div>
             </Link>
           </div>
@@ -340,7 +341,7 @@ export default async function DomePinotPage() {
           </p>
           <Button
             href="/book?a=dome-pinot"
-            ariaLabel="Book Dome Pinot now — $650 per night"
+            ariaLabel={`Book Dome Pinot now — ${fromRate("dome-pinot")}`}
           >
             Book Dome Pinot Now
           </Button>

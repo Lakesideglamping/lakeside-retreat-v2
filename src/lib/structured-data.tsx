@@ -1,3 +1,5 @@
+import { advertisedPriceRange } from "./advertised-rates";
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://lakesideretreat.co.nz";
 
 /**
@@ -72,7 +74,7 @@ export function createLodgingBusinessSchema(rating?: AggregateRatingStats) {
     geo,
     telephone: "+64 21 368 682",
     email: "info@lakesideretreat.co.nz",
-    priceRange: "$350-$650 NZD per night",
+    priceRange: advertisedPriceRange(),
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue,
