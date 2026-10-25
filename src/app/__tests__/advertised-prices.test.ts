@@ -45,7 +45,7 @@ describe("advertised prices", () => {
   it("no public page claims guests save OTA service fees", () => {
     // Airbnb charges this host a host-only fee, so guests pay no service
     // fee there; "save 12-18% in service fees" was untrue. The direct
-    // incentives are the second-night offer and the BOOKDIRECT code.
+    // incentive is the second-night offer on the domes.
     const offenders: string[] = [];
     for (const file of tsxFiles(PUBLIC)) {
       const source = readFileSync(file, "utf8");
