@@ -5,8 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { getAll, getById, type Accommodation } from "@/lib/accommodations";
 import { applyDateClick, isPastInNZ } from "@/lib/date-range";
 import { BookingCalendar } from "./calendar";
-import { PriceSummary } from "./price-summary";
+import { PriceSummary, type QuoteState } from "./price-summary";
 import { BookingForm } from "./booking-form";
+import { formatNZDCents, type StayQuote } from "@/lib/pricing";
 import { SubmitButton } from "@/components/ui/submit-button";
 import Image from "next/image";
 
@@ -82,7 +83,13 @@ export function BookingWidget() {
   const [availability, setAvailability] =
     useState<AvailabilityStatus>("idle");
   const [dateError, setDateError] = useState("");
-  const [seasonalMultiplier, setSeasonalMultiplier] = useState(1.0);
+  // The live quote for the selected stay, from /api/pricing. Prices come
+  // from Uplisting (or its last good copy); "unavailable" means neither was
+  // reachable and the guest is shown a retry, never a fallback number.
+  const [quoteState, setQuoteState] = useState<QuoteState>({ status: "idle" });
+  const [quoteNonce, setQuoteNonce] = useState(0);
+  // Lowest upcoming nightly rate per property for the selector cards.
+  const [fromRates, setFromRates] = useState<Record<string, number | null>>({});
 
   const acc: Accommodation | null = accommodation ? (getById(accommodation) ?? null) : null;
 
@@ -143,19 +150,62 @@ export function BookingWidget() {
 
     setAvailability("idle");
     setDateError("");
-    setSeasonalMultiplier(1.0);
   }, [accommodation, fetchBlocked]);
 
-  // Fetch seasonal multiplier whenever accommodation + dates are both set
+  // "from $X/night" for the property cards, once per visit.
   useEffect(() => {
-    if (!accommodation || !checkIn || !checkOut) return;
-    fetch(
-      `/api/pricing?accommodation=${accommodation}&checkIn=${checkIn}&checkOut=${checkOut}`
-    )
-      .then((r) => r.json())
-      .then((d) => setSeasonalMultiplier(d.seasonalMultiplier ?? 1.0))
-      .catch(() => setSeasonalMultiplier(1.0));
-  }, [accommodation, checkIn, checkOut]);
+    let cancelled = false;
+    fetch("/api/pricing/from")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!cancelled && d?.success && d.from) setFromRates(d.from);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Fetch the live quote whenever the stay changes. Guests and pets are part
+  // of the price (cottage extra-guest and pet fees), so they re-quote too.
+  useEffect(() => {
+    if (!accommodation || !checkIn || !checkOut) {
+      setQuoteState({ status: "idle" });
+      return;
+    }
+    let cancelled = false;
+    setQuoteState({ status: "loading" });
+    const params = new URLSearchParams({
+      accommodation,
+      checkIn,
+      checkOut,
+      guests: String(guests),
+      pets: String(pets),
+    });
+    fetch(`/api/pricing?${params}`)
+      .then(async (r) => {
+        const d = await r.json().catch(() => null);
+        if (cancelled) return;
+        if (r.ok && d?.success && d.quote) {
+          setQuoteState({
+            status: "ready",
+            quote: d.quote as StayQuote,
+            source: d.source === "cached" ? "cached" : "live",
+          });
+        } else {
+          setQuoteState({ status: "unavailable" });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setQuoteState({ status: "unavailable" });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [accommodation, checkIn, checkOut, guests, pets, quoteNonce]);
+
+  const quote: StayQuote | null =
+    quoteState.status === "ready" ? quoteState.quote : null;
 
   // Reset guests/pets when accommodation changes
   useEffect(() => {
@@ -228,8 +278,14 @@ export function BookingWidget() {
     setAvailability("idle");
   }
 
+  // No price, no booking: the Continue button waits for a quote so the
+  // guest never reaches payment without having seen what they will pay.
   const canContinue =
-    accommodation && checkIn && checkOut && availability !== "checking";
+    accommodation &&
+    checkIn &&
+    checkOut &&
+    quote !== null &&
+    availability !== "checking";
 
   /**
    * Bring the top of the widget back into view when the step changes.
@@ -295,6 +351,7 @@ export function BookingWidget() {
                 <AccommodationOption
                   key={a.id}
                   accommodation={a}
+                  fromRate={fromRates[a.id] ?? null}
                   selected={accommodation === a.id}
                   onSelect={() => setAccommodation(a.id)}
                 />
@@ -444,9 +501,8 @@ export function BookingWidget() {
               accommodation={acc}
               checkIn={checkIn}
               checkOut={checkOut}
-              guests={guests}
-              pets={pets}
-              seasonalMultiplier={seasonalMultiplier}
+              quoteState={quoteState}
+              onRetry={() => setQuoteNonce((n) => n + 1)}
             />
           )}
 
@@ -467,15 +523,15 @@ export function BookingWidget() {
         </div>
       )}
 
-      {step === 2 && acc && checkIn && checkOut && (
+      {step === 2 && acc && checkIn && checkOut && quote && (
         <BookingForm
           accommodation={acc}
           checkIn={checkIn}
           checkOut={checkOut}
           guests={guests}
           pets={pets}
+          quote={quote}
           onBack={handleBack}
-          seasonalMultiplier={seasonalMultiplier}
         />
       )}
     </div>
@@ -515,10 +571,13 @@ function StepIndicator({
 
 function AccommodationOption({
   accommodation,
+  fromRate,
   selected,
   onSelect,
 }: {
   accommodation: Accommodation;
+  /** Lowest live nightly rate over the coming weeks, NZD dollars; null when unknown. */
+  fromRate: number | null;
   selected: boolean;
   onSelect: () => void;
 }) {
@@ -545,7 +604,14 @@ function AccommodationOption({
       <p className="text-sm text-muted mt-0.5">{accommodation.description}</p>
       <div className="flex items-center justify-between mt-2">
         <span className="text-burgundy font-semibold text-sm">
-          ${accommodation.basePrice}/night
+          {fromRate !== null ? (
+            <>
+              <span className="text-xs text-muted font-normal">from </span>
+              {formatNZDCents(Math.round(fromRate * 100))}/night
+            </>
+          ) : (
+            "Live direct rates"
+          )}
           <span className="block text-xs text-muted font-normal">Cleaning included</span>
         </span>
         {accommodation.adultsOnly && (

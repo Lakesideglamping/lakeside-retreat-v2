@@ -6,13 +6,13 @@ import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Wanaka Day Trip Guide | Lakes, Mountains & That Tree — from Lakeside Retreat",
+  title: "Wanaka Day Trip Guide | Lakes, Mountains & That Tree",
   description:
     "Wanaka is just 45 minutes from Lakeside Retreat. Day trip guide: That Wanaka Tree, Roy's Peak, Rippon Vineyard, Puzzling World, lake walks, and the best cafés.",
 
   alternates: { canonical: "/wanaka-day-trip" },
   openGraph: {
-    title: "Wanaka Day Trip Guide | Lakes, Mountains & That Tree — from Lakeside Retreat",
+    title: "Wanaka Day Trip Guide | Lakes, Mountains & That Tree",
     description: "Wanaka is just 45 minutes from Lakeside Retreat. Day trip guide: That Wanaka Tree, Roy's Peak, Rippon Vineyard, Puzzling World, lake walks, and the best cafés.",
     url: "https://lakesideretreat.co.nz/wanaka-day-trip",
     images: [

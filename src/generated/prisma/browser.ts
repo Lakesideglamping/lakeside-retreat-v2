@@ -68,15 +68,21 @@ export type reviews = Prisma.reviewsModel
  */
 export type schema_migrations = Prisma.schema_migrationsModel
 /**
- * Model seasonal_rates
- * 
- */
-export type seasonal_rates = Prisma.seasonal_ratesModel
-/**
  * Model social_content_drafts
  * 
  */
 export type social_content_drafts = Prisma.social_content_draftsModel
+/**
+ * Model uplisting_rates
+ * Last successfully fetched nightly rates per property, straight from the
+ * Uplisting calendar. One row per accommodation slug; `rates` maps
+ * "YYYY-MM-DD" (NZ calendar date) to the GST-inclusive NZD day rate.
+ * 
+ * This is the fallback when Uplisting is down: the booking page serves the
+ * most recent copy rather than a hard-coded number. It lives in Postgres, not
+ * a file or process memory, because Render wipes both on every restart.
+ */
+export type uplisting_rates = Prisma.uplisting_ratesModel
 /**
  * Model system_settings
  * 

@@ -6,13 +6,13 @@ import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Queenstown Day Trip from Cromwell | Adventure Guide from Lakeside Retreat",
+  title: "Queenstown Day Trip from Cromwell | Adventure Guide",
   description:
     "Queenstown is just 45 minutes from Lakeside Retreat. Day trip guide: bungee jumping, Skyline Gondola, Shotover Jet, Arrowtown, and more — then return to your spa or wood-fired hot tub.",
 
   alternates: { canonical: "/weekend-getaway-queenstown" },
   openGraph: {
-    title: "Queenstown Day Trip from Cromwell | Adventure Guide from Lakeside Retreat",
+    title: "Queenstown Day Trip from Cromwell | Adventure Guide",
     description: "Queenstown is just 45 minutes from Lakeside Retreat. Day trip guide: bungee jumping, Skyline Gondola, Shotover Jet, Arrowtown, and more — then return to your spa or wood-fired hot tub.",
     url: "https://lakesideretreat.co.nz/weekend-getaway-queenstown",
     images: [

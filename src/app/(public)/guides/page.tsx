@@ -5,7 +5,7 @@ import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Central Otago Travel Guides | Insider Tips from Lakeside Retreat",
+  title: "Central Otago Travel Guides | Insider Tips from Your Hosts",
   description:
     "Expert guides for your Central Otago stay: Otago Rail Trail cycling, Lake Dunstan activities, Central Otago wine trails, and day trips to Queenstown and Wanaka.",
   alternates: { canonical: "/guides" },

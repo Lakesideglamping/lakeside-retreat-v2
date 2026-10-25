@@ -394,8 +394,8 @@ export const ModelName = {
   review_requests: 'review_requests',
   reviews: 'reviews',
   schema_migrations: 'schema_migrations',
-  seasonal_rates: 'seasonal_rates',
   social_content_drafts: 'social_content_drafts',
+  uplisting_rates: 'uplisting_rates',
   system_settings: 'system_settings',
   token_blacklist: 'token_blacklist',
   rate_limits: 'rate_limits',
@@ -417,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "audit_logs" | "bookings" | "contact_messages" | "email_sends" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "seasonal_rates" | "social_content_drafts" | "system_settings" | "token_blacklist" | "rate_limits" | "login_attempts" | "blocked_dates" | "promo_codes"
+    modelProps: "audit_logs" | "bookings" | "contact_messages" | "email_sends" | "failed_webhook_events" | "gallery_images" | "processed_webhook_events" | "review_requests" | "reviews" | "schema_migrations" | "social_content_drafts" | "uplisting_rates" | "system_settings" | "token_blacklist" | "rate_limits" | "login_attempts" | "blocked_dates" | "promo_codes"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1161,80 +1161,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    seasonal_rates: {
-      payload: Prisma.$seasonal_ratesPayload<ExtArgs>
-      fields: Prisma.seasonal_ratesFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.seasonal_ratesFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.seasonal_ratesFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload>
-        }
-        findFirst: {
-          args: Prisma.seasonal_ratesFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.seasonal_ratesFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload>
-        }
-        findMany: {
-          args: Prisma.seasonal_ratesFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload>[]
-        }
-        create: {
-          args: Prisma.seasonal_ratesCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload>
-        }
-        createMany: {
-          args: Prisma.seasonal_ratesCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.seasonal_ratesCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload>[]
-        }
-        delete: {
-          args: Prisma.seasonal_ratesDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload>
-        }
-        update: {
-          args: Prisma.seasonal_ratesUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload>
-        }
-        deleteMany: {
-          args: Prisma.seasonal_ratesDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.seasonal_ratesUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.seasonal_ratesUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload>[]
-        }
-        upsert: {
-          args: Prisma.seasonal_ratesUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$seasonal_ratesPayload>
-        }
-        aggregate: {
-          args: Prisma.Seasonal_ratesAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSeasonal_rates>
-        }
-        groupBy: {
-          args: Prisma.seasonal_ratesGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Seasonal_ratesGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.seasonal_ratesCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Seasonal_ratesCountAggregateOutputType> | number
-        }
-      }
-    }
     social_content_drafts: {
       payload: Prisma.$social_content_draftsPayload<ExtArgs>
       fields: Prisma.social_content_draftsFieldRefs
@@ -1306,6 +1232,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.social_content_draftsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Social_content_draftsCountAggregateOutputType> | number
+        }
+      }
+    }
+    uplisting_rates: {
+      payload: Prisma.$uplisting_ratesPayload<ExtArgs>
+      fields: Prisma.uplisting_ratesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.uplisting_ratesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.uplisting_ratesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload>
+        }
+        findFirst: {
+          args: Prisma.uplisting_ratesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.uplisting_ratesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload>
+        }
+        findMany: {
+          args: Prisma.uplisting_ratesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload>[]
+        }
+        create: {
+          args: Prisma.uplisting_ratesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload>
+        }
+        createMany: {
+          args: Prisma.uplisting_ratesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.uplisting_ratesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload>[]
+        }
+        delete: {
+          args: Prisma.uplisting_ratesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload>
+        }
+        update: {
+          args: Prisma.uplisting_ratesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload>
+        }
+        deleteMany: {
+          args: Prisma.uplisting_ratesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.uplisting_ratesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.uplisting_ratesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload>[]
+        }
+        upsert: {
+          args: Prisma.uplisting_ratesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$uplisting_ratesPayload>
+        }
+        aggregate: {
+          args: Prisma.Uplisting_ratesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUplisting_rates>
+        }
+        groupBy: {
+          args: Prisma.uplisting_ratesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Uplisting_ratesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.uplisting_ratesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Uplisting_ratesCountAggregateOutputType> | number
         }
       }
     }
@@ -1951,20 +1951,6 @@ export const Schema_migrationsScalarFieldEnum = {
 export type Schema_migrationsScalarFieldEnum = (typeof Schema_migrationsScalarFieldEnum)[keyof typeof Schema_migrationsScalarFieldEnum]
 
 
-export const Seasonal_ratesScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  start_date: 'start_date',
-  end_date: 'end_date',
-  multiplier: 'multiplier',
-  is_active: 'is_active',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-} as const
-
-export type Seasonal_ratesScalarFieldEnum = (typeof Seasonal_ratesScalarFieldEnum)[keyof typeof Seasonal_ratesScalarFieldEnum]
-
-
 export const Social_content_draftsScalarFieldEnum = {
   id: 'id',
   platform: 'platform',
@@ -1979,6 +1965,15 @@ export const Social_content_draftsScalarFieldEnum = {
 } as const
 
 export type Social_content_draftsScalarFieldEnum = (typeof Social_content_draftsScalarFieldEnum)[keyof typeof Social_content_draftsScalarFieldEnum]
+
+
+export const Uplisting_ratesScalarFieldEnum = {
+  accommodation: 'accommodation',
+  rates: 'rates',
+  fetched_at: 'fetched_at'
+} as const
+
+export type Uplisting_ratesScalarFieldEnum = (typeof Uplisting_ratesScalarFieldEnum)[keyof typeof Uplisting_ratesScalarFieldEnum]
 
 
 export const System_settingsScalarFieldEnum = {
@@ -2062,6 +2057,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -2076,6 +2078,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -2144,6 +2155,20 @@ export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -2265,8 +2290,8 @@ export type GlobalOmitConfig = {
   review_requests?: Prisma.review_requestsOmit
   reviews?: Prisma.reviewsOmit
   schema_migrations?: Prisma.schema_migrationsOmit
-  seasonal_rates?: Prisma.seasonal_ratesOmit
   social_content_drafts?: Prisma.social_content_draftsOmit
+  uplisting_rates?: Prisma.uplisting_ratesOmit
   system_settings?: Prisma.system_settingsOmit
   token_blacklist?: Prisma.token_blacklistOmit
   rate_limits?: Prisma.rate_limitsOmit

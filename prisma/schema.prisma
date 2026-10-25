@@ -197,17 +197,6 @@ model schema_migrations {
   applied_at DateTime? @default(now()) @db.Timestamp(6)
 }
 
-model seasonal_rates {
-  id         Int       @id @default(autoincrement())
-  name       String
-  start_date DateTime  @db.Date
-  end_date   DateTime  @db.Date
-  multiplier Decimal?  @default(1.00) @db.Decimal(3, 2)
-  is_active  Boolean?  @default(true)
-  created_at DateTime? @default(now()) @db.Timestamp(6)
-  updated_at DateTime? @default(now()) @db.Timestamp(6)
-}
-
 model social_content_drafts {
   id                Int     @id @default(autoincrement())
   platform          String
@@ -219,6 +208,19 @@ model social_content_drafts {
   story_text        String?
   status            String? @default("draft")
   created_at        String? @default(dbgenerated("CURRENT_TIMESTAMP"))
+}
+
+/// Last successfully fetched nightly rates per property, straight from the
+/// Uplisting calendar. One row per accommodation slug; `rates` maps
+/// "YYYY-MM-DD" (NZ calendar date) to the GST-inclusive NZD day rate.
+///
+/// This is the fallback when Uplisting is down: the booking page serves the
+/// most recent copy rather than a hard-coded number. It lives in Postgres, not
+/// a file or process memory, because Render wipes both on every restart.
+model uplisting_rates {
+  accommodation String   @id
+  rates         Json
+  fetched_at    DateTime @default(now()) @db.Timestamptz(6)
 }
 
 model system_settings {

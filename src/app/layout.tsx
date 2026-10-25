@@ -29,6 +29,11 @@ const OG_IMAGE = {
 export const metadata: Metadata = {
   title: {
     default: "Lakeside Retreat | Luxury Glamping Central Otago",
+    // This template is the ONE place the brand suffix is added. Page titles
+    // must not end in "| Lakeside Retreat" themselves, or the tab reads
+    // "... | Lakeside Retreat | Lakeside Retreat". A page that needs the brand
+    // elsewhere in its title (the homepage) uses `title: { absolute }`.
+    // Guarded by src/app/__tests__/page-titles.test.ts.
     template: "%s | Lakeside Retreat",
   },
   description:

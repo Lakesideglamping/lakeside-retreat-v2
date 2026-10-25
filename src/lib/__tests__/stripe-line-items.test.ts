@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { calculateLineItems } from "../stripe";
+import { quoteToLineItems } from "../stripe";
+import { buildStayQuote, nightsOfStay } from "../pricing";
 import type { Accommodation } from "../accommodations";
 
 const dome: Accommodation = {
@@ -8,10 +9,10 @@ const dome: Accommodation = {
   description: "",
   maxGuests: 2,
   baseGuests: 2,
-  basePrice: 635,
   minStay: 1,
   adultsOnly: true,
   minimumAge: 18,
+  secondNightDiscount: true,
   amenities: [],
   images: [],
 };
@@ -22,73 +23,64 @@ const cottage: Accommodation = {
   description: "",
   maxGuests: 3,
   baseGuests: 2,
-  basePrice: 365,
   minStay: 2,
   adultsOnly: true,
   minimumAge: 18,
-  extraGuestFee: 50,
-  petFee: 50,
+  extraGuestFee: 100,
+  petFee: 25,
   amenities: [],
   images: [],
 };
 
-describe("calculateLineItems", () => {
-  it("returns amounts in cents, cleaning bundled into nightly", () => {
-    const { lineItems, totalAmount } = calculateLineItems(
-      dome,
-      "2026-06-01",
-      "2026-06-03",
-      2
-    );
-    // 2 nights × 63500 cents (no cleaning line item)
-    expect(totalAmount).toBe(635 * 2 * 100);
-    expect(lineItems[0].amount).toBe(635 * 100);
-    expect(lineItems.find((i) => i.name.toLowerCase().includes("cleaning"))).toBeUndefined();
+const flat = (rate: number, from: string, to: string) =>
+  Object.fromEntries(nightsOfStay(from, to).map((d) => [d, rate]));
+
+describe("quoteToLineItems", () => {
+  it("maps the quote's charged items to Stripe line items in cents", () => {
+    const quote = buildStayQuote({
+      accommodation: cottage,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-03",
+      guests: 3,
+      pets: 1,
+      rates: flat(350, "2026-06-01", "2026-06-03"),
+    })!;
+    const items = quoteToLineItems(quote);
+    expect(items).toEqual([
+      { name: "Lakeside Cottage (2 nights)", amount: 35000, quantity: 2 },
+      { name: "Extra guest fee (1 guest)", amount: 10000, quantity: 2 },
+      { name: "Pet fee (flat, per stay)", amount: 2500, quantity: 1 },
+    ]);
   });
 
-  it("does NOT include security deposit in total", () => {
-    const { totalAmount } = calculateLineItems(dome, "2026-06-01", "2026-06-03", 2);
-    expect(totalAmount).toBe(635 * 2 * 100);
+  it("keeps the discount out of the line items (it travels as a coupon)", () => {
+    const quote = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-03",
+      guests: 2,
+      rates: flat(600, "2026-06-01", "2026-06-03"),
+    })!;
+    expect(quote.discount).not.toBeNull();
+    const items = quoteToLineItems(quote);
+    expect(items).toEqual([{ name: "Dome Pinot (2 nights)", amount: 60000, quantity: 2 }]);
+    // Line items sum to the undiscounted subtotal; Stripe applies the coupon.
+    const lineTotal = items.reduce((s, i) => s + i.amount * i.quantity, 0);
+    expect(lineTotal).toBe(quote.subtotalCents);
+    expect(lineTotal - quote.discount!.amountCents).toBe(quote.totalCents);
   });
 
-  it("adds extra guest fee in cents × nights × extra guests", () => {
-    const { totalAmount, lineItems } = calculateLineItems(
-      cottage,
-      "2026-06-01",
-      "2026-06-03",
-      3
-    );
-    const extra = lineItems.find((i) => i.name.includes("Extra guest"));
-    expect(extra).toBeDefined();
-    // 2 nights × 1 extra guest × $50 = $100 = 10000 cents
-    expect(extra!.amount * extra!.quantity).toBe(10000);
-    expect(totalAmount).toBe(365 * 2 * 100 + 10000);
-  });
-
-  it("applies seasonal multiplier and rounds to cents", () => {
-    const base = calculateLineItems(dome, "2026-12-20", "2026-12-23", 2, 0, 1.0);
-    const peak = calculateLineItems(dome, "2026-12-20", "2026-12-23", 2, 0, 1.2);
-    const peakNightly = Math.round(635 * 1.2) * 100;
-    expect(peak.lineItems[0].amount).toBe(peakNightly);
-    expect(peak.totalAmount).toBeGreaterThan(base.totalAmount);
-  });
-
-  it("labels nightly item with peak season when multiplier > 1", () => {
-    const { lineItems } = calculateLineItems(dome, "2026-12-20", "2026-12-22", 2, 0, 1.3);
-    expect(lineItems[0].name).toContain("peak season");
-  });
-
-  it("charges the pet fee as a single flat fee per stay (not per pet, not per night)", () => {
-    const { lineItems } = calculateLineItems(cottage, "2026-06-01", "2026-06-04", 2, 2);
-    const petItem = lineItems.find((i) => i.name.includes("Pet fee"));
-    expect(petItem).toBeDefined();
-    expect(petItem!.quantity).toBe(1);
-    expect(petItem!.amount).toBe(50 * 100); // flat fixture fee, even with 2 pets
-  });
-
-  it("omits extra guest fee when at base occupancy", () => {
-    const { lineItems } = calculateLineItems(cottage, "2026-06-01", "2026-06-03", 2);
-    const extra = lineItems.find((i) => i.name.includes("Extra guest"));
-    expect(extra).toBeUndefined();
+  it("never emits a negative or zero amount (Stripe rejects them)", () => {
+    const quote = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-12-30",
+      checkOut: "2027-01-02",
+      guests: 2,
+      rates: { "2026-12-30": 579, "2026-12-31": 899, "2027-01-01": 650 },
+    })!;
+    for (const item of quoteToLineItems(quote)) {
+      expect(item.amount).toBeGreaterThan(0);
+      expect(item.quantity).toBeGreaterThan(0);
+    }
   });
 });

@@ -4,24 +4,27 @@ export interface Accommodation {
   description: string;
   maxGuests: number;
   baseGuests: number;
-  basePrice: number;
   minStay: number;
   adultsOnly: boolean;
   /** Minimum guest age in years. All properties are strictly adults-only (18+). */
   minimumAge: number;
   extraGuestFee?: number;
   petFee?: number;
+  /**
+   * Stay two nights or more and the second night is 25% off (12.5% off the
+   * nightly total). Domes only — the cottage has no such offer.
+   */
+  secondNightDiscount?: boolean;
   amenities: string[];
   images: string[];
 }
 
 // Pricing notes (GST-inclusive, cleaning bundled into nightly rate):
-//   - Cottage $350/night base (2 guests) + $100/night for a third adult
-//   - Dome Rosé $599/night, Dome Pinot $650/night (each strictly 2 guests)
-//   - Cottage only: $25 pet fee, flat per stay (not per pet)
+//   - Nightly rates are NOT here. They come live from Uplisting's calendar
+//     (lib/uplisting.ts fetchNightlyRates) and are quoted by lib/quote.ts.
+//   - Cottage: +$100/night for a third adult, $25 pet fee flat per stay
+//   - Domes: 25% off the second night on stays of 2+ nights
 //   - All three properties strictly 18+, adults only
-// These figures mirror basePrice below — update both together, and check
-// the advertised prices on the landing pages match.
 const accommodations: Accommodation[] = [
   {
     id: "dome-pinot",
@@ -29,10 +32,10 @@ const accommodations: Accommodation[] = [
     description: "Flagship 50sqm luxury dome with panoramic views and private spa",
     maxGuests: 2,
     baseGuests: 2,
-    basePrice: 650,
     minStay: 1,
     adultsOnly: true,
     minimumAge: 18,
+    secondNightDiscount: true,
     amenities: ["Super King bed", "Private spa", "Panoramic views", "Solar powered"],
     images: ["Pinotfront.jpeg", "pinotinternal.jpeg"],
   },
@@ -42,10 +45,10 @@ const accommodations: Accommodation[] = [
     description: "Romantic 40sqm retreat perfect for couples",
     maxGuests: 2,
     baseGuests: 2,
-    basePrice: 599,
     minStay: 1,
     adultsOnly: true,
     minimumAge: 18,
+    secondNightDiscount: true,
     amenities: ["Super King bed", "Outdoor spa", "Mountain views", "Solar powered"],
     images: ["dome-rose-spa1.jpeg", "dome-rose-interior.jpeg"],
   },
@@ -55,7 +58,6 @@ const accommodations: Accommodation[] = [
     description: "Adults-only lakefront cottage with direct lake access and wood-fired hot tub",
     maxGuests: 3,
     baseGuests: 2,
-    basePrice: 350,
     minStay: 2,
     adultsOnly: true,
     minimumAge: 18,
@@ -76,15 +78,4 @@ export function getById(id: string): Accommodation | undefined {
 
 export function getValidIds(): string[] {
   return accommodations.map((a) => a.id);
-}
-
-/**
- * Lowest nightly base price across all properties. The public-facing
- * "from $X/night" messaging (sticky book bar, hero sub-copy, etc.)
- * MUST derive from this — never hardcode a price in a component, or
- * it will desync whenever `accommodations` changes. Tested in
- * accommodations.test.ts to catch any regression.
- */
-export function getFromPrice(): number {
-  return Math.min(...accommodations.map((a) => a.basePrice));
 }

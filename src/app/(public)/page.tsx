@@ -19,7 +19,12 @@ const PROPERTY_MEDIA: Record<string, { image: string; label: string }> = {
 const FALLBACK_MEDIA = { image: "/images/domes-vineyard-sunset.jpg", label: "Lakeside Retreat" };
 
 export const metadata: Metadata = {
-  title: "Lakeside Retreat | Luxury Glamping Domes & Lakeside Cottage, Central Otago",
+  // Brand-first on the homepage only. `absolute` opts out of the root
+  // layout's "%s | Lakeside Retreat" template, which would otherwise append
+  // the brand a second time.
+  title: {
+    absolute: "Lakeside Retreat | Luxury Glamping Domes & Lakeside Cottage, Central Otago",
+  },
   description:
     "Adults-only luxury glamping domes and pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Private spas, vineyard and mountain views, 4.9\u2605 guest reviews.",
   alternates: { canonical: "/" },
@@ -165,7 +170,7 @@ export default async function HomePage() {
           <p className="text-xl md:text-2xl mb-8 opacity-95 font-light tracking-wide">
             Wake to the lake. Dine in the vines. Sleep beneath the stars.
           </p>
-          <Button href="/book">Book Direct & Save 10%</Button>
+          <Button href="/book">Best price when you book direct</Button>
         </div>
       </section>
 
@@ -246,7 +251,7 @@ export default async function HomePage() {
               the stars by dinner.
             </p>
             <p className="text-lg leading-8 text-muted mb-8">
-              Queenstown&apos;s 45 minutes or Wanaka 30 mintes away when you want the
+              Queenstown&apos;s 45 minutes or Wanaka 30 minutes away when you want the
               bustle. By sunset, the rest of the world feels
               very far away.
             </p>
@@ -322,10 +327,6 @@ export default async function HomePage() {
               <div className="text-center">
                 <p className="text-4xl font-display text-burgundy">416</p>
                 <p className="text-sm text-muted">Verified Reviews</p>
-              </div>
-              <div className="text-center">
-                <p className="text-4xl font-display text-burgundy">33%</p>
-                <p className="text-sm text-muted">Return Guests</p>
               </div>
               <div className="text-center">
                 <p className="text-4xl font-display text-burgundy">98%</p>

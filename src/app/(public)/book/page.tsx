@@ -8,7 +8,7 @@ import {
 } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Book Your Stay | Lakeside Retreat",
+  title: "Book Your Stay",
   description:
     "Book your luxury glamping escape at Lakeside Retreat on Lake Dunstan, Central Otago. Choose from geodesic domes and a lakeside cottage.",
   robots: "noindex",

@@ -53,7 +53,6 @@ export default async function ReviewsPage() {
   const stats = [
     { label: "Overall Rating", value: ratingValue, sub: "out of 5 stars" },
     { label: "Verified Reviews", value: reviewCount, sub: "across all platforms" },
-    { label: "Return Guests", value: "33%", sub: "come back again" },
     { label: "Would Recommend", value: "98%", sub: "to friends" },
   ];
 

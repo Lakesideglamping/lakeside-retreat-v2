@@ -1,6 +1,6 @@
 import Stripe from "stripe";
-import { getById, type Accommodation } from "./accommodations";
-import { logger } from "./logger";
+import { getById } from "./accommodations";
+import type { StayQuote } from "./pricing";
 
 export const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -13,12 +13,6 @@ export const isDevMode = !process.env.STRIPE_SECRET_KEY;
 const baseUrl = () =>
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-function daysBetween(checkIn: string, checkOut: string): number {
-  const start = new Date(checkIn);
-  const end = new Date(checkOut);
-  return Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-}
-
 export interface LineItem {
   name: string;
   amount: number; // in cents
@@ -26,92 +20,18 @@ export interface LineItem {
 }
 
 /**
- * Look up the highest active seasonal rate multiplier that overlaps [checkIn, checkOut).
- * Returns 1.0 when no rates apply or on any DB error (fail-safe).
+ * Stripe line items for a quote. The quote already carries every charged
+ * item in cents (nightly stay from Uplisting's live rates, extra guest fee,
+ * pet fee); this is a straight mapping. Discounts are not line items —
+ * Stripe Checkout rejects negative amounts — so they travel as a coupon on
+ * the session instead (see createCheckoutSession).
  */
-export async function getSeasonalMultiplier(
-  checkIn: string,
-  checkOut: string
-): Promise<number> {
-  try {
-    const { prisma } = await import("./db");
-    const rates = await prisma.seasonal_rates.findMany({
-      where: {
-        is_active: true,
-        start_date: { lte: new Date(checkOut) },
-        end_date: { gte: new Date(checkIn) },
-      },
-      select: { multiplier: true },
-    });
-    if (!rates.length) return 1.0;
-    return Math.max(...rates.map((r) => Number(r.multiplier ?? 1)));
-  } catch (err) {
-    // Fail safe to 1.0, but log so a broken DB connection doesn't silently
-    // strip peak pricing from every booking.
-    logger.error("[stripe] getSeasonalMultiplier failed, falling back to 1.0", { err });
-    return 1.0;
-  }
-}
-
-/**
- * Calculate line items for a booking.
- * Pass seasonalMultiplier > 1.0 to apply peak/seasonal pricing to the nightly rate.
- */
-export function calculateLineItems(
-  accommodation: Accommodation,
-  checkIn: string,
-  checkOut: string,
-  guests: number,
-  pets: number = 0,
-  seasonalMultiplier: number = 1.0
-): { lineItems: LineItem[]; totalAmount: number } {
-  const nights = daysBetween(checkIn, checkOut);
-  const items: LineItem[] = [];
-
-  const nightlyRateCents = Math.round(accommodation.basePrice * seasonalMultiplier * 100);
-  const nightlyLabel = seasonalMultiplier !== 1.0
-    ? `${accommodation.name} — peak season (${nights} night${nights > 1 ? "s" : ""})`
-    : `${accommodation.name} (${nights} night${nights > 1 ? "s" : ""})`;
-
-  items.push({
-    name: nightlyLabel,
-    amount: nightlyRateCents,
-    quantity: nights,
-  });
-
-  // Cleaning is bundled into the nightly rate — no separate line item.
-
-  // Extra guest fee
-  if (
-    accommodation.extraGuestFee &&
-    guests > accommodation.baseGuests
-  ) {
-    const extraGuests = guests - accommodation.baseGuests;
-    items.push({
-      name: `Extra guest fee (${extraGuests} guest${extraGuests > 1 ? "s" : ""})`,
-      amount: accommodation.extraGuestFee * 100,
-      quantity: nights * extraGuests,
-    });
-  }
-
-  // Pet fee — a single FLAT fee per stay, regardless of how many pets
-  // (max 2). Advertised everywhere as "flat $25 pet fee per stay", so do
-  // NOT multiply by the pet count.
-  if (accommodation.petFee && pets > 0) {
-    items.push({
-      name: "Pet fee (flat, per stay)",
-      amount: accommodation.petFee * 100,
-      quantity: 1,
-    });
-  }
-
-  // PaymentIntent (manual capture) created by the webhook after checkout
-  // completes. Keeping it out of the Checkout total avoids the partial-capture
-  // trap (once a PI is partial-captured, the remainder can't be captured later).
-
-  const totalAmount = items.reduce((sum, i) => sum + i.amount * i.quantity, 0);
-
-  return { lineItems: items, totalAmount };
+export function quoteToLineItems(quote: StayQuote): LineItem[] {
+  return quote.lineItems.map((item) => ({
+    name: item.label,
+    amount: item.amountCents,
+    quantity: item.quantity,
+  }));
 }
 
 interface CreateSessionParams {
@@ -124,12 +44,20 @@ interface CreateSessionParams {
   guestPhone?: string;
   specialRequests?: string;
   pets?: number;
-  /** Pre-computed seasonal multiplier from getSeasonalMultiplier(). If omitted, computed internally. */
-  seasonalMultiplier?: number;
+  /** The server-side quote the guest saw: its line items are what Stripe charges. */
+  quote: StayQuote;
+  /** Where the quote's rates came from — recorded on the session for the audit trail. */
+  rateSource: "live" | "cached";
   /** Promo code string (for metadata and coupon label). */
   promoCode?: string;
-  /** Discount to apply in cents (positive integer). Shown as a Stripe coupon deduction. */
+  /**
+   * Total discount to apply in cents (positive integer): the dome
+   * second-night discount plus any promo. Shown as one Stripe coupon
+   * deduction — Checkout allows a single discount per session.
+   */
   discountAmountCents?: number;
+  /** Human label for the coupon, e.g. "25% off your second night + Promo code: X". */
+  discountLabel?: string;
 }
 
 export async function createCheckoutSession(
@@ -146,18 +74,9 @@ export async function createCheckoutSession(
     };
   }
 
-  const multiplier =
-    params.seasonalMultiplier ??
-    (await getSeasonalMultiplier(params.checkIn, params.checkOut));
-
-  const { lineItems } = calculateLineItems(
-    acc,
-    params.checkIn,
-    params.checkOut,
-    params.guests,
-    params.pets || 0,
-    multiplier
-  );
+  const lineItems = quoteToLineItems(params.quote);
+  const quotedTotalCents =
+    params.quote.subtotalCents - (params.discountAmountCents ?? 0);
 
   const checkInFormatted = new Date(params.checkIn).toLocaleDateString("en-NZ", {
     weekday: "short",
@@ -182,16 +101,18 @@ export async function createCheckoutSession(
         amount_off: params.discountAmountCents,
         currency: "nzd",
         duration: "once",
-        name: params.promoCode
-          ? `Promo code: ${params.promoCode}`
-          : "Promotional discount",
+        name: params.discountLabel
+          ? params.discountLabel.slice(0, 40) // Stripe caps coupon names at 40 chars
+          : params.promoCode
+            ? `Promo code: ${params.promoCode}`
+            : "Promotional discount",
       },
       {
         // The amount belongs in the key.
         //
         // This was keyed on accommodation + check-in + code alone, but the
-        // amount also depends on check-out, guests, pets, the seasonal
-        // multiplier and the code's own discount_value — none of which were in
+        // amount also depends on check-out, guests, pets, the live nightly
+        // rates and the code's own discount_value — none of which were in
         // the key. Two visitors eyeing the same dome from the same date for
         // different lengths of stay therefore produced one key and two
         // amounts, and Stripe rejects a reused key whose parameters differ.
@@ -246,9 +167,14 @@ export async function createCheckoutSession(
       guestPhone: params.guestPhone || "",
       specialRequests: params.specialRequests || "",
       pets: String(params.pets || 0),
-      seasonalMultiplier: String(multiplier),
+      // The total we quoted, so the webhook can verify Stripe charged exactly
+      // what the guest was shown without re-fetching rates that may since
+      // have changed in Uplisting.
+      quotedTotalCents: String(quotedTotalCents),
+      rateSource: params.rateSource,
       promoCode: params.promoCode || "",
       discountAmountCents: String(params.discountAmountCents || 0),
+      discountLabel: params.discountLabel || "",
     },
     success_url: `${baseUrl()}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${baseUrl()}/booking-cancelled`,
