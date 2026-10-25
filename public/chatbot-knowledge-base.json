@@ -193,7 +193,7 @@
     },
     "pricing": {
       "patterns": ["price", "cost", "rate", "how much", "expensive", "cheap", "afford"],
-      "response": "Our nightly rates vary by season and start from: Dome Pinot (50sqm luxury dome) - $449 NZD, Dome Rosé (40sqm romantic dome) - $429 NZD, and Lakeside Cottage (sleeps 3) - $240 NZD. The booking page shows the live price for your dates. The cottage has an extra guest fee of $100 per night for a third adult. Dome stays of two nights or more get 25% off the second night, and code BOOKDIRECT takes a further 10% off. All prices include GST and cleaning, and continental breakfast for dome guests. Would you like to know more about what's included?"
+      "response": "Our nightly rates vary by season and start from: Dome Pinot (50sqm luxury dome) - $449 NZD, Dome Rosé (40sqm romantic dome) - $429 NZD, and Lakeside Cottage (sleeps 3) - $240 NZD. The booking page shows the live price for your dates. The cottage has an extra guest fee of $100 per night for a third adult. Dome stays of two nights or more get 25% off the second night when you book direct. All prices include GST and cleaning, and continental breakfast for dome guests. Would you like to know more about what's included?"
     },
     "contact_human": {
       "patterns": ["speak to someone", "talk to human", "real person", "contact", "call", "phone", "email"],

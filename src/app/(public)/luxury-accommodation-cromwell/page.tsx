@@ -254,8 +254,8 @@ export default function LuxuryAccommodationCromwellPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Direct &amp; Save</h2>
           <p className="text-lg text-muted mb-6">
-            Book direct and take 10% off with code BOOKDIRECT — a better price than Airbnb
-            or Booking.com for the same luxury stay, with your hosts a message away.
+            Stay two nights in a dome and your second night is 25% off when you book direct.
+            Same luxury stay, best price, and your hosts a message away.
           </p>
           <Button href="/book">Book Direct — Best Rate Guaranteed</Button>
           <p className="text-sm text-muted mt-6">
