@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import type { Accommodation } from "@/lib/accommodations";
-import { calculatePrice, formatNZD } from "@/lib/pricing";
+import { formatNZDCents, type StayQuote } from "@/lib/pricing";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { trackBeginCheckout } from "@/lib/analytics";
 
@@ -12,8 +12,9 @@ interface BookingFormProps {
   checkOut: string;
   guests: number;
   pets: number;
+  /** The live quote shown on step 1 — the total here must be the same figure. */
+  quote: StayQuote;
   onBack: () => void;
-  seasonalMultiplier?: number;
 }
 
 interface FormFields {
@@ -36,8 +37,8 @@ export function BookingForm({
   checkOut,
   guests,
   pets,
+  quote,
   onBack,
-  seasonalMultiplier = 1.0,
 }: BookingFormProps) {
   /**
    * This component mounts exactly when step 2 begins — the widget renders it
@@ -64,19 +65,8 @@ export function BookingForm({
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { totalAmount } = calculatePrice(
-    accommodation,
-    checkIn,
-    checkOut,
-    guests,
-    pets,
-    seasonalMultiplier
-  );
-
-  const nights = Math.round(
-    (new Date(checkOut).getTime() - new Date(checkIn).getTime()) /
-      (1000 * 60 * 60 * 24)
-  );
+  const totalCents = quote.totalCents;
+  const nights = quote.nights;
 
   function updateField<K extends keyof FormFields>(field: K, value: FormFields[K]) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -158,7 +148,7 @@ export function BookingForm({
         trackBeginCheckout({
           accommodationId: accommodation.id,
           accommodationName: accommodation.name,
-          value: totalAmount,
+          value: totalCents / 100,
           currency: "NZD",
         });
         window.location.assign(data.url);
@@ -224,7 +214,10 @@ export function BookingForm({
           </div>
           <div>
             <p className="text-muted">Total</p>
-            <p className="font-semibold text-burgundy">{formatNZD(totalAmount)}</p>
+            <p className="font-semibold text-burgundy">{formatNZDCents(totalCents)}</p>
+            {quote.discount && (
+              <p className="text-xs text-green-800">{quote.discount.label}</p>
+            )}
           </div>
         </div>
       </div>
@@ -417,7 +410,7 @@ export function BookingForm({
           <SubmitButton loading={status === "submitting"}>
             {status === "submitting"
               ? "Redirecting to payment..."
-              : `Proceed to Payment \u2014 ${formatNZD(totalAmount)}`}
+              : `Proceed to Payment \u2014 ${formatNZDCents(totalCents)}`}
           </SubmitButton>
         </div>
 

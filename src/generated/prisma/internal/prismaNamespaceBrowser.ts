@@ -61,8 +61,8 @@ export const ModelName = {
   review_requests: 'review_requests',
   reviews: 'reviews',
   schema_migrations: 'schema_migrations',
-  seasonal_rates: 'seasonal_rates',
   social_content_drafts: 'social_content_drafts',
+  uplisting_rates: 'uplisting_rates',
   system_settings: 'system_settings',
   token_blacklist: 'token_blacklist',
   rate_limits: 'rate_limits',
@@ -246,20 +246,6 @@ export const Schema_migrationsScalarFieldEnum = {
 export type Schema_migrationsScalarFieldEnum = (typeof Schema_migrationsScalarFieldEnum)[keyof typeof Schema_migrationsScalarFieldEnum]
 
 
-export const Seasonal_ratesScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  start_date: 'start_date',
-  end_date: 'end_date',
-  multiplier: 'multiplier',
-  is_active: 'is_active',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-} as const
-
-export type Seasonal_ratesScalarFieldEnum = (typeof Seasonal_ratesScalarFieldEnum)[keyof typeof Seasonal_ratesScalarFieldEnum]
-
-
 export const Social_content_draftsScalarFieldEnum = {
   id: 'id',
   platform: 'platform',
@@ -274,6 +260,15 @@ export const Social_content_draftsScalarFieldEnum = {
 } as const
 
 export type Social_content_draftsScalarFieldEnum = (typeof Social_content_draftsScalarFieldEnum)[keyof typeof Social_content_draftsScalarFieldEnum]
+
+
+export const Uplisting_ratesScalarFieldEnum = {
+  accommodation: 'accommodation',
+  rates: 'rates',
+  fetched_at: 'fetched_at'
+} as const
+
+export type Uplisting_ratesScalarFieldEnum = (typeof Uplisting_ratesScalarFieldEnum)[keyof typeof Uplisting_ratesScalarFieldEnum]
 
 
 export const System_settingsScalarFieldEnum = {
@@ -357,6 +352,13 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -371,4 +373,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

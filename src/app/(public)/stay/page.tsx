@@ -4,11 +4,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createLodgingBusinessSchema, createBreadcrumbSchema } from "@/lib/structured-data";
+import { fromRate, fromDollars } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
   title: "Luxury Accommodation Central Otago | Glamping Domes & Lakeside Cottage",
   description:
-    "Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Stargazing skylights, vineyard views. $350/night.",
+    `Two adults-only luxury geodesic domes with private spas and a pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Stargazing skylights, vineyard views. ${fromRate("lakeside-cottage")}.`,
   alternates: { canonical: "/stay" },
   openGraph: {
     title: "Luxury Accommodation Central Otago | Glamping Domes & Lakeside Cottage",
@@ -26,7 +27,7 @@ const accommodations = [
     image: "/images/Pinotfront.jpeg",
     title: "Dome Pinot",
     adultsOnly: true,
-    price: "$650",
+    price: fromDollars("dome-pinot"),
     tagline: "50sqm luxury dome with panoramic Lake Dunstan views, private spa, and stargazing skylight.",
     features: [
       "Super King bed with premium linens",
@@ -43,7 +44,7 @@ const accommodations = [
     image: "/images/dome-rose-spa1.jpeg",
     title: "Dome Ros\u00e9",
     adultsOnly: true,
-    price: "$599",
+    price: fromDollars("dome-rose"),
     tagline: "40sqm romantic retreat with vineyard views, private spa, and a kitchenette for in-dome dining.",
     features: [
       "Super King bed with luxury bedding",
@@ -60,7 +61,7 @@ const accommodations = [
     image: "/images/lakeside-cottage-exterior.jpeg",
     title: "Lakeside Cottage",
     adultsOnly: false,
-    price: "$350",
+    price: fromDollars("lakeside-cottage"),
     tagline: "Right on the water. Wood-fired tub steaming under the stars. BBQ on the deck, dog at your feet.",
     features: [
       "Queen bed + sofa pullout, sleeps 3",

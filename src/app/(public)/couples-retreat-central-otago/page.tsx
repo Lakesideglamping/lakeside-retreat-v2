@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/lib/structured-data";
+import { fromRate } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
   title: "Couples Retreat Central Otago | Romantic Glamping Domes with Private Spas",
@@ -131,7 +132,7 @@ export default function CouplesRetreatPage() {
               </div>
               <div className="p-6">
                 <h3 className="font-display text-xl text-burgundy mb-1">Dome Pinot</h3>
-                <p className="text-burgundy font-semibold text-sm mb-3">$650/night &middot; 50sqm</p>
+                <p className="text-burgundy font-semibold text-sm mb-3">{fromRate("dome-pinot")} &middot; 50sqm</p>
                 <ul className="text-sm text-muted space-y-1">
                   <li>&bull; Private outdoor spa with lake views</li>
                   <li>&bull; Stargazing skylight</li>
@@ -146,7 +147,7 @@ export default function CouplesRetreatPage() {
               </div>
               <div className="p-6">
                 <h3 className="font-display text-xl text-burgundy mb-1">Dome Rosé</h3>
-                <p className="text-burgundy font-semibold text-sm mb-3">$599/night &middot; 40sqm</p>
+                <p className="text-burgundy font-semibold text-sm mb-3">{fromRate("dome-rose")} &middot; 40sqm</p>
                 <ul className="text-sm text-muted space-y-1">
                   <li>&bull; Private outdoor spa</li>
                   <li>&bull; Mountain and vineyard views</li>

@@ -1,18 +1,24 @@
 import { describe, it, expect } from "vitest";
-import { calculatePrice } from "../pricing";
+import {
+  buildStayQuote,
+  nightsOfStay,
+  SECOND_NIGHT_DISCOUNT_LABEL,
+  formatNZDCents,
+} from "../pricing";
 import type { Accommodation } from "../accommodations";
 
-// Test fixtures mirror the real accommodations data (GST-incl, cleaning bundled).
+// Fixtures mirror the real accommodations data, minus any nightly price:
+// that comes from Uplisting and is passed in as `rates`.
 const dome: Accommodation = {
   id: "dome-pinot",
   name: "Dome Pinot",
   description: "",
   maxGuests: 2,
   baseGuests: 2,
-  basePrice: 635,
   minStay: 1,
   adultsOnly: true,
   minimumAge: 18,
+  secondNightDiscount: true,
   amenities: [],
   images: [],
 };
@@ -23,85 +29,238 @@ const cottage: Accommodation = {
   description: "",
   maxGuests: 3,
   baseGuests: 2,
-  basePrice: 365,
   minStay: 2,
   adultsOnly: true,
   minimumAge: 18,
-  extraGuestFee: 50,
-  petFee: 50,
+  extraGuestFee: 100,
+  petFee: 25,
   amenities: [],
   images: [],
 };
 
-describe("calculatePrice", () => {
-  it("computes nightly rate × nights, excludes deposit, no cleaning line item", () => {
-    const { totalAmount, lineItems } = calculatePrice(
-      dome,
-      "2026-06-01",
-      "2026-06-03",
-      2
-    );
-    // 2 nights × $635 (no cleaning, no deposit in total)
-    expect(totalAmount).toBe(635 * 2);
-    expect(lineItems).toHaveLength(1); // nightly only
-    expect(lineItems.find((i) => i.label.toLowerCase().includes("cleaning"))).toBeUndefined();
-    expect(lineItems.find((i) => i.label.toLowerCase().includes("security"))).toBeUndefined();
+const flat = (rate: number, from: string, to: string) =>
+  Object.fromEntries(nightsOfStay(from, to).map((d) => [d, rate]));
+
+describe("nightsOfStay", () => {
+  it("lists the nights slept, excluding the check-out morning", () => {
+    expect(nightsOfStay("2026-06-01", "2026-06-03")).toEqual(["2026-06-01", "2026-06-02"]);
   });
 
-  it("adds extra guest fee for guests above base", () => {
-    const { totalAmount } = calculatePrice(
-      cottage,
-      "2026-06-01",
-      "2026-06-03",
-      3 // 1 extra guest
-    );
-    // 2 nights × $365 + 2 nights × 1 extra guest × $50
-    expect(totalAmount).toBe(365 * 2 + 2 * 1 * 50);
+  it("crosses the NZ daylight-saving changeover without losing a night", () => {
+    // Clocks go forward on 2026-09-27 in NZ.
+    expect(nightsOfStay("2026-09-26", "2026-09-28")).toEqual(["2026-09-26", "2026-09-27"]);
+  });
+});
+
+describe("buildStayQuote: nightly rates from Uplisting", () => {
+  it("charges each night at its own Uplisting rate, in cents", () => {
+    const quote = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-02",
+      guests: 2,
+      rates: { "2026-06-01": 579 },
+    })!;
+    expect(quote.nights).toBe(1);
+    expect(quote.nightly).toEqual([{ date: "2026-06-01", rateCents: 57900 }]);
+    expect(quote.subtotalCents).toBe(57900);
+    expect(quote.discount).toBeNull();
+    expect(quote.totalCents).toBe(57900);
   });
 
-  it("does not add extra guest fee when at base occupancy", () => {
-    const { lineItems } = calculatePrice(cottage, "2026-06-01", "2026-06-03", 2);
-    const hasExtraGuest = lineItems.some((i) => i.label.includes("Extra guest"));
-    expect(hasExtraGuest).toBe(false);
+  it("collapses uniform nights into rate x nights for Stripe", () => {
+    const quote = buildStayQuote({
+      accommodation: cottage,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-04",
+      guests: 2,
+      rates: flat(350, "2026-06-01", "2026-06-04"),
+    })!;
+    expect(quote.lineItems[0]).toEqual({
+      label: "Lakeside Cottage (3 nights)",
+      amountCents: 35000,
+      quantity: 3,
+      totalCents: 105000,
+    });
   });
 
-  it("charges the pet fee as a single flat fee per stay (not per pet)", () => {
-    const { totalAmount, lineItems } = calculatePrice(
-      cottage,
-      "2026-06-01",
-      "2026-06-03",
-      2,
-      2
-    );
-    const petItem = lineItems.find((i) => i.label.includes("Pet fee"));
-    expect(petItem).toBeDefined();
-    expect(petItem!.quantity).toBe(1);
-    expect(petItem!.total).toBe(50); // flat $50 fixture fee, even with 2 pets
-    expect(totalAmount).toBe(365 * 2 + 50);
+  it("sums varying nights into one stay line", () => {
+    const quote = buildStayQuote({
+      accommodation: cottage,
+      checkIn: "2026-12-30",
+      checkOut: "2027-01-02",
+      guests: 2,
+      rates: { "2026-12-30": 350, "2026-12-31": 450, "2027-01-01": 400 },
+    })!;
+    expect(quote.lineItems[0]).toEqual({
+      label: "Lakeside Cottage (3 nights)",
+      amountCents: 120000,
+      quantity: 1,
+      totalCents: 120000,
+    });
+    expect(quote.nightly.map((n) => n.rateCents)).toEqual([35000, 45000, 40000]);
   });
 
-  it("applies seasonal multiplier to nightly rate", () => {
-    const base = calculatePrice(dome, "2026-12-20", "2026-12-23", 2);
-    const peak = calculatePrice(dome, "2026-12-20", "2026-12-23", 2, 0, 1.2);
-    expect(peak.totalAmount).toBeGreaterThan(base.totalAmount);
-    const peakNightly = peak.lineItems.find((i) => i.label.includes("peak season"));
-    expect(peakNightly).toBeDefined();
-    expect(peakNightly!.amount).toBe(Math.round(635 * 1.2));
+  it("returns null when any night has no rate, never a partial price", () => {
+    expect(
+      buildStayQuote({
+        accommodation: dome,
+        checkIn: "2026-06-01",
+        checkOut: "2026-06-03",
+        guests: 2,
+        rates: { "2026-06-01": 579 },
+      })
+    ).toBeNull();
   });
 
-  it("does not label line item as peak season when multiplier is 1.0", () => {
-    const { lineItems } = calculatePrice(dome, "2026-06-01", "2026-06-03", 2, 0, 1.0);
-    const nightly = lineItems[0];
-    expect(nightly.label).not.toContain("peak season");
+  it("returns null for an empty or inverted range", () => {
+    expect(
+      buildStayQuote({ accommodation: dome, checkIn: "2026-06-03", checkOut: "2026-06-03", guests: 2, rates: {} })
+    ).toBeNull();
+    expect(
+      buildStayQuote({ accommodation: dome, checkIn: "2026-06-03", checkOut: "2026-06-01", guests: 2, rates: {} })
+    ).toBeNull();
   });
 
-  it("returns security deposit separately from the charged total", () => {
-    const { totalAmount } = calculatePrice(
-      dome,
-      "2026-06-01",
-      "2026-06-02",
-      2
-    );
-    expect(totalAmount).toBe(635); // 1 night, cleaning bundled, no bond
+  it("never carries a cleaning or security-deposit line", () => {
+    const quote = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-03",
+      guests: 2,
+      rates: flat(579, "2026-06-01", "2026-06-03"),
+    })!;
+    const labels = quote.lineItems.map((i) => i.label.toLowerCase());
+    expect(labels.some((l) => l.includes("cleaning"))).toBe(false);
+    expect(labels.some((l) => l.includes("security"))).toBe(false);
+  });
+});
+
+describe("buildStayQuote: dome second-night discount", () => {
+  it("takes 12.5% off the nightly total for a dome on 2 nights, labelled exactly", () => {
+    const quote = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-03",
+      guests: 2,
+      rates: flat(600, "2026-06-01", "2026-06-03"),
+    })!;
+    expect(quote.subtotalCents).toBe(120000);
+    expect(quote.discount).toEqual({
+      label: "25% off your second night",
+      amountCents: 15000,
+    });
+    expect(quote.discount!.label).toBe(SECOND_NIGHT_DISCOUNT_LABEL);
+    expect(quote.totalCents).toBe(105000);
+  });
+
+  it("applies on 3+ nights too (12.5% of the whole nightly total)", () => {
+    const quote = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-04",
+      guests: 2,
+      rates: { "2026-06-01": 579, "2026-06-02": 579, "2026-06-03": 650 },
+    })!;
+    const nightly = 57900 + 57900 + 65000;
+    expect(quote.discount!.amountCents).toBe(Math.round(nightly * 0.125));
+    expect(quote.totalCents).toBe(nightly - Math.round(nightly * 0.125));
+  });
+
+  it("does not apply to a single dome night", () => {
+    const quote = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-02",
+      guests: 2,
+      rates: { "2026-06-01": 579 },
+    })!;
+    expect(quote.discount).toBeNull();
+    expect(quote.totalCents).toBe(quote.subtotalCents);
+  });
+
+  it("never applies to the cottage, however long the stay", () => {
+    const quote = buildStayQuote({
+      accommodation: cottage,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-06",
+      guests: 2,
+      rates: flat(350, "2026-06-01", "2026-06-06"),
+    })!;
+    expect(quote.discount).toBeNull();
+    expect(quote.totalCents).toBe(5 * 35000);
+  });
+
+  it("rounds the discount to whole cents", () => {
+    const quote = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-03",
+      guests: 2,
+      rates: { "2026-06-01": 333.33, "2026-06-02": 333.33 },
+    })!;
+    expect(Number.isInteger(quote.discount!.amountCents)).toBe(true);
+    expect(Number.isInteger(quote.totalCents)).toBe(true);
+  });
+});
+
+describe("buildStayQuote: cottage add-ons", () => {
+  it("adds the extra guest fee per night per guest above base", () => {
+    const quote = buildStayQuote({
+      accommodation: cottage,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-03",
+      guests: 3,
+      rates: flat(350, "2026-06-01", "2026-06-03"),
+    })!;
+    const extra = quote.lineItems.find((i) => i.label.includes("Extra guest"))!;
+    expect(extra.amountCents).toBe(10000);
+    expect(extra.quantity).toBe(2);
+    expect(quote.totalCents).toBe(70000 + 20000);
+  });
+
+  it("omits the extra guest fee at base occupancy", () => {
+    const quote = buildStayQuote({
+      accommodation: cottage,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-03",
+      guests: 2,
+      rates: flat(350, "2026-06-01", "2026-06-03"),
+    })!;
+    expect(quote.lineItems.some((i) => i.label.includes("Extra guest"))).toBe(false);
+  });
+
+  it("charges the pet fee once per stay, not per pet or per night", () => {
+    const quote = buildStayQuote({
+      accommodation: cottage,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-04",
+      guests: 2,
+      pets: 2,
+      rates: flat(350, "2026-06-01", "2026-06-04"),
+    })!;
+    const pet = quote.lineItems.find((i) => i.label.includes("Pet fee"))!;
+    expect(pet.quantity).toBe(1);
+    expect(pet.totalCents).toBe(2500);
+    expect(quote.totalCents).toBe(3 * 35000 + 2500);
+  });
+
+  it("never bills a dome a pet fee", () => {
+    const quote = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-06-01",
+      checkOut: "2026-06-02",
+      guests: 2,
+      pets: 2,
+      rates: { "2026-06-01": 579 },
+    })!;
+    expect(quote.lineItems.some((i) => i.label.includes("Pet"))).toBe(false);
+  });
+});
+
+describe("formatNZDCents", () => {
+  it("drops the cents on whole dollars and keeps them otherwise", () => {
+    expect(formatNZDCents(57900)).toBe("$579");
+    expect(formatNZDCents(57950)).toBe("$579.50");
   });
 });

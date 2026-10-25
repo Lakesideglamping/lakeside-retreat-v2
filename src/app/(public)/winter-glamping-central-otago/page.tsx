@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { fromRate } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
   title: "Winter Glamping Central Otago | Cosy Domes, Outdoor Spas & Snow Views",
   description:
-    "Winter glamping on Lake Dunstan — soak in your private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes from $599/night. Central Otago's best winter escape.",
+    `Winter glamping on Lake Dunstan — soak in your private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes ${fromRate("dome-rose")}. Central Otago's best winter escape.`,
   alternates: { canonical: "/winter-glamping-central-otago" },
   openGraph: {
     title: "Winter Glamping Central Otago | Cosy Domes, Outdoor Spas & Snow Views",
     description:
-      "Soak in a private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes on Lake Dunstan — from $599/night.",
+      `Soak in a private outdoor spa with snow-capped Pisa Range views. Heated geodesic domes on Lake Dunstan — ${fromRate("dome-rose")}.`,
     url: "https://lakesideretreat.co.nz/winter-glamping-central-otago",
     images: [
       {
@@ -271,7 +272,7 @@ export default function WinterGlampingPage() {
                 bookHref: "/book?a=dome-pinot",
                 image: "/images/Pinotfront.jpeg",
                 title: "Dome Pinot",
-                price: "$650/night",
+                price: fromRate("dome-pinot"),
                 winter: ["Heat pump climate control", "Stargazing skylight above bed", "Private outdoor saltwater spa", "Panoramic Pisa Range snow views"],
               },
               {
@@ -279,7 +280,7 @@ export default function WinterGlampingPage() {
                 bookHref: "/book?a=dome-rose",
                 image: "/images/dome-rose-spa1.jpeg",
                 title: "Dome Ros\u00e9",
-                price: "$599/night",
+                price: fromRate("dome-rose"),
                 winter: ["Heat pump climate control", "Private outdoor saltwater spa", "Mountain & vineyard views", "Outdoor dining deck with heater"],
               },
             ].map((dome) => (

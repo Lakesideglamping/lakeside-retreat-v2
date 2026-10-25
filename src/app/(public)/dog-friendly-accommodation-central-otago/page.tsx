@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { fromRate } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
   title: "Dog-Friendly Accommodation Central Otago | Lakeside Cottage, Cromwell",
   description:
-    "Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, a secure outdoor area, and a BBQ deck. $350/night.",
+    `Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, a secure outdoor area, and a BBQ deck. ${fromRate("lakeside-cottage")}.`,
 
   alternates: { canonical: "/dog-friendly-accommodation-central-otago" },
   openGraph: {
     title: "Dog-Friendly Accommodation Central Otago | Lakeside Cottage, Cromwell",
-    description: "Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, a secure outdoor area, and a BBQ deck. $350/night.",
+    description: `Pet-friendly accommodation on Lake Dunstan, Central Otago. The Lakeside Cottage welcomes dogs with direct lake access, a secure outdoor area, and a BBQ deck. ${fromRate("lakeside-cottage")}.`,
     url: "https://lakesideretreat.co.nz/dog-friendly-accommodation-central-otago",
     images: [
       {
@@ -129,7 +130,7 @@ export default function DogFriendlyAccommodationPage() {
                 <li>&#10003; Wood-fired cedar hot tub (no chemicals)</li>
                 <li>&#10003; Kitchenette &amp; outdoor BBQ</li>
                 <li>&#10003; Heat pump (heating &amp; AC)</li>
-                <li>&#10003; $350/night</li>
+                <li>&#10003; {fromRate("lakeside-cottage")}</li>
               </ul>
             </div>
           </div>
@@ -233,7 +234,7 @@ export default function DogFriendlyAccommodationPage() {
         <div className="max-w-[600px] mx-auto">
           <h2 className="font-display text-4xl mb-4">Book Your Dog-Friendly Stay</h2>
           <p className="text-lg text-muted mb-8">
-            Lakeside Cottage $350/night. Direct lake access. Lake Dunstan Cycle Trail 200m away.
+            Lakeside Cottage {fromRate("lakeside-cottage")}. Direct lake access. Lake Dunstan Cycle Trail 200m away.
             Dogs welcome with prior approval.
           </p>
           <Button href="/book?a=lakeside-cottage">Check Availability</Button>

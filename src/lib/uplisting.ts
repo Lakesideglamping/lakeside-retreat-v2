@@ -1,6 +1,7 @@
 import { getCached, setCache } from "./cache";
 import { getDbCached, setDbCache, invalidateDbCache } from "./db-cache";
 import { logger } from "./logger";
+import { prisma } from "./db";
 import crypto from "crypto";
 
 const API_BASE = "https://connect.uplisting.io";
@@ -188,6 +189,142 @@ export async function fetchBlockedDates(
   } catch (err) {
     logger.error("[uplisting] Error fetching blocked dates", { err });
     return [];
+  }
+}
+
+
+/**
+ * Nightly rates for one property, keyed by NZ calendar date ("YYYY-MM-DD"),
+ * in NZD dollars, GST inclusive — exactly as Uplisting's calendar reports
+ * `day_rate`.
+ */
+export interface NightlyRates {
+  rates: Record<string, number>;
+  /** When these rates were last fetched from Uplisting. */
+  fetchedAt: Date;
+  /** "live" straight from the API (or a copy fresher than CACHE_TTL); "cached" when the API was unavailable and the last good copy was served instead. */
+  source: "live" | "cached";
+}
+
+/** How long to serve a stale copy before trying the API again. */
+const STALE_RATES_RETRY_MS = 60 * 1000;
+
+function ratesCacheKey(accommodation: string): string {
+  return `nightly-rates-${accommodation}`;
+}
+
+async function readRatesRow(accommodation: string): Promise<NightlyRates | null> {
+  try {
+    const row = await prisma.uplisting_rates.findUnique({ where: { accommodation } });
+    if (!row) return null;
+    const rates = row.rates as Record<string, number>;
+    if (!rates || typeof rates !== "object") return null;
+    return { rates, fetchedAt: row.fetched_at, source: "cached" };
+  } catch (err) {
+    logger.error("[uplisting] Failed to read cached rates", { accommodation, err });
+    return null;
+  }
+}
+
+async function writeRatesRow(accommodation: string, rates: Record<string, number>, fetchedAt: Date): Promise<void> {
+  try {
+    await prisma.uplisting_rates.upsert({
+      where: { accommodation },
+      create: { accommodation, rates, fetched_at: fetchedAt },
+      update: { rates, fetched_at: fetchedAt },
+    });
+  } catch (err) {
+    // Non-fatal: the live answer still goes out. But it is worth knowing,
+    // because without this row the next outage has nothing to fall back on.
+    logger.error("[uplisting] Failed to persist rates cache", { accommodation, err });
+  }
+}
+
+/**
+ * Fetch the next year of nightly rates for a property from Uplisting.
+ *
+ * Lookup order:
+ *   1. In-memory copy (fast; gone on restart).
+ *   2. Postgres copy, if fetched within CACHE_TTL — shared across instances,
+ *      and what stops every restart turning into a burst of API calls.
+ *   3. The Uplisting calendar API. A success is written back to Postgres.
+ *   4. If the API fails for any reason: the Postgres copy regardless of age,
+ *      marked `source: "cached"`.
+ *
+ * Returns null only when the API failed AND there is no cached copy at all.
+ * It never invents a number — the caller must show "prices unavailable".
+ */
+export async function fetchNightlyRates(accommodation: string): Promise<NightlyRates | null> {
+  const memKey = ratesCacheKey(accommodation);
+  const inMemory = getCached<NightlyRates>(memKey, CACHE_TTL);
+  if (inMemory?.source === "live") return inMemory;
+  // A stale copy is held in memory only briefly, so an outage does not mean
+  // three slow retries on every price check — but recovery is still quick.
+  const staleInMemory = getCached<NightlyRates>(memKey, STALE_RATES_RETRY_MS);
+  if (staleInMemory) return staleInMemory;
+
+  const propertyId = PROPERTY_IDS[accommodation];
+  if (!propertyId || !isConfigured()) {
+    // Nothing to ask. Serve whatever was last stored, or nothing.
+    return readRatesRow(accommodation);
+  }
+
+  const dbRow = await readRatesRow(accommodation);
+  if (dbRow && Date.now() - dbRow.fetchedAt.getTime() < CACHE_TTL) {
+    const fresh: NightlyRates = { ...dbRow, source: "live" };
+    setCache(memKey, fresh);
+    return fresh;
+  }
+
+  try {
+    // Calendar range: today → today + 1 year, in NZ local time. The nights
+    // a guest can book are NZ dates; the server's own date is irrelevant.
+    const from = nzDateString();
+    const future = new Date();
+    future.setFullYear(future.getFullYear() + 1);
+    const to = nzDateString(future);
+
+    const res = await fetchWithRetry(
+      `${API_BASE}/calendar/${propertyId}?from=${from}&to=${to}`,
+      {
+        headers: {
+          Authorization: authHeader(),
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Uplisting calendar returned ${res.status}`);
+    }
+
+    const data = await res.json();
+    const rates: Record<string, number> = {};
+    for (const day of data.calendar?.days || []) {
+      const rate = Number(day?.day_rate);
+      if (typeof day?.date === "string" && Number.isFinite(rate) && rate > 0) {
+        rates[day.date] = rate;
+      }
+    }
+    if (Object.keys(rates).length === 0) {
+      throw new Error("Uplisting calendar returned no rates");
+    }
+
+    const live: NightlyRates = { rates, fetchedAt: new Date(), source: "live" };
+    setCache(memKey, live);
+    writeRatesRow(accommodation, rates, live.fetchedAt).catch(() => {});
+    return live;
+  } catch (err) {
+    logger.error("[uplisting] Rates fetch failed, falling back to cached copy", {
+      accommodation,
+      hasCachedCopy: !!dbRow,
+      err,
+    });
+    if (dbRow) {
+      setCache(memKey, dbRow);
+      return dbRow;
+    }
+    return null;
   }
 }
 

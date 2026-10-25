@@ -63,14 +63,6 @@ export const statusUpdateSchema = z.object({
   status: z.enum(["pending", "confirmed", "cancelled", "completed"]),
 });
 
-export const seasonalRateSchema = z.object({
-  name: z.string().min(1).max(100),
-  start_date: dateStringSchema,
-  end_date: dateStringSchema,
-  multiplier: z.number().min(0.01).max(9.99),
-  is_active: z.boolean().optional(),
-});
-
 export const reviewSchema = z.object({
   guest_name: z.string().min(2).max(100),
   platform: z.string().optional(),

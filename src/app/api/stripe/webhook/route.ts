@@ -1,11 +1,6 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
-import {
-  constructWebhookEvent,
-  isDevMode,
-  calculateLineItems,
-} from "@/lib/stripe";
-import { getById } from "@/lib/accommodations";
+import { constructWebhookEvent, isDevMode } from "@/lib/stripe";
 import {
   sendBookingConfirmation,
   sendCancellationConfirmation,
@@ -139,26 +134,22 @@ export async function POST(request: Request) {
           );
         }
 
-        // Re-verify the charged amount against a server-side calculation.
-        // This catches cases where the session metadata was tampered with or
-        // the price logic drifts between session creation and capture.
-        // seasonalMultiplier and discountAmountCents are stored in metadata at
-        // session-creation time so verification always uses the same values.
-        const acc = getById(metadata.accommodation || "");
-        if (acc && metadata.checkIn && metadata.checkOut) {
-          const seasonalMultiplier =
-            parseFloat(metadata.seasonalMultiplier || "1") || 1;
-          const discountCents =
-            parseInt(metadata.discountAmountCents || "0") || 0;
-          const { totalAmount: baseTotal } = calculateLineItems(
-            acc,
-            metadata.checkIn,
-            metadata.checkOut,
-            Number(metadata.guests) || 1,
-            Number(metadata.pets) || 0,
-            seasonalMultiplier
-          );
-          const expectedTotal = baseTotal - discountCents;
+        // Re-verify the charged amount against the total we quoted when the
+        // session was created (metadata.quotedTotalCents). Nightly rates are
+        // live from Uplisting and can change between quote and payment, so
+        // recomputing from today's rates would flag honest bookings; the
+        // quoted total is the figure the guest agreed to and the line items
+        // Stripe was given, so it is the right thing to check against.
+        const quotedTotal = parseInt(metadata.quotedTotalCents || "", 10);
+        if (!Number.isFinite(quotedTotal)) {
+          // Sessions created before quoting moved to live rates carried no
+          // quoted total. Checkout sessions expire after 30 minutes, so this
+          // is a brief deploy-time window; record it rather than reject.
+          log.warn("stripe webhook: no quotedTotalCents in metadata, skipping amount check", {
+            sessionId: session.id,
+          });
+        } else {
+          const expectedTotal = quotedTotal;
           // Allow up to 10c drift from line-item rounding; anything larger
           // is tampering/calculation error. Stripe builds totals from
           // per-line-item cents, so a few cents of drift across multiple

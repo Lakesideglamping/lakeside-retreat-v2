@@ -80,7 +80,6 @@ const quickLinks = [
   { label: "New Booking", href: "/admin/bookings/new", description: "Create a manual booking" },
   { label: "Calendar", href: "/admin/calendar", description: "View availability calendar" },
   { label: "Reviews", href: "/admin/reviews", description: "Manage guest reviews" },
-  { label: "Pricing", href: "/admin/pricing", description: "Update seasonal rates" },
   { label: "Promotions", href: "/admin/promotions", description: "Manage promo codes" },
   { label: "Analytics", href: "/admin/analytics", description: "View detailed reports" },
 ];

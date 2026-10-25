@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/db";
 import { JsonLd, createLodgingBusinessSchema, createOrganizationSchema, createWebSiteSchema, createFaqSchema, createBreadcrumbSchema, fetchReviewStats } from "@/lib/structured-data";
+import { fromRate } from "@/lib/advertised-rates";
 
 // The teaser reviews come from the database, so re-render hourly rather than
 // on every request — keeps the busiest page on the CDN.
@@ -19,7 +20,12 @@ const PROPERTY_MEDIA: Record<string, { image: string; label: string }> = {
 const FALLBACK_MEDIA = { image: "/images/domes-vineyard-sunset.jpg", label: "Lakeside Retreat" };
 
 export const metadata: Metadata = {
-  title: "Lakeside Retreat | Luxury Glamping Domes & Lakeside Cottage, Central Otago",
+  // Brand-first on the homepage only. `absolute` opts out of the root
+  // layout's "%s | Lakeside Retreat" template, which would otherwise append
+  // the brand a second time.
+  title: {
+    absolute: "Lakeside Retreat | Luxury Glamping Domes & Lakeside Cottage, Central Otago",
+  },
   description:
     "Adults-only luxury glamping domes and pet-friendly lakeside cottage on Lake Dunstan, Cromwell. Private spas, vineyard and mountain views, 4.9\u2605 guest reviews.",
   alternates: { canonical: "/" },
@@ -129,7 +135,7 @@ export default async function HomePage() {
           { question: "Is Lakeside Retreat close to the Otago Rail Trail?", answer: "The Otago Rail Trail (New Zealand's original Great Ride) is just 200 metres from Lakeside Retreat. You can walk from your accommodation to the trail start. The Cromwell to Clyde section is flat and spectacular — ideal for cyclists of all fitness levels." },
           { question: "What is the minimum stay at Lakeside Retreat?", answer: "Our luxury domes (Dome Pinot and Dome Ros\u00e9) have a 1-night minimum stay, though 2+ nights is recommended to fully experience the retreat. The Lakeside Cottage has a 2-night minimum stay (3 nights in peak season)." },
           { question: "What's the cancellation policy?", answer: "Full refund if cancelled 14+ days before check-in. No refund within 13 days." },
-          { question: "Why book direct instead of Airbnb?", answer: "Booking direct saves you 12-18% in service fees that platforms charge. You get the same luxury stay at a lower price with direct host communication and the ability to discuss special requests with Steve and Sandy." },
+          { question: "Why book direct instead of Airbnb?", answer: "You always get our best price when you book direct: the same nightly rate as the booking platforms, 25% off your second night in the domes, and a further 10% off with code BOOKDIRECT. You also deal directly with Steve and Sandy, so special requests are easy." },
           // JSON-LD answers must be plain strings (this array is serialized
           // into Google structured data — JSX links can't go here). The
           // visible FAQ section below has the clickable-link version.
@@ -165,7 +171,7 @@ export default async function HomePage() {
           <p className="text-xl md:text-2xl mb-8 opacity-95 font-light tracking-wide">
             Wake to the lake. Dine in the vines. Sleep beneath the stars.
           </p>
-          <Button href="/book">Book Direct & Save 10%</Button>
+          <Button href="/book">Best price when you book direct</Button>
         </div>
       </section>
 
@@ -246,7 +252,7 @@ export default async function HomePage() {
               the stars by dinner.
             </p>
             <p className="text-lg leading-8 text-muted mb-8">
-              Queenstown&apos;s 45 minutes or Wanaka 30 mintes away when you want the
+              Queenstown&apos;s 45 minutes or Wanaka 30 minutes away when you want the
               bustle. By sunset, the rest of the world feels
               very far away.
             </p>
@@ -286,7 +292,7 @@ export default async function HomePage() {
               badge="Adults Only"
               description="50sqm of calm. Lake from the bed, stars through the roof, spa out the door."
               features={["Lake Views", "Vineyard Views","Private Spa", "Breakfast Included", "Super King Bed"]}
-              price="$650/night"
+              price={fromRate("dome-pinot")}
             />
             <AccommodationCard
               href="/dome-rose"
@@ -295,7 +301,7 @@ export default async function HomePage() {
               badge="Adults Only"
               description="40sqm geodesic dome tucked into the vines. Private spa, super-king bed, vineyard at the window."
               features={["Vineyard Views", "Private Spa", "Breakfast Included", "Super King Bed"]}
-              price="$599/night"
+              price={fromRate("dome-rose")}
             />
             <AccommodationCard
               href="/lakeside-cottage"
@@ -303,7 +309,7 @@ export default async function HomePage() {
               title="Lakeside Cottage"
               description="Self-contained lakefront cottage, sleeps 3. Direct Lake Dunstan access, and pet-friendly."
               features={["Lake Access", "Pet Friendly", "Sleeps 3", "Private Hot Tub","Weber BBQ"]}
-              price="$350/night"
+              price={fromRate("lakeside-cottage")}
             />
           </div>
         </div>
@@ -322,10 +328,6 @@ export default async function HomePage() {
               <div className="text-center">
                 <p className="text-4xl font-display text-burgundy">416</p>
                 <p className="text-sm text-muted">Verified Reviews</p>
-              </div>
-              <div className="text-center">
-                <p className="text-4xl font-display text-burgundy">33%</p>
-                <p className="text-sm text-muted">Return Guests</p>
               </div>
               <div className="text-center">
                 <p className="text-4xl font-display text-burgundy">98%</p>
@@ -430,7 +432,7 @@ export default async function HomePage() {
               { q: "How far from Queenstown and Wanaka?", a: "45 minutes from Queenstown via the Kawarau Gorge, and 30 minutes from Wanaka." },
               { q: "Can I bring my pet?", a: "The Lakeside Cottage is pet-friendly ($25 flat fee, max 2 dogs). The domes are adults-only and not suitable for pets." },
               { q: "What\u2019s the cancellation policy?", a: "Full refund if cancelled 14+ days before check-in. No refund within 13 days." },
-              { q: "Why book direct instead of Airbnb?", a: "Save 12\u201318% in service fees. Same stay, better price, and direct communication with your hosts." },
+              { q: "Why book direct instead of Airbnb?", a: "Best price, always: 10% off with code BOOKDIRECT, and 25% off your second night in the domes. Same stay, and you deal directly with your hosts." },
               {
                 q: "Are gift vouchers available?",
                 a: (

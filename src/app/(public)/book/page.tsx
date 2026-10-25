@@ -8,7 +8,7 @@ import {
 } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Book Your Stay | Lakeside Retreat",
+  title: "Book Your Stay",
   description:
     "Book your luxury glamping escape at Lakeside Retreat on Lake Dunstan, Central Otago. Choose from geodesic domes and a lakeside cottage.",
   robots: "noindex",
@@ -77,7 +77,7 @@ export default function BookPage() {
             <div className="bg-cream rounded-xl p-4">
               <p className="text-2xl mb-1">&#128176;</p>
               <p className="font-semibold text-body">Best Price</p>
-              <p className="text-xs text-muted">Save vs. Airbnb</p>
+              <p className="text-xs text-muted">10% off with code BOOKDIRECT</p>
             </div>
             <div className="bg-cream rounded-xl p-4">
               <p className="text-2xl mb-1">&#10003;</p>

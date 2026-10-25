@@ -1,21 +1,23 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { getAll, getById, getFromPrice } from "../accommodations";
-import { calculateLineItems } from "../stripe";
+import { getAll, getById } from "../accommodations";
+import { buildStayQuote, nightsOfStay } from "../pricing";
 
 describe("accommodations", () => {
-  it("getFromPrice returns the minimum basePrice across all properties", () => {
-    const expected = Math.min(...getAll().map((a) => a.basePrice));
-    expect(getFromPrice()).toBe(expected);
-    // Sanity: currently cottage at 350 (updated 2026-06 price change)
-    expect(getFromPrice()).toBe(350);
+  it("carries no nightly price: rates come live from Uplisting", () => {
+    // The booking page quotes Uplisting's calendar rate for each night. A
+    // base price here would be a second source of truth that drifts.
+    for (const acc of getAll()) {
+      expect(acc, `${acc.id} must not carry a nightly price`).not.toHaveProperty("basePrice");
+    }
+    const source = readFileSync(join(__dirname, "..", "accommodations.ts"), "utf8");
+    expect(source).not.toMatch(/basePrice/);
   });
 
   it("sticky-book-bar does not hardcode a dollar amount", () => {
-    // The sticky bar renders on every public page, so its price must
-    // derive from getFromPrice() — never a literal. Guarding against
-    // a regression where someone types `$365` or similar back in.
+    // The sticky bar renders on every public page. Nightly prices are live
+    // and vary by date, so a literal here would be wrong most of the year.
     const source = readFileSync(
       join(__dirname, "..", "..", "components", "sticky-book-bar.tsx"),
       "utf8"
@@ -23,9 +25,14 @@ describe("accommodations", () => {
     const hardcodedPrice = /\$\d{2,4}\b/.exec(source);
     expect(
       hardcodedPrice,
-      `sticky-book-bar.tsx must derive price from getFromPrice(), found literal "${hardcodedPrice?.[0]}"`
+      `sticky-book-bar.tsx must not carry a price literal, found "${hardcodedPrice?.[0]}"`
     ).toBeNull();
-    expect(source).toMatch(/getFromPrice\(\)/);
+  });
+
+  it("only the two domes carry the second-night discount", () => {
+    expect(getById("dome-pinot")!.secondNightDiscount).toBe(true);
+    expect(getById("dome-rose")!.secondNightDiscount).toBe(true);
+    expect(getById("lakeside-cottage")!.secondNightDiscount).toBeFalsy();
   });
 });
 
@@ -77,24 +84,34 @@ describe("pet policy", () => {
   });
 
   it("bills the cottage a flat pet fee and the domes none", () => {
+    const flat = (from: string, to: string) =>
+      Object.fromEntries(nightsOfStay(from, to).map((d) => [d, 400]));
     const cottage = getById("lakeside-cottage")!;
-    const { lineItems } = calculateLineItems(
-      cottage,
-      "2026-09-23",
-      "2026-09-26",
-      2,
-      2 // two dogs — still one flat fee
-    );
-    const petLine = lineItems.find((i) => i.name.includes("Pet"));
+    const { lineItems } = buildStayQuote({
+      accommodation: cottage,
+      checkIn: "2026-09-23",
+      checkOut: "2026-09-26",
+      guests: 2,
+      pets: 2, // two dogs — still one flat fee
+      rates: flat("2026-09-23", "2026-09-26"),
+    })!;
+    const petLine = lineItems.find((i) => i.label.includes("Pet"));
     expect(petLine, "cottage booking with pets must include a pet fee").toBeDefined();
     expect(petLine!.quantity).toBe(1);
-    expect(petLine!.amount).toBe(cottage.petFee! * 100);
+    expect(petLine!.amountCents).toBe(cottage.petFee! * 100);
 
     for (const id of ["dome-pinot", "dome-rose"]) {
       const dome = getById(id)!;
-      const result = calculateLineItems(dome, "2026-09-23", "2026-09-25", 2, 2);
+      const result = buildStayQuote({
+        accommodation: dome,
+        checkIn: "2026-09-23",
+        checkOut: "2026-09-25",
+        guests: 2,
+        pets: 2,
+        rates: flat("2026-09-23", "2026-09-25"),
+      })!;
       expect(
-        result.lineItems.find((i) => i.name.includes("Pet")),
+        result.lineItems.find((i) => i.label.includes("Pet")),
         `${id} must never be billed a pet fee`
       ).toBeUndefined();
     }

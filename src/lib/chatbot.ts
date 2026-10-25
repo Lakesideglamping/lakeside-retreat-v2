@@ -182,7 +182,7 @@ function formatAccommodationResponse(acc: Accommodation): string {
   response += `${acc.description}\n\n`;
   response += `**Size:** ${acc.size}\n`;
   response += `**Max Guests:** ${acc.maxGuests}\n`;
-  response += `**Price:** $${acc.price.base} NZD per night\n`;
+  response += `**Price:** from $${acc.price.base} NZD per night (varies by season — live prices at lakesideretreat.co.nz/book)\n`;
   response += `**Views:** ${acc.views}\n\n`;
   response += `**Amenities include:** ${acc.amenities.slice(0, 5).join(", ")}, and more.\n\n`;
 
@@ -199,7 +199,7 @@ function formatComparisonResponse(kb: KnowledgeBase): string {
 
   for (const acc of kb.accommodations) {
     response += `**${acc.name}** (${acc.size})\n`;
-    response += `- Price: $${acc.price.base} NZD/night\n`;
+    response += `- Price: from $${acc.price.base} NZD/night\n`;
     response += `- Max guests: ${acc.maxGuests}\n`;
     response += `- Best for: ${acc.maxGuests <= 2 ? "Couples" : "Small adult groups"}\n`;
     response += `- Pet-friendly: ${acc.petFriendly ? "Yes" : "No"}\n\n`;
@@ -265,7 +265,7 @@ ACCOMMODATIONS:
 ${kb.accommodations
   .map(
     (a) =>
-      `- ${a.name}: ${a.size}, $${a.price.base}/night, max ${a.maxGuests} guests, ${a.petFriendly ? "pet-friendly" : "no pets"}`
+      `- ${a.name}: ${a.size}, from $${a.price.base}/night (seasonal; live prices on the booking page), max ${a.maxGuests} guests, ${a.petFriendly ? "pet-friendly" : "no pets"}`
   )
   .join("\n")}
 

@@ -5,7 +5,7 @@ import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createContactPageSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Contact Lakeside Retreat | Cromwell, Central Otago",
+  title: "Contact Us | Cromwell, Central Otago",
   description:
     "Get in touch with Lakeside Retreat in Cromwell, Central Otago. Enquiries, availability, and bookings for luxury glamping domes and lakeside cottage. Call or email Steve and Sandy.",
   alternates: { canonical: "/contact" },

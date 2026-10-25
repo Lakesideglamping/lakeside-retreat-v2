@@ -5,7 +5,7 @@ import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "About Lakeside Retreat | Sustainable Luxury Accommodation, Central Otago",
+  title: "Our Story | Sustainable Luxury Accommodation, Central Otago",
   description:
     "Meet Steve and Sandy, hosts of Central Otago's premier sustainably powered retreat on Lake Dunstan. Our story of building luxury glamping domes and a lakeside cottage.",
   alternates: { canonical: "/our-story" },

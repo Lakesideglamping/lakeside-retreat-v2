@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { paymentSessionSchema } from "@/lib/validations";
 import { getById } from "@/lib/accommodations";
-import { createCheckoutSession, calculateLineItems, getSeasonalMultiplier } from "@/lib/stripe";
+import { createCheckoutSession } from "@/lib/stripe";
+import { getStayQuote } from "@/lib/quote";
 import { checkAvailability } from "@/lib/uplisting";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { isPastInNZ } from "@/lib/date-range";
@@ -105,12 +106,29 @@ export async function POST(request: Request) {
       );
     }
 
-    // Seasonal multiplier — computed once, passed to both calculateLineItems
-    // (for totalAmount response) and createCheckoutSession (to avoid a second lookup).
-    const seasonalMultiplier = await getSeasonalMultiplier(data.checkIn, data.checkOut);
+    // Price the stay server-side from live Uplisting rates — the same quote
+    // the booking page showed. If Uplisting is down and nothing is cached,
+    // there is no honest price to charge, so checkout stops here.
+    const quoted = await getStayQuote({
+      accommodation: data.accommodation,
+      checkIn: data.checkIn,
+      checkOut: data.checkOut,
+      guests: data.guests,
+      pets: data.pets || 0,
+    });
+    if (!quoted) {
+      return NextResponse.json(
+        { error: "Prices are temporarily unavailable. Please try again in a few minutes." },
+        { status: 503 }
+      );
+    }
+    const { quote } = quoted;
 
-    // Promo code validation and discount computation
-    let discountAmountCents = 0;
+    // Discounts: the dome second-night offer (already in the quote) plus any
+    // promo code. Stripe Checkout takes one coupon per session, so they are
+    // summed into a single deduction with a combined label.
+    let discountAmountCents = quote.discount?.amountCents ?? 0;
+    const discountLabels: string[] = quote.discount ? [quote.discount.label] : [];
     let appliedPromoCode: string | undefined;
 
     if (data.promoCode) {
@@ -149,40 +167,21 @@ export async function POST(request: Request) {
         );
       }
 
-      // Compute discount against the seasonally-adjusted base total
-      const { totalAmount: baseTotal } = calculateLineItems(
-        accommodation,
-        data.checkIn,
-        data.checkOut,
-        data.guests,
-        data.pets || 0,
-        seasonalMultiplier
-      );
-
+      // A percentage promo applies to what the guest would otherwise pay —
+      // after the second-night discount, not stacked on the undiscounted total.
+      const promoBaseCents = quote.totalCents;
+      let promoCents: number;
       if (promo.discount_type === "percentage") {
-        discountAmountCents = Math.round(
-          baseTotal * (Number(promo.discount_value) / 100)
-        );
+        promoCents = Math.round(promoBaseCents * (Number(promo.discount_value) / 100));
       } else {
-        // Fixed NZD discount — cap at the booking total
-        discountAmountCents = Math.min(
-          Math.round(Number(promo.discount_value) * 100),
-          baseTotal
-        );
+        // Fixed NZD discount — cap at what is left to pay
+        promoCents = Math.min(Math.round(Number(promo.discount_value) * 100), promoBaseCents);
       }
 
+      discountAmountCents += promoCents;
+      discountLabels.push(`Promo code: ${promo.code}`);
       appliedPromoCode = promo.code;
     }
-
-    // Calculate expected pricing for the response
-    const { totalAmount } = calculateLineItems(
-      accommodation,
-      data.checkIn,
-      data.checkOut,
-      data.guests,
-      data.pets || 0,
-      seasonalMultiplier
-    );
 
     // Create Stripe session
     const session = await createCheckoutSession({
@@ -195,16 +194,18 @@ export async function POST(request: Request) {
       guestPhone: data.guestPhone,
       specialRequests: data.specialRequests,
       pets: data.pets,
-      seasonalMultiplier,
+      quote,
+      rateSource: quoted.source,
       promoCode: appliedPromoCode,
       discountAmountCents,
+      discountLabel: discountLabels.join(" + ") || undefined,
     });
 
     return NextResponse.json({
       success: true,
       sessionId: session.sessionId,
       url: session.url,
-      totalAmount: (totalAmount - discountAmountCents) / 100,
+      totalAmount: (quote.subtotalCents - discountAmountCents) / 100,
     });
   } catch (err) {
     logger.error("[api/payments/create-session] Error", { err });

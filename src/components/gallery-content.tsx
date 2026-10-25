@@ -21,7 +21,7 @@ const galleryItems = [
   { src: "/images/cottagebedroom.jpeg", alt: "Lakeside Cottage bedroom with mountain views", title: "Cottage Bedroom", categories: ["cottage"] as Category[] },
   { src: "/images/lakesidecottageinterior.jpg", alt: "Lakeside Cottage sitting room", title: "Lakeside Cottage", categories: ["cottage"] as Category[] },
   { src: "/images/cottagebathroom.jpeg", alt: "Lakeside Cottage bathroom", title: "Lakeside Cottage", categories: ["cottage"] as Category[] },
-  { src: "/images/CottageMountainView.jpeg", alt: "Lakeside Cottage with mountain views", title: "Cottage moutain view", categories: ["views", "cottage"] as Category[] },
+  { src: "/images/CottageMountainView.jpeg", alt: "Lakeside Cottage with mountain views", title: "Cottage mountain view", categories: ["views", "cottage"] as Category[] },
   { src: "/images/domes-vineyard-sunset.jpg", alt: "Both glamping domes at Lakeside Retreat with Lake Dunstan and sunset sky", title: "Domes at Sunset", categories: ["domes"] as Category[] },
   { src: "/images/Pinotfront.jpeg", alt: "Dome Pinot exterior with snow-capped mountain views", title: "Dome Pinot Exterior", categories: ["domes"] as Category[] },
   { src: "/images/dome-rose-spa1.jpeg", alt: "Dome Rosé nestled in golden autumn vineyard by the lake", title: "Dome Rosé in Autumn", categories: ["domes", "amenities"] as Category[] },

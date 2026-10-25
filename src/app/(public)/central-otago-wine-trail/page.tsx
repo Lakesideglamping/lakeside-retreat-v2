@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HeroBackground } from "@/components/hero-background";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema, createFaqSchema } from "@/lib/structured-data";
+import { fromRate } from "@/lib/advertised-rates";
 
 export const metadata: Metadata = {
   title: "Central Otago Wine Trail | Best Wineries Near Cromwell & Bannockburn",
@@ -230,9 +231,9 @@ export default function WineTrailPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", price: "$650/night" },
-              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", price: "$599/night" },
-              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", price: "$350/night" },
+              { href: "/dome-pinot", image: "/images/Pinotfront.jpeg", title: "Dome Pinot", price: fromRate("dome-pinot") },
+              { href: "/dome-rose", image: "/images/dome-rose-spa1.jpeg", title: "Dome Ros\u00e9", price: fromRate("dome-rose") },
+              { href: "/lakeside-cottage", image: "/images/lakeside-cottage-exterior.jpeg", title: "Lakeside Cottage", price: fromRate("lakeside-cottage") },
             ].map((acc) => (
               <Link
                 key={acc.href}
@@ -277,7 +278,7 @@ export default function WineTrailPage() {
           <h2 className="font-display text-4xl mb-4">Book Your Wine Country Escape</h2>
           <p className="text-lg text-muted mb-8">
             30+ cellar doors within 15 minutes. Spa or hot tub to return to each evening.
-            Domes $599 &bull; Cottage $350/night.
+            Domes {fromRate("dome-rose")} &bull; Cottage {fromRate("lakeside-cottage")}.
           </p>
           <Button href="/book">Check Availability & Book</Button>
         </div>
