@@ -122,7 +122,6 @@ describe("checkAvailability", () => {
   it("fails closed in production when the API is unconfigured", async () => {
     delete process.env.UPLISTING_API_KEY;
     const prev = process.env.NODE_ENV;
-    // @ts-expect-error writing a test-only NODE_ENV
     vi.stubEnv("NODE_ENV", "production");
     try {
       const { checkAvailability } = await import("../uplisting");
