@@ -6,6 +6,8 @@
  *   3. fetchBlockedDates returns [] without a key and parses the API shape.
  *   4. checkAvailability treats an unconfigured prod env as fail-closed.
  *   5. verifyWebhookSignature matches only on correct HMAC, constant-time.
+ *   6. syncBooking blocks check_in → check_out: Uplisting reads `to` as the
+ *      check-out date, so sending the last night instead leaves it on sale.
  *
  * Caches are mocked so we always hit the mocked `fetch`.
  */
@@ -121,7 +123,7 @@ describe("checkAvailability", () => {
     delete process.env.UPLISTING_API_KEY;
     const prev = process.env.NODE_ENV;
     // @ts-expect-error writing a test-only NODE_ENV
-    process.env.NODE_ENV = "production";
+    vi.stubEnv("NODE_ENV", "production");
     try {
       const { checkAvailability } = await import("../uplisting");
       expect(
@@ -141,6 +143,41 @@ describe("checkAvailability", () => {
     expect(
       await checkAvailability("dome-pinot", "2026-05-01", "2026-05-03")
     ).toBe(true);
+  });
+});
+
+describe("syncBooking", () => {
+  it("blocks every night of the stay by sending check-out as the range end", async () => {
+    // A 10–12 Dec stay is the nights of the 10th and 11th. Uplisting treats
+    // `to` as the check-out date, so the range sent must end on the 12th:
+    // the old check_out - 1 left the 11th open to the OTAs.
+    vi.stubEnv("NODE_ENV", "production");
+    process.env.UPLISTING_API_KEY = "k";
+    process.env.UPLISTING_COTTAGE_ID = "80360";
+    const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { syncBooking } = await import("../uplisting");
+    await syncBooking({
+      accommodation: "lakeside-cottage",
+      checkIn: "2026-12-10",
+      checkOut: "2026-12-12",
+      guestName: "Laura",
+      guestEmail: "laura@example.com",
+      guests: 2,
+    });
+
+    expect(fetchMock).toHaveBeenCalledOnce();
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect(url).toBe("https://connect.uplisting.io/calendar/80360");
+    expect(init.method).toBe("POST");
+    const body = JSON.parse(String(init.body));
+    expect(body.calendar.days).toHaveLength(1);
+    expect(body.calendar.days[0]).toMatchObject({
+      available: false,
+      from: "2026-12-10",
+      to: "2026-12-12",
+    });
   });
 });
 
