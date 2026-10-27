@@ -6,6 +6,7 @@ import { adminGet, adminDelete } from "@/lib/admin-api";
 import { BlockDatesForm } from "./block-dates-form";
 import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
 import { Alert } from "@/components/admin/ui/alert";
+import { formatCalendarDate } from "@/lib/format-date";
 
 interface BlockedDate {
   id: number;
@@ -211,7 +212,8 @@ export function CalendarView({
   });
 
   // Format date range label
-  const rangeLabel = `${new Date(startDate).toLocaleDateString("en-NZ", { day: "numeric", month: "short", year: "numeric" })} — ${new Date(endDate).toLocaleDateString("en-NZ", { day: "numeric", month: "short", year: "numeric" })}`;
+  const rangeFormat: Intl.DateTimeFormatOptions = { day: "numeric", month: "short", year: "numeric" };
+  const rangeLabel = `${formatCalendarDate(startDate, rangeFormat)} — ${formatCalendarDate(endDate, rangeFormat)}`;
 
   return (
     <div className="space-y-4">

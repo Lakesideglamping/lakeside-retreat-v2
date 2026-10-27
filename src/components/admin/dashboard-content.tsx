@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Card } from "@/components/admin/ui/card";
 import { Badge } from "@/components/admin/ui/badge";
 import { Alert } from "@/components/admin/ui/alert";
+import { formatCalendarDate } from "@/lib/format-date";
 
 interface Stats {
   totalBookings: number;
@@ -101,11 +102,7 @@ function formatAccommodation(slug: string): string {
 }
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return formatCalendarDate(dateStr, { month: "short", day: "numeric", year: "numeric" }, "en-US");
 }
 
 export function DashboardContent({

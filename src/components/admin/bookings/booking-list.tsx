@@ -7,6 +7,7 @@ import { DataTable } from "@/components/admin/ui/data-table";
 import { SearchInput } from "@/components/admin/ui/search-input";
 import { Badge } from "@/components/admin/ui/badge";
 import { Alert } from "@/components/admin/ui/alert";
+import { formatCalendarDate } from "@/lib/format-date";
 
 interface Booking {
   id: string;
@@ -71,12 +72,7 @@ const paymentVariant: Record<string, "success" | "warning" | "error" | "info" | 
 };
 
 function formatDate(dateStr: string): string {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return formatCalendarDate(dateStr, { month: "short", day: "numeric", year: "numeric" }, "en-US");
 }
 
 function formatCurrency(amount: number): string {

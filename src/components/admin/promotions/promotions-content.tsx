@@ -10,6 +10,7 @@ import { ConfirmDialog } from "@/components/admin/ui/confirm-dialog";
 import { SearchInput } from "@/components/admin/ui/search-input";
 import { adminGet, adminPost, adminPut, adminDelete, adminPatch } from "@/lib/admin-api";
 import { PromoForm, type PromoFormData } from "./promo-form";
+import { formatCalendarDate } from "@/lib/format-date";
 
 interface PromoCode {
   id: number;
@@ -53,11 +54,7 @@ const typeVariant: Record<string, "info" | "success" | "warning" | "default"> = 
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "-";
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return formatCalendarDate(dateStr, { month: "short", day: "numeric", year: "numeric" }, "en-US");
 }
 
 function formatDiscount(type: string, value: number): string {

@@ -1,3 +1,5 @@
+import { formatCalendarDate, formatNZDateTime } from "./format-date";
+
 export interface BookingEmailData {
   guest_name: string;
   guest_email: string;
@@ -73,12 +75,15 @@ function displayReference(data: BookingEmailData): string {
   return data.booking_reference || data.booking_id || "";
 }
 
+// Check-in and check-out are calendar dates. formatCalendarDate renders them
+// the same on any server; the naive toLocaleDateString this replaced was
+// right on Render only because Render runs UTC.
 function formatDateNZ(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("en-NZ");
+  return formatCalendarDate(dateStr);
 }
 
 function formatDateLong(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("en-NZ", {
+  return formatCalendarDate(dateStr, {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -366,7 +371,10 @@ export function checkoutReviewReminderHtml(data: BookingEmailData): string {
   // No accommodation name: the rewritten copy thanks the guest for their stay
   // without naming the property, so formatAccommodationName is not needed here.
   const guestName = escapeHtml(data.guest_name);
-  const googleReviewUrl = "https://g.page/r/lakeside-retreat-cromwell/review?utm_source=email&utm_medium=review_reminder";
+  // The "Get more reviews" link from the Lakeside Glamping Ltd Google Business
+  // Profile (2026-10-27). It opens the write-a-review dialog on the Maps
+  // listing. The previous value was a guessed slug that landed on google.com.
+  const googleReviewUrl = "https://g.page/r/CUB53Fy9QAXJEBM/review?utm_source=email&utm_medium=review_reminder";
   
   return layout("How was your stay?", `
     <p>Hi ${guestName},</p>
@@ -467,7 +475,7 @@ export function systemAlertHtml(data: {
     <div style="padding:16px 20px;border-radius:6px;margin:0 0 20px;border-left:4px solid ${borderColor};background-color:${bgColor};">
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Alert Details</h3>
       <p style="margin:4px 0;"><strong>Type:</strong> ${alertTypeUpper}</p>
-      <p style="margin:4px 0;"><strong>Time:</strong> ${escapeHtml(new Date().toLocaleString("en-NZ", { timeZone: "Pacific/Auckland", timeZoneName: "short" }))}</p>
+      <p style="margin:4px 0;"><strong>Time:</strong> ${escapeHtml(formatNZDateTime(new Date(), { dateStyle: "medium", timeStyle: "short", timeZoneName: "short" }))}</p>
       <p style="margin:4px 0;"><strong>Message:</strong> ${message}</p>
     </div>
 

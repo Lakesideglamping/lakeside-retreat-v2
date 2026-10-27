@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import { getById } from "./accommodations";
 import type { StayQuote } from "./pricing";
+import { formatCalendarDate } from "./format-date";
 
 export const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -78,18 +79,17 @@ export async function createCheckoutSession(
   const quotedTotalCents =
     params.quote.subtotalCents - (params.discountAmountCents ?? 0);
 
-  const checkInFormatted = new Date(params.checkIn).toLocaleDateString("en-NZ", {
+  // Calendar dates for the Stripe line item the guest sees at checkout and on
+  // the receipt. Pinned so they match the booking form whatever zone the
+  // server runs in.
+  const stayDateFormat: Intl.DateTimeFormatOptions = {
     weekday: "short",
     day: "numeric",
     month: "short",
     year: "numeric",
-  });
-  const checkOutFormatted = new Date(params.checkOut).toLocaleDateString("en-NZ", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  };
+  const checkInFormatted = formatCalendarDate(params.checkIn, stayDateFormat);
+  const checkOutFormatted = formatCalendarDate(params.checkOut, stayDateFormat);
 
   // Create an ephemeral Stripe coupon when a promo discount is being applied.
   // The coupon shows as a named deduction in Stripe Checkout, separate from the

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { retrieveCheckoutSession } from "@/lib/stripe";
 import { Button } from "@/components/ui/button";
 import { TrackPurchase } from "@/components/analytics/track-purchase";
+import { formatCalendarDate } from "@/lib/format-date";
 
 export const metadata: Metadata = {
   title: "Booking Confirmed",
@@ -18,8 +19,7 @@ const ACCOMMODATION_LABELS: Record<string, string> = {
 };
 
 function formatDate(dateStr: string): string {
-  const [y, m, d] = dateStr.split("-");
-  return new Date(Number(y), Number(m) - 1, Number(d)).toLocaleDateString("en-NZ", {
+  return formatCalendarDate(dateStr, {
     weekday: "short", day: "numeric", month: "long", year: "numeric",
   });
 }
