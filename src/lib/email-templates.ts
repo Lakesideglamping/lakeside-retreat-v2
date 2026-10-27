@@ -371,7 +371,10 @@ export function checkoutReviewReminderHtml(data: BookingEmailData): string {
   // No accommodation name: the rewritten copy thanks the guest for their stay
   // without naming the property, so formatAccommodationName is not needed here.
   const guestName = escapeHtml(data.guest_name);
-  const googleReviewUrl = "https://g.page/r/lakeside-retreat-cromwell/review?utm_source=email&utm_medium=review_reminder";
+  // The "Get more reviews" link from the Lakeside Glamping Ltd Google Business
+  // Profile (2026-10-27). It opens the write-a-review dialog on the Maps
+  // listing. The previous value was a guessed slug that landed on google.com.
+  const googleReviewUrl = "https://g.page/r/CUB53Fy9QAXJEBM/review?utm_source=email&utm_medium=review_reminder";
   
   return layout("How was your stay?", `
     <p>Hi ${guestName},</p>
