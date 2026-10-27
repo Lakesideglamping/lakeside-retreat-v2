@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/db";
 import { JsonLd, createLodgingBusinessSchema, createOrganizationSchema, createWebSiteSchema, createFaqSchema, createBreadcrumbSchema, fetchReviewStats } from "@/lib/structured-data";
 import { fromRate } from "@/lib/advertised-rates";
+import { formatCalendarDate } from "@/lib/format-date";
 
 // The teaser reviews come from the database, so re-render hourly rather than
 // on every request — keeps the busiest page on the CDN.
@@ -105,13 +106,7 @@ export default async function HomePage() {
       text: r.review_text ?? "",
       accommodation: media.label,
       image: media.image,
-      date: r.stay_date
-        ? r.stay_date.toLocaleDateString("en-NZ", {
-            month: "long",
-            year: "numeric",
-            timeZone: "Pacific/Auckland",
-          })
-        : "",
+      date: formatCalendarDate(r.stay_date, { month: "long", year: "numeric" }),
     };
   });
 

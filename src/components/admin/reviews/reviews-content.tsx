@@ -12,6 +12,7 @@ import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
 import { ConfirmDialog } from "@/components/admin/ui/confirm-dialog";
 import { SearchInput } from "@/components/admin/ui/search-input";
 import { adminGet, adminPost, adminPut, adminDelete } from "@/lib/admin-api";
+import { formatNZDateTime } from "@/lib/format-date";
 
 interface Review {
   id: number;
@@ -80,13 +81,10 @@ function renderStars(rating: number | null): React.ReactNode {
   );
 }
 
+// created_at is a moment, shown as its New Zealand date.
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "-";
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return formatNZDateTime(dateStr, { month: "short", day: "numeric", year: "numeric" }, "en-US");
 }
 
 const emptyReviewForm = {

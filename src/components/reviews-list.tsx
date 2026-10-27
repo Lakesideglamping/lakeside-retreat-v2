@@ -1,3 +1,5 @@
+import { formatCalendarDate } from "@/lib/format-date";
+
 // Server component by design: this list is a fixed single page of reviews
 // with no filters and no "Show More", so it needs no client-side state and
 // ships no JavaScript to the browser.
@@ -24,13 +26,7 @@ const PROPERTY_DISPLAY: Record<string, string> = {
 };
 
 function formatStayDate(dateStr: string | null): string {
-  if (!dateStr) return "";
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-NZ", {
-    month: "long",
-    year: "numeric",
-    timeZone: "Pacific/Auckland",
-  });
+  return formatCalendarDate(dateStr, { month: "long", year: "numeric" });
 }
 
 function renderStars(rating: number) {

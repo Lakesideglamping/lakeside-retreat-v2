@@ -8,6 +8,7 @@ import { DataTable } from "@/components/admin/ui/data-table";
 import { Badge } from "@/components/admin/ui/badge";
 import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
 import { Alert } from "@/components/admin/ui/alert";
+import { formatCalendarDate, formatNZDateTime } from "@/lib/format-date";
 
 interface Stats {
   reviewRequests: number;
@@ -63,13 +64,18 @@ const reviewStatusVariant: Record<string, "success" | "warning" | "info" | "defa
   completed: "info",
 };
 
+const SHORT_DATE: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", year: "numeric" };
+
+// check_out is a calendar date.
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "-";
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return formatCalendarDate(dateStr, SHORT_DATE, "en-US");
+}
+
+// created_at is a moment, shown as its New Zealand date.
+function formatMomentDate(dateStr: string | null): string {
+  if (!dateStr) return "-";
+  return formatNZDateTime(dateStr, SHORT_DATE, "en-US");
 }
 
 interface MarketingContentProps {
@@ -215,7 +221,7 @@ export function MarketingContent({ initialData }: MarketingContentProps = {}) {
     {
       key: "created_at",
       header: "Created",
-      render: (v: unknown) => formatDate(v as string | null),
+      render: (v: unknown) => formatMomentDate(v as string | null),
       sortable: true,
     },
   ];

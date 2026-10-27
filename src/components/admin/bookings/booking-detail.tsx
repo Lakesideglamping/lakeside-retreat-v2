@@ -7,6 +7,7 @@ import { Badge } from "@/components/admin/ui/badge";
 import { Alert } from "@/components/admin/ui/alert";
 import { ConfirmDialog } from "@/components/admin/ui/confirm-dialog";
 import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
+import { formatCalendarDate, formatNZDateTime } from "@/lib/format-date";
 
 interface Booking {
   id: string;
@@ -105,23 +106,22 @@ const syncVariant: Record<string, "success" | "warning" | "error" | "info" | "de
   skipped: "default",
 };
 
+// Check-in/out are calendar dates; created/sent/released are moments shown in
+// NZ time. Both are pinned so an admin browsing from anywhere sees the same.
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return formatCalendarDate(
+    dateStr,
+    { weekday: "short", month: "short", day: "numeric", year: "numeric" },
+    "en-US"
+  );
 }
 
 function formatDateTime(dateStr: string): string {
-  return new Date(dateStr).toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  return formatNZDateTime(
+    dateStr,
+    { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" },
+    "en-US"
+  );
 }
 
 function formatCurrency(amount: number): string {
