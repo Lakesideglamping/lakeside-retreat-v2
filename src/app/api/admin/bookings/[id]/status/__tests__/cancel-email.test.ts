@@ -44,7 +44,26 @@ vi.mock("@/lib/admin-route", () => ({
   getClientIp: () => "1.2.3.4",
 }));
 
-const baseBooking = {
+// Only the columns the route reads. Nullable ones are typed as such so a
+// test can clear them the way a real row would have them.
+type BookingRow = {
+  id: string;
+  reference: string;
+  guest_name: string;
+  guest_email: string;
+  accommodation: string;
+  check_in: Date;
+  check_out: Date;
+  guests: number;
+  total_price: number | null;
+  status: string | null;
+  payment_status: string | null;
+  stripe_payment_id: string | null;
+  booking_source: string | null;
+  deleted_at: Date | null;
+};
+
+const baseBooking: BookingRow = {
   id: "6d2f3a1e-9c4b-4e7a-b8d1-2f5c6a7b8c9d",
   reference: "BK-2026-00042",
   guest_name: "Sarah Johnson",
@@ -61,7 +80,7 @@ const baseBooking = {
   deleted_at: null,
 };
 
-async function cancel(booking: Partial<typeof baseBooking>) {
+async function cancel(booking: Partial<BookingRow>) {
   const row = { ...baseBooking, ...booking };
   findFirst.mockResolvedValue(row);
   update.mockImplementation(async ({ data }: { data: Record<string, unknown> }) => ({
