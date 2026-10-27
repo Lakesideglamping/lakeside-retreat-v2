@@ -3,7 +3,6 @@ import {
   bookingConfirmationCottageHtml,
   preArrivalHtml,
   checkoutReviewReminderHtml,
-  paymentFailureHtml,
   cancellationHtml,
   systemAlertHtml,
   type BookingEmailData,
@@ -31,7 +30,8 @@ export const sampleBooking: BookingEmailData = {
   check_out: "2026-05-15",
   num_guests: 2,
   total_price: 1280,
-  booking_id: "BK-2026-00042",
+  booking_id: "6d2f3a1e-9c4b-4e7a-b8d1-2f5c6a7b8c9d",
+  booking_reference: "BK-2026-00042",
   special_requests: "Celebrating our 5th anniversary — any chance of a late checkout?",
 };
 
@@ -94,13 +94,6 @@ export const emailPreviews: EmailPreview[] = [
     description: "Sent when a guest cancels within 14 days of arrival.",
     whenSent: "Manual cancel within 14 days",
     html: () => cancellationHtml({ ...sampleBooking, refundEligible: false }),
-  },
-  {
-    id: "payment_failure",
-    label: "Payment failure notice",
-    description: "Sent when a scheduled payment fails.",
-    whenSent: "Stripe payment_intent.payment_failed",
-    html: () => paymentFailureHtml(sampleBooking),
   },
   {
     id: "system_alert",

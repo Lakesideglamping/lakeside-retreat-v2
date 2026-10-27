@@ -10,7 +10,6 @@ import {
   bookingConfirmationCottageHtml,
   preArrivalHtml,
   checkoutReviewReminderHtml,
-  paymentFailureHtml,
   cancellationHtml,
   systemAlertHtml,
 } from "./email-templates";
@@ -150,6 +149,9 @@ interface LegacyBookingEmailData {
   guests: number;
   totalAmount: number;
   bookingId?: string;
+  // Short guest-facing reference (BK-2026-00042). Shown in the email; bookingId
+  // is still what the send is logged against.
+  bookingReference?: string;
   depositStatus?: "held" | "failed_to_hold" | "pending";
 }
 
@@ -188,6 +190,7 @@ export async function sendBookingConfirmation(
   const safeCheckOut = escapeHtml(data.checkOut);
   const safeGuests = escapeHtml(data.guests);
   const safeTotal = escapeHtml(data.totalAmount.toFixed(2));
+  const safeReference = escapeHtml(data.bookingReference ?? "");
 
   // The domes and the cottage get different confirmations: the copy names the
   // spa vs the hot tub, the non-smoking wording, and which side of the
@@ -215,6 +218,7 @@ export async function sendBookingConfirmation(
       // so $650 renders as $650.00 rather than $650.
       total_price: data.totalAmount.toFixed(2),
       booking_id: data.bookingId,
+      booking_reference: data.bookingReference,
     }),
   }, { template: "booking_confirmation_guest", bookingId: data.bookingId });
 
@@ -227,6 +231,7 @@ export async function sendBookingConfirmation(
       <div style="font-family: Arial, sans-serif; max-width: 600px;">
         <h2 style="color: #2d5a5a;">New Booking Received</h2>
         <table style="width: 100%; border-collapse: collapse;">
+          ${safeReference ? `<tr><td style="padding: 8px; font-weight: bold;">Reference</td><td style="padding: 8px;">${safeReference}</td></tr>` : ""}
           <tr><td style="padding: 8px; font-weight: bold;">Guest</td><td style="padding: 8px;">${safeGuestName} (${safeGuestEmail})</td></tr>
           <tr><td style="padding: 8px; font-weight: bold;">Accommodation</td><td style="padding: 8px;">${safeAccommodation}</td></tr>
           <tr><td style="padding: 8px; font-weight: bold;">Dates</td><td style="padding: 8px;">${safeCheckIn} to ${safeCheckOut}</td></tr>
@@ -281,23 +286,30 @@ export async function sendCheckoutReviewReminder(
   logger.info(`Review reminder email sent to ${booking.guest_email}`);
 }
 
-export async function sendPaymentFailureNotification(
-  booking: TemplateBookingData
-): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("Email not configured - payment failure notification skipped");
-    return;
+/**
+ * Has a given template already gone out for this booking?
+ *
+ * The cancellation email has two senders — the admin cancel route and the
+ * Stripe charge.refunded webhook — and an admin refund fires both within a
+ * second of each other. The booking's status alone cannot settle who sends,
+ * because the webhook can land before the admin route has written
+ * "cancelled". email_sends is the one record both can consult, so each checks
+ * it before sending. A DB error here reads as "not sent": a duplicate email
+ * is the lesser harm than a cancelled guest hearing nothing.
+ */
+export async function hasSentEmail(
+  bookingId: string,
+  template: string
+): Promise<boolean> {
+  try {
+    const row = await prisma.email_sends.findFirst({
+      where: { booking_id: bookingId, template, status: "sent" },
+      select: { id: true },
+    });
+    return row !== null;
+  } catch {
+    return false;
   }
-
-  const idSlice = booking.booking_id ? booking.booking_id.slice(0, 8) : "";
-  await sendAndLog(transporter, {
-    from: fromAddress(),
-    to: booking.guest_email,
-    subject: `Payment Issue — Lakeside Retreat${idSlice ? ` Booking #${idSlice}` : ""}`,
-    html: paymentFailureHtml(booking),
-  }, { template: "payment_failure", bookingId: booking.booking_id });
-  logger.info(`Payment failure notification sent to ${booking.guest_email}`);
 }
 
 export async function sendCancellationConfirmation(

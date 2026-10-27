@@ -393,13 +393,14 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
     throw new Error(`No Uplisting property ID for ${data.accommodation}`);
   }
 
-  // Guest leaves on check-out morning, so the last blocked night is
-  // check_out - 1. Matches the checkout-exclusive convention used by
-  // checkAvailability / fetchBlockedDates elsewhere in this file.
-  const lastNight = new Date(data.checkOut);
-  lastNight.setDate(lastNight.getDate() - 1);
-  const toDate = nzDateString(lastNight);
-
+  // Uplisting reads `to` as the check-out date, not the last night: a block
+  // from 2026-12-10 to 2026-12-11 closes only the night of the 10th. This
+  // used to send check_out - 1 on the opposite assumption, and every direct
+  // booking since April came through one night short — the 10–12 Dec
+  // cottage stay left the 11th on sale to the OTAs and on our own booking
+  // page, which draws its greyed-out dates from Uplisting. So the range is
+  // check_in → check_out exactly as the guest booked it, and the nights it
+  // covers are the same ones checkAvailability walks (check_out exclusive).
   const reason = `Direct booking — ${data.guestName} (${data.guestEmail})`;
 
   const res = await fetchWithRetry(`${API_BASE}/calendar/${propertyId}`, {
@@ -410,7 +411,9 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
     },
     body: JSON.stringify({
       calendar: {
-        days: [{ available: false, from: data.checkIn, to: toDate, reason }],
+        days: [
+          { available: false, from: data.checkIn, to: data.checkOut, reason },
+        ],
       },
     }),
   });
@@ -426,7 +429,6 @@ export async function syncBooking(data: SyncBookingData): Promise<void> {
     guestName: data.guestName,
     checkIn: data.checkIn,
     checkOut: data.checkOut,
-    lastNight: toDate,
   });
   setCache(`blocked-dates-${data.accommodation}`, null);
   invalidateDbCache(`cache:blocked-dates:${data.accommodation}`).catch(() => {});

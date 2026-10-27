@@ -10,6 +10,7 @@ import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
 
 interface Booking {
   id: string;
+  reference: string;
   guest_name: string;
   guest_email: string;
   guest_phone: string | null;
@@ -61,15 +62,15 @@ interface EmailSendEntry {
 // Labels for rows already in email_log — a historical record, not a list of
 // templates we still send. abandoned_checkout stays: the feature is gone, but
 // six past sends are still in the log and would otherwise display as a raw key.
-// during_stay and payment_notification are absent for the opposite reason —
-// both were removed having never sent once, so there is nothing to label.
+// during_stay, payment_notification and payment_failure are absent for the
+// opposite reason — all were removed having never sent once, so there is
+// nothing to label.
 const emailTemplateLabels: Record<string, string> = {
   booking_confirmation_guest: "Booking confirmation (guest)",
   booking_confirmation_host: "Booking notification (host)",
   pre_arrival: "Pre-arrival instructions",
   checkout_review_reminder: "Post-stay thank-you & review",
   abandoned_checkout: "Abandoned checkout reminder",
-  payment_failure: "Payment failure notice",
   cancellation: "Cancellation confirmation",
   contact_enquiry: "Contact form enquiry",
   system_alert: "System alert",
@@ -402,7 +403,7 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
           </button>
           <h1 className="text-2xl font-bold text-gray-900">{booking.guest_name}</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Booking {booking.id.slice(0, 8)}... | {formatAccommodation(booking.accommodation)}
+            {booking.reference} | {formatAccommodation(booking.accommodation)}
           </p>
         </div>
         <div className="flex items-center gap-2">

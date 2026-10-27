@@ -6,6 +6,9 @@ export interface BookingEmailData {
   check_out: string;
   total_price?: number | string;
   booking_id?: string;
+  // Guest-facing reference (BK-2026-00042). Preferred over booking_id in
+  // anything a guest reads; booking_id (the UUID) stays for logging and joins.
+  booking_reference?: string;
   num_guests?: number;
   special_requests?: string;
 }
@@ -59,6 +62,15 @@ function formatPrice(value: number | string | undefined): string {
   if (value === null || value === undefined || value === "") return "";
   const n = typeof value === "number" ? value : Number(String(value).trim());
   return Number.isFinite(n) ? n.toFixed(2) : String(value);
+}
+
+/**
+ * What the guest sees as their "Booking ID": the short reference when the
+ * booking has one, else the UUID, so an email for a booking created before
+ * references existed still shows something that identifies it.
+ */
+function displayReference(data: BookingEmailData): string {
+  return data.booking_reference || data.booking_id || "";
 }
 
 function formatDateNZ(dateStr: string): string {
@@ -153,7 +165,7 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
   const guestName = escapeHtml(data.guest_name);
   const numGuests = escapeHtml(data.num_guests);
   const totalPrice = escapeHtml(formatPrice(data.total_price));
-  const bookingId = escapeHtml(data.booking_id);
+  const bookingId = escapeHtml(displayReference(data));
 
   return layout("Booking Confirmed", `
     <p>Dear ${guestName},</p>
@@ -166,7 +178,7 @@ export function bookingConfirmationHtml(data: BookingEmailData): string {
       <p style="margin:4px 0;">Check-out Date: ${formatDateLong(data.check_out)} (10:00 AM)</p>
       ${data.num_guests ? `<p style="margin:4px 0;">No. of Guests: ${numGuests}</p>` : ""}
       ${data.total_price ? `<p style="margin:4px 0;">Total: $${totalPrice} NZD</p>` : ""}
-      ${data.booking_id ? `<p style="margin:4px 0;">Booking ID: ${bookingId}</p>` : ""}
+      ${bookingId ? `<p style="margin:4px 0;">Booking ID: ${bookingId}</p>` : ""}
     </div>
 
     <h5 style="font-size:16px;color:#2d5a5a;">For your stay:</h5>
@@ -222,7 +234,7 @@ export function bookingConfirmationCottageHtml(data: BookingEmailData): string {
   const guestName = escapeHtml(data.guest_name);
   const numGuests = escapeHtml(data.num_guests);
   const totalPrice = escapeHtml(formatPrice(data.total_price));
-  const bookingId = escapeHtml(data.booking_id);
+  const bookingId = escapeHtml(displayReference(data));
 
   return layout("Booking Confirmed", `
     <p>Dear ${guestName},</p>
@@ -235,7 +247,7 @@ export function bookingConfirmationCottageHtml(data: BookingEmailData): string {
       <p style="margin:4px 0;">Check-out Date: ${formatDateLong(data.check_out)} (10:00 AM)</p>
       ${data.num_guests ? `<p style="margin:4px 0;">No. of Guests: ${numGuests}</p>` : ""}
       ${data.total_price ? `<p style="margin:4px 0;">Total: $${totalPrice} NZD</p>` : ""}
-      ${data.booking_id ? `<p style="margin:4px 0;">Booking ID: ${bookingId}</p>` : ""}
+      ${bookingId ? `<p style="margin:4px 0;">Booking ID: ${bookingId}</p>` : ""}
     </div>
 
     <h5 style="font-size:16px;color:#2d5a5a;">For your stay:</h5>
@@ -376,43 +388,6 @@ export function checkoutReviewReminderHtml(data: BookingEmailData): string {
   `);
 }
 
-export function paymentFailureHtml(data: BookingEmailData): string {
-  const name = escapeHtml(formatAccommodationName(data.accommodation));
-  const guestName = escapeHtml(data.guest_name);
-  const numGuests = escapeHtml(data.num_guests);
-  const totalPrice = escapeHtml(formatPrice(data.total_price));
-  const idSlice = escapeHtml(data.booking_id ? data.booking_id.slice(0, 8) : "");
-
-  return layout("Payment Issue", `
-    <p>Hi ${guestName},</p>
-    <p>We noticed that the payment for your booking didn't go through. Don't worry &mdash; these things happen, and your booking details are still saved.</p>
-
-    <div ${alertBox("#ffc107")}>
-      <h4 style="margin:0 0 6px;">What happened?</h4>
-      <p style="margin:0;">Your payment could not be processed. This can happen for a number of reasons, such as insufficient funds, an expired card, or a temporary issue with your bank.</p>
-    </div>
-
-    <div ${detailsBox}>
-      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Your Booking</h3>
-      <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
-      <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateNZ(data.check_in)}</p>
-      <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateNZ(data.check_out)}</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
-      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${totalPrice} NZD</p>` : ""}
-      ${idSlice ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${idSlice}</p>` : ""}
-    </div>
-
-    <p>To complete your reservation, please try your payment again:</p>
-
-    <div style="text-align:center;margin:28px 0;">
-      <a href="https://lakesideretreat.co.nz/stay" ${ctaButton("#2d5a5a")}>Try Payment Again</a>
-    </div>
-
-    <p>If you continue to experience issues, please don't hesitate to reach out. We're happy to help you complete your booking.</p>
-    ${signOff}
-  `);
-}
-
 export function cancellationHtml(
   data: BookingEmailData & { refundEligible: boolean }
 ): string {
@@ -420,7 +395,7 @@ export function cancellationHtml(
   const guestName = escapeHtml(data.guest_name);
   const numGuests = escapeHtml(data.num_guests);
   const totalPrice = escapeHtml(formatPrice(data.total_price));
-  const bookingId = escapeHtml(data.booking_id);
+  const bookingId = escapeHtml(displayReference(data));
 
   const refundBlock = data.refundEligible
     ? `<div style="padding:14px 18px;border-radius:6px;margin:20px 0;border-left:4px solid #28a745;background-color:#f0fff0;">
@@ -443,7 +418,7 @@ export function cancellationHtml(
       <p style="margin:4px 0;">Check-out: ${formatDateNZ(data.check_out)}</p>
       ${data.num_guests ? `<p style="margin:4px 0;">Guests: ${numGuests}</p>` : ""}
       ${data.total_price ? `<p style="margin:4px 0;">Total: $${totalPrice} NZD</p>` : ""}
-      ${data.booking_id ? `<p style="margin:4px 0;">Booking ID: ${bookingId}</p>` : ""}
+      ${bookingId ? `<p style="margin:4px 0;">Booking ID: ${bookingId}</p>` : ""}
     </div>
 
     <div ${alertBox("#17a2b8")}>
@@ -492,7 +467,7 @@ export function systemAlertHtml(data: {
     <div style="padding:16px 20px;border-radius:6px;margin:0 0 20px;border-left:4px solid ${borderColor};background-color:${bgColor};">
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Alert Details</h3>
       <p style="margin:4px 0;"><strong>Type:</strong> ${alertTypeUpper}</p>
-      <p style="margin:4px 0;"><strong>Time:</strong> ${escapeHtml(new Date().toLocaleString("en-NZ"))}</p>
+      <p style="margin:4px 0;"><strong>Time:</strong> ${escapeHtml(new Date().toLocaleString("en-NZ", { timeZone: "Pacific/Auckland", timeZoneName: "short" }))}</p>
       <p style="margin:4px 0;"><strong>Message:</strong> ${message}</p>
     </div>
 

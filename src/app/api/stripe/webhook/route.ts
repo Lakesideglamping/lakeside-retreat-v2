@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { constructWebhookEvent, isDevMode } from "@/lib/stripe";
 import {
+  hasSentEmail,
   sendBookingConfirmation,
   sendCancellationConfirmation,
   sendSystemAlert,
@@ -177,8 +178,10 @@ export async function POST(request: Request) {
 
         // 2) Save booking with its final deposit state in one atomic write.
         let bookingSaved = false;
+        // Assigned by the database default on insert; read back for the email.
+        let bookingReference: string | undefined;
         try {
-          await prisma.bookings.create({
+          const created = await prisma.bookings.create({
             data: {
               id: bookingId,
               guest_name: metadata.guestName || "Guest",
@@ -201,9 +204,11 @@ export async function POST(request: Request) {
               security_deposit_status: "not_applicable",
             },
           });
+          bookingReference = created.reference;
           bookingSaved = true;
           log.info("booking saved", {
             bookingId,
+            bookingReference,
             guestEmailMasked: maskEmail(metadata.guestEmail),
           });
         } catch (dbErr) {
@@ -474,6 +479,7 @@ export async function POST(request: Request) {
             guests: Number(metadata.guests) || 1,
             totalAmount: (session.amount_total || 0) / 100,
             bookingId,
+            bookingReference,
           }).catch((err) =>
             log.error("booking confirmation email failed", {
               bookingId,
@@ -518,7 +524,15 @@ export async function POST(request: Request) {
             });
             log.info("booking marked refunded (full refund)", { paymentIntentId });
 
-            if (existing && existing.status !== "cancelled" && existing.guest_email) {
+            // The admin cancel route also emails the guest, and an admin refund
+            // triggers this event moments later — so check the send log too,
+            // not just the status, or a guest cancelled by admin gets two.
+            if (
+              existing &&
+              existing.status !== "cancelled" &&
+              existing.guest_email &&
+              !(await hasSentEmail(existing.id, "cancellation"))
+            ) {
               sendCancellationConfirmation({
                 guest_name: existing.guest_name ?? "Guest",
                 guest_email: existing.guest_email,
@@ -527,6 +541,7 @@ export async function POST(request: Request) {
                 check_out: existing.check_out.toISOString(),
                 total_price: existing.total_price ? String(existing.total_price) : undefined,
                 booking_id: existing.id,
+                booking_reference: existing.reference,
                 refundEligible: true,
               }).catch((err) =>
                 log.error("cancellation email failed", {

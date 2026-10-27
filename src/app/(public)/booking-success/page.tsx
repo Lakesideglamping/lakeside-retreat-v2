@@ -147,7 +147,7 @@ export default async function BookingSuccessPage({
           <h2 className="font-display text-xl mb-3">What Happens Next</h2>
           <ul className="space-y-2 text-muted">
             <li>&bull; Check your email for your booking confirmation</li>
-            <li>&bull; Self-check-in instructions will be sent 2 days before arrival</li>
+            <li>&bull; Self-check-in instructions will be sent 3 days before arrival</li>
             <li>&bull; Check-in is from 3:00 PM, check-out by 10:00 AM</li>
           </ul>
         </div>
