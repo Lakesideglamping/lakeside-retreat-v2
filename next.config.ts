@@ -123,6 +123,22 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // book.lakesideretreat.co.nz was the custom domain of Uplisting's direct
+      // booking website, which Uplisting retired in October 2026. The hostname
+      // is still on old emails, printed material and in Google, so it now
+      // lands on this site's booking page rather than Duda's "SITE NOT FOUND"
+      // behind a self-signed certificate. Whatever path the old link carried
+      // is dropped, since nothing on that site maps to anything here; Next
+      // carries the query string across, which is harmless on /book.
+      // Requires the hostname to be added as a custom domain on the Render
+      // service, so Render serves a certificate for it, and the Cloudflare
+      // CNAME to point at lakeside-retreat-v2.onrender.com.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "book.lakesideretreat.co.nz" }],
+        destination: "https://lakesideretreat.co.nz/book",
+        permanent: true,
+      },
       { source: "/index.html", destination: "/", permanent: true },
       { source: "/dome-pinot.html", destination: "/dome-pinot", permanent: true },
       { source: "/dome-rose.html", destination: "/dome-rose", permanent: true },
