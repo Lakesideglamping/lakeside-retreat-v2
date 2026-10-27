@@ -31,7 +31,8 @@ export const sampleBooking: BookingEmailData = {
   check_out: "2026-05-15",
   num_guests: 2,
   total_price: 1280,
-  booking_id: "BK-2026-00042",
+  booking_id: "6d2f3a1e-9c4b-4e7a-b8d1-2f5c6a7b8c9d",
+  booking_reference: "BK-2026-00042",
   special_requests: "Celebrating our 5th anniversary — any chance of a late checkout?",
 };
 

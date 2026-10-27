@@ -177,8 +177,10 @@ export async function POST(request: Request) {
 
         // 2) Save booking with its final deposit state in one atomic write.
         let bookingSaved = false;
+        // Assigned by the database default on insert; read back for the email.
+        let bookingReference: string | undefined;
         try {
-          await prisma.bookings.create({
+          const created = await prisma.bookings.create({
             data: {
               id: bookingId,
               guest_name: metadata.guestName || "Guest",
@@ -201,9 +203,11 @@ export async function POST(request: Request) {
               security_deposit_status: "not_applicable",
             },
           });
+          bookingReference = created.reference;
           bookingSaved = true;
           log.info("booking saved", {
             bookingId,
+            bookingReference,
             guestEmailMasked: maskEmail(metadata.guestEmail),
           });
         } catch (dbErr) {
@@ -474,6 +478,7 @@ export async function POST(request: Request) {
             guests: Number(metadata.guests) || 1,
             totalAmount: (session.amount_total || 0) / 100,
             bookingId,
+            bookingReference,
           }).catch((err) =>
             log.error("booking confirmation email failed", {
               bookingId,
@@ -527,6 +532,7 @@ export async function POST(request: Request) {
                 check_out: existing.check_out.toISOString(),
                 total_price: existing.total_price ? String(existing.total_price) : undefined,
                 booking_id: existing.id,
+                booking_reference: existing.reference,
                 refundEligible: true,
               }).catch((err) =>
                 log.error("cancellation email failed", {

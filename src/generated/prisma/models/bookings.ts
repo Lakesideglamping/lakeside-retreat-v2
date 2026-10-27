@@ -70,6 +70,7 @@ export type BookingsMinAggregateOutputType = {
   security_deposit_released_at: Date | null
   security_deposit_claimed_amount: runtime.Decimal | null
   deleted_at: Date | null
+  reference: string | null
 }
 
 export type BookingsMaxAggregateOutputType = {
@@ -100,6 +101,7 @@ export type BookingsMaxAggregateOutputType = {
   security_deposit_released_at: Date | null
   security_deposit_claimed_amount: runtime.Decimal | null
   deleted_at: Date | null
+  reference: string | null
 }
 
 export type BookingsCountAggregateOutputType = {
@@ -130,6 +132,7 @@ export type BookingsCountAggregateOutputType = {
   security_deposit_released_at: number
   security_deposit_claimed_amount: number
   deleted_at: number
+  reference: number
   _all: number
 }
 
@@ -178,6 +181,7 @@ export type BookingsMinAggregateInputType = {
   security_deposit_released_at?: true
   security_deposit_claimed_amount?: true
   deleted_at?: true
+  reference?: true
 }
 
 export type BookingsMaxAggregateInputType = {
@@ -208,6 +212,7 @@ export type BookingsMaxAggregateInputType = {
   security_deposit_released_at?: true
   security_deposit_claimed_amount?: true
   deleted_at?: true
+  reference?: true
 }
 
 export type BookingsCountAggregateInputType = {
@@ -238,6 +243,7 @@ export type BookingsCountAggregateInputType = {
   security_deposit_released_at?: true
   security_deposit_claimed_amount?: true
   deleted_at?: true
+  reference?: true
   _all?: true
 }
 
@@ -355,6 +361,7 @@ export type BookingsGroupByOutputType = {
   security_deposit_released_at: Date | null
   security_deposit_claimed_amount: runtime.Decimal | null
   deleted_at: Date | null
+  reference: string
   _count: BookingsCountAggregateOutputType | null
   _avg: BookingsAvgAggregateOutputType | null
   _sum: BookingsSumAggregateOutputType | null
@@ -408,6 +415,7 @@ export type bookingsWhereInput = {
   security_deposit_released_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
   security_deposit_claimed_amount?: Prisma.DecimalNullableFilter<"bookings"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
+  reference?: Prisma.StringFilter<"bookings"> | string
 }
 
 export type bookingsOrderByWithRelationInput = {
@@ -438,10 +446,12 @@ export type bookingsOrderByWithRelationInput = {
   security_deposit_released_at?: Prisma.SortOrderInput | Prisma.SortOrder
   security_deposit_claimed_amount?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  reference?: Prisma.SortOrder
 }
 
 export type bookingsWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  reference?: string
   accommodation_check_in_check_out?: Prisma.bookingsAccommodationCheck_inCheck_outCompoundUniqueInput
   AND?: Prisma.bookingsWhereInput | Prisma.bookingsWhereInput[]
   OR?: Prisma.bookingsWhereInput[]
@@ -472,7 +482,7 @@ export type bookingsWhereUniqueInput = Prisma.AtLeast<{
   security_deposit_released_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
   security_deposit_claimed_amount?: Prisma.DecimalNullableFilter<"bookings"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"bookings"> | Date | string | null
-}, "id" | "accommodation_check_in_check_out">
+}, "id" | "reference" | "accommodation_check_in_check_out">
 
 export type bookingsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -502,6 +512,7 @@ export type bookingsOrderByWithAggregationInput = {
   security_deposit_released_at?: Prisma.SortOrderInput | Prisma.SortOrder
   security_deposit_claimed_amount?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  reference?: Prisma.SortOrder
   _count?: Prisma.bookingsCountOrderByAggregateInput
   _avg?: Prisma.bookingsAvgOrderByAggregateInput
   _max?: Prisma.bookingsMaxOrderByAggregateInput
@@ -540,6 +551,7 @@ export type bookingsScalarWhereWithAggregatesInput = {
   security_deposit_released_at?: Prisma.DateTimeNullableWithAggregatesFilter<"bookings"> | Date | string | null
   security_deposit_claimed_amount?: Prisma.DecimalNullableWithAggregatesFilter<"bookings"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"bookings"> | Date | string | null
+  reference?: Prisma.StringWithAggregatesFilter<"bookings"> | string
 }
 
 export type bookingsCreateInput = {
@@ -570,6 +582,7 @@ export type bookingsCreateInput = {
   security_deposit_released_at?: Date | string | null
   security_deposit_claimed_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Date | string | null
+  reference?: string
 }
 
 export type bookingsUncheckedCreateInput = {
@@ -600,6 +613,7 @@ export type bookingsUncheckedCreateInput = {
   security_deposit_released_at?: Date | string | null
   security_deposit_claimed_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Date | string | null
+  reference?: string
 }
 
 export type bookingsUpdateInput = {
@@ -630,6 +644,7 @@ export type bookingsUpdateInput = {
   security_deposit_released_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   security_deposit_claimed_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reference?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type bookingsUncheckedUpdateInput = {
@@ -660,6 +675,7 @@ export type bookingsUncheckedUpdateInput = {
   security_deposit_released_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   security_deposit_claimed_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reference?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type bookingsCreateManyInput = {
@@ -690,6 +706,7 @@ export type bookingsCreateManyInput = {
   security_deposit_released_at?: Date | string | null
   security_deposit_claimed_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Date | string | null
+  reference?: string
 }
 
 export type bookingsUpdateManyMutationInput = {
@@ -720,6 +737,7 @@ export type bookingsUpdateManyMutationInput = {
   security_deposit_released_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   security_deposit_claimed_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reference?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type bookingsUncheckedUpdateManyInput = {
@@ -750,6 +768,7 @@ export type bookingsUncheckedUpdateManyInput = {
   security_deposit_released_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   security_deposit_claimed_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reference?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type bookingsAccommodationCheck_inCheck_outCompoundUniqueInput = {
@@ -786,6 +805,7 @@ export type bookingsCountOrderByAggregateInput = {
   security_deposit_released_at?: Prisma.SortOrder
   security_deposit_claimed_amount?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
+  reference?: Prisma.SortOrder
 }
 
 export type bookingsAvgOrderByAggregateInput = {
@@ -824,6 +844,7 @@ export type bookingsMaxOrderByAggregateInput = {
   security_deposit_released_at?: Prisma.SortOrder
   security_deposit_claimed_amount?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
+  reference?: Prisma.SortOrder
 }
 
 export type bookingsMinOrderByAggregateInput = {
@@ -854,6 +875,7 @@ export type bookingsMinOrderByAggregateInput = {
   security_deposit_released_at?: Prisma.SortOrder
   security_deposit_claimed_amount?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
+  reference?: Prisma.SortOrder
 }
 
 export type bookingsSumOrderByAggregateInput = {
@@ -906,6 +928,7 @@ export type bookingsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   security_deposit_released_at?: boolean
   security_deposit_claimed_amount?: boolean
   deleted_at?: boolean
+  reference?: boolean
 }, ExtArgs["result"]["bookings"]>
 
 export type bookingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -936,6 +959,7 @@ export type bookingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   security_deposit_released_at?: boolean
   security_deposit_claimed_amount?: boolean
   deleted_at?: boolean
+  reference?: boolean
 }, ExtArgs["result"]["bookings"]>
 
 export type bookingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -966,6 +990,7 @@ export type bookingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   security_deposit_released_at?: boolean
   security_deposit_claimed_amount?: boolean
   deleted_at?: boolean
+  reference?: boolean
 }, ExtArgs["result"]["bookings"]>
 
 export type bookingsSelectScalar = {
@@ -996,9 +1021,10 @@ export type bookingsSelectScalar = {
   security_deposit_released_at?: boolean
   security_deposit_claimed_amount?: boolean
   deleted_at?: boolean
+  reference?: boolean
 }
 
-export type bookingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "guest_name" | "guest_email" | "guest_phone" | "accommodation" | "check_in" | "check_out" | "guests" | "total_price" | "status" | "payment_status" | "notes" | "stripe_session_id" | "stripe_payment_id" | "uplisting_id" | "created_at" | "updated_at" | "deposit_release_due" | "booking_source" | "uplisting_sync_status" | "uplisting_sync_retries" | "security_deposit_intent_id" | "security_deposit_status" | "security_deposit_amount" | "security_deposit_released_at" | "security_deposit_claimed_amount" | "deleted_at", ExtArgs["result"]["bookings"]>
+export type bookingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "guest_name" | "guest_email" | "guest_phone" | "accommodation" | "check_in" | "check_out" | "guests" | "total_price" | "status" | "payment_status" | "notes" | "stripe_session_id" | "stripe_payment_id" | "uplisting_id" | "created_at" | "updated_at" | "deposit_release_due" | "booking_source" | "uplisting_sync_status" | "uplisting_sync_retries" | "security_deposit_intent_id" | "security_deposit_status" | "security_deposit_amount" | "security_deposit_released_at" | "security_deposit_claimed_amount" | "deleted_at" | "reference", ExtArgs["result"]["bookings"]>
 
 export type $bookingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "bookings"
@@ -1031,6 +1057,11 @@ export type $bookingsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     security_deposit_released_at: Date | null
     security_deposit_claimed_amount: runtime.Decimal | null
     deleted_at: Date | null
+    /**
+     * Guest-facing reference (BK-2026-00042). Generated by the database so every
+     * create path gets one; `id` remains the key other tables join on.
+     */
+    reference: string
   }, ExtArgs["result"]["bookings"]>
   composites: {}
 }
@@ -1481,6 +1512,7 @@ export interface bookingsFieldRefs {
   readonly security_deposit_released_at: Prisma.FieldRef<"bookings", 'DateTime'>
   readonly security_deposit_claimed_amount: Prisma.FieldRef<"bookings", 'Decimal'>
   readonly deleted_at: Prisma.FieldRef<"bookings", 'DateTime'>
+  readonly reference: Prisma.FieldRef<"bookings", 'String'>
 }
     
 

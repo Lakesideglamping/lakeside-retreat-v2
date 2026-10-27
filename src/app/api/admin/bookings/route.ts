@@ -60,6 +60,7 @@ export async function GET(request: Request) {
       where.OR = [
         { guest_name: { contains: search, mode: "insensitive" } },
         { guest_email: { contains: search, mode: "insensitive" } },
+        { reference: { contains: search, mode: "insensitive" } },
       ];
     }
 

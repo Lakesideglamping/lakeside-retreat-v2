@@ -188,6 +188,36 @@ describe("sendBookingConfirmation", () => {
   });
 
   /**
+   * Guests quote the short reference, not the UUID. The UUID still goes into
+   * email_sends.booking_id so admin can find the send against the booking.
+   */
+  it("shows the booking reference instead of the UUID when one is given", async () => {
+    process.env.EMAIL_USER = "host@e.com";
+    process.env.EMAIL_PASS = "p";
+    process.env.CONTACT_EMAIL = "ops@e.com";
+    const { sendBookingConfirmation } = await import("../email");
+    await sendBookingConfirmation({
+      guestName: "A",
+      guestEmail: "guest@e.com",
+      accommodation: "lakeside-cottage",
+      checkIn: "2026-05-12",
+      checkOut: "2026-05-15",
+      guests: 2,
+      totalAmount: 1280,
+      bookingId: "6d2f3a1e-9c4b-4e7a-b8d1-2f5c6a7b8c9d",
+      bookingReference: "BK-2026-00042",
+    });
+
+    const mails = sendMail.mock.calls.map((c) => c[0] as { to: string; html: string });
+    const guest = mails.find((m) => m.to === "guest@e.com")!;
+    const host = mails.find((m) => m.to === "ops@e.com")!;
+
+    expect(guest.html).toContain("Booking ID: BK-2026-00042");
+    expect(guest.html).not.toContain("6d2f3a1e");
+    expect(host.html).toContain("BK-2026-00042");
+  });
+
+  /**
    * The domes and the cottage have different confirmations. The copy names
    * the spa vs the hot tub and which side of the driveway to park on, so
    * sending one to the other's guest is plainly wrong.

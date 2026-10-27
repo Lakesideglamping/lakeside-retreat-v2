@@ -7,6 +7,7 @@ import {
 
 type Booking = {
   id: string;
+  reference: string;
   guest_name: string;
   guest_email: string;
   guest_phone: string | null;
@@ -222,6 +223,7 @@ export async function processReviewRequest(
     num_guests: booking.guests,
     total_price: booking.total_price ? String(booking.total_price) : undefined,
     booking_id: booking.id,
+    booking_reference: booking.reference,
   });
 
   const now = new Date().toISOString();

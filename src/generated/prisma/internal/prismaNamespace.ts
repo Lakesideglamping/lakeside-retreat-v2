@@ -1831,7 +1831,8 @@ export const BookingsScalarFieldEnum = {
   security_deposit_amount: 'security_deposit_amount',
   security_deposit_released_at: 'security_deposit_released_at',
   security_deposit_claimed_amount: 'security_deposit_claimed_amount',
-  deleted_at: 'deleted_at'
+  deleted_at: 'deleted_at',
+  reference: 'reference'
 } as const
 
 export type BookingsScalarFieldEnum = (typeof BookingsScalarFieldEnum)[keyof typeof BookingsScalarFieldEnum]

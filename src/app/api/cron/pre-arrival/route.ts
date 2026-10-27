@@ -45,6 +45,7 @@ export async function POST(request: Request) {
           check_out: booking.check_out.toISOString(),
           total_price: booking.total_price ? Number(booking.total_price) : undefined,
           booking_id: booking.id,
+          booking_reference: booking.reference,
         });
         sent++;
       } catch (err) {

@@ -150,6 +150,9 @@ interface LegacyBookingEmailData {
   guests: number;
   totalAmount: number;
   bookingId?: string;
+  // Short guest-facing reference (BK-2026-00042). Shown in the email; bookingId
+  // is still what the send is logged against.
+  bookingReference?: string;
   depositStatus?: "held" | "failed_to_hold" | "pending";
 }
 
@@ -188,6 +191,7 @@ export async function sendBookingConfirmation(
   const safeCheckOut = escapeHtml(data.checkOut);
   const safeGuests = escapeHtml(data.guests);
   const safeTotal = escapeHtml(data.totalAmount.toFixed(2));
+  const safeReference = escapeHtml(data.bookingReference ?? "");
 
   // The domes and the cottage get different confirmations: the copy names the
   // spa vs the hot tub, the non-smoking wording, and which side of the
@@ -215,6 +219,7 @@ export async function sendBookingConfirmation(
       // so $650 renders as $650.00 rather than $650.
       total_price: data.totalAmount.toFixed(2),
       booking_id: data.bookingId,
+      booking_reference: data.bookingReference,
     }),
   }, { template: "booking_confirmation_guest", bookingId: data.bookingId });
 
@@ -227,6 +232,7 @@ export async function sendBookingConfirmation(
       <div style="font-family: Arial, sans-serif; max-width: 600px;">
         <h2 style="color: #2d5a5a;">New Booking Received</h2>
         <table style="width: 100%; border-collapse: collapse;">
+          ${safeReference ? `<tr><td style="padding: 8px; font-weight: bold;">Reference</td><td style="padding: 8px;">${safeReference}</td></tr>` : ""}
           <tr><td style="padding: 8px; font-weight: bold;">Guest</td><td style="padding: 8px;">${safeGuestName} (${safeGuestEmail})</td></tr>
           <tr><td style="padding: 8px; font-weight: bold;">Accommodation</td><td style="padding: 8px;">${safeAccommodation}</td></tr>
           <tr><td style="padding: 8px; font-weight: bold;">Dates</td><td style="padding: 8px;">${safeCheckIn} to ${safeCheckOut}</td></tr>

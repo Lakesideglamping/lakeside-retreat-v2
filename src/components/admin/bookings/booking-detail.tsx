@@ -10,6 +10,7 @@ import { LoadingSpinner } from "@/components/admin/ui/loading-spinner";
 
 interface Booking {
   id: string;
+  reference: string;
   guest_name: string;
   guest_email: string;
   guest_phone: string | null;
@@ -402,7 +403,7 @@ export function BookingDetail({ bookingId }: BookingDetailProps) {
           </button>
           <h1 className="text-2xl font-bold text-gray-900">{booking.guest_name}</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Booking {booking.id.slice(0, 8)}... | {formatAccommodation(booking.accommodation)}
+            {booking.reference} | {formatAccommodation(booking.accommodation)}
           </p>
         </div>
         <div className="flex items-center gap-2">

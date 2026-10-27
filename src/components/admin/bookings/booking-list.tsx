@@ -10,6 +10,7 @@ import { Alert } from "@/components/admin/ui/alert";
 
 interface Booking {
   id: string;
+  reference: string;
   guest_name: string;
   guest_email: string;
   accommodation: string;
@@ -230,6 +231,7 @@ export function BookingList() {
         <div>
           <p className="font-medium text-gray-900">{row.guest_name}</p>
           <p className="text-xs text-gray-500">{row.guest_email}</p>
+          <p className="text-xs text-gray-400">{row.reference}</p>
         </div>
       ),
     },
