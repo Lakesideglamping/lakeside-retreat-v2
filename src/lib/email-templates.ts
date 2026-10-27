@@ -388,46 +388,6 @@ export function checkoutReviewReminderHtml(data: BookingEmailData): string {
   `);
 }
 
-export function paymentFailureHtml(data: BookingEmailData): string {
-  const name = escapeHtml(formatAccommodationName(data.accommodation));
-  const guestName = escapeHtml(data.guest_name);
-  const numGuests = escapeHtml(data.num_guests);
-  const totalPrice = escapeHtml(formatPrice(data.total_price));
-  // A reference is short already; only the legacy UUID gets trimmed to 8 chars.
-  const idSlice = escapeHtml(
-    data.booking_reference || (data.booking_id ? data.booking_id.slice(0, 8) : "")
-  );
-
-  return layout("Payment Issue", `
-    <p>Hi ${guestName},</p>
-    <p>We noticed that the payment for your booking didn't go through. Don't worry &mdash; these things happen, and your booking details are still saved.</p>
-
-    <div ${alertBox("#ffc107")}>
-      <h4 style="margin:0 0 6px;">What happened?</h4>
-      <p style="margin:0;">Your payment could not be processed. This can happen for a number of reasons, such as insufficient funds, an expired card, or a temporary issue with your bank.</p>
-    </div>
-
-    <div ${detailsBox}>
-      <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Your Booking</h3>
-      <p style="margin:4px 0;"><strong>Accommodation:</strong> ${name}</p>
-      <p style="margin:4px 0;"><strong>Check-in:</strong> ${formatDateNZ(data.check_in)}</p>
-      <p style="margin:4px 0;"><strong>Check-out:</strong> ${formatDateNZ(data.check_out)}</p>
-      ${data.num_guests ? `<p style="margin:4px 0;"><strong>Guests:</strong> ${numGuests}</p>` : ""}
-      ${data.total_price ? `<p style="margin:4px 0;"><strong>Total:</strong> $${totalPrice} NZD</p>` : ""}
-      ${idSlice ? `<p style="margin:4px 0;"><strong>Booking ID:</strong> ${idSlice}</p>` : ""}
-    </div>
-
-    <p>To complete your reservation, please try your payment again:</p>
-
-    <div style="text-align:center;margin:28px 0;">
-      <a href="https://lakesideretreat.co.nz/stay" ${ctaButton("#2d5a5a")}>Try Payment Again</a>
-    </div>
-
-    <p>If you continue to experience issues, please don't hesitate to reach out. We're happy to help you complete your booking.</p>
-    ${signOff}
-  `);
-}
-
 export function cancellationHtml(
   data: BookingEmailData & { refundEligible: boolean }
 ): string {
@@ -507,7 +467,7 @@ export function systemAlertHtml(data: {
     <div style="padding:16px 20px;border-radius:6px;margin:0 0 20px;border-left:4px solid ${borderColor};background-color:${bgColor};">
       <h3 style="margin:0 0 12px;font-size:17px;color:#2d5a5a;">Alert Details</h3>
       <p style="margin:4px 0;"><strong>Type:</strong> ${alertTypeUpper}</p>
-      <p style="margin:4px 0;"><strong>Time:</strong> ${escapeHtml(new Date().toLocaleString("en-NZ"))}</p>
+      <p style="margin:4px 0;"><strong>Time:</strong> ${escapeHtml(new Date().toLocaleString("en-NZ", { timeZone: "Pacific/Auckland", timeZoneName: "short" }))}</p>
       <p style="margin:4px 0;"><strong>Message:</strong> ${message}</p>
     </div>
 

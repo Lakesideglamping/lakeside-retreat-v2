@@ -10,7 +10,6 @@ import {
   bookingConfirmationCottageHtml,
   preArrivalHtml,
   checkoutReviewReminderHtml,
-  paymentFailureHtml,
   cancellationHtml,
   systemAlertHtml,
 } from "./email-templates";
@@ -287,23 +286,30 @@ export async function sendCheckoutReviewReminder(
   logger.info(`Review reminder email sent to ${booking.guest_email}`);
 }
 
-export async function sendPaymentFailureNotification(
-  booking: TemplateBookingData
-): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("Email not configured - payment failure notification skipped");
-    return;
+/**
+ * Has a given template already gone out for this booking?
+ *
+ * The cancellation email has two senders — the admin cancel route and the
+ * Stripe charge.refunded webhook — and an admin refund fires both within a
+ * second of each other. The booking's status alone cannot settle who sends,
+ * because the webhook can land before the admin route has written
+ * "cancelled". email_sends is the one record both can consult, so each checks
+ * it before sending. A DB error here reads as "not sent": a duplicate email
+ * is the lesser harm than a cancelled guest hearing nothing.
+ */
+export async function hasSentEmail(
+  bookingId: string,
+  template: string
+): Promise<boolean> {
+  try {
+    const row = await prisma.email_sends.findFirst({
+      where: { booking_id: bookingId, template, status: "sent" },
+      select: { id: true },
+    });
+    return row !== null;
+  } catch {
+    return false;
   }
-
-  const idSlice = booking.booking_id ? booking.booking_id.slice(0, 8) : "";
-  await sendAndLog(transporter, {
-    from: fromAddress(),
-    to: booking.guest_email,
-    subject: `Payment Issue — Lakeside Retreat${idSlice ? ` Booking #${idSlice}` : ""}`,
-    html: paymentFailureHtml(booking),
-  }, { template: "payment_failure", bookingId: booking.booking_id });
-  logger.info(`Payment failure notification sent to ${booking.guest_email}`);
 }
 
 export async function sendCancellationConfirmation(

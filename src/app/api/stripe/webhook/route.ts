@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { constructWebhookEvent, isDevMode } from "@/lib/stripe";
 import {
+  hasSentEmail,
   sendBookingConfirmation,
   sendCancellationConfirmation,
   sendSystemAlert,
@@ -523,7 +524,15 @@ export async function POST(request: Request) {
             });
             log.info("booking marked refunded (full refund)", { paymentIntentId });
 
-            if (existing && existing.status !== "cancelled" && existing.guest_email) {
+            // The admin cancel route also emails the guest, and an admin refund
+            // triggers this event moments later — so check the send log too,
+            // not just the status, or a guest cancelled by admin gets two.
+            if (
+              existing &&
+              existing.status !== "cancelled" &&
+              existing.guest_email &&
+              !(await hasSentEmail(existing.id, "cancellation"))
+            ) {
               sendCancellationConfirmation({
                 guest_name: existing.guest_name ?? "Guest",
                 guest_email: existing.guest_email,

@@ -3,7 +3,6 @@ import {
   bookingConfirmationCottageHtml,
   preArrivalHtml,
   checkoutReviewReminderHtml,
-  paymentFailureHtml,
   cancellationHtml,
   systemAlertHtml,
   type BookingEmailData,
@@ -95,13 +94,6 @@ export const emailPreviews: EmailPreview[] = [
     description: "Sent when a guest cancels within 14 days of arrival.",
     whenSent: "Manual cancel within 14 days",
     html: () => cancellationHtml({ ...sampleBooking, refundEligible: false }),
-  },
-  {
-    id: "payment_failure",
-    label: "Payment failure notice",
-    description: "Sent when a scheduled payment fails.",
-    whenSent: "Stripe payment_intent.payment_failed",
-    html: () => paymentFailureHtml(sampleBooking),
   },
   {
     id: "system_alert",

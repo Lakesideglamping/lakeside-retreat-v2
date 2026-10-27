@@ -5,6 +5,8 @@ import { statusUpdateSchema } from "@/lib/admin-validations";
 import { auditLog } from "@/lib/audit";
 import { stripe, isDevMode } from "@/lib/stripe";
 import { logger } from "@/lib/logger";
+import { hasSentEmail, sendCancellationConfirmation } from "@/lib/email";
+import { DIRECT_BOOKING_SOURCES } from "@/lib/marketing-automation";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -108,6 +110,42 @@ export async function PUT(request: Request, { params }: RouteParams) {
 
     const ip = getClientIp(req);
     await auditLog(admin.username, "booking_status_updated", auditDetails, ip);
+
+    // Tell the guest. Direct bookings only (see DIRECT_BOOKING_SOURCES): an
+    // OTA guest is told by the OTA, and Booking.com relays strip our contact
+    // details. The refund wording follows what actually happened above — a
+    // refund was issued, or it was not — rather than re-deriving the 14-day
+    // rule here.
+    //
+    // Fire-and-forget, like the webhook: a mail failure must not undo a
+    // cancellation that has already refunded. sendAndLog records the failure
+    // in email_sends, where the booking's Communications panel shows it.
+    const becameCancelled =
+      status === "cancelled" && previousStatus !== "cancelled";
+    if (
+      becameCancelled &&
+      DIRECT_BOOKING_SOURCES.includes(booking.booking_source ?? "") &&
+      booking.guest_email.includes("@") &&
+      !(await hasSentEmail(id, "cancellation"))
+    ) {
+      sendCancellationConfirmation({
+        guest_name: booking.guest_name || "Guest",
+        guest_email: booking.guest_email,
+        accommodation: booking.accommodation,
+        check_in: booking.check_in.toISOString(),
+        check_out: booking.check_out.toISOString(),
+        num_guests: booking.guests,
+        total_price: booking.total_price ? String(booking.total_price) : undefined,
+        booking_id: id,
+        booking_reference: booking.reference,
+        refundEligible: Boolean(needsRefund),
+      }).catch((err) =>
+        logger.error("[booking status] cancellation email failed", {
+          bookingId: id,
+          error: err instanceof Error ? err.message : String(err),
+        })
+      );
+    }
 
     return NextResponse.json({
       ...updated,
