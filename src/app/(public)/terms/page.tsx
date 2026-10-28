@@ -18,7 +18,7 @@ export default function TermsConditionsPage() {
           <p className="text-muted">
             Please read these terms carefully before making a booking
           </p>
-          <p className="text-muted text-sm mt-2">Last updated: March 2026</p>
+          <p className="text-muted text-sm mt-2">Last updated: October 2026</p>
         </div>
       </section>
 
@@ -209,8 +209,53 @@ export default function TermsConditionsPage() {
             and the New Zealand Privacy Act 2020.
           </p>
 
+          <h2 className="font-display text-2xl mt-10 mb-4">10. Gift Vouchers</h2>
+          <p>
+            Gift vouchers are available for a stay at any of our accommodations
+            or for a dollar amount. Each voucher carries a voucher number and is
+            issued in New Zealand dollars.
+          </p>
+          <p>
+            <strong>Validity:</strong> A voucher is valid for making a booking
+            for three years from the date it was purchased. The expiry date is
+            printed on the voucher. The stay itself may fall after that date.
+          </p>
+          <p>
+            <strong>Redeeming:</strong> To redeem a voucher, email{" "}
+            <Link href="mailto:info@lakesideretreat.co.nz" className="text-burgundy">
+              info@lakesideretreat.co.nz
+            </Link>{" "}
+            or phone +64 21 368 682 with your preferred dates and the voucher
+            number. Bookings are subject to availability and to the minimum stay
+            for the accommodation chosen.
+          </p>
+          <p>
+            <strong>Value:</strong> If the stay costs more than the voucher, for
+            example over the peak summer season, the difference is payable when
+            the booking is made. If the stay costs less, the balance is issued as
+            a new voucher. Vouchers have no cash value and cannot be exchanged for
+            cash.
+          </p>
+          <p>
+            <strong>Cancellations:</strong> A booking made with a voucher is
+            subject to the cancellation policy above. If it is cancelled 14 or
+            more days before check-in, the voucher is reinstated for a future
+            booking. If it is cancelled within 13 days or the guest does not
+            arrive, the voucher is forfeited.
+          </p>
+          <p>
+            <strong>Transfer and refunds:</strong> A voucher may be given as a
+            gift but may not be resold. Vouchers are non-refundable to the
+            purchaser once issued, except where required by law.
+          </p>
+          <p>
+            <strong>Lost vouchers:</strong> Keep your voucher number safe. We can
+            reissue a lost voucher to the original purchaser or named recipient
+            on request.
+          </p>
+
           <h2 className="font-display text-2xl mt-10 mb-4">
-            10. Changes to These Terms
+            11. Changes to These Terms
           </h2>
           <p>
             We may update these terms from time to time. The version in effect at
@@ -218,13 +263,13 @@ export default function TermsConditionsPage() {
             communicated to guests with existing bookings.
           </p>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">11. Governing Law</h2>
+          <h2 className="font-display text-2xl mt-10 mb-4">12. Governing Law</h2>
           <p>
             These terms are governed by the laws of New Zealand. Any disputes will
             be subject to the exclusive jurisdiction of the New Zealand courts.
           </p>
 
-          <h2 className="font-display text-2xl mt-10 mb-4">12. Contact Us</h2>
+          <h2 className="font-display text-2xl mt-10 mb-4">13. Contact Us</h2>
           <p>
             For questions about these terms, contact us at{" "}
             <Link href="mailto:info@lakesideretreat.co.nz" className="text-burgundy">
