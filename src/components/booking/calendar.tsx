@@ -2,7 +2,12 @@
 
 import { useMemo, useState } from "react";
 
-import { initialMonthOffset, nzToday } from "@/lib/date-range";
+import {
+  describeStay,
+  initialMonthOffset,
+  isSelectableDate,
+  nzToday,
+} from "@/lib/date-range";
 
 // How far ahead guests can page. 12 months matches typical short-stay
 // rental booking windows and avoids pagination into indefinite future
@@ -20,6 +25,8 @@ interface CalendarProps {
   checkIn: string | null;
   checkOut: string | null;
   onDateSelect: (date: string) => void;
+  /** Wipes the selection; shown as a Clear link beside the stay summary. */
+  onClear?: () => void;
   minStay: number;
   loading?: boolean;
 }
@@ -122,8 +129,13 @@ function MonthGrid({
         {days.map((day, i) => {
           const isPast = day.date < todayStr;
           const isBlocked = blockedSet.has(day.date);
-          const isDisabled =
-            !day.isCurrentMonth || isPast || isBlocked;
+          // A booked night is still a valid departure day while the guest is
+          // choosing a check-out (see isSelectableDate); it is only ever
+          // unclickable as an arrival.
+          const isSelectable =
+            day.isCurrentMonth &&
+            isSelectableDate(day.date, checkIn, checkOut, blockedSet, todayStr);
+          const isDepartureOnly = isBlocked && isSelectable;
           const isCheckIn = day.date === checkIn;
           const isCheckOut = day.date === checkOut;
           const isInRange =
@@ -133,6 +145,9 @@ function MonthGrid({
           let cellClass =
             "relative h-11 flex items-center justify-center text-sm transition-colors ";
 
+          // Arrival is a solid day; departure is an outlined one. Painting
+          // both ends solid made "11 to 12 November" look like two days
+          // booked, when the guest sleeps one night and leaves on the 12th.
           if (!day.isCurrentMonth) {
             cellClass += "text-gray-300 ";
           } else if (isCheckIn) {
@@ -140,9 +155,12 @@ function MonthGrid({
               "bg-burgundy text-white font-semibold rounded-l-full z-10 ";
           } else if (isCheckOut) {
             cellClass +=
-              "bg-burgundy text-white font-semibold rounded-r-full z-10 ";
+              "bg-white text-burgundy font-semibold rounded-r-full ring-2 ring-inset ring-burgundy z-10 ";
           } else if (isInRange) {
             cellClass += "bg-burgundy/10 text-body ";
+          } else if (isDepartureOnly) {
+            cellClass +=
+              "text-body hover:bg-burgundy/10 cursor-pointer ";
           } else if (isBlocked) {
             cellClass +=
               "text-gray-300 line-through cursor-not-allowed ";
@@ -161,17 +179,19 @@ function MonthGrid({
             <button
               key={`${day.date}-${i}`}
               type="button"
-              disabled={isDisabled}
-              onClick={() => !isDisabled && onDateSelect(day.date)}
+              disabled={!isSelectable}
+              onClick={() => isSelectable && onDateSelect(day.date)}
               className={cellClass}
               aria-label={
-                isBlocked
-                  ? `${day.date} unavailable`
-                  : isCheckIn
-                    ? `Check-in: ${day.date}`
-                    : isCheckOut
-                      ? `Check-out: ${day.date}`
-                      : day.date
+                isCheckIn
+                  ? `Check-in: ${day.date}`
+                  : isCheckOut
+                    ? `Check-out: ${day.date}`
+                    : isDepartureOnly
+                      ? `${day.date} available as check-out only`
+                      : isBlocked
+                        ? `${day.date} unavailable`
+                        : day.date
               }
             >
               {day.dayNum}
@@ -188,6 +208,7 @@ export function BookingCalendar({
   checkIn,
   checkOut,
   onDateSelect,
+  onClear,
   minStay,
   loading,
 }: CalendarProps) {
@@ -334,11 +355,15 @@ export function BookingCalendar({
       {/* Legend */}
       <div className="flex flex-wrap gap-4 mt-4 text-xs text-muted justify-center">
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-burgundy" /> Selected
+          <span className="w-3 h-3 rounded-sm bg-burgundy" /> Check-in
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-burgundy/10 border border-burgundy/20" />{" "}
-          Your stay
+          Nights
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded-sm bg-white border-2 border-burgundy" />{" "}
+          Check-out
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-gray-200 line-through" />{" "}
@@ -346,7 +371,7 @@ export function BookingCalendar({
         </span>
       </div>
 
-      {/* Hints */}
+      {/* Hints and, once both dates are in, the stay in nights */}
       {!checkIn && (
         <p className="text-center text-sm text-muted mt-3">
           Select your check-in date
@@ -360,6 +385,23 @@ export function BookingCalendar({
               {" "}
               (minimum {minStay} nights)
             </span>
+          )}
+        </p>
+      )}
+      {checkIn && checkOut && (
+        <p
+          className="text-center text-sm font-semibold text-body mt-3"
+          aria-live="polite"
+        >
+          {describeStay(checkIn, checkOut).label}
+          {onClear && (
+            <button
+              type="button"
+              onClick={onClear}
+              className="ml-3 text-xs font-normal text-muted underline hover:text-burgundy"
+            >
+              Clear
+            </button>
           )}
         </p>
       )}

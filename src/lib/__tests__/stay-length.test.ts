@@ -6,6 +6,8 @@ import {
   applyDateClick,
   initialMonthOffset,
   addDays,
+  isSelectableDate,
+  describeStay,
 } from "../date-range";
 
 /**
@@ -143,6 +145,78 @@ describe("applyDateClick", () => {
     expect(next.checkIn).toBe("2026-10-14");
     expect(next.checkOut).toBeNull();
     expect(next.error).toMatch(/unavailable dates/);
+  });
+
+  it("accepts a booked day as check-out when the nights before it are free", () => {
+    // The next guest arrives on the 12th. This guest sleeps the 10th and
+    // 11th and leaves on the morning of the 12th — a perfectly sellable stay.
+    expect(applyDateClick("2026-10-12", "2026-10-10", null, ["2026-10-12"], 1)).toEqual({
+      checkIn: "2026-10-10",
+      checkOut: "2026-10-12",
+      error: "",
+    });
+  });
+
+  it("never restarts from a booked night", () => {
+    // A stale click on a booked day (as first click, or spanning another
+    // booked night) clears the selection rather than making it the check-in.
+    expect(applyDateClick("2026-10-12", null, null, ["2026-10-12"], 1)).toEqual({
+      checkIn: null,
+      checkOut: null,
+      error: "",
+    });
+    const next = applyDateClick("2026-10-14", "2026-10-10", null, ["2026-10-12", "2026-10-14"], 1);
+    expect(next.checkIn).toBeNull();
+    expect(next.checkOut).toBeNull();
+    expect(next.error).toMatch(/unavailable dates/);
+  });
+});
+
+describe("isSelectableDate", () => {
+  const TODAY = "2026-10-29";
+  const BLOCKED = ["2026-11-12", "2026-11-13"];
+
+  it("never enables a past day", () => {
+    expect(isSelectableDate("2026-10-28", null, null, [], TODAY)).toBe(false);
+    expect(isSelectableDate("2026-10-29", null, null, [], TODAY)).toBe(true);
+  });
+
+  it("keeps a booked night off the table as an arrival", () => {
+    expect(isSelectableDate("2026-11-12", null, null, BLOCKED, TODAY)).toBe(false);
+    // ...and once a range is complete, so the next click starts fresh.
+    expect(isSelectableDate("2026-11-12", "2026-11-10", "2026-11-11", BLOCKED, TODAY)).toBe(
+      false
+    );
+  });
+
+  it("enables the first booked day after check-in as a departure day", () => {
+    // The fault behind "the night before every booking can't be sold":
+    // with check-in on the 11th, the 12th must be clickable as check-out.
+    expect(isSelectableDate("2026-11-12", "2026-11-11", null, BLOCKED, TODAY)).toBe(true);
+  });
+
+  it("does not enable a booked day beyond another booked night", () => {
+    // Leaving on the 13th would mean sleeping the 12th, which is taken.
+    expect(isSelectableDate("2026-11-13", "2026-11-11", null, BLOCKED, TODAY)).toBe(false);
+  });
+
+  it("does not enable a booked day on or before check-in", () => {
+    expect(isSelectableDate("2026-11-12", "2026-11-12", null, BLOCKED, TODAY)).toBe(false);
+    expect(isSelectableDate("2026-11-12", "2026-11-14", null, BLOCKED, TODAY)).toBe(false);
+  });
+});
+
+describe("describeStay", () => {
+  it("reads 11 to 12 November as one night", () => {
+    const stay = describeStay("2026-11-11", "2026-11-12");
+    expect(stay.nights).toBe(1);
+    expect(stay.label).toBe("Arrive Wed, 11 Nov · 1 night · Depart Thu, 12 Nov");
+  });
+
+  it("pluralises nights and formats the same whatever the browser timezone", () => {
+    const stay = describeStay("2026-12-31", "2027-01-02");
+    expect(stay.nights).toBe(2);
+    expect(stay.label).toBe("Arrive Thu, 31 Dec · 2 nights · Depart Sat, 2 Jan");
   });
 });
 

@@ -103,27 +103,93 @@ export function applyDateClick(
   blockedDates: Iterable<string>,
   minStay: number
 ): { checkIn: string | null; checkOut: string | null; error: string } {
+  const blocked = blockedDates instanceof Set ? blockedDates : new Set(blockedDates);
+  // A booked night can be a departure day but never an arrival: nobody can
+  // sleep there. The calendar only enables such a day as a check-out, so this
+  // is a guard against a stale click (availability refreshed underneath the
+  // guest) rather than a path the UI takes deliberately.
+  const restart = blocked.has(date)
+    ? { checkIn: null, checkOut: null, error: "" }
+    : { checkIn: date, checkOut: null, error: "" };
+
   // No selection yet, or the previous range is complete — start again.
   if (!checkIn || checkOut) {
-    return { checkIn: date, checkOut: null, error: "" };
+    return restart;
   }
 
   // Clicking on or before check-in restarts from the new date.
   if (date <= checkIn) {
-    return { checkIn: date, checkOut: null, error: "" };
+    return restart;
   }
 
-  const result = validateStayRange(checkIn, date, blockedDates, minStay);
+  const result = validateStayRange(checkIn, date, blocked, minStay);
   if (!result.ok) {
     // A blocked range restarts from the clicked date; too-short keeps the
     // existing check-in so the guest can simply pick a later check-out.
-    const blocked = firstBlockedNight(checkIn, date, blockedDates) !== null;
-    return blocked
-      ? { checkIn: date, checkOut: null, error: result.error }
+    const spansBlocked = firstBlockedNight(checkIn, date, blocked) !== null;
+    return spansBlocked
+      ? { ...restart, error: result.error }
       : { checkIn, checkOut: null, error: result.error };
   }
 
   return { checkIn, checkOut: date, error: "" };
+}
+
+/**
+ * Whether a calendar day can be clicked given the current selection.
+ *
+ * Past days never. A booked night can't be an arrival, but it can be a
+ * departure: the guest leaves that morning and the next one arrives in the
+ * afternoon, which is how every booking site works. So a booked day is
+ * enabled only while a check-in is waiting for its check-out, and only if
+ * every night from that check-in up to it is free — in practice the first
+ * booked day after the check-in. Without this rule the night before every
+ * existing booking was unsellable.
+ */
+export function isSelectableDate(
+  date: string,
+  checkIn: string | null,
+  checkOut: string | null,
+  blockedDates: Iterable<string>,
+  today: string
+): boolean {
+  if (date < today) return false;
+  const blocked = blockedDates instanceof Set ? blockedDates : new Set(blockedDates);
+  if (!blocked.has(date)) return true;
+  if (!checkIn || checkOut || date <= checkIn) return false;
+  return firstBlockedNight(checkIn, date, blocked) === null;
+}
+
+/**
+ * The guest-facing summary of a selected stay, in nights.
+ *
+ * Shown beside the calendar the moment both dates are picked, so "11 to 12
+ * November" is read as one night before the guest reaches the price. Dates
+ * are formatted in UTC from their literal parts so the text is the same in
+ * every browser timezone.
+ */
+export function describeStay(
+  checkIn: string,
+  checkOut: string
+): { nights: number; arrive: string; depart: string; label: string } {
+  const nights = nightsBetween(checkIn, checkOut);
+  const fmt = (date: string) => {
+    const [y, m, d] = date.split("-").map(Number);
+    return new Intl.DateTimeFormat("en-NZ", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      timeZone: "UTC",
+    }).format(Date.UTC(y, m - 1, d));
+  };
+  const arrive = fmt(checkIn);
+  const depart = fmt(checkOut);
+  return {
+    nights,
+    arrive,
+    depart,
+    label: `Arrive ${arrive} · ${nights} night${nights === 1 ? "" : "s"} · Depart ${depart}`,
+  };
 }
 
 /**
