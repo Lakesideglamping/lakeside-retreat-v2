@@ -3,27 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BookingCalendar } from "./calendar";
-import { applyDateClick, nightsBetween } from "@/lib/date-range";
+import { applyDateClick } from "@/lib/date-range";
 
 interface Props {
   /** Accommodation id, e.g. "dome-pinot". */
   accommodationId: string;
   /** Minimum nights for this property. */
   minStay: number;
-}
-
-const NZ_DATE = new Intl.DateTimeFormat("en-NZ", {
-  day: "numeric",
-  month: "short",
-});
-
-function formatRange(checkIn: string, checkOut: string): string {
-  const [ciY, ciM, ciD] = checkIn.split("-").map(Number);
-  const [coY, coM, coD] = checkOut.split("-").map(Number);
-  const from = NZ_DATE.format(new Date(ciY, ciM - 1, ciD));
-  const to = NZ_DATE.format(new Date(coY, coM - 1, coD));
-  const nights = nightsBetween(checkIn, checkOut);
-  return `${from} → ${to} · ${nights} night${nights > 1 ? "s" : ""}`;
 }
 
 /**
@@ -91,6 +77,11 @@ export function PropertyAvailability({ accommodationId, minStay }: Props) {
         checkIn={checkIn}
         checkOut={checkOut}
         onDateSelect={handleDateSelect}
+        onClear={() => {
+          setCheckIn(null);
+          setCheckOut(null);
+          setDateError("");
+        }}
         minStay={minStay}
         loading={loading}
       />
@@ -105,23 +96,6 @@ export function PropertyAvailability({ accommodationId, minStay }: Props) {
       )}
 
       <div className="mt-6 text-center">
-        {checkIn && checkOut && (
-          <p className="mb-3 text-sm font-semibold text-body">
-            {formatRange(checkIn, checkOut)}
-            <button
-              type="button"
-              onClick={() => {
-                setCheckIn(null);
-                setCheckOut(null);
-                setDateError("");
-              }}
-              className="ml-3 text-xs font-normal text-muted underline hover:text-burgundy"
-            >
-              Clear
-            </button>
-          </p>
-        )}
-
         <Link
           href={bookHref}
           className="inline-flex items-center gap-2 bg-burgundy text-white no-underline px-6 py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity min-h-[44px]"

@@ -386,6 +386,12 @@ export function BookingWidget() {
                 checkIn={checkIn}
                 checkOut={checkOut}
                 onDateSelect={handleDateSelect}
+                onClear={() => {
+                  setCheckIn(null);
+                  setCheckOut(null);
+                  setDateError("");
+                  setAvailability("idle");
+                }}
                 minStay={acc?.minStay || 1}
                 loading={loadingDates}
               />
