@@ -12,7 +12,8 @@ export interface Accommodation {
   petFee?: number;
   /**
    * Stay two nights or more and the second night is 25% off (12.5% off the
-   * nightly total). Domes only — the cottage has no such offer.
+   * nightly total). Domes only — the cottage has no such offer. Withdrawn
+   * over peak season, 12 Dec – 31 Mar (lib/pricing SECOND_NIGHT_DISCOUNT_PEAK).
    */
   secondNightDiscount?: boolean;
   amenities: string[];
@@ -23,7 +24,8 @@ export interface Accommodation {
 //   - Nightly rates are NOT here. They come live from Uplisting's calendar
 //     (lib/uplisting.ts fetchNightlyRates) and are quoted by lib/quote.ts.
 //   - Cottage: +$100/night for a third adult, $25 pet fee flat per stay
-//   - Domes: 25% off the second night on stays of 2+ nights
+//   - Domes: 25% off the second night on stays of 2+ nights, except over
+//     peak season (12 Dec – 31 Mar)
 //   - All three properties strictly 18+, adults only
 const accommodations: Accommodation[] = [
   {

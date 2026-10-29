@@ -4,6 +4,7 @@ import {
   nightsOfStay,
   SECOND_NIGHT_DISCOUNT_LABEL,
   formatNZDCents,
+  isPeakSeasonNight,
 } from "../pricing";
 import type { Accommodation } from "../accommodations";
 
@@ -191,6 +192,76 @@ describe("buildStayQuote: dome second-night discount", () => {
     expect(quote.totalCents).toBe(5 * 35000);
   });
 
+  it("is withdrawn over peak season, 12 Dec – 31 Mar", () => {
+    // The request that introduced the rule: 12–14 Dec in Dome Pinot gets
+    // no second-night discount.
+    const peak = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-12-12",
+      checkOut: "2026-12-14",
+      guests: 2,
+      rates: flat(600, "2026-12-12", "2026-12-14"),
+    })!;
+    expect(peak.discount).toBeNull();
+    expect(peak.totalCents).toBe(120000);
+
+    // Deep in summer, and the last peak night (check-out 1 April).
+    expect(
+      buildStayQuote({
+        accommodation: dome,
+        checkIn: "2027-01-20",
+        checkOut: "2027-01-22",
+        guests: 2,
+        rates: flat(600, "2027-01-20", "2027-01-22"),
+      })!.discount
+    ).toBeNull();
+    expect(
+      buildStayQuote({
+        accommodation: dome,
+        checkIn: "2027-03-30",
+        checkOut: "2027-04-01",
+        guests: 2,
+        rates: flat(600, "2027-03-30", "2027-04-01"),
+      })!.discount
+    ).toBeNull();
+  });
+
+  it("is withdrawn from a stay that merely touches peak season", () => {
+    // Nights of 10 and 11 Dec are fine; add the 12th and the whole stay
+    // loses the offer rather than a pro-rated slice of it.
+    expect(
+      buildStayQuote({
+        accommodation: dome,
+        checkIn: "2026-12-10",
+        checkOut: "2026-12-13",
+        guests: 2,
+        rates: flat(600, "2026-12-10", "2026-12-13"),
+      })!.discount
+    ).toBeNull();
+  });
+
+  it("still applies either side of peak season", () => {
+    // Last two nights before the window: 10 and 11 Dec, check-out on the 12th.
+    const before = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2026-12-10",
+      checkOut: "2026-12-12",
+      guests: 2,
+      rates: flat(600, "2026-12-10", "2026-12-12"),
+    })!;
+    expect(before.discount).toEqual({ label: SECOND_NIGHT_DISCOUNT_LABEL, amountCents: 15000 });
+
+    // First two nights after it: 1 and 2 April.
+    const after = buildStayQuote({
+      accommodation: dome,
+      checkIn: "2027-04-01",
+      checkOut: "2027-04-03",
+      guests: 2,
+      rates: flat(600, "2027-04-01", "2027-04-03"),
+    })!;
+    expect(after.discount).toEqual({ label: SECOND_NIGHT_DISCOUNT_LABEL, amountCents: 15000 });
+  });
+
   it("rounds the discount to whole cents", () => {
     const quote = buildStayQuote({
       accommodation: dome,
@@ -255,6 +326,19 @@ describe("buildStayQuote: cottage add-ons", () => {
       rates: { "2026-06-01": 579 },
     })!;
     expect(quote.lineItems.some((i) => i.label.includes("Pet"))).toBe(false);
+  });
+});
+
+describe("isPeakSeasonNight", () => {
+  it("covers 12 Dec through 31 Mar inclusive, in any year", () => {
+    expect(isPeakSeasonNight("2026-12-11")).toBe(false);
+    expect(isPeakSeasonNight("2026-12-12")).toBe(true);
+    expect(isPeakSeasonNight("2026-12-31")).toBe(true);
+    expect(isPeakSeasonNight("2027-01-01")).toBe(true);
+    expect(isPeakSeasonNight("2027-03-31")).toBe(true);
+    expect(isPeakSeasonNight("2027-04-01")).toBe(false);
+    expect(isPeakSeasonNight("2028-02-29")).toBe(true);
+    expect(isPeakSeasonNight("2027-07-15")).toBe(false);
   });
 });
 

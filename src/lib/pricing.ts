@@ -15,6 +15,25 @@ export const SECOND_NIGHT_DISCOUNT_LABEL = "25% off your second night";
 export const SECOND_NIGHT_DISCOUNT_RATE = 0.125;
 export const SECOND_NIGHT_DISCOUNT_MIN_NIGHTS = 2;
 
+/**
+ * Peak season, every year: the nights of 12 December through 31 March
+ * inclusive (so a check-out on 1 April is still peak). The second-night offer
+ * is withdrawn from any stay that includes one of these nights — the domes
+ * sell out over summer without it. Steve's call, 29 October 2026.
+ *
+ * Month-day strings compare correctly as text because both are zero-padded.
+ */
+export const SECOND_NIGHT_DISCOUNT_PEAK = { from: "12-12", to: "03-31" } as const;
+
+/** True for a night (YYYY-MM-DD) that falls in the peak window, in any year. */
+export function isPeakSeasonNight(date: string): boolean {
+  const monthDay = date.slice(5, 10);
+  return (
+    monthDay >= SECOND_NIGHT_DISCOUNT_PEAK.from ||
+    monthDay <= SECOND_NIGHT_DISCOUNT_PEAK.to
+  );
+}
+
 export interface QuoteLineItem {
   label: string;
   /** Unit amount, NZD cents. */
@@ -134,11 +153,13 @@ export function buildStayQuote(input: BuildQuoteInput): StayQuote | null {
   const subtotalCents = items.reduce((sum, i) => sum + i.totalCents, 0);
 
   // Domes only: stay two nights or more and the second night is 25% off,
-  // taken as 12.5% off the nightly total. The cottage has no such offer.
+  // taken as 12.5% off the nightly total. The cottage has no such offer, and
+  // nor does any stay that touches peak season (see SECOND_NIGHT_DISCOUNT_PEAK).
   let discount: QuoteDiscount | null = null;
   if (
     accommodation.secondNightDiscount &&
-    nights >= SECOND_NIGHT_DISCOUNT_MIN_NIGHTS
+    nights >= SECOND_NIGHT_DISCOUNT_MIN_NIGHTS &&
+    !nightly.some((n) => isPeakSeasonNight(n.date))
   ) {
     const amountCents = Math.round(nightlyTotal * SECOND_NIGHT_DISCOUNT_RATE);
     if (amountCents > 0) {

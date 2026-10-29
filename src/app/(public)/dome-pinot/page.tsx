@@ -60,7 +60,7 @@ const galleryImages = [
 
 const pricingFeatures = [
   `Nightly rate: ${fromRate("dome-pinot")} (GST incl.)`,
-  "Stay 2+ nights: 25% off your second night when you book direct",
+  "Stay 2+ nights: 25% off your second night when you book direct (not over peak season, 12 Dec – 31 Mar)",
   "Cleaning fee: included in your nightly rate",
   "Continental breakfast: included",
   "No minimum stay — 1 night bookings welcome",
