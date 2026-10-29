@@ -130,7 +130,7 @@ export default async function HomePage() {
           { question: "Is Lakeside Retreat close to the Otago Rail Trail?", answer: "The Otago Rail Trail (New Zealand's original Great Ride) is just 200 metres from Lakeside Retreat. You can walk from your accommodation to the trail start. The Cromwell to Clyde section is flat and spectacular — ideal for cyclists of all fitness levels." },
           { question: "What is the minimum stay at Lakeside Retreat?", answer: "Our luxury domes (Dome Pinot and Dome Ros\u00e9) have a 1-night minimum stay, though 2+ nights is recommended to fully experience the retreat. The Lakeside Cottage has a 2-night minimum stay (3 nights in peak season)." },
           { question: "What's the cancellation policy?", answer: "Full refund if cancelled 14+ days before check-in. No refund within 13 days." },
-          { question: "Why book direct instead of Airbnb?", answer: "You always get our best price when you book direct: the same nightly rate as the booking platforms, and 25% off your second night in the domes. You also deal directly with Steve and Sandy, so special requests are easy." },
+          { question: "Why book direct instead of Airbnb?", answer: "You always get our best price when you book direct: the same nightly rate as the booking platforms, and 25% off your second night in the domes outside peak season (12 Dec to 31 Mar). You also deal directly with Steve and Sandy, so special requests are easy." },
           // JSON-LD answers must be plain strings (this array is serialized
           // into Google structured data — JSX links can't go here). The
           // visible FAQ section below has the clickable-link version.
@@ -167,7 +167,7 @@ export default async function HomePage() {
             Wake to the lake. Dine in the vines. Sleep beneath the stars.
           </p>
           <p className="text-sm md:text-base mb-8 opacity-90">
-            Stay two nights in a dome and your second night is 25% off.
+            Stay two nights in a dome and your second night is 25% off (outside 12 Dec &ndash; 31 Mar).
           </p>
           <Button href="/book">Best price when you book direct</Button>
         </div>
@@ -430,7 +430,7 @@ export default async function HomePage() {
               { q: "How far from Queenstown and Wanaka?", a: "45 minutes from Queenstown via the Kawarau Gorge, and 30 minutes from Wanaka." },
               { q: "Can I bring my pet?", a: "The Lakeside Cottage is pet-friendly ($25 flat fee, max 2 dogs). The domes are adults-only and not suitable for pets." },
               { q: "What\u2019s the cancellation policy?", a: "Full refund if cancelled 14+ days before check-in. No refund within 13 days." },
-              { q: "Why book direct instead of Airbnb?", a: "25% off your second night in the domes, and our best price every night. Same stay, and you deal directly with your hosts." },
+              { q: "Why book direct instead of Airbnb?", a: "25% off your second night in the domes outside peak season (12 Dec to 31 Mar), and our best price every night. Same stay, and you deal directly with your hosts." },
               {
                 q: "Are gift vouchers available?",
                 a: (
