@@ -210,13 +210,13 @@ describe("describeStay", () => {
   it("reads 11 to 12 November as one night", () => {
     const stay = describeStay("2026-11-11", "2026-11-12");
     expect(stay.nights).toBe(1);
-    expect(stay.label).toBe("Arrive Wed, 11 Nov · 1 night · Depart Thu, 12 Nov");
+    expect(stay.label).toBe("Check-in Wed, 11 Nov · 1 night · Check-out Thu, 12 Nov");
   });
 
   it("pluralises nights and formats the same whatever the browser timezone", () => {
     const stay = describeStay("2026-12-31", "2027-01-02");
     expect(stay.nights).toBe(2);
-    expect(stay.label).toBe("Arrive Thu, 31 Dec · 2 nights · Depart Sat, 2 Jan");
+    expect(stay.label).toBe("Check-in Thu, 31 Dec · 2 nights · Check-out Sat, 2 Jan");
   });
 });
 

@@ -188,7 +188,7 @@ export function describeStay(
     nights,
     arrive,
     depart,
-    label: `Arrive ${arrive} · ${nights} night${nights === 1 ? "" : "s"} · Depart ${depart}`,
+    label: `Check-in ${arrive} · ${nights} night${nights === 1 ? "" : "s"} · Check-out ${depart}`,
   };
 }
 
