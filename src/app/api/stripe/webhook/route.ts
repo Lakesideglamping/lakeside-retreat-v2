@@ -109,6 +109,20 @@ export async function POST(request: Request) {
         const metadata = session.metadata || {};
         const paymentIntentId = extractPaymentIntentId(session.payment_intent);
 
+        // Only sessions created by createCheckoutSession carry stay metadata.
+        // Anything else that completes on this Stripe account — a Payment Link
+        // for a gift voucher, a dashboard invoice — is not a booking and must
+        // not become one: without dates the insert below would throw, page the
+        // admin, and in the worst case save a dateless "Guest" booking.
+        if (!metadata.accommodation || !metadata.checkIn || !metadata.checkOut) {
+          log.info("checkout.session.completed: not a website booking, ignored", {
+            sessionId: session.id,
+            kind: metadata.kind,
+            amount: session.amount_total,
+          });
+          return NextResponse.json({ received: true, ignored: "not_a_booking" });
+        }
+
         log.info("checkout.session.completed", {
           accommodation: metadata.accommodation,
           checkIn: metadata.checkIn,
