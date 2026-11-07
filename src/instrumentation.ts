@@ -25,6 +25,25 @@ export async function register() {
       // Node.js exits after uncaughtException by default; we log it first
       // so Sentry/logger can flush before the process terminates.
     });
+
+    // Refill the image cache after every start — see lib/warm-images-on-start.
+    // Delayed so the health check passes and traffic cuts over first; unref'd
+    // so a pending timer never holds the process open.
+    const { shouldWarmOnStart, startImageWarm, WARM_START_DELAY_MS } = await import(
+      "./lib/warm-images-on-start"
+    );
+    if (shouldWarmOnStart(process.env)) {
+      const { join } = await import("node:path");
+      const timer = setTimeout(() => {
+        void startImageWarm({
+          env: process.env,
+          logger,
+          scriptPath: join(process.cwd(), "scripts", "warm-image-cache.mjs"),
+          cwd: process.cwd(),
+        });
+      }, WARM_START_DELAY_MS);
+      timer.unref();
+    }
   }
 
   if (process.env.NEXT_RUNTIME === "edge") {

@@ -131,10 +131,25 @@ async function main() {
   //
   // Only formats next/image actually optimises. Favicons live here too and are
   // never served through the optimiser, so warming them is wasted work.
-  const tracked = execSync("git ls-files public/images", { cwd: ROOT, encoding: "utf8" })
-    .split(/\r?\n/)
-    .filter(Boolean)
-    .map((p) => p.replace(/^public\/images\//, ""));
+  //
+  // On the server itself (the start-up warm, see lib/warm-images-on-start)
+  // there may be no git checkout to ask, and there what is on disk IS what is
+  // deployed — so fall back to the directory listing only in that case.
+  let tracked;
+  try {
+    tracked = execSync("git ls-files public/images", {
+      cwd: ROOT,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    })
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .map((p) => p.replace(/^public\/images\//, ""));
+  } catch {
+    console.log("  (no git checkout - warming every image on disk)");
+    const dir = join(ROOT, "public", "images");
+    tracked = readdirSync(dir).filter((f) => statSync(join(dir, f)).isFile());
+  }
   const all = tracked.filter(
     (f) => /\.(jpe?g|png|webp)$/i.test(f) && !/favicon|apple-touch-icon/i.test(f)
   );
